@@ -1,0 +1,47 @@
+name: ai-minehub-dev
+
+networks:
+  ai-minehub-dev:
+    driver: bridge
+
+services:
+  ai-minehub-dev-database:
+    container_name: ai-minehub-dev-database
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_USER: admin
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+    networks:
+      - ai-minehub-dev
+    volumes:
+      - database:/var/lib/mysql
+
+  ai-minehub-dev-phpmyadmin:
+    container_name: ai-minehub-dev-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "9000:80"
+    environment:
+      PMA_HOST: ai-minehub-dev-database
+      PMA_PORT: 3306
+    depends_on:
+      - ai-minehub-dev-database
+    networks:
+      - ai-minehub-dev
+
+  ai-minehub-dev-proxy:
+    container_name: ai-minehub-dev-proxy
+    image: nginx:alpine
+    ports:
+      - "8080:80" # access everything via localhost:3000 in dev
+    volumes:
+      - ./../nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # lets nginx reach your host machine
+    networks:
+      - ai-minehub-dev
+
+volumes:
+  database:

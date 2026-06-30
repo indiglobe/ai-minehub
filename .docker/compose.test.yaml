@@ -1,0 +1,25 @@
+name: ai-minehub-test
+
+networks:
+  ai-minehub-test:
+    driver: bridge
+
+services:
+  ai-minehub-test-database:
+    container_name: ai-minehub-test-database
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3307:3306
+    networks:
+      - ai-minehub-test
+
+  # ai-minehub-test-cache:
+  #   container_name: ai-minehub-test-cache
+  #   image: redis/redis-stack:7.4.0-v8
+  #   ports:
+  #     - 6379:6379
+  #     - 8001:8001
+  #   networks:
+  #     - ai-minehub-test

@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./shadcn.css";
+@import "tw-extended";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ececec;
+  --foreground: #1a1a1a;
+}
+.dark {
+  --background: #080c1a;
+  --foreground: #ececec;
+}
+
+@layer base {
+  :root {
+    --primary-50: #fff4ed;
+    --primary-100: #ffe5d4;
+    --primary-200: #ffc7a8;
+    --primary-300: #ffa071;
+    --primary-400: #ff6b35;
+    --primary-500: #fe4711;
+    --primary-600: #ef2c07;
+    --primary-700: #c61d08;
+    --primary-800: #9d190f;
+    --primary-900: #7e1810;
+    --primary-950: #440806;
+
+    --secondary-50: #eff6ff;
+    --secondary-100: #dbeafe;
+    --secondary-200: #bfdbfe;
+    --secondary-300: #93c5fd;
+    --secondary-400: #60a5fa;
+    --secondary-500: #3b82f6;
+    --secondary-600: #2563eb;
+    --secondary-700: #1d4ed8;
+    --secondary-800: #1e40af;
+    --secondary-900: #1e3a8a;
+    --secondary-950: #172554;
+
+    --accent-50: #ecfdf5;
+    --accent-100: #d1fae5;
+    --accent-200: #a7f3d0;
+    --accent-300: #6ee7b7;
+    --accent-400: #34d399;
+    --accent-500: #10b981;
+    --accent-600: #059669;
+    --accent-700: #047857;
+    --accent-800: #065f46;
+    --accent-900: #064e3b;
+    --accent-950: #022c22;
+  }
+
+  :root.dark {
+    --primary-50: #440806;
+    --primary-100: #7e1810;
+    --primary-200: #9d190f;
+    --primary-300: #c61d08;
+    --primary-400: #ef2c07;
+    --primary-500: #fe4711;
+    --primary-600: #ff6b35;
+    --primary-700: #ffa071;
+    --primary-800: #ffc7a8;
+    --primary-900: #ffe5d4;
+    --primary-950: #fff4ed;
+
+    --secondary-50: #172554;
+    --secondary-100: #1e3a8a;
+    --secondary-200: #1e40af;
+    --secondary-300: #1d4ed8;
+    --secondary-400: #2563eb;
+    --secondary-500: #3b82f6;
+    --secondary-600: #60a5fa;
+    --secondary-700: #93c5fd;
+    --secondary-800: #bfdbfe;
+    --secondary-900: #dbeafe;
+    --secondary-950: #eff6ff;
+
+    --accent-50: #022c22;
+    --accent-100: #064e3b;
+    --accent-200: #065f46;
+    --accent-300: #047857;
+    --accent-400: #059669;
+    --accent-500: #10b981;
+    --accent-600: #34d399;
+    --accent-700: #6ee7b7;
+    --accent-800: #a7f3d0;
+    --accent-900: #d1fae5;
+    --accent-950: #ecfdf5;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-brand-primary: "Inter", sans-serif;
+  --font-brand-secondary: "Bricolage Grotesque", sans-serif;
+
+  --breakpoint-xs: 36rem;
+  --breakpoint-2xs: 32rem;
+  --breakpoint-3xs: 28rem;
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
+}
+
+@layer base {
+  body {
+    @apply bg-background dark:bg-background dark:text-foreground font-brand-primary text-foreground min-h-svh;
+  }
+
+  main {
+    @apply grow;
+  }
+
+  button {
+    @apply cursor-pointer scroll-smooth;
+  }
+}
