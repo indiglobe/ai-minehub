@@ -10,11 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as withHeaderFooterRouteRouteImport } from './routes/(with-header-footer)/route'
-import { Route as SigninIndexRouteImport } from './routes/signin/index'
 import { Route as withHeaderFooterIndexRouteImport } from './routes/(with-header-footer)/index'
-import { Route as withoutHeaderFooterTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/terms-of-service/index'
-import { Route as withoutHeaderFooterPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/privacy-policy/index'
-import { Route as withoutHeaderFooterCookiePolicyIndexRouteImport } from './routes/(without-header-footer)/cookie-policy/index'
 import { Route as withHeaderFooterTradingIndexRouteImport } from './routes/(with-header-footer)/trading/index'
 import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
 import { Route as withHeaderFooterPromotionsIndexRouteImport } from './routes/(with-header-footer)/promotions/index'
@@ -22,6 +18,13 @@ import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(
 import { Route as withHeaderFooterEducationIndexRouteImport } from './routes/(with-header-footer)/education/index'
 import { Route as withHeaderFooterCompanyIndexRouteImport } from './routes/(with-header-footer)/company/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as withoutHeaderFooterauthenticatednewUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/route'
+import { Route as withoutHeaderFooterauthenticatedexistingUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/route'
+import { Route as withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/terms-of-service/index'
+import { Route as withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/privacy-policy/index'
+import { Route as withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/cookie-policy/index'
+import { Route as withoutHeaderFooterguestSigninIndexRouteImport } from './routes/(without-header-footer)/(guest)/signin/index'
+import { Route as withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/redirect-signin/index'
 import { Route as withHeaderFooterTradingSyntxIndexRouteImport } from './routes/(with-header-footer)/trading/syntx/index'
 import { Route as withHeaderFooterTradingPlatformsIndexRouteImport } from './routes/(with-header-footer)/trading/platforms/index'
 import { Route as withHeaderFooterTradingInstrumentsIndexRouteImport } from './routes/(with-header-footer)/trading/instruments/index'
@@ -33,14 +36,11 @@ import { Route as withHeaderFooterEducationGuidesIndexRouteImport } from './rout
 import { Route as withHeaderFooterCompanyNewsIndexRouteImport } from './routes/(with-header-footer)/company/news/index'
 import { Route as withHeaderFooterCompanyAwardsIndexRouteImport } from './routes/(with-header-footer)/company/awards/index'
 import { Route as withHeaderFooterCompanyAboutIndexRouteImport } from './routes/(with-header-footer)/company/about/index'
+import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/dashboard/index'
 
 const withHeaderFooterRouteRoute = withHeaderFooterRouteRouteImport.update({
   id: '/(with-header-footer)',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SigninIndexRoute = SigninIndexRouteImport.update({
-  id: '/signin/',
-  path: '/signin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const withHeaderFooterIndexRoute = withHeaderFooterIndexRouteImport.update({
@@ -48,24 +48,6 @@ const withHeaderFooterIndexRoute = withHeaderFooterIndexRouteImport.update({
   path: '/',
   getParentRoute: () => withHeaderFooterRouteRoute,
 } as any)
-const withoutHeaderFooterTermsOfServiceIndexRoute =
-  withoutHeaderFooterTermsOfServiceIndexRouteImport.update({
-    id: '/(without-header-footer)/terms-of-service/',
-    path: '/terms-of-service/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withoutHeaderFooterPrivacyPolicyIndexRoute =
-  withoutHeaderFooterPrivacyPolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/privacy-policy/',
-    path: '/privacy-policy/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withoutHeaderFooterCookiePolicyIndexRoute =
-  withoutHeaderFooterCookiePolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/cookie-policy/',
-    path: '/cookie-policy/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const withHeaderFooterTradingIndexRoute =
   withHeaderFooterTradingIndexRouteImport.update({
     id: '/trading/',
@@ -107,6 +89,46 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const withoutHeaderFooterauthenticatednewUserRouteRoute =
+  withoutHeaderFooterauthenticatednewUserRouteRouteImport.update({
+    id: '/(new-user)',
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedexistingUserRouteRoute =
+  withoutHeaderFooterauthenticatedexistingUserRouteRouteImport.update({
+    id: '/(existing-user)',
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+  } as any)
+const withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute =
+  withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/terms-of-service/',
+    path: '/terms-of-service/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute =
+  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/privacy-policy/',
+    path: '/privacy-policy/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesCookiePolicyIndexRoute =
+  withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/cookie-policy/',
+    path: '/cookie-policy/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterguestSigninIndexRoute =
+  withoutHeaderFooterguestSigninIndexRouteImport.update({
+    id: '/(without-header-footer)/(guest)/signin/',
+    path: '/signin/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
+  withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
+    id: '/redirect-signin/',
+    path: '/redirect-signin/',
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+  } as any)
 const withHeaderFooterTradingSyntxIndexRoute =
   withHeaderFooterTradingSyntxIndexRouteImport.update({
     id: '/trading/syntx/',
@@ -173,10 +195,22 @@ const withHeaderFooterCompanyAboutIndexRoute =
     path: '/company/about/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
+const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
+  withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
+    id: '/welcome/',
+    path: '/welcome/',
+    getParentRoute: () => withoutHeaderFooterauthenticatednewUserRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof withHeaderFooterIndexRoute
-  '/signin/': typeof SigninIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company/': typeof withHeaderFooterCompanyIndexRoute
   '/education/': typeof withHeaderFooterEducationIndexRoute
@@ -184,9 +218,6 @@ export interface FileRoutesByFullPath {
   '/promotions/': typeof withHeaderFooterPromotionsIndexRoute
   '/tools/': typeof withHeaderFooterToolsIndexRoute
   '/trading/': typeof withHeaderFooterTradingIndexRoute
-  '/cookie-policy/': typeof withoutHeaderFooterCookiePolicyIndexRoute
-  '/privacy-policy/': typeof withoutHeaderFooterPrivacyPolicyIndexRoute
-  '/terms-of-service/': typeof withoutHeaderFooterTermsOfServiceIndexRoute
   '/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -198,10 +229,16 @@ export interface FileRoutesByFullPath {
   '/trading/instruments/': typeof withHeaderFooterTradingInstrumentsIndexRoute
   '/trading/platforms/': typeof withHeaderFooterTradingPlatformsIndexRoute
   '/trading/syntx/': typeof withHeaderFooterTradingSyntxIndexRoute
+  '/redirect-signin/': typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
+  '/signin/': typeof withoutHeaderFooterguestSigninIndexRoute
+  '/cookie-policy/': typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
+  '/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
+  '/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
+  '/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof withHeaderFooterIndexRoute
-  '/signin': typeof SigninIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company': typeof withHeaderFooterCompanyIndexRoute
   '/education': typeof withHeaderFooterEducationIndexRoute
@@ -209,9 +246,6 @@ export interface FileRoutesByTo {
   '/promotions': typeof withHeaderFooterPromotionsIndexRoute
   '/tools': typeof withHeaderFooterToolsIndexRoute
   '/trading': typeof withHeaderFooterTradingIndexRoute
-  '/cookie-policy': typeof withoutHeaderFooterCookiePolicyIndexRoute
-  '/privacy-policy': typeof withoutHeaderFooterPrivacyPolicyIndexRoute
-  '/terms-of-service': typeof withoutHeaderFooterTermsOfServiceIndexRoute
   '/company/about': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -223,12 +257,20 @@ export interface FileRoutesByTo {
   '/trading/instruments': typeof withHeaderFooterTradingInstrumentsIndexRoute
   '/trading/platforms': typeof withHeaderFooterTradingPlatformsIndexRoute
   '/trading/syntx': typeof withHeaderFooterTradingSyntxIndexRoute
+  '/redirect-signin': typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
+  '/signin': typeof withoutHeaderFooterguestSigninIndexRoute
+  '/cookie-policy': typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
+  '/privacy-policy': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
+  '/terms-of-service': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
+  '/dashboard': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/welcome': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(with-header-footer)': typeof withHeaderFooterRouteRouteWithChildren
   '/(with-header-footer)/': typeof withHeaderFooterIndexRoute
-  '/signin/': typeof SigninIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)': typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
+  '/(without-header-footer)/(authenticated)/(new-user)': typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(with-header-footer)/company/': typeof withHeaderFooterCompanyIndexRoute
   '/(with-header-footer)/education/': typeof withHeaderFooterEducationIndexRoute
@@ -236,9 +278,6 @@ export interface FileRoutesById {
   '/(with-header-footer)/promotions/': typeof withHeaderFooterPromotionsIndexRoute
   '/(with-header-footer)/tools/': typeof withHeaderFooterToolsIndexRoute
   '/(with-header-footer)/trading/': typeof withHeaderFooterTradingIndexRoute
-  '/(without-header-footer)/cookie-policy/': typeof withoutHeaderFooterCookiePolicyIndexRoute
-  '/(without-header-footer)/privacy-policy/': typeof withoutHeaderFooterPrivacyPolicyIndexRoute
-  '/(without-header-footer)/terms-of-service/': typeof withoutHeaderFooterTermsOfServiceIndexRoute
   '/(with-header-footer)/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/(with-header-footer)/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/(with-header-footer)/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -250,12 +289,18 @@ export interface FileRoutesById {
   '/(with-header-footer)/trading/instruments/': typeof withHeaderFooterTradingInstrumentsIndexRoute
   '/(with-header-footer)/trading/platforms/': typeof withHeaderFooterTradingPlatformsIndexRoute
   '/(with-header-footer)/trading/syntx/': typeof withHeaderFooterTradingSyntxIndexRoute
+  '/(without-header-footer)/(authenticated)/redirect-signin/': typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
+  '/(without-header-footer)/(guest)/signin/': typeof withoutHeaderFooterguestSigninIndexRoute
+  '/(without-header-footer)/(leagal-pages)/cookie-policy/': typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
+  '/(without-header-footer)/(leagal-pages)/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
+  '/(without-header-footer)/(leagal-pages)/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/(without-header-footer)/(authenticated)/(new-user)/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/signin/'
     | '/api/auth/$'
     | '/company/'
     | '/education/'
@@ -263,9 +308,6 @@ export interface FileRouteTypes {
     | '/promotions/'
     | '/tools/'
     | '/trading/'
-    | '/cookie-policy/'
-    | '/privacy-policy/'
-    | '/terms-of-service/'
     | '/company/about/'
     | '/company/awards/'
     | '/company/news/'
@@ -277,10 +319,16 @@ export interface FileRouteTypes {
     | '/trading/instruments/'
     | '/trading/platforms/'
     | '/trading/syntx/'
+    | '/redirect-signin/'
+    | '/signin/'
+    | '/cookie-policy/'
+    | '/privacy-policy/'
+    | '/terms-of-service/'
+    | '/dashboard/'
+    | '/welcome/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/signin'
     | '/api/auth/$'
     | '/company'
     | '/education'
@@ -288,9 +336,6 @@ export interface FileRouteTypes {
     | '/promotions'
     | '/tools'
     | '/trading'
-    | '/cookie-policy'
-    | '/privacy-policy'
-    | '/terms-of-service'
     | '/company/about'
     | '/company/awards'
     | '/company/news'
@@ -302,11 +347,19 @@ export interface FileRouteTypes {
     | '/trading/instruments'
     | '/trading/platforms'
     | '/trading/syntx'
+    | '/redirect-signin'
+    | '/signin'
+    | '/cookie-policy'
+    | '/privacy-policy'
+    | '/terms-of-service'
+    | '/dashboard'
+    | '/welcome'
   id:
     | '__root__'
     | '/(with-header-footer)'
     | '/(with-header-footer)/'
-    | '/signin/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)'
+    | '/(without-header-footer)/(authenticated)/(new-user)'
     | '/api/auth/$'
     | '/(with-header-footer)/company/'
     | '/(with-header-footer)/education/'
@@ -314,9 +367,6 @@ export interface FileRouteTypes {
     | '/(with-header-footer)/promotions/'
     | '/(with-header-footer)/tools/'
     | '/(with-header-footer)/trading/'
-    | '/(without-header-footer)/cookie-policy/'
-    | '/(without-header-footer)/privacy-policy/'
-    | '/(without-header-footer)/terms-of-service/'
     | '/(with-header-footer)/company/about/'
     | '/(with-header-footer)/company/awards/'
     | '/(with-header-footer)/company/news/'
@@ -328,15 +378,22 @@ export interface FileRouteTypes {
     | '/(with-header-footer)/trading/instruments/'
     | '/(with-header-footer)/trading/platforms/'
     | '/(with-header-footer)/trading/syntx/'
+    | '/(without-header-footer)/(authenticated)/redirect-signin/'
+    | '/(without-header-footer)/(guest)/signin/'
+    | '/(without-header-footer)/(leagal-pages)/cookie-policy/'
+    | '/(without-header-footer)/(leagal-pages)/privacy-policy/'
+    | '/(without-header-footer)/(leagal-pages)/terms-of-service/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
+    | '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   withHeaderFooterRouteRoute: typeof withHeaderFooterRouteRouteWithChildren
-  SigninIndexRoute: typeof SigninIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  withoutHeaderFooterCookiePolicyIndexRoute: typeof withoutHeaderFooterCookiePolicyIndexRoute
-  withoutHeaderFooterPrivacyPolicyIndexRoute: typeof withoutHeaderFooterPrivacyPolicyIndexRoute
-  withoutHeaderFooterTermsOfServiceIndexRoute: typeof withoutHeaderFooterTermsOfServiceIndexRoute
+  withoutHeaderFooterguestSigninIndexRoute: typeof withoutHeaderFooterguestSigninIndexRoute
+  withoutHeaderFooterleagalPagesCookiePolicyIndexRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
+  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
+  withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -348,40 +405,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/signin/': {
-      id: '/signin/'
-      path: '/signin'
-      fullPath: '/signin/'
-      preLoaderRoute: typeof SigninIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(with-header-footer)/': {
       id: '/(with-header-footer)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof withHeaderFooterIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(without-header-footer)/terms-of-service/': {
-      id: '/(without-header-footer)/terms-of-service/'
-      path: '/terms-of-service'
-      fullPath: '/terms-of-service/'
-      preLoaderRoute: typeof withoutHeaderFooterTermsOfServiceIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/privacy-policy/': {
-      id: '/(without-header-footer)/privacy-policy/'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy/'
-      preLoaderRoute: typeof withoutHeaderFooterPrivacyPolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/cookie-policy/': {
-      id: '/(without-header-footer)/cookie-policy/'
-      path: '/cookie-policy'
-      fullPath: '/cookie-policy/'
-      preLoaderRoute: typeof withoutHeaderFooterCookiePolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/trading/': {
       id: '/(with-header-footer)/trading/'
@@ -431,6 +460,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(authenticated)/(new-user)': {
+      id: '/(without-header-footer)/(authenticated)/(new-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
+    }
+    '/(without-header-footer)/(leagal-pages)/terms-of-service/': {
+      id: '/(without-header-footer)/(leagal-pages)/terms-of-service/'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)/privacy-policy/': {
+      id: '/(without-header-footer)/(leagal-pages)/privacy-policy/'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)/cookie-policy/': {
+      id: '/(without-header-footer)/(leagal-pages)/cookie-policy/'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(guest)/signin/': {
+      id: '/(without-header-footer)/(guest)/signin/'
+      path: '/signin'
+      fullPath: '/signin/'
+      preLoaderRoute: typeof withoutHeaderFooterguestSigninIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(authenticated)/redirect-signin/': {
+      id: '/(without-header-footer)/(authenticated)/redirect-signin/'
+      path: '/redirect-signin'
+      fullPath: '/redirect-signin/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
     }
     '/(with-header-footer)/trading/syntx/': {
       id: '/(with-header-footer)/trading/syntx/'
@@ -509,6 +587,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterCompanyAboutIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
+    '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
+      id: '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
+      path: '/welcome'
+      fullPath: '/welcome/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
   }
 }
 
@@ -571,14 +663,15 @@ const withHeaderFooterRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   withHeaderFooterRouteRoute: withHeaderFooterRouteRouteWithChildren,
-  SigninIndexRoute: SigninIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  withoutHeaderFooterCookiePolicyIndexRoute:
-    withoutHeaderFooterCookiePolicyIndexRoute,
-  withoutHeaderFooterPrivacyPolicyIndexRoute:
-    withoutHeaderFooterPrivacyPolicyIndexRoute,
-  withoutHeaderFooterTermsOfServiceIndexRoute:
-    withoutHeaderFooterTermsOfServiceIndexRoute,
+  withoutHeaderFooterguestSigninIndexRoute:
+    withoutHeaderFooterguestSigninIndexRoute,
+  withoutHeaderFooterleagalPagesCookiePolicyIndexRoute:
+    withoutHeaderFooterleagalPagesCookiePolicyIndexRoute,
+  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute:
+    withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute,
+  withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute:
+    withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

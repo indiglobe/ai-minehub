@@ -92,6 +92,7 @@ export const UserTable = mysqlTable("users", {
   phoneNumber: char("phone_number", {
     length: 10,
   }).notNull(),
+  referrerId: char("referrer_id", { length: 10 }),
   ...metadataTimestamp,
   tableIdentifierToken: tokenColumn("USER"),
 });
@@ -178,7 +179,7 @@ export const NewsTable = mysqlTable("news", {
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 
-export const UserRelations = relations(UserTable, ({ one }) => ({
+export const UserRelations = relations(UserTable, ({ one, many }) => ({
   tradingWalletDetails: one(TradingWalletTable, {
     fields: [UserTable.id],
     references: [TradingWalletTable.associatedUser],
@@ -188,6 +189,7 @@ export const UserRelations = relations(UserTable, ({ one }) => ({
     references: [MiningWalletTable.associatedUser],
   }),
   ratingDetails: one(RatingTable),
+  referrals: many(UserTable),
 }));
 
 export const TradingWalletRelations = relations(

@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/(without-header-footer)/terms-of-service/",
+  "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
 )({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/(without-header-footer)/terms-of-service/"!</div>;
+  return (
+    <div>Hello "/(without-header-footer)/(authenticated)/dashboard/"!</div>
+  );
 }

@@ -26,7 +26,7 @@ export type TTradingWallet = typeof TradingWalletTable.$inferSelect;
  */
 export type TCreate__TradingWallet = Omit<
   typeof TradingWalletTable.$inferInsert,
-  "tableIdentifierToken"
+  "tableIdentifierToken" | "id"
 >;
 
 /**

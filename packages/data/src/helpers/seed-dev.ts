@@ -60,6 +60,22 @@ async function seedUsers() {
 
   await db.insert(UserTable).values([...__dummyUsers]);
 
+  const users = await db.select().from(UserTable);
+
+  const updatedUsers = users.map<typeof UserTable.$inferInsert>((u) => {
+    return {
+      ...u,
+      referrerId:
+        users[Math.floor(Math.random() * users.length)]?.id === u.id
+          ? undefined
+          : users[Math.floor(Math.random() * users.length)]?.id,
+    };
+  });
+
+  await db.delete(UserTable);
+
+  await db.insert(UserTable).values([...updatedUsers]);
+
   console.log("✅ UserTable seeded");
 }
 

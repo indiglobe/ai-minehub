@@ -8,7 +8,7 @@
     ]
   },
   "scripts": {
-    "dev": "tf run dev:app --port 3000",
+    "dev": "tf run dev:app --port 3000 --open",
     "build": "tf run build:app",
     "serve": "tf run serve:app",
     "preview": "vite preview",

@@ -20,6 +20,16 @@
         "types": "./dist/date/index.d.mts",
         "default": "./dist/date/index.mjs"
       }
+    },
+    "./zod-schema/*": {
+      "require": {
+        "types": "./dist/zod-schema/*.d.cts",
+        "default": "./dist/zod-schema/*.cjs"
+      },
+      "import": {
+        "types": "./dist/zod-schema/*.d.mts",
+        "default": "./dist/zod-schema/*.mjs"
+      }
     }
   },
   "version": "0.0.0",

@@ -1,6 +1,6 @@
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import { LogoIconFilled } from "@repo/ui/logo";
 import { Button } from "@repo/ui/button";
@@ -145,6 +145,8 @@ function LargeScreenSigninSection({
   className,
   ...props
 }: ComponentProps<typeof Button>) {
+  const location = useLocation();
+
   return (
     <Button
       asChild
@@ -153,7 +155,9 @@ function LargeScreenSigninSection({
       className={cn(`max-lg:hidden`, className)}
       {...props}
     >
-      <Link to="/signin">Sign in</Link>
+      <Link to="/signin" search={{ redirectUrl: location.pathname }}>
+        Sign in
+      </Link>
     </Button>
   );
 }

@@ -1,5 +1,5 @@
 import { db } from "@/index";
-import { NewstTable } from "@/schema";
+import { NewsTable } from "@/schema";
 import { id } from "@repo/utils/id";
 import { and, desc, eq, gte, lte, SQL } from "drizzle-orm";
 
@@ -7,14 +7,14 @@ import { and, desc, eq, gte, lte, SQL } from "drizzle-orm";
  * ==========================================
  * NEWS MODULE
  * ==========================================
- * Provides full CRUD operations for NewstTable.
+ * Provides full CRUD operations for NewsTable.
  * ==========================================
  */
 
 /**
  * News record type.
  */
-export type TNews = typeof NewstTable.$inferSelect;
+export type TNews = typeof NewsTable.$inferSelect;
 
 /**
  * ==========================================
@@ -26,7 +26,7 @@ export type TNews = typeof NewstTable.$inferSelect;
  * Type used for creating a news record.
  */
 export type TCreate__News = Omit<
-  typeof NewstTable.$inferInsert,
+  typeof NewsTable.$inferInsert,
   "tableIdentifierToken"
 >;
 
@@ -41,7 +41,7 @@ export type TCreate__News = Omit<
 export const create__News = async (data: TCreate__News) => {
   const generatedId = data.id ?? id();
 
-  await db.insert(NewstTable).values({ ...data, id: generatedId });
+  await db.insert(NewsTable).values({ ...data, id: generatedId });
 
   return await read__OneNews({
     identifier: {
@@ -90,18 +90,18 @@ export const read__AllNews = async (options?: TRead__AllNews) => {
   const conditions: SQL[] = [];
 
   if (options?.identifier?.fromDate) {
-    conditions.push(gte(NewstTable.effectiveDate, options.identifier.fromDate));
+    conditions.push(gte(NewsTable.effectiveDate, options.identifier.fromDate));
   }
 
   if (options?.identifier?.toDate) {
-    conditions.push(lte(NewstTable.effectiveDate, options.identifier.toDate));
+    conditions.push(lte(NewsTable.effectiveDate, options.identifier.toDate));
   }
 
-  return await db.query.NewstTable.findMany({
+  return await db.query.NewsTable.findMany({
     limit,
     offset: skip,
     where: and(...conditions),
-    orderBy: [desc(NewstTable.effectiveDate)],
+    orderBy: [desc(NewsTable.effectiveDate)],
   });
 };
 
@@ -116,7 +116,7 @@ export const read__AllNews = async (options?: TRead__AllNews) => {
  */
 export type TRead__OneNews = {
   identifier: {
-    id: (typeof NewstTable.$inferSelect)["id"];
+    id: (typeof NewsTable.$inferSelect)["id"];
   };
 };
 
@@ -127,8 +127,8 @@ export type TRead__OneNews = {
  * @returns News record if found, otherwise null
  */
 export const read__OneNews = async (options: TRead__OneNews) => {
-  const queryResult = await db.query.NewstTable.findFirst({
-    where: eq(NewstTable.id, options.identifier.id),
+  const queryResult = await db.query.NewsTable.findFirst({
+    where: eq(NewsTable.id, options.identifier.id),
   });
 
   return queryResult ? queryResult : null;
@@ -145,11 +145,11 @@ export const read__OneNews = async (options: TRead__OneNews) => {
  */
 export type TUpdate__News = {
   identifier: {
-    id: (typeof NewstTable.$inferSelect)["id"];
+    id: (typeof NewsTable.$inferSelect)["id"];
   };
 
   dataToUpdate: Partial<
-    Omit<typeof NewstTable.$inferInsert, "tableIdentifierToken" | "id">
+    Omit<typeof NewsTable.$inferInsert, "tableIdentifierToken" | "id">
   >;
 };
 
@@ -174,9 +174,9 @@ export const update__News = async (options: TUpdate__News) => {
   }
 
   await db
-    .update(NewstTable)
+    .update(NewsTable)
     .set(filteredData)
-    .where(eq(NewstTable.id, options.identifier.id));
+    .where(eq(NewsTable.id, options.identifier.id));
 
   return await read__OneNews({
     identifier: options.identifier,
@@ -194,7 +194,7 @@ export const update__News = async (options: TUpdate__News) => {
  */
 export type TDelete__News = {
   identifier: {
-    id: (typeof NewstTable.$inferSelect)["id"];
+    id: (typeof NewsTable.$inferSelect)["id"];
   };
 };
 
@@ -213,7 +213,7 @@ export const delete__News = async (options: TDelete__News) => {
     return null;
   }
 
-  await db.delete(NewstTable).where(eq(NewstTable.id, options.identifier.id));
+  await db.delete(NewsTable).where(eq(NewsTable.id, options.identifier.id));
 
   return existing;
 };

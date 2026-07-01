@@ -1,6 +1,6 @@
 import { db } from "@/index";
 import { UserTable } from "@/schema";
-import { and, desc, eq, SQL } from "drizzle-orm";
+import { and, desc, eq, sql, SQL } from "drizzle-orm";
 
 /**
  * ----------------------------------------
@@ -18,7 +18,7 @@ export type TUser = typeof UserTable.$inferSelect;
 
 export type TCreate__User = Omit<
   typeof UserTable.$inferInsert,
-  "tableIdentifierToken"
+  "tableIdentifierToken" | "id" | "createdAt"
 >;
 
 /**
@@ -43,6 +43,7 @@ export const create__User = async (data: TCreate__User) => {
 export type TRead__AllUsers = {
   identifier?: {
     role?: (typeof UserTable.$inferSelect)["role"];
+    referrerId?: (typeof UserTable.$inferSelect)["referrerId"];
   };
 
   queryOptions?: {
@@ -54,6 +55,7 @@ export type TRead__AllUsers = {
     ratingDetails: boolean;
     tradingWalletDetails: boolean;
     miningWalletDetails: boolean;
+    referrals: boolean;
   };
 };
 
@@ -82,6 +84,10 @@ export const read__AllUsers = async (options?: TRead__AllUsers) => {
     conditions.push(eq(UserTable.role, options.identifier.role));
   }
 
+  if (options?.identifier?.referrerId) {
+    conditions.push(eq(UserTable.referrerId, options.identifier.referrerId));
+  }
+
   const queryResult = db.query.UserTable.findMany({
     limit: limit,
     offset: skip,
@@ -95,6 +101,7 @@ export const read__AllUsers = async (options?: TRead__AllUsers) => {
       ...(options?.joinOptions?.tradingWalletDetails
         ? { tradingWalletDetails: true }
         : {}),
+      ...(options?.joinOptions?.referrals ? { referrals: true } : {}),
     },
   });
 
@@ -108,9 +115,13 @@ export const read__AllUsers = async (options?: TRead__AllUsers) => {
  */
 
 export type TRead__OneUser = {
-  identifier: {
-    email: (typeof UserTable.$inferSelect)["email"];
-  };
+  identifier:
+    | {
+        email: (typeof UserTable.$inferSelect)["email"];
+      }
+    | {
+        id: (typeof UserTable.$inferSelect)["id"];
+      };
 
   joinOptions?: {
     ratingDetails: boolean;
@@ -137,8 +148,12 @@ export const read__OneUser = async (options: TRead__OneUser) => {
 
   const conditions: SQL[] = [];
 
-  if (identifier.email) {
+  if ("email" in identifier) {
     conditions.push(eq(UserTable.email, identifier.email));
+  }
+
+  if ("id" in identifier) {
+    conditions.push(sql`LOWER(${UserTable.id}) = LOWER(${identifier.id})`);
   }
 
   const queryResult = await db.query.UserTable.findFirst({
@@ -169,7 +184,10 @@ export type TUpdate__User = {
   };
 
   dataToUpdate: Partial<
-    Omit<typeof UserTable.$inferInsert, "email" | "tableIdentifierToken">
+    Omit<
+      typeof UserTable.$inferInsert,
+      "email" | "tableIdentifierToken" | "referrerCode" | "id"
+    >
   >;
 };
 
@@ -213,9 +231,13 @@ export const update__User = async ({
  */
 
 export type TDelete__User = {
-  identifier: {
-    email: (typeof UserTable.$inferSelect)["email"];
-  };
+  identifier:
+    | {
+        email: (typeof UserTable.$inferSelect)["email"];
+      }
+    | {
+        id: (typeof UserTable.$inferSelect)["id"];
+      };
 };
 
 /**
@@ -228,7 +250,19 @@ export type TDelete__User = {
  * @returns The deleted user record if it existed, otherwise null
  */
 
-export const delete__User = async ({ identifier }: TDelete__User) => {
+export const delete__User = async (options: TDelete__User) => {
+  const { identifier } = options;
+
+  const conditions: SQL[] = [];
+
+  if ("email" in identifier) {
+    conditions.push(eq(UserTable.email, identifier.email));
+  }
+
+  if ("id" in identifier) {
+    conditions.push(eq(UserTable.id, identifier.id));
+  }
+
   const existingUser = await read__OneUser({
     identifier,
   });
@@ -237,7 +271,7 @@ export const delete__User = async ({ identifier }: TDelete__User) => {
     return null;
   }
 
-  await db.delete(UserTable).where(eq(UserTable.email, identifier.email));
+  await db.delete(UserTable).where(and(...conditions));
 
   return existingUser;
 };
