@@ -1,4 +1,4 @@
-import CompanyHome from "@/components/main/company/company";
+import { CompanyHome } from "@/components/main/company/company";
 import type {
   TypedMetaOptions,
   TypedStoryOptions,

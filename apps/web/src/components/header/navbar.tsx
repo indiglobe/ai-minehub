@@ -16,6 +16,7 @@ import { useNavbarState } from "@/hooks/use-navstate";
 import { ChevronDown } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { authClient } from "@/lib/auth/auth-client";
 
 type NavItem =
   | { to: LinkProps["to"]; text: string }
@@ -134,30 +135,47 @@ export default function Navbar({ className, ...props }: ComponentProps<"nav">) {
 
       <LargeScreenNavItemList />
 
-      <LargeScreenSigninSection />
+      <LargeScreenNavCTA />
 
       <HamburgerButton />
     </nav>
   );
 }
 
-function LargeScreenSigninSection({
+function LargeScreenNavCTA({
   className,
   ...props
 }: ComponentProps<typeof Button>) {
   const location = useLocation();
+  const { data, isPending } = authClient.useSession();
+
+  if (isPending) {
+    return (
+      <Button
+        variant={"primary"}
+        corner={"rounded"}
+        className={cn(`max-lg:hidden`, className)}
+      >
+        Loading...
+      </Button>
+    );
+  }
 
   return (
     <Button
-      asChild
+      asChild={!isPending}
       variant={"primary"}
       corner={"rounded"}
       className={cn(`max-lg:hidden`, className)}
       {...props}
     >
-      <Link to="/signin" search={{ redirectUrl: location.pathname }}>
-        Sign in
-      </Link>
+      {data ? (
+        <Link to="/dashboard">Dashboard</Link>
+      ) : (
+        <Link to="/signin" search={{ redirectUrl: location.pathname }}>
+          Sign in
+        </Link>
+      )}
     </Button>
   );
 }

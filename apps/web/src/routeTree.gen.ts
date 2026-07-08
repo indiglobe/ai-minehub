@@ -91,13 +91,13 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 const withoutHeaderFooterauthenticatednewUserRouteRoute =
   withoutHeaderFooterauthenticatednewUserRouteRouteImport.update({
-    id: '/(new-user)',
-    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+    id: '/(without-header-footer)/(authenticated)/(new-user)',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const withoutHeaderFooterauthenticatedexistingUserRouteRoute =
   withoutHeaderFooterauthenticatedexistingUserRouteRouteImport.update({
-    id: '/(existing-user)',
-    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+    id: '/(without-header-footer)/(authenticated)/(existing-user)',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute =
   withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport.update({
@@ -125,9 +125,9 @@ const withoutHeaderFooterguestSigninIndexRoute =
   } as any)
 const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
   withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
-    id: '/redirect-signin/',
+    id: '/(without-header-footer)/(authenticated)/redirect-signin/',
     path: '/redirect-signin/',
-    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
+    getParentRoute: () => rootRouteImport,
   } as any)
 const withHeaderFooterTradingSyntxIndexRoute =
   withHeaderFooterTradingSyntxIndexRouteImport.update({
@@ -389,7 +389,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   withHeaderFooterRouteRoute: typeof withHeaderFooterRouteRouteWithChildren
+  withoutHeaderFooterauthenticatedexistingUserRouteRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
+  withoutHeaderFooterauthenticatednewUserRouteRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  withoutHeaderFooterauthenticatedRedirectSigninIndexRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
   withoutHeaderFooterguestSigninIndexRoute: typeof withoutHeaderFooterguestSigninIndexRoute
   withoutHeaderFooterleagalPagesCookiePolicyIndexRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
   withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
@@ -466,14 +469,14 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(without-header-footer)/(authenticated)/(existing-user)': {
       id: '/(without-header-footer)/(authenticated)/(existing-user)'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(without-header-footer)/(leagal-pages)/terms-of-service/': {
       id: '/(without-header-footer)/(leagal-pages)/terms-of-service/'
@@ -508,7 +511,7 @@ declare module '@tanstack/react-router' {
       path: '/redirect-signin'
       fullPath: '/redirect-signin/'
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/trading/syntx/': {
       id: '/(with-header-footer)/trading/syntx/'
@@ -661,9 +664,45 @@ const withHeaderFooterRouteRouteWithChildren =
     withHeaderFooterRouteRouteChildren,
   )
 
+interface withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren {
+  withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+}
+
+const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren =
+  {
+    withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute,
+  }
+
+const withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren =
+  withoutHeaderFooterauthenticatedexistingUserRouteRoute._addFileChildren(
+    withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren,
+  )
+
+interface withoutHeaderFooterauthenticatednewUserRouteRouteChildren {
+  withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute: typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
+}
+
+const withoutHeaderFooterauthenticatednewUserRouteRouteChildren: withoutHeaderFooterauthenticatednewUserRouteRouteChildren =
+  {
+    withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute:
+      withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute,
+  }
+
+const withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren =
+  withoutHeaderFooterauthenticatednewUserRouteRoute._addFileChildren(
+    withoutHeaderFooterauthenticatednewUserRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   withHeaderFooterRouteRoute: withHeaderFooterRouteRouteWithChildren,
+  withoutHeaderFooterauthenticatedexistingUserRouteRoute:
+    withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren,
+  withoutHeaderFooterauthenticatednewUserRouteRoute:
+    withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  withoutHeaderFooterauthenticatedRedirectSigninIndexRoute:
+    withoutHeaderFooterauthenticatedRedirectSigninIndexRoute,
   withoutHeaderFooterguestSigninIndexRoute:
     withoutHeaderFooterguestSigninIndexRoute,
   withoutHeaderFooterleagalPagesCookiePolicyIndexRoute:

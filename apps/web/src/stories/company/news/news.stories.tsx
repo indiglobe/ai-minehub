@@ -11,6 +11,7 @@ import type {
   TypedMetaOptions,
   TypedStoryOptions,
 } from "@/integrations/storybook/sb.types";
+import type { FileRouteTypes } from "@/routeTree.gen";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   createMemoryHistory,
@@ -32,7 +33,7 @@ const meta: Meta<typeof NewsComp> & TypedMetaOptions = {
 
     const route = createRoute({
       getParentRoute: () => rootRoute,
-      id: "/(with-header-footer)/company/news/",
+      id: "/(with-header-footer)/company/news/" satisfies FileRouteTypes["id"],
       loader: () => ({
         newsData: newsDataData(),
       }),

@@ -1,3 +1,4 @@
+import { Instruments } from "@/components/main/trading/instruments/instruments";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -13,5 +14,9 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/trading/instruments/"!</div>;
+  return (
+    <>
+      <Instruments />
+    </>
+  );
 }

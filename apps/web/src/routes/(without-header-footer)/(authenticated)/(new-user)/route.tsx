@@ -42,6 +42,10 @@ export const Route = createFileRoute(
       throw redirect({ to: "/dashboard" });
     }
 
+    return {
+      session,
+    };
+
     // No profile found.
     // Allow access to the onboarding flow.
   },

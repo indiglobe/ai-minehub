@@ -13,6 +13,7 @@ import type {
   TypedMetaOptions,
   TypedStoryOptions,
 } from "@/integrations/storybook/sb.types";
+import type { FileRouteTypes } from "@/routeTree.gen";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   createMemoryHistory,
@@ -33,7 +34,7 @@ const meta: Meta<typeof HomeComp> & TypedMetaOptions = {
 
     const route = createRoute({
       getParentRoute: () => rootRoute,
-      id: "/(with-header-footer)/",
+      id: "/(with-header-footer)/" satisfies FileRouteTypes["id"],
       loader: () => ({
         allRatings: allRatingsData(),
       }),
@@ -124,6 +125,7 @@ async function allRatingsData() {
         role: "basic",
         tableIdentifierToken: "USER",
         updatedAt: new Date(Date.now()),
+        referrerId: null,
       },
     },
     {
@@ -144,6 +146,7 @@ async function allRatingsData() {
         role: "basic",
         tableIdentifierToken: "USER",
         updatedAt: new Date(Date.now()),
+        referrerId: null,
       },
     },
     {
@@ -164,6 +167,7 @@ async function allRatingsData() {
         role: "basic",
         tableIdentifierToken: "USER",
         updatedAt: new Date(Date.now()),
+        referrerId: "1212121212",
       },
     },
   ] satisfies Awaited<ReturnType<typeof serverFn__readAllRatings>>;

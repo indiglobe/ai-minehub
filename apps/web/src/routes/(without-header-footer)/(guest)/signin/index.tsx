@@ -1,4 +1,4 @@
-import SigninComp from "@/components/main/signin/signin";
+import { SigninComp } from "@/components/main/signin/signin";
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { fetchSession } from "@/lib/auth/session";
 import { signinPageSearchParams } from "@/utils/zod-schema/search-params-schema/signin-page";
@@ -57,7 +57,6 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      {/* Sign-in page UI */}
       <SigninComp />
     </>
   );

@@ -57,8 +57,8 @@ export default function Home() {
       <TrustStatSection />
       <WhyUsSection />
       <AccountTypesSection />
-      <ExclusiveOffersSection />
-      <EverythingYouNeedSection />
+      {/* <ExclusiveOffersSection />
+      <EverythingYouNeedSection /> */}
     </Main>
   );
 }
@@ -294,7 +294,7 @@ export function TrustStatSection({
       )}
       {...props}
     >
-      <h2 className={cn(`text-center text-foreground/70 uppercase`)}>
+      <h2 className={cn(`text-foreground/70 text-center uppercase`)}>
         Trusted & Regulated By
       </h2>
       <ul
@@ -507,7 +507,7 @@ export function AccountTypesSection({
                 </AccountTypeCardOfferingItemTopic>
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `bg-accent-500/20 text-accent-500 px-2 border border-accent-500/40 rounded-md`,
+                    `bg-accent-500/20 text-accent-500 border-accent-500/40 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes
@@ -557,7 +557,7 @@ export function AccountTypesSection({
 
           <AccountType
             className={cn(
-              `md:col-span-2 lg:col-span-1 md:col-start-1 md:row-start-1 lg:col-start-2`,
+              `md:col-span-2 md:col-start-1 md:row-start-1 lg:col-span-1 lg:col-start-2`,
             )}
           >
             <AccountTypeHeader
@@ -603,7 +603,7 @@ export function AccountTypesSection({
                 </AccountTypeCardOfferingItemTopic>
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `bg-accent-500/20 text-accent-500 px-2 border border-accent-500/40 rounded-md`,
+                    `bg-accent-500/20 text-accent-500 border-accent-500/40 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes
@@ -694,7 +694,7 @@ export function AccountTypesSection({
                 </AccountTypeCardOfferingItemTopic>
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `bg-accent-500/20 text-accent-500 px-2 border border-accent-500/40 rounded-md`,
+                    `bg-accent-500/20 text-accent-500 border-accent-500/40 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes

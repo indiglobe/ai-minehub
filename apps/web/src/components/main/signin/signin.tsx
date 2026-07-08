@@ -8,7 +8,7 @@ import { useSearch } from "@tanstack/react-router";
 import { env } from "@repo/env/client";
 import Main from "@/components/main/main";
 
-export default function SigninComp({ ...props }: ComponentProps<typeof Main>) {
+export function SigninComp({ ...props }: ComponentProps<typeof Main>) {
   return (
     <Main
       className={cn(
@@ -174,6 +174,7 @@ function SigninForm({ className, ...props }: ComponentProps<"div">) {
       {/* Button */}
       <div className="w-full">
         <GoogleSigninButton
+          className={cn(`mx-auto`)}
           onClick={async () => {
             await authClient.signIn.social({
               provider: "google",

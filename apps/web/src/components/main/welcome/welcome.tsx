@@ -229,7 +229,8 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
               Phone Number
             </label>
             <input
-              type="tel"
+              type="text"
+              inputMode="numeric"
               placeholder="9876543210"
               value={field.state.value || ""}
               onBlur={field.handleBlur}
@@ -248,7 +249,8 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
           <div>
             <label className={cn(`mb-2 block text-sm font-medium`)}>Age</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               min={0}
               value={field.state.value || ""}
               onBlur={field.handleBlur}
