@@ -51,12 +51,14 @@ export type TRead__AllUsers = {
     limit?: number;
   };
 
-  joinOptions?: {
-    ratingDetails: boolean;
-    tradingWalletDetails: boolean;
-    miningWalletDetails: boolean;
+  joinOptions?: Partial<{
+    tradingWallet: boolean;
+    miningWallet: boolean;
+    rating: boolean;
+    referredBy: boolean;
     referrals: boolean;
-  };
+    miningOrders: boolean;
+  }>;
 };
 
 /**
@@ -68,7 +70,7 @@ export type TRead__AllUsers = {
  * @param options.identifier.role - Filter users by role
  * @param options.queryOptions.skip - Number of records to skip (pagination offset)
  * @param options.queryOptions.limit - Maximum number of records to return
- * @param options.joinOptions.miningWalletDetails - Include mining wallet relation
+ * @param options.joinOptions.miningWallet - Include mining wallet relation
  * @param options.joinOptions.tradingWalletDetails - Include trading wallet relation
  * @param options.joinOptions.ratingDetails - Include rating relation
  * @returns Array of user records with optional relations
@@ -94,14 +96,12 @@ export const read__AllUsers = async (options?: TRead__AllUsers) => {
     where: and(...conditions),
     orderBy: [desc(UserTable.createdAt)],
     with: {
-      ...(options?.joinOptions?.miningWalletDetails
-        ? { miningWalletDetails: true }
-        : {}),
-      ...(options?.joinOptions?.ratingDetails ? { ratingDetails: true } : {}),
-      ...(options?.joinOptions?.tradingWalletDetails
-        ? { tradingWalletDetails: true }
-        : {}),
+      ...(options?.joinOptions?.miningWallet ? { miningWallet: true } : {}),
+      ...(options?.joinOptions?.rating ? { rating: true } : {}),
+      ...(options?.joinOptions?.tradingWallet ? { tradingWallet: true } : {}),
+      ...(options?.joinOptions?.miningOrders ? { miningOrders: true } : {}),
       ...(options?.joinOptions?.referrals ? { referrals: true } : {}),
+      ...(options?.joinOptions?.referredBy ? { referredBy: true } : {}),
     },
   });
 
@@ -123,11 +123,14 @@ export type TRead__OneUser = {
         id: (typeof UserTable.$inferSelect)["id"];
       };
 
-  joinOptions?: {
-    ratingDetails: boolean;
-    tradingWalletDetails: boolean;
-    miningWalletDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    tradingWallet: boolean;
+    miningWallet: boolean;
+    rating: boolean;
+    referredBy: boolean;
+    referrals: boolean;
+    miningOrders: boolean;
+  }>;
 };
 
 /**
@@ -137,7 +140,7 @@ export type TRead__OneUser = {
  * and rating details based on join configuration.
  *
  * @param options.identifier.email - Unique email identifier for the user
- * @param options.joinOptions.miningWalletDetails - Include mining wallet relation
+ * @param options.joinOptions.miningWallet - Include mining wallet relation
  * @param options.joinOptions.tradingWalletDetails - Include trading wallet relation
  * @param options.joinOptions.ratingDetails - Include rating relation
  * @returns User record if found, otherwise null
@@ -159,13 +162,12 @@ export const read__OneUser = async (options: TRead__OneUser) => {
   const queryResult = await db.query.UserTable.findFirst({
     where: and(...conditions),
     with: {
-      ...(options?.joinOptions?.miningWalletDetails
-        ? { miningWalletDetails: true }
-        : {}),
-      ...(options?.joinOptions?.ratingDetails ? { ratingDetails: true } : {}),
-      ...(options?.joinOptions?.tradingWalletDetails
-        ? { tradingWalletDetails: true }
-        : {}),
+      ...(options?.joinOptions?.miningWallet ? { miningWallet: true } : {}),
+      ...(options?.joinOptions?.rating ? { rating: true } : {}),
+      ...(options?.joinOptions?.tradingWallet ? { tradingWallet: true } : {}),
+      ...(options?.joinOptions?.miningOrders ? { miningOrders: true } : {}),
+      ...(options?.joinOptions?.referrals ? { referrals: true } : {}),
+      ...(options?.joinOptions?.referredBy ? { referredBy: true } : {}),
     },
   });
 

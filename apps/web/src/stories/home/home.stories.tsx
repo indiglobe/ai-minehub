@@ -7,6 +7,7 @@ import Home, {
   Rating,
   WhyUsSection,
   PassiveIncomeSection,
+  BottomCTASection,
 } from "@/components/main/home/home";
 import type { serverFn__readAllRatings } from "@/integrations/server-function/rating";
 import type {
@@ -102,6 +103,11 @@ export const EverythingYouNeedSectionCompStory: Story = {
 export const PassiveIncomeSectionCompStory: Story = {
   args: {},
   render: () => <PassiveIncomeSection />,
+};
+
+export const BottomCTASectionCompStory: Story = {
+  args: {},
+  render: () => <BottomCTASection />,
 };
 
 async function allRatingsData() {

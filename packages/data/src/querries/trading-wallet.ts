@@ -55,9 +55,9 @@ export type TRead__AllTradingWallets = {
     limit?: number;
   };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -86,7 +86,7 @@ export const read__AllTradingWallets = async (
       offset: skip,
       orderBy: [desc(TradingWalletTable.createdAt)],
       with: {
-        ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+        ...(options?.joinOptions?.user ? { user: true } : {}),
       },
     });
 
@@ -96,7 +96,7 @@ export const read__AllTradingWallets = async (
     where: and(...conditions),
     orderBy: [desc(TradingWalletTable.createdAt)],
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 };
@@ -116,9 +116,9 @@ export type TRead__OneTradingWallet = {
         associatedUser: (typeof TradingWalletTable.$inferSelect)["associatedUser"];
       };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -155,7 +155,7 @@ export const read__OneTradingWallet = async (
   const queryResult = await db.query.TradingWalletTable.findFirst({
     where: and(...conditions),
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 

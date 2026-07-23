@@ -3,6 +3,8 @@ import type { ComponentProps } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Check, Globe } from "lucide-react";
+import { Button } from "@repo/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,7 +44,7 @@ export function SectionSubHeading({
   return (
     <h2
       className={cn(
-        `fs-3.5 md:fs-4.5 max-w-140 text-center text-foreground/50`,
+        `fs-3.5 md:fs-4.5 text-foreground/50 max-w-140 text-center`,
         className,
       )}
       {...props}
@@ -69,7 +71,7 @@ export function WhyChooseCards({ className, ...props }: ComponentProps<"div">) {
       data-slot={`section-sub-heading`}
       className={cn(
         `bg-secondary-500/20 dark:bg-secondary-500/10 dark:border-secondary-500/15 group border-secondary-500/50 hover:border-secondary-500 dark:hover:border-secondary-500/30 relative space-y-3 overflow-clip rounded-2xl border p-10 transition-transform duration-500 hover:-translate-y-1`,
-        `gsap-section-sub-heading relative opacity-0 top-10`,
+        `gsap-section-sub-heading relative top-10 opacity-0`,
         className,
       )}
       {...props}
@@ -125,7 +127,7 @@ export function WhyChooseCardDetails({
   return (
     <h3
       data-slot={`why-choose-card-details`}
-      className={cn(`text-sm text-foreground/50`, className)}
+      className={cn(`text-foreground/50 text-sm`, className)}
       {...props}
     />
   );
@@ -180,7 +182,7 @@ export function AccountType({ className, ...props }: ComponentProps<"div">) {
       data-slot={`account-type`}
       className={cn(
         `bg-secondary-500/10 border-secondary-500/50 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
-        `relative opacity-0 top-10 gsap-account-type`,
+        `gsap-account-type relative top-10 opacity-0`,
         className,
       )}
       {...props}
@@ -259,7 +261,7 @@ export function AccountTypeDescription({
   return (
     <div
       data-slot={`account-type-description`}
-      className={cn(`text-sm text-foreground/50 uppercase`, className)}
+      className={cn(`text-foreground/50 text-sm uppercase`, className)}
       {...props}
     />
   );
@@ -371,5 +373,300 @@ export function BouncingBox({ className, ...props }: ComponentProps<"div">) {
     >
       {props.children}
     </div>
+  );
+}
+
+export function PromotionBonus({
+  className,
+  offer,
+  ...props
+}: ComponentProps<"div"> & { offer?: boolean }) {
+  useGSAP(() => {
+    gsap.to(".gsap-account-type", {
+      opacity: 1,
+      top: 0,
+      stagger: 0.3,
+      scrollTrigger: {
+        trigger: ".gsap-account-type",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+
+  return (
+    <div
+      data-slot={`promotion-bonus`}
+      className={cn(
+        `bg-secondary-500/10 border-secondary-500/50 relative space-y-4 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
+        `gsap-account-type relative top-10 opacity-0`,
+        className,
+      )}
+      {...props}
+    >
+      {offer && (
+        <span
+          className={cn(
+            `bg-primary-600 absolute top-4 right-4 rounded-full px-2 py-0.5 text-xs`,
+          )}
+        >
+          🔥 Hot Offer
+        </span>
+      )}
+      {props.children}
+    </div>
+  );
+}
+
+export function PromotionBonusIcon({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot={`promotion-bonus-icon`}
+      className={cn(
+        `bg-background flex size-16 shrink-0 items-center justify-center rounded-sm border border-[color-mix(in_srgb,currentColor_30%,transparent)]`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function PromotionBonusTitle({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot={`promotion-bonus-title`}
+      className={cn(`font-brand-secondary text-2xl font-bold`, className)}
+      {...props}
+    />
+  );
+}
+
+export function PromotionBonusDescription({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot={`promotion-bonus-description`}
+      className={cn(`text-foreground/50 text-sm`, className)}
+      {...props}
+    />
+  );
+}
+
+export function PaymentVisual() {
+  return (
+    <div
+      className={cn(
+        `hidden items-center justify-center p-7 md:col-span-5 md:flex`,
+      )}
+    >
+      <div className={cn(`relative w-50`)}>
+        {/* Visa Card */}
+        <div
+          className={cn(
+            `w-40 rounded-xl border border-white/10 bg-linear-to-br from-[#1e3a5f] to-[#1a3254] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.4)]`,
+          )}
+        >
+          <div
+            className={`mb-4 h-5 w-7 rounded bg-linear-to-br from-[#d4af37] to-[#f0d060]`}
+          />
+
+          <div className={cn(`mb-2 text-sm font-black text-white italic`)}>
+            VISA
+          </div>
+
+          <div className={cn(`text-2.75 font-mono text-white/50`)}>
+            •••• •••• •••• 4242
+          </div>
+        </div>
+
+        {/* Bitcoin Card */}
+        <div
+          className={cn(
+            `absolute right-0 -bottom-8 w-40 -rotate-6 rounded-xl border border-white/10 bg-linear-to-br from-[#1c3044] to-[#f59e0b22] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.4)]`,
+          )}
+        >
+          <div
+            className={cn(
+              `mb-4 h-5 w-7 rounded bg-linear-to-br from-[#d4af37] to-[#f0d060]`,
+            )}
+          />
+
+          <div className={cn(`mb-2 text-2xl text-amber-400`)}>₿</div>
+
+          <div className={cn(`text-2.75 font-mono text-white/50`)}>Bitcoin</div>
+        </div>
+
+        {/* Floating Globe */}
+        <div
+          className={cn(
+            `absolute -top-5 -right-2 flex animate-bounce items-center gap-2 rounded-lg border border-blue-500/20 bg-[#0e1829] px-3 py-2 text-xs font-bold text-blue-400 shadow-lg`,
+          )}
+        >
+          <Globe className={cn(`size-4`)} />
+
+          <span>30+ Methods</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function PassiveIncome({
+  className,
+  popular,
+  ...props
+}: ComponentProps<"div"> & { popular?: boolean }) {
+  useGSAP(() => {
+    gsap.to(".gsap-account-type", {
+      opacity: 1,
+      top: 0,
+      stagger: 0.3,
+      scrollTrigger: {
+        trigger: ".gsap-account-type",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+
+  return (
+    <div
+      data-slot={`passive-income`}
+      data-popular={popular}
+      className={cn(
+        `group`,
+        `bg-secondary-500/10 border-secondary-500/50 relative flex w-full flex-col items-center justify-center space-y-4 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
+        `gsap-account-type relative top-10 opacity-0`,
+        className,
+      )}
+      {...props}
+    >
+      {popular && (
+        <span
+          className={cn(
+            `bg-primary-600 absolute top-8 -right-17 rotate-45 rounded-full px-20 py-0.5 text-xs uppercase`,
+          )}
+        >
+          Popular
+        </span>
+      )}
+      {props.children}
+    </div>
+  );
+}
+
+export function PassiveIncomeIcon({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot={`passive-income-icon`}
+      className={cn(
+        `flex size-16 shrink-0 items-center justify-center rounded-sm text-2xl`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function PassiveIncomeTitle({
+  className,
+  ...props
+}: ComponentProps<"h3">) {
+  return (
+    <h3
+      data-slot={`passive-income-title`}
+      className={cn(`font-brand-secondary text-2xl font-bold`, className)}
+      {...props}
+    />
+  );
+}
+
+export function PassiveIncomeReturn({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot={`passive-income-return`}
+      className={cn(
+        `font-brand-secondary bg-accent-500/20 flex w-full flex-col items-center justify-center rounded-2xl p-8 font-bold`,
+        className,
+      )}
+      {...props}
+    >
+      <div className={cn(`text-accent-500 text-2xl lg:text-3xl`)}>
+        {props.children}
+      </div>
+      <div className={cn(`text-foreground/50 text-sm font-normal`)}>
+        Total retun
+      </div>
+    </div>
+  );
+}
+
+export function PassiveIncomeDescription({
+  className,
+  ...props
+}: ComponentProps<"ul">) {
+  return (
+    <ul
+      data-slot={`passive-income-description`}
+      className={cn(`text-foreground/50 w-full space-y-4 text-sm`, className)}
+      {...props}
+    />
+  );
+}
+
+export function PassiveIncomeDescriptionItem({
+  className,
+  ...props
+}: ComponentProps<"li">) {
+  return (
+    <li
+      data-slot={`passive-income-description-item`}
+      className={cn(`text-foreground/50 space-x-4 text-sm`, className)}
+      {...props}
+    >
+      <Check
+        className={cn(
+          `bg-accent-500 inline-block size-4 rounded-full px-px text-white`,
+        )}
+      />
+      <span>{props.children}</span>
+    </li>
+  );
+}
+
+export function PassiveIncomeCTA({
+  className,
+  ...props
+}: ComponentProps<typeof Button>) {
+  return (
+    <Button
+      className={cn(
+        `group/btn border-accent-500 group-data-[popular=true]:hover:shadow-accent-500/30 relative h-16 w-full overflow-hidden rounded-xl border bg-transparent transition-shadow hover:bg-transparent group-data-[popular=true]:hover:shadow-xl`,
+        className,
+      )}
+      {...props}
+    >
+      <span
+        className={cn(
+          `from-secondary-500 to-accent-500 absolute inset-0 bg-linear-to-r opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100 group-data-[popular=true]:opacity-100`,
+        )}
+      />
+
+      <span className={cn(`relative z-10`)}>Start Mining</span>
+    </Button>
   );
 }

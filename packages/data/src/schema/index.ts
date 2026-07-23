@@ -7,6 +7,7 @@ import {
   timestamp,
   float,
   tinyint,
+  smallint,
 } from "drizzle-orm/mysql-core";
 import { id } from "@repo/utils/id";
 import { relations } from "drizzle-orm";
@@ -33,6 +34,14 @@ export type TableIdentifierToken =
    * NewsTable
    */
   | "NEWS"
+  /**
+   * MiningOrderTable
+   */
+  | "MORD"
+  /**
+   * MiningProfileTable
+   */
+  | "MPRO"
   /**
    * TradingWalletTable
    */
@@ -63,7 +72,9 @@ export const tableIdentifierToken = mysqlEnum("table_identifier_token", [
   "TWAL",
   "MWAL",
   "RTNG",
+  "MORD",
   "NEWS",
+  "MPRO",
 ] as [TableIdentifierToken, ...TableIdentifierToken[]]);
 export const tokenColumn = (token: TableIdentifierToken) =>
   tableIdentifierToken.notNull().default(token);
@@ -107,6 +118,7 @@ export const TradingWalletTable = mysqlTable("trading_wallet", {
     .$defaultFn(() => id()),
   balance: float({ precision: 2 }).$default(() => 0),
   associatedUser: char({ length: 10 })
+    .unique()
     .references(() => UserTable.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
@@ -126,6 +138,7 @@ export const MiningWalletTable = mysqlTable("mining_wallet", {
     .$defaultFn(() => id()),
   balance: float({ precision: 2 }).$default(() => 0),
   associatedUser: char({ length: 10 })
+    .unique()
     .references(() => UserTable.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
@@ -144,6 +157,7 @@ export const RatingTable = mysqlTable("rating", {
     .primaryKey()
     .$defaultFn(() => id()),
   associatedUser: char({ length: 10 })
+    .unique()
     .references(() => UserTable.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
@@ -174,28 +188,83 @@ export const NewsTable = mysqlTable("news", {
   tableIdentifierToken: tokenColumn("NEWS"),
 });
 
+// -------------------------
+// MiningProfileTable
+// -------------------------
+
+export const MiningProfileTable = mysqlTable("mining_profile", {
+  id: char("id", { length: 10 })
+    .primaryKey()
+    .$defaultFn(() => id()),
+  maximumAllowedAmount: int().notNull(),
+  minimumAllowedAmount: int().notNull(),
+  lockinPeriod: smallint().notNull(),
+  category: varchar({ length: 50 }).notNull(),
+  dailyReturn: float({ precision: 2 }).notNull(),
+  ...metadataTimestamp,
+  tableIdentifierToken: tokenColumn("MPRO"),
+});
+
+// -------------------------
+// MiningOrderTable
+// -------------------------
+
+export const MiningOrderTable = mysqlTable("mining_order", {
+  id: char("id", { length: 10 })
+    .primaryKey()
+    .$defaultFn(() => id()),
+  orderedBy: char("ordered_by", { length: 10 })
+    .notNull()
+    .references(() => UserTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  amountInvested: int().notNull(),
+  miningProfileUsed: char("mining_profile_used", {
+    length: 10,
+  })
+    .notNull()
+    .references(() => MiningProfileTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  ...metadataTimestamp,
+  tableIdentifierToken: tokenColumn("MORD"),
+});
+
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 
 export const UserRelations = relations(UserTable, ({ one, many }) => ({
-  tradingWalletDetails: one(TradingWalletTable, {
+  tradingWallet: one(TradingWalletTable, {
     fields: [UserTable.id],
     references: [TradingWalletTable.associatedUser],
   }),
-  miningWalletDetails: one(MiningWalletTable, {
+  miningWallet: one(MiningWalletTable, {
     fields: [UserTable.id],
     references: [MiningWalletTable.associatedUser],
   }),
-  ratingDetails: one(RatingTable),
-  referrals: many(UserTable),
+  rating: one(RatingTable, {
+    fields: [UserTable.id],
+    references: [RatingTable.associatedUser],
+  }),
+  referredBy: one(UserTable, {
+    fields: [UserTable.referrerId],
+    references: [UserTable.id],
+    relationName: "UserReferrals",
+  }),
+  referrals: many(UserTable, {
+    relationName: "UserReferrals",
+  }),
+  miningOrders: many(MiningOrderTable),
 }));
 
 export const TradingWalletRelations = relations(
   TradingWalletTable,
   ({ one }) => ({
-    userDetails: one(UserTable, {
+    user: one(UserTable, {
       fields: [TradingWalletTable.associatedUser],
       references: [UserTable.id],
     }),
@@ -205,7 +274,7 @@ export const TradingWalletRelations = relations(
 export const MiningWalletRelations = relations(
   MiningWalletTable,
   ({ one }) => ({
-    userDetails: one(UserTable, {
+    user: one(UserTable, {
       fields: [MiningWalletTable.associatedUser],
       references: [UserTable.id],
     }),
@@ -213,9 +282,27 @@ export const MiningWalletRelations = relations(
 );
 
 export const RatingRelations = relations(RatingTable, ({ one }) => ({
-  userDetails: one(UserTable, {
+  user: one(UserTable, {
     fields: [RatingTable.associatedUser],
     references: [UserTable.id],
+  }),
+}));
+
+export const MiningProfileRelations = relations(
+  MiningProfileTable,
+  ({ many }) => ({
+    orders: many(MiningOrderTable),
+  }),
+);
+
+export const MiningOrderRelations = relations(MiningOrderTable, ({ one }) => ({
+  user: one(UserTable, {
+    fields: [MiningOrderTable.orderedBy],
+    references: [UserTable.id],
+  }),
+  miningProfile: one(MiningProfileTable, {
+    fields: [MiningOrderTable.miningProfileUsed],
+    references: [MiningProfileTable.id],
   }),
 }));
 

@@ -71,9 +71,9 @@ export type TRead__AllRatings = {
     limit?: number;
   };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -85,7 +85,7 @@ export type TRead__AllRatings = {
  * @param options.identifier.ratingStar - Filter ratings by star value
  * @param options.queryOptions.skip - Number of records to skip (pagination offset)
  * @param options.queryOptions.limit - Maximum number of records to return
- * @param options.joinOptions.userDetails - Include related user data
+ * @param options.joinOptions.user - Include related user data
  * @returns Array of rating records
  */
 export const read__AllRatings = async (options?: TRead__AllRatings) => {
@@ -104,7 +104,7 @@ export const read__AllRatings = async (options?: TRead__AllRatings) => {
     where: and(...conditions),
     orderBy: [desc(RatingTable.createdAt)],
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 };
@@ -124,9 +124,9 @@ export type TRead__OneRating = {
         id: (typeof RatingTable.$inferSelect)["id"];
       };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -139,7 +139,7 @@ export type TRead__OneRating = {
  * Optionally includes related user details if requested.
  *
  * @param options.identifier - Unique identifier for the rating record
- * @param options.joinOptions.userDetails - Include related user data
+ * @param options.joinOptions.user - Include related user data
  * @returns The rating record if found, otherwise null
  */
 export const read__OneRating = async (options: TRead__OneRating) => {
@@ -158,7 +158,7 @@ export const read__OneRating = async (options: TRead__OneRating) => {
   const queryResult = await db.query.RatingTable.findFirst({
     where: and(...conditions),
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 
@@ -173,8 +173,8 @@ export const read__OneRating = async (options: TRead__OneRating) => {
 
 export type TRead__RatingStats = {
   joinOptions?: {
-    userDetails: boolean;
-    ratingDetails: boolean;
+    user: boolean;
+    rating: boolean;
   };
 };
 
@@ -184,8 +184,8 @@ export type TRead__RatingStats = {
  * Returns total count per rating star along with optional aggregated
  * JSON details for ratings and related user information.
  *
- * @param options.joinOptions.ratingDetails - Include rating record details in response
- * @param options.joinOptions.userDetails - Include related user details in response
+ * @param options.joinOptions.rating - Include rating record details in response
+ * @param options.joinOptions.user - Include related user details in response
  * @returns Array of grouped rating statistics with optional JSON details
  */
 export const read__RatingStats = async (options: TRead__RatingStats) => {
@@ -196,16 +196,16 @@ export const read__RatingStats = async (options: TRead__RatingStats) => {
 
   const details = sql<
     {
-      ratingDetails?: typeof RatingTable.$inferSelect;
-      userDetails?: typeof UserTable.$inferSelect;
+      rating?: typeof RatingTable.$inferSelect;
+      user?: typeof UserTable.$inferSelect;
     }[]
   >`
     JSON_ARRAYAGG(
       JSON_OBJECT(
         ${
-          joinOptions?.ratingDetails
+          joinOptions?.rating
             ? sql`
-              'ratingDetails',
+              'rating',
               JSON_OBJECT(
                 'id', ${ratingTableCol.id},
                 'associatedUser', ${ratingTableCol.associatedUser},
@@ -219,9 +219,9 @@ export const read__RatingStats = async (options: TRead__RatingStats) => {
         }
 
         ${
-          joinOptions?.userDetails
+          joinOptions?.user
             ? sql`
-              'userDetails',
+              'user',
               JSON_OBJECT(
                 'id', ${userTableCol.id},
                 'fullName', ${userTableCol.fullName},

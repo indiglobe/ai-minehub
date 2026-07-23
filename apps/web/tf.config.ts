@@ -1,5 +1,5 @@
 import { defineConfig } from "taskforge-cli/config";
-import os from "node:os";
+import { env } from "node:process";
 
 export default defineConfig({
   envDir: "../../",
@@ -15,12 +15,16 @@ export default defineConfig({
     "dev:app": {
       execute: "vite dev",
       envFile:
-        os.platform() === "linux" ? ".env.devcontainer" : ".env.development",
+        env.PLATFORM === "devcontainer"
+          ? ".env.devcontainer"
+          : ".env.development",
     },
     "sb:dev": {
-      execute: "storybook dev -p 6007 --no-open",
+      execute: "storybook dev -p 6006 --no-open",
       envFile:
-        os.platform() === "linux" ? ".env.devcontainer" : ".env.development",
+        env.PLATFORM === "devcontainer"
+          ? ".env.devcontainer"
+          : ".env.development",
     },
     "sb:build": {
       execute: "storybook build",

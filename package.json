@@ -4,6 +4,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:apps": "turbo run dev --filter=!@repo/*",
+    "dev:packages": "turbo run dev --filter=@repo/*",
     "lint": "turbo run lint",
     "format": "turbo run format",
     "lint:staged": "turbo run lint:staged",

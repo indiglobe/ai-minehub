@@ -14,6 +14,7 @@ const config = defineConfig(({ mode }) => {
 
     server: {
       host: "0.0.0.0",
+      allowedHosts: !isProd ? true : undefined,
     },
 
     plugins: [

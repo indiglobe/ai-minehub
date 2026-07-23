@@ -35,13 +35,15 @@ services:
     container_name: ai-minehub-dev-proxy
     image: nginx:alpine
     ports:
-      - "8080:80" # access everything via localhost:3000 in dev
-    volumes:
-      - ./../nginx.dev.conf:/etc/nginx/nginx.conf:ro
-    extra_hosts:
-      - "host.docker.internal:host-gateway" # lets nginx reach your host machine
+      - "80:80"
+      - "443:443"
     networks:
       - ai-minehub-dev
+    volumes:
+      # - ../nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ../nginx.dev.secure.conf:/etc/nginx/nginx.conf:ro
+      - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
+      - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
 volumes:
   database:

@@ -11,7 +11,7 @@ export const ThemeDecorator = withThemeByClassName<ReactRenderer>({
     light: "",
     dark: "dark",
   },
-  defaultTheme: "light",
+  defaultTheme: "dark",
 });
 
 export const RouterDecorator: Decorator = (Story) => {

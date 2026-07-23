@@ -63,9 +63,9 @@ export type TRead__AllMiningWallets = {
     limit?: number;
   };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -94,7 +94,7 @@ export const read__AllMiningWallets = async (
     where: conditions.length > 0 ? and(...conditions) : undefined,
     orderBy: [desc(MiningWalletTable.createdAt)],
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 };
@@ -114,9 +114,9 @@ export type TRead__OneMiningWallet = {
         associatedUser: (typeof MiningWalletTable.$inferSelect)["associatedUser"];
       };
 
-  joinOptions?: {
-    userDetails: boolean;
-  };
+  joinOptions?: Partial<{
+    user: boolean;
+  }>;
 };
 
 /**
@@ -153,7 +153,7 @@ export const read__OneMiningWallet = async (
   const queryResult = await db.query.MiningWalletTable.findFirst({
     where: and(...conditions),
     with: {
-      ...(options?.joinOptions?.userDetails ? { userDetails: true } : {}),
+      ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
 

@@ -21,6 +21,17 @@ import {
   AccountTypeFooter,
   AccountTypeIcon,
   BouncingBox,
+  PromotionBonus,
+  PromotionBonusIcon,
+  PromotionBonusTitle,
+  PromotionBonusDescription,
+  PaymentVisual,
+  PassiveIncome,
+  PassiveIncomeIcon,
+  PassiveIncomeTitle,
+  PassiveIncomeDescription,
+  PassiveIncomeReturn,
+  PassiveIncomeDescriptionItem,
 } from "@/components/main/home/page-uis";
 import type { TypedMetaOptions } from "@/integrations/storybook/sb.types";
 import { cn } from "@repo/styles/cn";
@@ -166,4 +177,69 @@ function AccountTypesWappers() {
 export const AccountTypesWappersStory: Story = {
   args: {},
   render: () => <AccountTypesWappers />,
+};
+
+function PromotionBonusWappers() {
+  return (
+    <PromotionBonus offer>
+      <PromotionBonusIcon
+        className={cn(`rounded-2xl border border-red-500 bg-red-500/10`)}
+      >
+        <Home className={cn(`text-red-500`)} />
+      </PromotionBonusIcon>
+      <PromotionBonusTitle>Welcoins</PromotionBonusTitle>
+      <PromotionBonusDescription>
+        Welcoins are our digital currency, part of our loyalty program. Trade
+        and effortlessly earn Welcoins, then exchange them for cash rewards or
+        exciting items in Welshop.
+      </PromotionBonusDescription>
+    </PromotionBonus>
+  );
+}
+
+export const PromotionBonusWappersStory: Story = {
+  args: {},
+  render: () => <PromotionBonusWappers />,
+};
+
+function EverythingYouNeedWappers() {
+  return (
+    <>
+      <PaymentVisual />
+    </>
+  );
+}
+
+export const EverythingYouNeedWappersStory: Story = {
+  args: {},
+  render: () => <EverythingYouNeedWappers />,
+};
+
+function PassiveIncomeWappers() {
+  return (
+    <>
+      <PassiveIncome popular className={cn(`min-w-60`)}>
+        <PassiveIncomeIcon className={cn(`rounded-2xl bg-red-500/20`)}>
+          ⛏️
+        </PassiveIncomeIcon>
+        <PassiveIncomeTitle>Starter</PassiveIncomeTitle>
+        <PassiveIncomeReturn>+15%</PassiveIncomeReturn>
+        <PassiveIncomeDescription>
+          <PassiveIncomeDescriptionItem>Min: $50</PassiveIncomeDescriptionItem>
+          <PassiveIncomeDescriptionItem>Max: $500</PassiveIncomeDescriptionItem>
+          <PassiveIncomeDescriptionItem>
+            0.5% Daily
+          </PassiveIncomeDescriptionItem>
+          <PassiveIncomeDescriptionItem>
+            30 Days Lock
+          </PassiveIncomeDescriptionItem>
+        </PassiveIncomeDescription>
+      </PassiveIncome>
+    </>
+  );
+}
+
+export const PassiveIncomeWappersStory: Story = {
+  args: {},
+  render: () => <PassiveIncomeWappers />,
 };

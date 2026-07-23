@@ -15,7 +15,19 @@ import {
   AccountTypeHeading,
   AccountTypeIcon,
   AccountTypeTitle,
+  PassiveIncome,
+  PassiveIncomeCTA,
+  PassiveIncomeDescription,
+  PassiveIncomeDescriptionItem,
+  PassiveIncomeIcon,
+  PassiveIncomeReturn,
+  PassiveIncomeTitle,
+  PaymentVisual,
   PopularAccountType,
+  PromotionBonus,
+  PromotionBonusDescription,
+  PromotionBonusIcon,
+  PromotionBonusTitle,
   RatingError,
   RatingLoading,
   SectionHeading,
@@ -39,6 +51,11 @@ import {
   InfinityIcon,
   ChartColumnStacked,
   ArrowRight,
+  FingerprintIcon,
+  RotateCcw,
+  Grid2x2,
+  Rocket,
+  Check,
 } from "lucide-react";
 import type {
   ClientToServerEvents,
@@ -57,8 +74,10 @@ export default function Home() {
       <TrustStatSection />
       <WhyUsSection />
       <AccountTypesSection />
-      {/* <ExclusiveOffersSection />
-      <EverythingYouNeedSection /> */}
+      <ExclusiveOffersSection />
+      {/* <EverythingYouNeedSection /> */}
+      <PassiveIncomeSection />
+      <BottomCTASection />
     </Main>
   );
 }
@@ -764,6 +783,55 @@ export function ExclusiveOffersSection({
           every trader.
         </SectionSubHeading>
       </div>
+
+      <div
+        className={cn(
+          `grid grid-cols-1 gap-4 pt-24 md:grid-cols-2 lg:grid-cols-3`,
+        )}
+      >
+        <PromotionBonus>
+          <PromotionBonusIcon
+            className={cn(`rounded-2xl border border-blue-500 bg-blue-500/10`)}
+          >
+            <FingerprintIcon className={cn(`text-blue-500`)} />
+          </PromotionBonusIcon>
+          <PromotionBonusTitle>Welcoins</PromotionBonusTitle>
+          <PromotionBonusDescription>
+            Welcoins are our digital currency, part of our loyalty program.
+            Trade and effortlessly earn Welcoins, then exchange them for cash
+            rewards or exciting items in Welshop.
+          </PromotionBonusDescription>
+        </PromotionBonus>
+
+        <PromotionBonus offer>
+          <PromotionBonusIcon
+            className={cn(
+              `border-primary-500 bg-primary-500/10 rounded-2xl border`,
+            )}
+          >
+            <Grid2x2 className={cn(`text-primary-500`)} />
+          </PromotionBonusIcon>
+          <PromotionBonusTitle>First Deposit Bonus</PromotionBonusTitle>
+          <PromotionBonusDescription>
+            Double your first deposit or get your first deposit bonus — choose
+            your reward and start trading with extra funds today!
+          </PromotionBonusDescription>
+        </PromotionBonus>
+        <PromotionBonus>
+          <PromotionBonusIcon
+            className={cn(
+              `border-accent-500 bg-accent-500/10 rounded-2xl border`,
+            )}
+          >
+            <RotateCcw className={cn(`text-accent-500`)} />
+          </PromotionBonusIcon>
+          <PromotionBonusTitle>Reload Bonuses</PromotionBonusTitle>
+          <PromotionBonusDescription>
+            Make another deposit and receive a random bonus to boost your
+            capital. Every reload is a surprise reward — spin and win!
+          </PromotionBonusDescription>
+        </PromotionBonus>
+      </div>
     </section>
   );
 }
@@ -780,6 +848,10 @@ export function EverythingYouNeedSection({
           <span>Trade With </span>
           <span className={cn(`text-secondary-500`)}>Total Confidence </span>
         </SectionHeading>
+      </div>
+
+      <div className={cn(`pt-24`)}>
+        <PaymentVisual />
       </div>
     </section>
   );
@@ -801,6 +873,231 @@ export function PassiveIncomeSection({
           Start earning passive income with our automated cloud mining system.
           No mining equipment needed — just invest and watch your profits grow.
         </SectionSubHeading>
+      </div>
+
+      <div
+        className={cn(
+          `grid grid-cols-1 gap-4 pt-24 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
+        )}
+      >
+        <PassiveIncome className={cn(`min-w-60`)}>
+          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
+            ⛏️
+          </PassiveIncomeIcon>
+          <PassiveIncomeTitle>Starter</PassiveIncomeTitle>
+          <PassiveIncomeReturn>+15%</PassiveIncomeReturn>
+          <PassiveIncomeDescription>
+            <PassiveIncomeDescriptionItem>
+              Min: $50
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              Max: $500
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              0.5% Daily
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              30 Days Lock
+            </PassiveIncomeDescriptionItem>
+          </PassiveIncomeDescription>
+          <PassiveIncomeCTA />
+        </PassiveIncome>
+
+        <PassiveIncome popular className={cn(`min-w-60`)}>
+          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
+            ⚡
+          </PassiveIncomeIcon>
+          <PassiveIncomeTitle>Basic</PassiveIncomeTitle>
+          <PassiveIncomeReturn>+36%</PassiveIncomeReturn>
+          <PassiveIncomeDescription>
+            <PassiveIncomeDescriptionItem>
+              Min: $500
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              Max: $2,000
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              0.8% Daily
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              45 Days Lock
+            </PassiveIncomeDescriptionItem>
+          </PassiveIncomeDescription>
+          <PassiveIncomeCTA />
+        </PassiveIncome>
+
+        <PassiveIncome className={cn(`min-w-60`)}>
+          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
+            💎
+          </PassiveIncomeIcon>
+          <PassiveIncomeTitle>Professional</PassiveIncomeTitle>
+          <PassiveIncomeReturn>+72%</PassiveIncomeReturn>
+          <PassiveIncomeDescription>
+            <PassiveIncomeDescriptionItem>
+              Min: $2,000
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              Max: $10,000
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              1.2% Daily
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              60 Days Lock
+            </PassiveIncomeDescriptionItem>
+          </PassiveIncomeDescription>
+          <PassiveIncomeCTA />
+        </PassiveIncome>
+
+        <PassiveIncome className={cn(`min-w-60`)}>
+          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
+            🏆
+          </PassiveIncomeIcon>
+          <PassiveIncomeTitle>Enterprise</PassiveIncomeTitle>
+          <PassiveIncomeReturn>+162%</PassiveIncomeReturn>
+          <PassiveIncomeDescription>
+            <PassiveIncomeDescriptionItem>
+              Min: $10,000
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              Max: $1,00,000
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              1.8% Daily
+            </PassiveIncomeDescriptionItem>
+            <PassiveIncomeDescriptionItem>
+              90 Days Lock
+            </PassiveIncomeDescriptionItem>
+          </PassiveIncomeDescription>
+          <PassiveIncomeCTA />
+        </PassiveIncome>
+      </div>
+
+      <div
+        className={cn(
+          `bg-secondary-500/5 border-secondary-500/30 mt-24 grid grid-cols-1 gap-y-8 rounded-2xl border py-8 text-center md:grid-cols-2 lg:grid-cols-4`,
+        )}
+      >
+        <div
+          className={cn(
+            `flex w-full flex-col items-center justify-center`,
+            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
+            `*:nth-[2]:text-foreground/50`,
+          )}
+        >
+          <span>$2.5M+</span> <span>Total Mined</span>
+        </div>
+        <div
+          className={cn(
+            `flex w-full flex-col items-center justify-center`,
+            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
+            `*:nth-[2]:text-foreground/50`,
+          )}
+        >
+          <span>15,000+</span> <span>Active Miners</span>
+        </div>
+        <div
+          className={cn(
+            `flex w-full flex-col items-center justify-center`,
+            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
+            `*:nth-[2]:text-foreground/50`,
+          )}
+        >
+          <span>99.9%</span> <span>Uptime</span>
+        </div>
+        <div
+          className={cn(
+            `flex w-full flex-col items-center justify-center`,
+            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
+            `*:nth-[2]:text-foreground/50`,
+          )}
+        >
+          <span>24/7</span> <span>Auto Payouts</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function BottomCTASection({
+  className,
+  ...props
+}: ComponentProps<"section">) {
+  return (
+    <section className={cn(`default-padding`, className)} {...props}>
+      <div
+        className={cn(
+          `bg-secondary-500/10 border-secondary-500/20 flex w-full flex-col items-center gap-x-10 gap-y-8 rounded-2xl border p-8 lg:flex-row`,
+        )}
+      >
+        <div className={cn(`space-y-4`)}>
+          <span
+            className={cn(
+              `bg-secondary-500/10 border-secondary-500/20 inline-block rounded-full border px-4 py-1`,
+            )}
+          >
+            🚀 <span className={cn(`text-sm`)}>Start Today</span>
+          </span>
+
+          <h2 className={cn(`text-4xl font-bold`)}>
+            <span>Ready to Trade the</span> <br />
+            <span className={cn(`text-secondary-500`)}>World's Markets?</span>
+          </h2>
+
+          <p className={cn(`text-foreground/50`)}>
+            Join 100,000+ traders. Open your account in 2 minutes — no complex
+            setup, just great conditions from day one.
+          </p>
+
+          <ul
+            className={cn(`text-foreground/50 flex flex-wrap gap-x-10 gap-y-2`)}
+          >
+            <li>
+              <Check
+                className={cn(
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
+                )}
+              />{" "}
+              <span>No minimum deposit required</span>
+            </li>
+            <li>
+              <Check
+                className={cn(
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
+                )}
+              />{" "}
+              <span>Access MT4 & MT5 instantly</span>
+            </li>
+            <li>
+              <Check
+                className={cn(
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
+                )}
+              />{" "}
+              <span>First deposit bonus up to $5,000</span>
+            </li>
+            <li>
+              <Check
+                className={cn(
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
+                )}
+              />{" "}
+              <span>24/7 multilingual support</span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          className={cn(`flex w-full items-center justify-center lg:max-w-max`)}
+        >
+          <Button
+            corner={"circle"}
+            className={cn(`m-auto h-16 w-full text-lg md:w-60`)}
+          >
+            <Rocket className={cn(`inline-block size-5`)} />{" "}
+            <span>Open Free Account</span>
+          </Button>
+        </div>
       </div>
     </section>
   );
