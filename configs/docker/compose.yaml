@@ -1,0 +1,78 @@
+name: sanjib-academy
+
+services:
+  web:
+    container_name: web
+    # pull_policy: "always"
+    image: "nirvikpurkait/ai-minehub/web-app"
+    env_file:
+      - ../../.env.production
+    build:
+      context: ../../
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
+        VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
+        VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+        BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+        BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        DATABASE_URL: ${DATABASE_URL}
+        SOCKET_APP_HOST: ${SOCKET_APP_HOST}
+        WEB_APP_HOST: ${WEB_APP_HOST}
+        RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
+        RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+    environment:
+      VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
+      VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
+      VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+      SOCKET_APP_HOST: ${SOCKET_APP_HOST}
+      WEB_APP_HOST: ${WEB_APP_HOST}
+      RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
+      RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+    ports:
+      - 3000:3000
+
+  socket:
+    container_name: socket
+    # pull_policy: "always"
+    image: "nirvikpurkait/ai-minehub/socket-app"
+    env_file:
+      - ../../.env.production
+    build:
+      context: ../../
+      dockerfile: apps/socket/Dockerfile
+      args:
+        VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
+        VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
+        VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+        BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+        BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        DATABASE_URL: ${DATABASE_URL}
+        SOCKET_APP_HOST: ${SOCKET_APP_HOST}
+        WEB_APP_HOST: ${WEB_APP_HOST}
+        RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
+        RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+    environment:
+      VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
+      VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
+      VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+      SOCKET_APP_HOST: ${SOCKET_APP_HOST}
+      WEB_APP_HOST: ${WEB_APP_HOST}
+      RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
+      RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+    ports:
+      - 3000:3000
