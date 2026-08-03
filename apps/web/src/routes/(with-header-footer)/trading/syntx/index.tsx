@@ -1,3 +1,4 @@
+import { SyntX } from "@/components/main/trading/syntx/syntx";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(with-header-footer)/trading/syntx/")({
@@ -11,5 +12,9 @@ export const Route = createFileRoute("/(with-header-footer)/trading/syntx/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/trading/syntx/"!</div>;
+  return (
+    <>
+      <SyntX />
+    </>
+  );
 }

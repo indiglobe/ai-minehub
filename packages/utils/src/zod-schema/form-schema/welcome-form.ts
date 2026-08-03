@@ -6,6 +6,7 @@ export const welcomeFormSchema = z.object({
   age: z.number(),
   phoneNo: z.number(),
   referralCode: z.string(),
+  avatarImageUrl: z.string(),
 });
 
 export type TWelcomeFormSchema = z.infer<typeof welcomeFormSchema>;

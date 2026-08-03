@@ -10,7 +10,7 @@ import {
   AccountsCardsOfferingList,
   AccountsCardsPopulerBadge,
   AccountsCardsSubHeading,
-} from "./page-uis";
+} from "@/components/main/trading/accounts/page-uis";
 import { Button } from "@repo/ui/button";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@repo/ui/table";
 

@@ -1,5 +1,6 @@
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
-import { fetchSession } from "@/lib/auth/session";
+import AuthenticatedHeader from "@/components/header/authenticated-header";
+import { fetchSession, fetchUserDetailsCookie } from "@/lib/auth/session";
+import { env } from "@repo/env/client";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -17,32 +18,31 @@ export const Route = createFileRoute(
    * - Session exists but no user profile → redirect to /welcome (onboarding)
    * - Valid existing user → allow access to child routes
    */
-  beforeLoad: async () => {
+  beforeLoad: async ({ location }) => {
     // Check authentication state
     const session = await fetchSession();
+    const userDetailsFromCookie = await fetchUserDetailsCookie();
 
     // Block unauthenticated users
     if (!session) {
       throw redirect({ to: "/signin" });
     }
 
-    const {
-      user: { email },
-    } = session;
-
-    // Verify that the user has a completed profile in the system
-    const userDetails = await serverFn__readOneUser({
-      data: { identifier: { email } },
-    });
-
-    // If no user record exists, treat as onboarding user
-    if (!userDetails) {
-      throw redirect({ to: "/welcome" });
+    if (!userDetailsFromCookie) {
+      throw redirect({
+        to: "/redirect-signin",
+        search: {
+          redirectUrl: new URL(
+            location.pathname,
+            env.VITE_WEB_APP_HOST,
+          ).toString(),
+        },
+      });
     }
 
     // Otherwise user is valid and allowed into existing-user routes
     return {
-      userDetails,
+      userDetailsFromCookie,
     };
   },
 });
@@ -50,7 +50,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      {/* Layout outlet for all existing-user nested routes */}
+      <AuthenticatedHeader />
       <Outlet />
     </>
   );

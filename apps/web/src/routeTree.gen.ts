@@ -11,33 +11,32 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as withHeaderFooterRouteRouteImport } from './routes/(with-header-footer)/route'
 import { Route as withHeaderFooterIndexRouteImport } from './routes/(with-header-footer)/index'
-import { Route as withHeaderFooterTradingIndexRouteImport } from './routes/(with-header-footer)/trading/index'
-import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
-import { Route as withHeaderFooterPromotionsIndexRouteImport } from './routes/(with-header-footer)/promotions/index'
-import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(with-header-footer)/partnership/index'
-import { Route as withHeaderFooterEducationIndexRouteImport } from './routes/(with-header-footer)/education/index'
 import { Route as withHeaderFooterCompanyIndexRouteImport } from './routes/(with-header-footer)/company/index'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as withoutHeaderFooterauthenticatednewUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/route'
+import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(with-header-footer)/partnership/index'
+import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
+import { Route as withHeaderFooterTradingIndexRouteImport } from './routes/(with-header-footer)/trading/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/route'
-import { Route as withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/terms-of-service/index'
-import { Route as withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/privacy-policy/index'
-import { Route as withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/cookie-policy/index'
-import { Route as withoutHeaderFooterguestSigninIndexRouteImport } from './routes/(without-header-footer)/(guest)/signin/index'
-import { Route as withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/redirect-signin/index'
-import { Route as withHeaderFooterTradingSyntxIndexRouteImport } from './routes/(with-header-footer)/trading/syntx/index'
-import { Route as withHeaderFooterTradingPlatformsIndexRouteImport } from './routes/(with-header-footer)/trading/platforms/index'
-import { Route as withHeaderFooterTradingInstrumentsIndexRouteImport } from './routes/(with-header-footer)/trading/instruments/index'
-import { Route as withHeaderFooterTradingAccountsIndexRouteImport } from './routes/(with-header-footer)/trading/accounts/index'
-import { Route as withHeaderFooterPartnershipIbIndexRouteImport } from './routes/(with-header-footer)/partnership/ib/index'
-import { Route as withHeaderFooterPartnershipAffiliateIndexRouteImport } from './routes/(with-header-footer)/partnership/affiliate/index'
-import { Route as withHeaderFooterEducationWebinarsIndexRouteImport } from './routes/(with-header-footer)/education/webinars/index'
-import { Route as withHeaderFooterEducationGuidesIndexRouteImport } from './routes/(with-header-footer)/education/guides/index'
-import { Route as withHeaderFooterCompanyNewsIndexRouteImport } from './routes/(with-header-footer)/company/news/index'
-import { Route as withHeaderFooterCompanyAwardsIndexRouteImport } from './routes/(with-header-footer)/company/awards/index'
+import { Route as withoutHeaderFooterauthenticatednewUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/route'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as withHeaderFooterCompanyAboutIndexRouteImport } from './routes/(with-header-footer)/company/about/index'
-import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
+import { Route as withHeaderFooterCompanyAwardsIndexRouteImport } from './routes/(with-header-footer)/company/awards/index'
+import { Route as withHeaderFooterCompanyNewsIndexRouteImport } from './routes/(with-header-footer)/company/news/index'
+import { Route as withHeaderFooterPartnershipAffiliateIndexRouteImport } from './routes/(with-header-footer)/partnership/affiliate/index'
+import { Route as withHeaderFooterPartnershipIbIndexRouteImport } from './routes/(with-header-footer)/partnership/ib/index'
+import { Route as withHeaderFooterTradingAccountsIndexRouteImport } from './routes/(with-header-footer)/trading/accounts/index'
+import { Route as withHeaderFooterTradingInstrumentsIndexRouteImport } from './routes/(with-header-footer)/trading/instruments/index'
+import { Route as withHeaderFooterTradingPlatformsIndexRouteImport } from './routes/(with-header-footer)/trading/platforms/index'
+import { Route as withHeaderFooterTradingSyntxIndexRouteImport } from './routes/(with-header-footer)/trading/syntx/index'
+import { Route as withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/redirect-signin/index'
+import { Route as withoutHeaderFooterguestSigninIndexRouteImport } from './routes/(without-header-footer)/(guest)/signin/index'
+import { Route as withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/cookie-policy/index'
+import { Route as withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/privacy-policy/index'
+import { Route as withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/terms-of-service/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/dashboard/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/deposit/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/mining/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/referral/index'
+import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
 
 const withHeaderFooterRouteRoute = withHeaderFooterRouteRouteImport.update({
   id: '/(with-header-footer)',
@@ -48,22 +47,10 @@ const withHeaderFooterIndexRoute = withHeaderFooterIndexRouteImport.update({
   path: '/',
   getParentRoute: () => withHeaderFooterRouteRoute,
 } as any)
-const withHeaderFooterTradingIndexRoute =
-  withHeaderFooterTradingIndexRouteImport.update({
-    id: '/trading/',
-    path: '/trading/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterToolsIndexRoute =
-  withHeaderFooterToolsIndexRouteImport.update({
-    id: '/tools/',
-    path: '/tools/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterPromotionsIndexRoute =
-  withHeaderFooterPromotionsIndexRouteImport.update({
-    id: '/promotions/',
-    path: '/promotions/',
+const withHeaderFooterCompanyIndexRoute =
+  withHeaderFooterCompanyIndexRouteImport.update({
+    id: '/company/',
+    path: '/company/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
 const withHeaderFooterPartnershipIndexRoute =
@@ -72,115 +59,37 @@ const withHeaderFooterPartnershipIndexRoute =
     path: '/partnership/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
-const withHeaderFooterEducationIndexRoute =
-  withHeaderFooterEducationIndexRouteImport.update({
-    id: '/education/',
-    path: '/education/',
+const withHeaderFooterToolsIndexRoute =
+  withHeaderFooterToolsIndexRouteImport.update({
+    id: '/tools/',
+    path: '/tools/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
-const withHeaderFooterCompanyIndexRoute =
-  withHeaderFooterCompanyIndexRouteImport.update({
-    id: '/company/',
-    path: '/company/',
+const withHeaderFooterTradingIndexRoute =
+  withHeaderFooterTradingIndexRouteImport.update({
+    id: '/trading/',
+    path: '/trading/',
     getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const withoutHeaderFooterauthenticatednewUserRouteRoute =
-  withoutHeaderFooterauthenticatednewUserRouteRouteImport.update({
-    id: '/(without-header-footer)/(authenticated)/(new-user)',
-    getParentRoute: () => rootRouteImport,
   } as any)
 const withoutHeaderFooterauthenticatedexistingUserRouteRoute =
   withoutHeaderFooterauthenticatedexistingUserRouteRouteImport.update({
     id: '/(without-header-footer)/(authenticated)/(existing-user)',
     getParentRoute: () => rootRouteImport,
   } as any)
-const withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute =
-  withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/terms-of-service/',
-    path: '/terms-of-service/',
+const withoutHeaderFooterauthenticatednewUserRouteRoute =
+  withoutHeaderFooterauthenticatednewUserRouteRouteImport.update({
+    id: '/(without-header-footer)/(authenticated)/(new-user)',
     getParentRoute: () => rootRouteImport,
   } as any)
-const withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute =
-  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/privacy-policy/',
-    path: '/privacy-policy/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withoutHeaderFooterleagalPagesCookiePolicyIndexRoute =
-  withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/cookie-policy/',
-    path: '/cookie-policy/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withoutHeaderFooterguestSigninIndexRoute =
-  withoutHeaderFooterguestSigninIndexRouteImport.update({
-    id: '/(without-header-footer)/(guest)/signin/',
-    path: '/signin/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
-  withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
-    id: '/(without-header-footer)/(authenticated)/redirect-signin/',
-    path: '/redirect-signin/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const withHeaderFooterTradingSyntxIndexRoute =
-  withHeaderFooterTradingSyntxIndexRouteImport.update({
-    id: '/trading/syntx/',
-    path: '/trading/syntx/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterTradingPlatformsIndexRoute =
-  withHeaderFooterTradingPlatformsIndexRouteImport.update({
-    id: '/trading/platforms/',
-    path: '/trading/platforms/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterTradingInstrumentsIndexRoute =
-  withHeaderFooterTradingInstrumentsIndexRouteImport.update({
-    id: '/trading/instruments/',
-    path: '/trading/instruments/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterTradingAccountsIndexRoute =
-  withHeaderFooterTradingAccountsIndexRouteImport.update({
-    id: '/trading/accounts/',
-    path: '/trading/accounts/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterPartnershipIbIndexRoute =
-  withHeaderFooterPartnershipIbIndexRouteImport.update({
-    id: '/partnership/ib/',
-    path: '/partnership/ib/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterPartnershipAffiliateIndexRoute =
-  withHeaderFooterPartnershipAffiliateIndexRouteImport.update({
-    id: '/partnership/affiliate/',
-    path: '/partnership/affiliate/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterEducationWebinarsIndexRoute =
-  withHeaderFooterEducationWebinarsIndexRouteImport.update({
-    id: '/education/webinars/',
-    path: '/education/webinars/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterEducationGuidesIndexRoute =
-  withHeaderFooterEducationGuidesIndexRouteImport.update({
-    id: '/education/guides/',
-    path: '/education/guides/',
-    getParentRoute: () => withHeaderFooterRouteRoute,
-  } as any)
-const withHeaderFooterCompanyNewsIndexRoute =
-  withHeaderFooterCompanyNewsIndexRouteImport.update({
-    id: '/company/news/',
-    path: '/company/news/',
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const withHeaderFooterCompanyAboutIndexRoute =
+  withHeaderFooterCompanyAboutIndexRouteImport.update({
+    id: '/company/about/',
+    path: '/company/about/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
 const withHeaderFooterCompanyAwardsIndexRoute =
@@ -189,17 +98,77 @@ const withHeaderFooterCompanyAwardsIndexRoute =
     path: '/company/awards/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
-const withHeaderFooterCompanyAboutIndexRoute =
-  withHeaderFooterCompanyAboutIndexRouteImport.update({
-    id: '/company/about/',
-    path: '/company/about/',
+const withHeaderFooterCompanyNewsIndexRoute =
+  withHeaderFooterCompanyNewsIndexRouteImport.update({
+    id: '/company/news/',
+    path: '/company/news/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
-const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
-  withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
-    id: '/welcome/',
-    path: '/welcome/',
-    getParentRoute: () => withoutHeaderFooterauthenticatednewUserRouteRoute,
+const withHeaderFooterPartnershipAffiliateIndexRoute =
+  withHeaderFooterPartnershipAffiliateIndexRouteImport.update({
+    id: '/partnership/affiliate/',
+    path: '/partnership/affiliate/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withHeaderFooterPartnershipIbIndexRoute =
+  withHeaderFooterPartnershipIbIndexRouteImport.update({
+    id: '/partnership/ib/',
+    path: '/partnership/ib/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withHeaderFooterTradingAccountsIndexRoute =
+  withHeaderFooterTradingAccountsIndexRouteImport.update({
+    id: '/trading/accounts/',
+    path: '/trading/accounts/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withHeaderFooterTradingInstrumentsIndexRoute =
+  withHeaderFooterTradingInstrumentsIndexRouteImport.update({
+    id: '/trading/instruments/',
+    path: '/trading/instruments/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withHeaderFooterTradingPlatformsIndexRoute =
+  withHeaderFooterTradingPlatformsIndexRouteImport.update({
+    id: '/trading/platforms/',
+    path: '/trading/platforms/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withHeaderFooterTradingSyntxIndexRoute =
+  withHeaderFooterTradingSyntxIndexRouteImport.update({
+    id: '/trading/syntx/',
+    path: '/trading/syntx/',
+    getParentRoute: () => withHeaderFooterRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
+  withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
+    id: '/(without-header-footer)/(authenticated)/redirect-signin/',
+    path: '/redirect-signin/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterguestSigninIndexRoute =
+  withoutHeaderFooterguestSigninIndexRouteImport.update({
+    id: '/(without-header-footer)/(guest)/signin/',
+    path: '/signin/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesCookiePolicyIndexRoute =
+  withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/cookie-policy/',
+    path: '/cookie-policy/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute =
+  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/privacy-policy/',
+    path: '/privacy-policy/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute =
+  withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)/terms-of-service/',
+    path: '/terms-of-service/',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
   withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport.update({
@@ -208,21 +177,44 @@ const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
     getParentRoute: () =>
       withoutHeaderFooterauthenticatedexistingUserRouteRoute,
   } as any)
+const withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport.update({
+    id: '/deposit/',
+    path: '/deposit/',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport.update({
+    id: '/mining/',
+    path: '/mining/',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport.update({
+    id: '/referral/',
+    path: '/referral/',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
+  withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
+    id: '/welcome/',
+    path: '/welcome/',
+    getParentRoute: () => withoutHeaderFooterauthenticatednewUserRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof withHeaderFooterIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company/': typeof withHeaderFooterCompanyIndexRoute
-  '/education/': typeof withHeaderFooterEducationIndexRoute
   '/partnership/': typeof withHeaderFooterPartnershipIndexRoute
-  '/promotions/': typeof withHeaderFooterPromotionsIndexRoute
   '/tools/': typeof withHeaderFooterToolsIndexRoute
   '/trading/': typeof withHeaderFooterTradingIndexRoute
   '/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
-  '/education/guides/': typeof withHeaderFooterEducationGuidesIndexRoute
-  '/education/webinars/': typeof withHeaderFooterEducationWebinarsIndexRoute
   '/partnership/affiliate/': typeof withHeaderFooterPartnershipAffiliateIndexRoute
   '/partnership/ib/': typeof withHeaderFooterPartnershipIbIndexRoute
   '/trading/accounts/': typeof withHeaderFooterTradingAccountsIndexRoute
@@ -235,22 +227,21 @@ export interface FileRoutesByFullPath {
   '/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
+  '/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
+  '/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof withHeaderFooterIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company': typeof withHeaderFooterCompanyIndexRoute
-  '/education': typeof withHeaderFooterEducationIndexRoute
   '/partnership': typeof withHeaderFooterPartnershipIndexRoute
-  '/promotions': typeof withHeaderFooterPromotionsIndexRoute
   '/tools': typeof withHeaderFooterToolsIndexRoute
   '/trading': typeof withHeaderFooterTradingIndexRoute
   '/company/about': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news': typeof withHeaderFooterCompanyNewsIndexRoute
-  '/education/guides': typeof withHeaderFooterEducationGuidesIndexRoute
-  '/education/webinars': typeof withHeaderFooterEducationWebinarsIndexRoute
   '/partnership/affiliate': typeof withHeaderFooterPartnershipAffiliateIndexRoute
   '/partnership/ib': typeof withHeaderFooterPartnershipIbIndexRoute
   '/trading/accounts': typeof withHeaderFooterTradingAccountsIndexRoute
@@ -263,6 +254,9 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/deposit': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
+  '/mining': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
+  '/referral': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/welcome': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesById {
@@ -273,16 +267,12 @@ export interface FileRoutesById {
   '/(without-header-footer)/(authenticated)/(new-user)': typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(with-header-footer)/company/': typeof withHeaderFooterCompanyIndexRoute
-  '/(with-header-footer)/education/': typeof withHeaderFooterEducationIndexRoute
   '/(with-header-footer)/partnership/': typeof withHeaderFooterPartnershipIndexRoute
-  '/(with-header-footer)/promotions/': typeof withHeaderFooterPromotionsIndexRoute
   '/(with-header-footer)/tools/': typeof withHeaderFooterToolsIndexRoute
   '/(with-header-footer)/trading/': typeof withHeaderFooterTradingIndexRoute
   '/(with-header-footer)/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/(with-header-footer)/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/(with-header-footer)/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
-  '/(with-header-footer)/education/guides/': typeof withHeaderFooterEducationGuidesIndexRoute
-  '/(with-header-footer)/education/webinars/': typeof withHeaderFooterEducationWebinarsIndexRoute
   '/(with-header-footer)/partnership/affiliate/': typeof withHeaderFooterPartnershipAffiliateIndexRoute
   '/(with-header-footer)/partnership/ib/': typeof withHeaderFooterPartnershipIbIndexRoute
   '/(with-header-footer)/trading/accounts/': typeof withHeaderFooterTradingAccountsIndexRoute
@@ -295,6 +285,9 @@ export interface FileRoutesById {
   '/(without-header-footer)/(leagal-pages)/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/(without-header-footer)/(leagal-pages)/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/(without-header-footer)/(authenticated)/(new-user)/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRouteTypes {
@@ -303,16 +296,12 @@ export interface FileRouteTypes {
     | '/'
     | '/api/auth/$'
     | '/company/'
-    | '/education/'
     | '/partnership/'
-    | '/promotions/'
     | '/tools/'
     | '/trading/'
     | '/company/about/'
     | '/company/awards/'
     | '/company/news/'
-    | '/education/guides/'
-    | '/education/webinars/'
     | '/partnership/affiliate/'
     | '/partnership/ib/'
     | '/trading/accounts/'
@@ -325,22 +314,21 @@ export interface FileRouteTypes {
     | '/privacy-policy/'
     | '/terms-of-service/'
     | '/dashboard/'
+    | '/deposit/'
+    | '/mining/'
+    | '/referral/'
     | '/welcome/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/api/auth/$'
     | '/company'
-    | '/education'
     | '/partnership'
-    | '/promotions'
     | '/tools'
     | '/trading'
     | '/company/about'
     | '/company/awards'
     | '/company/news'
-    | '/education/guides'
-    | '/education/webinars'
     | '/partnership/affiliate'
     | '/partnership/ib'
     | '/trading/accounts'
@@ -353,6 +341,9 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-of-service'
     | '/dashboard'
+    | '/deposit'
+    | '/mining'
+    | '/referral'
     | '/welcome'
   id:
     | '__root__'
@@ -362,16 +353,12 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(authenticated)/(new-user)'
     | '/api/auth/$'
     | '/(with-header-footer)/company/'
-    | '/(with-header-footer)/education/'
     | '/(with-header-footer)/partnership/'
-    | '/(with-header-footer)/promotions/'
     | '/(with-header-footer)/tools/'
     | '/(with-header-footer)/trading/'
     | '/(with-header-footer)/company/about/'
     | '/(with-header-footer)/company/awards/'
     | '/(with-header-footer)/company/news/'
-    | '/(with-header-footer)/education/guides/'
-    | '/(with-header-footer)/education/webinars/'
     | '/(with-header-footer)/partnership/affiliate/'
     | '/(with-header-footer)/partnership/ib/'
     | '/(with-header-footer)/trading/accounts/'
@@ -384,6 +371,9 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(leagal-pages)/privacy-policy/'
     | '/(without-header-footer)/(leagal-pages)/terms-of-service/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/deposit/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
     | '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
   fileRoutesById: FileRoutesById
 }
@@ -415,25 +405,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/(with-header-footer)/trading/': {
-      id: '/(with-header-footer)/trading/'
-      path: '/trading'
-      fullPath: '/trading/'
-      preLoaderRoute: typeof withHeaderFooterTradingIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/tools/': {
-      id: '/(with-header-footer)/tools/'
-      path: '/tools'
-      fullPath: '/tools/'
-      preLoaderRoute: typeof withHeaderFooterToolsIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/promotions/': {
-      id: '/(with-header-footer)/promotions/'
-      path: '/promotions'
-      fullPath: '/promotions/'
-      preLoaderRoute: typeof withHeaderFooterPromotionsIndexRouteImport
+    '/(with-header-footer)/company/': {
+      id: '/(with-header-footer)/company/'
+      path: '/company'
+      fullPath: '/company/'
+      preLoaderRoute: typeof withHeaderFooterCompanyIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
     '/(with-header-footer)/partnership/': {
@@ -443,25 +419,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterPartnershipIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/(with-header-footer)/education/': {
-      id: '/(with-header-footer)/education/'
-      path: '/education'
-      fullPath: '/education/'
-      preLoaderRoute: typeof withHeaderFooterEducationIndexRouteImport
+    '/(with-header-footer)/tools/': {
+      id: '/(with-header-footer)/tools/'
+      path: '/tools'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof withHeaderFooterToolsIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/(with-header-footer)/company/': {
-      id: '/(with-header-footer)/company/'
-      path: '/company'
-      fullPath: '/company/'
-      preLoaderRoute: typeof withHeaderFooterCompanyIndexRouteImport
+    '/(with-header-footer)/trading/': {
+      id: '/(with-header-footer)/trading/'
+      path: '/trading'
+      fullPath: '/trading/'
+      preLoaderRoute: typeof withHeaderFooterTradingIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
+    '/(without-header-footer)/(authenticated)/(existing-user)': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(without-header-footer)/(authenticated)/(new-user)': {
@@ -471,109 +447,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(without-header-footer)/(authenticated)/(existing-user)': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteImport
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(without-header-footer)/(leagal-pages)/terms-of-service/': {
-      id: '/(without-header-footer)/(leagal-pages)/terms-of-service/'
-      path: '/terms-of-service'
-      fullPath: '/terms-of-service/'
-      preLoaderRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/(leagal-pages)/privacy-policy/': {
-      id: '/(without-header-footer)/(leagal-pages)/privacy-policy/'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy/'
-      preLoaderRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/(leagal-pages)/cookie-policy/': {
-      id: '/(without-header-footer)/(leagal-pages)/cookie-policy/'
-      path: '/cookie-policy'
-      fullPath: '/cookie-policy/'
-      preLoaderRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/(guest)/signin/': {
-      id: '/(without-header-footer)/(guest)/signin/'
-      path: '/signin'
-      fullPath: '/signin/'
-      preLoaderRoute: typeof withoutHeaderFooterguestSigninIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(without-header-footer)/(authenticated)/redirect-signin/': {
-      id: '/(without-header-footer)/(authenticated)/redirect-signin/'
-      path: '/redirect-signin'
-      fullPath: '/redirect-signin/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(with-header-footer)/trading/syntx/': {
-      id: '/(with-header-footer)/trading/syntx/'
-      path: '/trading/syntx'
-      fullPath: '/trading/syntx/'
-      preLoaderRoute: typeof withHeaderFooterTradingSyntxIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/trading/platforms/': {
-      id: '/(with-header-footer)/trading/platforms/'
-      path: '/trading/platforms'
-      fullPath: '/trading/platforms/'
-      preLoaderRoute: typeof withHeaderFooterTradingPlatformsIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/trading/instruments/': {
-      id: '/(with-header-footer)/trading/instruments/'
-      path: '/trading/instruments'
-      fullPath: '/trading/instruments/'
-      preLoaderRoute: typeof withHeaderFooterTradingInstrumentsIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/trading/accounts/': {
-      id: '/(with-header-footer)/trading/accounts/'
-      path: '/trading/accounts'
-      fullPath: '/trading/accounts/'
-      preLoaderRoute: typeof withHeaderFooterTradingAccountsIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/partnership/ib/': {
-      id: '/(with-header-footer)/partnership/ib/'
-      path: '/partnership/ib'
-      fullPath: '/partnership/ib/'
-      preLoaderRoute: typeof withHeaderFooterPartnershipIbIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/partnership/affiliate/': {
-      id: '/(with-header-footer)/partnership/affiliate/'
-      path: '/partnership/affiliate'
-      fullPath: '/partnership/affiliate/'
-      preLoaderRoute: typeof withHeaderFooterPartnershipAffiliateIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/education/webinars/': {
-      id: '/(with-header-footer)/education/webinars/'
-      path: '/education/webinars'
-      fullPath: '/education/webinars/'
-      preLoaderRoute: typeof withHeaderFooterEducationWebinarsIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/education/guides/': {
-      id: '/(with-header-footer)/education/guides/'
-      path: '/education/guides'
-      fullPath: '/education/guides/'
-      preLoaderRoute: typeof withHeaderFooterEducationGuidesIndexRouteImport
-      parentRoute: typeof withHeaderFooterRouteRoute
-    }
-    '/(with-header-footer)/company/news/': {
-      id: '/(with-header-footer)/company/news/'
-      path: '/company/news'
-      fullPath: '/company/news/'
-      preLoaderRoute: typeof withHeaderFooterCompanyNewsIndexRouteImport
+    '/(with-header-footer)/company/about/': {
+      id: '/(with-header-footer)/company/about/'
+      path: '/company/about'
+      fullPath: '/company/about/'
+      preLoaderRoute: typeof withHeaderFooterCompanyAboutIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
     '/(with-header-footer)/company/awards/': {
@@ -583,19 +468,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterCompanyAwardsIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/(with-header-footer)/company/about/': {
-      id: '/(with-header-footer)/company/about/'
-      path: '/company/about'
-      fullPath: '/company/about/'
-      preLoaderRoute: typeof withHeaderFooterCompanyAboutIndexRouteImport
+    '/(with-header-footer)/company/news/': {
+      id: '/(with-header-footer)/company/news/'
+      path: '/company/news'
+      fullPath: '/company/news/'
+      preLoaderRoute: typeof withHeaderFooterCompanyNewsIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
-    '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
-      id: '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
-      path: '/welcome'
-      fullPath: '/welcome/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRoute
+    '/(with-header-footer)/partnership/affiliate/': {
+      id: '/(with-header-footer)/partnership/affiliate/'
+      path: '/partnership/affiliate'
+      fullPath: '/partnership/affiliate/'
+      preLoaderRoute: typeof withHeaderFooterPartnershipAffiliateIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(with-header-footer)/partnership/ib/': {
+      id: '/(with-header-footer)/partnership/ib/'
+      path: '/partnership/ib'
+      fullPath: '/partnership/ib/'
+      preLoaderRoute: typeof withHeaderFooterPartnershipIbIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(with-header-footer)/trading/accounts/': {
+      id: '/(with-header-footer)/trading/accounts/'
+      path: '/trading/accounts'
+      fullPath: '/trading/accounts/'
+      preLoaderRoute: typeof withHeaderFooterTradingAccountsIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(with-header-footer)/trading/instruments/': {
+      id: '/(with-header-footer)/trading/instruments/'
+      path: '/trading/instruments'
+      fullPath: '/trading/instruments/'
+      preLoaderRoute: typeof withHeaderFooterTradingInstrumentsIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(with-header-footer)/trading/platforms/': {
+      id: '/(with-header-footer)/trading/platforms/'
+      path: '/trading/platforms'
+      fullPath: '/trading/platforms/'
+      preLoaderRoute: typeof withHeaderFooterTradingPlatformsIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(with-header-footer)/trading/syntx/': {
+      id: '/(with-header-footer)/trading/syntx/'
+      path: '/trading/syntx'
+      fullPath: '/trading/syntx/'
+      preLoaderRoute: typeof withHeaderFooterTradingSyntxIndexRouteImport
+      parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/redirect-signin/': {
+      id: '/(without-header-footer)/(authenticated)/redirect-signin/'
+      path: '/redirect-signin'
+      fullPath: '/redirect-signin/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(guest)/signin/': {
+      id: '/(without-header-footer)/(guest)/signin/'
+      path: '/signin'
+      fullPath: '/signin/'
+      preLoaderRoute: typeof withoutHeaderFooterguestSigninIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)/cookie-policy/': {
+      id: '/(without-header-footer)/(leagal-pages)/cookie-policy/'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)/privacy-policy/': {
+      id: '/(without-header-footer)/(leagal-pages)/privacy-policy/'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)/terms-of-service/': {
+      id: '/(without-header-footer)/(leagal-pages)/terms-of-service/'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service/'
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': {
       id: '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
@@ -604,22 +559,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
     }
+    '/(without-header-footer)/(authenticated)/(existing-user)/deposit/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/deposit/'
+      path: '/deposit'
+      fullPath: '/deposit/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/mining/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
+      path: '/mining'
+      fullPath: '/mining/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/referral/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
+      path: '/referral'
+      fullPath: '/referral/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
+      id: '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
+      path: '/welcome'
+      fullPath: '/welcome/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRoute
+    }
   }
 }
 
 interface withHeaderFooterRouteRouteChildren {
   withHeaderFooterIndexRoute: typeof withHeaderFooterIndexRoute
   withHeaderFooterCompanyIndexRoute: typeof withHeaderFooterCompanyIndexRoute
-  withHeaderFooterEducationIndexRoute: typeof withHeaderFooterEducationIndexRoute
   withHeaderFooterPartnershipIndexRoute: typeof withHeaderFooterPartnershipIndexRoute
-  withHeaderFooterPromotionsIndexRoute: typeof withHeaderFooterPromotionsIndexRoute
   withHeaderFooterToolsIndexRoute: typeof withHeaderFooterToolsIndexRoute
   withHeaderFooterTradingIndexRoute: typeof withHeaderFooterTradingIndexRoute
   withHeaderFooterCompanyAboutIndexRoute: typeof withHeaderFooterCompanyAboutIndexRoute
   withHeaderFooterCompanyAwardsIndexRoute: typeof withHeaderFooterCompanyAwardsIndexRoute
   withHeaderFooterCompanyNewsIndexRoute: typeof withHeaderFooterCompanyNewsIndexRoute
-  withHeaderFooterEducationGuidesIndexRoute: typeof withHeaderFooterEducationGuidesIndexRoute
-  withHeaderFooterEducationWebinarsIndexRoute: typeof withHeaderFooterEducationWebinarsIndexRoute
   withHeaderFooterPartnershipAffiliateIndexRoute: typeof withHeaderFooterPartnershipAffiliateIndexRoute
   withHeaderFooterPartnershipIbIndexRoute: typeof withHeaderFooterPartnershipIbIndexRoute
   withHeaderFooterTradingAccountsIndexRoute: typeof withHeaderFooterTradingAccountsIndexRoute
@@ -631,9 +610,7 @@ interface withHeaderFooterRouteRouteChildren {
 const withHeaderFooterRouteRouteChildren: withHeaderFooterRouteRouteChildren = {
   withHeaderFooterIndexRoute: withHeaderFooterIndexRoute,
   withHeaderFooterCompanyIndexRoute: withHeaderFooterCompanyIndexRoute,
-  withHeaderFooterEducationIndexRoute: withHeaderFooterEducationIndexRoute,
   withHeaderFooterPartnershipIndexRoute: withHeaderFooterPartnershipIndexRoute,
-  withHeaderFooterPromotionsIndexRoute: withHeaderFooterPromotionsIndexRoute,
   withHeaderFooterToolsIndexRoute: withHeaderFooterToolsIndexRoute,
   withHeaderFooterTradingIndexRoute: withHeaderFooterTradingIndexRoute,
   withHeaderFooterCompanyAboutIndexRoute:
@@ -641,10 +618,6 @@ const withHeaderFooterRouteRouteChildren: withHeaderFooterRouteRouteChildren = {
   withHeaderFooterCompanyAwardsIndexRoute:
     withHeaderFooterCompanyAwardsIndexRoute,
   withHeaderFooterCompanyNewsIndexRoute: withHeaderFooterCompanyNewsIndexRoute,
-  withHeaderFooterEducationGuidesIndexRoute:
-    withHeaderFooterEducationGuidesIndexRoute,
-  withHeaderFooterEducationWebinarsIndexRoute:
-    withHeaderFooterEducationWebinarsIndexRoute,
   withHeaderFooterPartnershipAffiliateIndexRoute:
     withHeaderFooterPartnershipAffiliateIndexRoute,
   withHeaderFooterPartnershipIbIndexRoute:
@@ -666,12 +639,21 @@ const withHeaderFooterRouteRouteWithChildren =
 
 interface withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren {
   withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
 }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren =
   {
     withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute,
   }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren =

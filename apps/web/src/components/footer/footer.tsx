@@ -7,10 +7,7 @@ import { Mail, MapPin } from "lucide-react";
 import type { ComponentProps } from "react";
 import { Facebook, Instagram, Telegram, Twitter, YouTube } from "@repo/ui/svg";
 
-export default function Footer({
-  className,
-  ...props
-}: ComponentProps<"footer">) {
+export function Footer({ className, ...props }: ComponentProps<"footer">) {
   return (
     <footer className={cn(`default-padding pt-16 pb-10`, className)} {...props}>
       <section
@@ -176,9 +173,6 @@ export default function Footer({
           <FooterLinkHeading>Support</FooterLinkHeading>
           <ul className={cn(`space-y-1`)}>
             <li>
-              <FooterLink to="/education/guides">Help Center</FooterLink>
-            </li>
-            <li>
               <FooterLink to="/">Live Chat</FooterLink>
             </li>
             <li>
@@ -190,12 +184,6 @@ export default function Footer({
               >
                 Contact Us
               </a>
-            </li>
-            <li>
-              <FooterLink to="/education/guides">Education</FooterLink>
-            </li>
-            <li>
-              <FooterLink to="/education/webinars">Webinars</FooterLink>
             </li>
           </ul>
         </div>

@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import Main from "../../main";
+import Main from "@/components/main/main";
 import { cn } from "@repo/styles/cn";
 import { ShieldCheckIcon, Star, Trophy } from "lucide-react";
 

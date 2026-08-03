@@ -1,3 +1,4 @@
+import { Platforms } from "@/components/main/trading/platforms/platforms";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -11,5 +12,9 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/trading/platforms/"!</div>;
+  return (
+    <>
+      <Platforms />
+    </>
+  );
 }

@@ -1,4 +1,4 @@
-import Header from "@/components/header/unauthenticated-header";
+import { UnauthenticatedHeader } from "@/components/header/unauthenticated-header";
 import type {
   TypedMetaOptions,
   TypedStoryOptions,
@@ -13,8 +13,8 @@ import {
   RouterProvider,
 } from "@tanstack/react-router";
 
-const meta: Meta<typeof Header> & TypedMetaOptions = {
-  component: Header,
+const meta: Meta<typeof UnauthenticatedHeader> & TypedMetaOptions = {
+  component: UnauthenticatedHeader,
 
   decorators: (Story) => {
     const rootRoute = createRootRoute();
@@ -40,8 +40,8 @@ const meta: Meta<typeof Header> & TypedMetaOptions = {
 
 export default meta;
 
-type Story = StoryObj<typeof Header> & TypedStoryOptions;
+type Story = StoryObj<typeof UnauthenticatedHeader> & TypedStoryOptions;
 
-export const HeaderStory: Story = {
+export const UnauthenticatedHeaderStory: Story = {
   args: {},
 };

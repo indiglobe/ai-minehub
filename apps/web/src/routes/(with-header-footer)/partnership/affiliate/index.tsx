@@ -1,3 +1,4 @@
+import Affiliate from "@/components/main/partnership/affiliate/affiliate";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -11,5 +12,9 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/partnership/affiliate/"!</div>;
+  return (
+    <>
+      <Affiliate />
+    </>
+  );
 }

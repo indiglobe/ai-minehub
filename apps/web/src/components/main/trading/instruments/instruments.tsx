@@ -22,16 +22,17 @@ import { Button } from "@repo/ui/button";
 import { useForex } from "@/hooks/use-forex";
 import { useCrypto } from "@/hooks/use-crypto";
 import { useStock } from "@/hooks/use-stock";
+import Main from "@/components/main/main.tsx";
 
 export function Instruments() {
   return (
-    <>
+    <Main>
       <PageHeading />
       <ForexTrading />
       <CryptocurrencyTrading />
       <StockTrading />
       <ChatWithExpert />
-    </>
+    </Main>
   );
 }
 

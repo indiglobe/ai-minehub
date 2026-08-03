@@ -15,6 +15,8 @@ export const env = createEnv({
   client: {
     VITE_SOCKET_APP_HOST: z.string(),
     VITE_WEB_APP_HOST: z.string(),
+
+    VITE_RAZOR_PAY_KEY: z.string(),
   },
 
   /**

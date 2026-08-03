@@ -1,10 +1,24 @@
 import Main from "@/components/main/main";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
-import { DownloadIcon, Globe, Phone, Smartphone } from "lucide-react";
+import { DownloadIcon, Globe } from "lucide-react";
 import type { ComponentProps } from "react";
-import { FaAndroid, FaApple, FaWindows } from "react-icons/fa";
 import { MetaTraderLogo } from "@repo/ui/meta-trader-logo";
+import {
+  DownloadAndroid,
+  DownloadButtons,
+  DownloadIOS,
+  DownloadMacOS,
+  DownloadWindows,
+  PlatformCard,
+  PlatformCardHeading,
+  PlatformCardRecomendation,
+  PlatformCardSubHeading,
+  StatRow,
+  StatRowItem,
+  StatRowItemLabel,
+  StatRowItemValue,
+} from "@/components/main/trading/platforms/page-ui";
 
 export function Platforms() {
   return (
@@ -132,324 +146,104 @@ export function ChoosePlatform({
   );
 }
 
-type PlatformCard = {
-  recommended?: boolean;
-  name: string;
-  subtitle: string;
-  logoColor: string;
-  accent: string;
-  valuesColor: string;
-  programming: string;
-  timeframes: string;
-  orderTypes: string;
-  hedging: string;
-  feature: string;
-  featureValue: string;
-  copyTrading: string;
-  secondaryDownloads: {
-    icon: React.ReactNode;
-    label: string;
-  }[];
-};
-
-const cards: PlatformCard[] = [
-  {
-    recommended: true,
-    name: "MetaTrader 5",
-    subtitle: "The next generation trading platform",
-    logoColor: "bg-emerald-600",
-    accent: "from-emerald-600 to-emerald-400 border-emerald-500/50",
-    valuesColor: "text-emerald-400",
-    programming: "MQL5",
-    timeframes: "21",
-    orderTypes: "6 pending",
-    hedging: "Allowed",
-    feature: "Economic Cal.",
-    featureValue: "Built-in",
-    copyTrading: "Supported",
-    secondaryDownloads: [
-      {
-        icon: <FaApple size={18} />,
-        label: "macOS",
-      },
-      {
-        icon: <Smartphone size={18} />,
-        label: "iOS",
-      },
-    ],
-  },
-  {
-    name: "MetaTrader 4",
-    subtitle: "The industry standard platform",
-    logoColor: "bg-blue-500",
-    accent: "from-sky-600 to-sky-400 border-sky-500/50",
-    valuesColor: "text-sky-400",
-    programming: "MQL4",
-    timeframes: "9",
-    orderTypes: "4 pending",
-    hedging: "Allowed",
-    feature: "Custom Indicators",
-    featureValue: "Limited",
-    copyTrading: "Available",
-    secondaryDownloads: [
-      {
-        icon: <FaApple size={18} />,
-        label: "macOS",
-      },
-      {
-        icon: <Phone size={18} />,
-        label: "Android",
-      },
-    ],
-  },
-];
-
-function Row({
-  label,
-  value,
-  valueColor,
-}: {
-  label: string;
-  value: string;
-  valueColor: string;
-}) {
+export function TradingPlatforms({
+  className,
+  ...props
+}: ComponentProps<"section">) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-700/40 py-4">
-      <span className="text-slate-400">{label}</span>
-
-      <span className={`font-mono font-semibold ${valueColor}`}>{value}</span>
-    </div>
-  );
-}
-
-export default function TradingPlatforms() {
-  return (
-    <section className="bg-[#050A13] px-6 py-20">
+    <section
+      className={cn(`px-6 py-20`, className)}
+      {...props}
+      data-slot={`trading-platforms`}
+    >
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
-        <PlatformCard></PlatformCard>
-
-        {/* {cards.map((card) => (
-          <div key={card.name} className="">
-            {card.recommended && (
-              <div className="absolute top-0 left-1/2 -translate-x-1/2">
-                <div className="rounded-b-xl bg-emerald-500 px-6 py-1 text-sm font-semibold text-white">
-                  ✓ Recommended
-                </div>
-              </div>
+        <PlatformCard>
+          <PlatformCardRecomendation />
+          <MetaTraderLogo className={cn(`mt-4 w-full text-emerald-500`)} />
+          <PlatformCardHeading>MetaTrader 5</PlatformCardHeading>
+          <PlatformCardSubHeading>
+            The next generation trading platform
+          </PlatformCardSubHeading>
+          <StatRow
+            className={cn(
+              `**:data-[slot=stat-row-item-value]:text-emerald-500`,
             )}
+          >
+            <StatRowItem>
+              <StatRowItemLabel>Programming</StatRowItemLabel>
+              <StatRowItemValue>MQL5</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Timeframes</StatRowItemLabel>
+              <StatRowItemValue>21</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Order Types</StatRowItemLabel>
+              <StatRowItemValue>6 pending</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Hedging</StatRowItemLabel>
+              <StatRowItemValue>Allowed</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Economic Cal.</StatRowItemLabel>
+              <StatRowItemValue>Built-in</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Copy Trading</StatRowItemLabel>
+              <StatRowItemValue>Supported</StatRowItemValue>
+            </StatRowItem>
+          </StatRow>
 
-            <MetaTraderLogo />
+          <DownloadButtons>
+            <DownloadWindows className={cn(`bg-emerald-500`)} />
+            <DownloadMacOS className={cn(`bg-emerald-500`)} />
+            <DownloadIOS className={cn(`bg-emerald-500`)} />
+          </DownloadButtons>
+        </PlatformCard>
 
-            <h2 className="">{card.name}</h2>
+        <PlatformCard>
+          <MetaTraderLogo className={cn(`mt-4 w-full text-indigo-500`)} />
+          <PlatformCardHeading>MetaTrader 4</PlatformCardHeading>
+          <PlatformCardSubHeading>
+            The industry standard platform
+          </PlatformCardSubHeading>
+          <StatRow
+            className={cn(`**:data-[slot=stat-row-item-value]:text-indigo-500`)}
+          >
+            <StatRowItem>
+              <StatRowItemLabel>Programming</StatRowItemLabel>
+              <StatRowItemValue>MQL5</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Timeframes</StatRowItemLabel>
+              <StatRowItemValue>9</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Order Types</StatRowItemLabel>
+              <StatRowItemValue>4 pending</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Hedging</StatRowItemLabel>
+              <StatRowItemValue>Allowed</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Custom Indicators</StatRowItemLabel>
+              <StatRowItemValue>Limited</StatRowItemValue>
+            </StatRowItem>
+            <StatRowItem>
+              <StatRowItemLabel>Copy Trading</StatRowItemLabel>
+              <StatRowItemValue>Available</StatRowItemValue>
+            </StatRowItem>
+          </StatRow>
 
-            <p className="mt-3 text-center text-slate-400">{card.subtitle}</p>
-
-            <div className="mt-10">
-              <Row
-                label="Programming"
-                value={card.programming}
-                valueColor={card.valuesColor}
-              />
-
-              <Row
-                label="Timeframes"
-                value={card.timeframes}
-                valueColor={card.valuesColor}
-              />
-
-              <Row
-                label="Order Types"
-                value={card.orderTypes}
-                valueColor={card.valuesColor}
-              />
-
-              <Row
-                label="Hedging"
-                value={card.hedging}
-                valueColor={card.valuesColor}
-              />
-
-              <Row
-                label={card.feature}
-                value={card.featureValue}
-                valueColor={card.valuesColor}
-              />
-
-              <Row
-                label="Copy Trading"
-                value={card.copyTrading}
-                valueColor={card.valuesColor}
-              />
-            </div>
-
-            <DownloadButtons>
-              <DownloadWindows />
-              <DownloadMacOS />
-              <DownloadIOS />
-            </DownloadButtons>
-          </div>
-        ))} */}
+          <DownloadButtons>
+            <DownloadWindows className={cn(`bg-indigo-500`)} />
+            <DownloadMacOS className={cn(`bg-indigo-500`)} />
+            <DownloadAndroid className={cn(`bg-indigo-500`)} />
+          </DownloadButtons>
+        </PlatformCard>
       </div>
     </section>
-  );
-}
-
-export function DownloadButtons({
-  className,
-  ...props
-}: ComponentProps<"div">) {
-  return <div className={cn(`grid grid-cols-2`, className)} {...props} />;
-}
-
-export function DownloadWindows({
-  className,
-  ...props
-}: ComponentProps<"button">) {
-  return (
-    <button
-      className={cn(
-        `col-span-2 mt-10 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r text-lg font-semibold text-white`,
-        className,
-      )}
-      {...props}
-    >
-      <FaWindows size={20} />
-      Download for Windows
-    </button>
-  );
-}
-
-export function DownloadMacOS({
-  className,
-  ...props
-}: ComponentProps<"button">) {
-  return (
-    <button
-      className={cn(
-        `mt-10 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r text-lg font-semibold text-white`,
-        className,
-      )}
-      {...props}
-    >
-      <FaApple size={20} />
-      macOS
-    </button>
-  );
-}
-
-export function DownloadIOS({ className, ...props }: ComponentProps<"button">) {
-  return (
-    <button
-      className={cn(
-        `mt-10 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r text-lg font-semibold text-white`,
-        className,
-      )}
-      {...props}
-    >
-      <Smartphone size={20} />
-      iOS
-    </button>
-  );
-}
-
-export function DownloadAndroid({
-  className,
-  ...props
-}: ComponentProps<"button">) {
-  return (
-    <button
-      className={cn(
-        `mt-10 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r text-lg font-semibold text-white`,
-        className,
-      )}
-      {...props}
-    >
-      <FaAndroid size={20} />
-      Android
-    </button>
-  );
-}
-
-export function StatRow({ className, ...props }: ComponentProps<"div">) {
-  return <div className={cn(`mt-10`, className)} {...props} />;
-}
-
-export function StatRowItem({ className, ...props }: ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        `flex items-center justify-between border-b border-slate-700/40 py-4`,
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-export function StatRowItemLabel({
-  className,
-  ...props
-}: ComponentProps<"span">) {
-  return <span className={cn(`text-slate-400`, className)} {...props} />;
-}
-
-export function StatRowItemValue({
-  className,
-  ...props
-}: ComponentProps<"span">) {
-  return (
-    <span className={cn(`font-mono font-semibold`, className)} {...props} />
-  );
-}
-
-export function PlatformCardHeading({
-  className,
-  ...props
-}: ComponentProps<"h2">) {
-  return (
-    <h2
-      className={cn(
-        `mt-6 text-center text-4xl font-bold text-white`,
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-export function PlatformCardSubHeading({
-  className,
-  ...props
-}: ComponentProps<"p">) {
-  return (
-    <p
-      className={cn(`mt-3 text-center text-slate-400`, className)}
-      {...props}
-    />
-  );
-}
-
-export function PlatformCard({ className, ...props }: ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        `relative overflow-hidden rounded-3xl border p-8`,
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-export function PlatformCardRecomendation({
-  className,
-  ...props
-}: ComponentProps<"div">) {
-  return (
-    <div className={cn("absolute top-0 left-1/2 -translate-x-1/2")} {...props}>
-      <div className="rounded-b-xl bg-emerald-500 px-6 py-1 text-sm font-semibold text-white">
-        ✓ Recommended
-      </div>
-    </div>
   );
 }

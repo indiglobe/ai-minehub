@@ -4,28 +4,20 @@ import type { LinkProps } from "@tanstack/react-router";
 
 const sections = [
   {
-    title: "About Us",
+    title: "Introducing Broker (IB)",
     description:
-      "Learn who we are, what we believe in, and the vision behind our platform.",
-    to: "/company/about",
+      "Build your trading community and generate revenue by referring traders to our trusted brokerage services with dedicated IB support.",
+    to: "/partnership/ib",
     icon: "🌐",
     accent: "from-sky-500/30 to-cyan-500/10",
   },
   {
-    title: "Awards",
+    title: "Affiliate Partnership",
     description:
-      "Explore the milestones, recognitions, and achievements we've earned.",
-    to: "/company/awards",
+      "Promote our trading solutions, attract new clients, and benefit from a rewarding affiliate program designed for growth.",
+    to: "/partnership/affiliate",
     icon: "🏆",
     accent: "from-amber-500/30 to-yellow-500/10",
-  },
-  {
-    title: "News",
-    description:
-      "Stay updated with the latest announcements, releases, and platform updates.",
-    to: "/company/news",
-    icon: "📰",
-    accent: "from-violet-500/30 to-fuchsia-500/10",
   },
 ] satisfies {
   title: string;
@@ -35,7 +27,7 @@ const sections = [
   accent: string;
 }[];
 
-export function CompanyHome() {
+export function PartnershipHome() {
   return (
     <main className="default-padding relative overflow-hidden py-20">
       {/* Background */}
@@ -53,7 +45,7 @@ export function CompanyHome() {
         <h1 className="font-brand-secondary text-4xl font-bold md:text-6xl">
           Explore{" "}
           <span className="from-primary-500 to-secondary-500 bg-linear-to-r bg-clip-text text-transparent">
-            Company
+            Partnership
           </span>
         </h1>
 

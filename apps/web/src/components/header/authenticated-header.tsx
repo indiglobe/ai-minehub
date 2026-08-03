@@ -8,7 +8,7 @@ export default function AuthenticatedHeader({
 }: ComponentProps<"header">) {
   return (
     <header className={cn(``, className)} {...props}>
-      {/* <AuthenticatedNavbar /> */}
+      <AuthenticatedNavbar />
     </header>
   );
 }

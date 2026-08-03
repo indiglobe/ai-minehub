@@ -7,11 +7,19 @@ export const env = createEnv({
   server: {
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_URL: z.string(),
+
     DATABASE_URL: z.string(),
+
     SOCKET_APP_HOST: z.string(),
     WEB_APP_HOST: z.string(),
+
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
+
+    RAZOR_PAY_KEY: z.string(),
+    RAZOR_PAY_SECRET: z.string(),
+    
+    TOKEN_SECRET: z.string(),
   },
 
   /**

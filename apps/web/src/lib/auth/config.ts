@@ -31,9 +31,7 @@ export const auth = betterAuth({
       secure: isProd,
       httpOnly: true,
       ...(isProd && {
-        domain: env.WEB_APP_HOST.startsWith("http://")
-          ? `.${env.WEB_APP_HOST.split("http://")[1]}`
-          : `.${env.WEB_APP_HOST.split("https://")[1]}`,
+        domain: env.WEB_APP_HOST.split("://")[1],
       }),
       path: "/",
     },

@@ -1,15 +1,26 @@
-import { logOut } from "@/lib/auth/session";
+import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { LogoIconFilled } from "@repo/ui/logo";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { LogOut } from "lucide-react";
 import type { ComponentProps } from "react";
+import { deleteUserDetailsCookie as deleteUserDetailsCookieServerFn } from "@/lib/auth/session";
 
 export default function AuthenticatedNavbar({
   className,
   ...props
 }: ComponentProps<"nav">) {
+  const deleteUserDetailsCookie = useServerFn(deleteUserDetailsCookieServerFn);
+  const navigate = useNavigate();
+
+  async function logOut() {
+    await authClient.signOut();
+    await deleteUserDetailsCookie();
+    throw navigate({ to: "/" });
+  }
+
   return (
     <nav
       className={cn(
@@ -20,18 +31,16 @@ export default function AuthenticatedNavbar({
     >
       <Button asChild variant={"ghost"} className={cn(`px-0`)}>
         <Link to="/" className={cn(`flex items-center justify-start gap-3`)}>
-          <span className={cn(`max-xs:hidden`)}>
+          <span>
             <LogoIconFilled className={cn(`size-10`)} />
           </span>
-          <span className={cn(`fs-5.5 font-semibold`)}>AI Mine Hub</span>
+          <span className={cn(`fs-5.5 max-xs:hidden font-semibold`)}>
+            AI Mine Hub
+          </span>
         </Link>
       </Button>
 
-      <Button
-        variant={"destructive"}
-        corner={"circle"}
-        onClick={async () => await logOut()}
-      >
+      <Button variant={"destructive"} corner={"circle"} onClick={logOut}>
         <span className={cn(`max-xs:hidden`)}>Logout</span>
         <span>
           <LogOut />

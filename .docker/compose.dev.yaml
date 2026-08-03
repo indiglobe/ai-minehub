@@ -1,5 +1,14 @@
 name: ai-minehub-dev
 
+# the ports are derived from this, for consistent accross projects
+# node -p "
+# const c = require('crypto');
+# const n = process.argv[1];
+# const h = c.createHash('sha256').update(n).digest().readUInt32BE(0);
+# 10000 + (h % 10000);
+# " \
+# container-name
+
 networks:
   ai-minehub-dev:
     driver: bridge
@@ -12,7 +21,7 @@ services:
       MYSQL_ROOT_USER: admin
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - 3306:3306
+      - 14015:3306
     networks:
       - ai-minehub-dev
     volumes:
@@ -22,10 +31,12 @@ services:
     container_name: ai-minehub-dev-phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
-      - "9000:80"
+      - "17037:80"
     environment:
       PMA_HOST: ai-minehub-dev-database
       PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
     depends_on:
       - ai-minehub-dev-database
     networks:
@@ -40,10 +51,25 @@ services:
     networks:
       - ai-minehub-dev
     volumes:
-      # - ../nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - ../nginx.dev.secure.conf:/etc/nginx/nginx.conf:ro
+      - ../nginx.secure.dev.conf:/etc/nginx/nginx.conf:ro
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
+  ai-minehub-dev-adguard:
+    container_name: ai-minehub-dev-adguardhome
+    image: adguard/adguardhome:edge
+    restart: unless-stopped
+    ports:
+      - "9000:3000/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - ai-minehub-dev
+    # volumes:
+    #   - adguard-work:/opt/adguardhome/work
+    #   - adguard-conf:/opt/adguardhome/conf
+
 volumes:
   database:
+  # adguard-work:
+  # adguard-conf:

@@ -1,3 +1,4 @@
+import IB from "@/components/main/partnership/ib/ib";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(with-header-footer)/partnership/ib/")({
@@ -9,5 +10,9 @@ export const Route = createFileRoute("/(with-header-footer)/partnership/ib/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/partnership/ib/"!</div>;
+  return (
+    <>
+      <IB />
+    </>
+  );
 }

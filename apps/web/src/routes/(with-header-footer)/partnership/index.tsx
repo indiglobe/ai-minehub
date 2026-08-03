@@ -1,3 +1,4 @@
+import { PartnershipHome } from "@/components/main/partnership/partnership";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(with-header-footer)/partnership/")({
@@ -5,5 +6,9 @@ export const Route = createFileRoute("/(with-header-footer)/partnership/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/(with-header-footer)/partnership/"!</div>;
+  return (
+    <>
+      <PartnershipHome />
+    </>
+  );
 }

@@ -23,7 +23,7 @@ export const read__AllRatingsSchema = z
       .optional(),
     joinOptions: z
       .object({
-        userDetails: z.boolean(),
+        user: z.boolean().optional(),
       })
       .optional(),
   })

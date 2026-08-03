@@ -1,5 +1,5 @@
 import { cn } from "@repo/styles/cn";
-import Main from "../main";
+import Main from "@/components/main/main";
 import type { ComponentProps } from "react";
 import { Button } from "@repo/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -12,7 +12,7 @@ import {
 import { welcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welcome-form";
 import type { TWelcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welcome-form";
 import { useServerFn } from "@tanstack/react-start";
-import { serverFn__createUser } from "@/integrations/server-function/user";
+import { formAction__createNewUser } from "@/integrations/form-actions/welcome-form.fa";
 
 export function WelcomeComp({ ...props }: ComponentProps<typeof Main>) {
   return (
@@ -134,7 +134,7 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
   const { referralCode } = useLoaderData({
     from: "/(without-header-footer)/(authenticated)/(new-user)/welcome/",
   });
-  const createUser = useServerFn(serverFn__createUser);
+  const createNewUser = useServerFn(formAction__createNewUser);
   const navigate = useNavigate();
 
   const form = useForm({
@@ -144,28 +144,27 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
       age: 0,
       referralCode: referralCode.toUpperCase(),
       email,
-    } satisfies TWelcomeFormSchema,
+      avatarImageUrl: image,
+    } as TWelcomeFormSchema,
     validators: {
       onSubmit: welcomeFormSchema,
     },
     onSubmit: async ({ value }) => {
       // eslint-disable-next-line no-shadow
-      const { age, email, name, phoneNo, referralCode } = value;
+      const { age, email, name, phoneNo, referralCode, avatarImageUrl } = value;
 
-      await createUser({
+      await createNewUser({
         data: {
           age,
           email,
           fullName: name,
           phoneNumber: phoneNo.toString(),
           referrerId: referralCode.length > 0 ? referralCode : null,
-          avatarUrl: image ?? "",
+          avatarUrl: avatarImageUrl,
         },
       });
 
-      navigate({ to: "/dashboard" });
-
-      return;
+      throw navigate({ to: "/dashboard" });
     },
   });
 

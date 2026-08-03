@@ -10,7 +10,7 @@ export function About() {
 
       <div className="default-padding bg-slate-300 py-10 lg:py-16 dark:bg-slate-900">
         <div className="mx-auto max-w-6xl space-y-10 lg:space-y-16">
-          <div className="space-y-10 rounded-3xl border border-slate-600 bg-black/5 px-6 py-8 sm:px-8 sm:py-10 lg:space-y-12 lg:px-12 lg:py-14 dark:bg-white/3">
+          <div className="space-y-10 rounded-3xl border border-slate-600 bg-black/5 px-4 py-6 sm:px-8 sm:py-10 lg:space-y-12 lg:px-12 lg:py-14 dark:bg-white/3">
             <OurMission />
             <CoreValues />
           </div>
@@ -106,7 +106,7 @@ function ValueItem({
 }) {
   return (
     <li className="flex items-start gap-3">
-      <Check className="bg-accent-500 text-background mt-1 size-5 shrink-0 rounded-full p-1" />
+      <Check className="bg-accent-500 text-background mt-1 size-4 shrink-0 rounded-full p-1 md:size-5" />
 
       <span>
         <strong>{title}:</strong> {children}
@@ -122,7 +122,7 @@ export function LicensingAndRegulation({
   return (
     <section
       className={cn(
-        "rounded-3xl border border-slate-600 bg-black/5 px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14 dark:bg-white/3",
+        "rounded-3xl border border-slate-600 bg-black/5 px-4 py-6 sm:px-8 sm:py-10 lg:px-12 lg:py-14 dark:bg-white/3",
         className,
       )}
       {...props}

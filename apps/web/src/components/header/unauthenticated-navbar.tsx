@@ -91,26 +91,6 @@ const navItems = [
     text: "Tool",
     to: "/tools",
   },
-  {
-    children: [
-      {
-        text: "Webinar",
-        to: "/education/webinars",
-        subtext: "Live & on-demand",
-      },
-      {
-        text: "Trading guides",
-        to: "/education/guides",
-        subtext: "Beginner to pro",
-      },
-    ],
-    text: "Education",
-    to: "/education",
-  },
-  {
-    text: "Promotions",
-    to: "/promotions",
-  },
 ] satisfies NavItem[];
 
 export default function Navbar({ className, ...props }: ComponentProps<"nav">) {

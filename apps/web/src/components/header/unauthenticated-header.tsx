@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import Navbar from "@/components/header/unauthenticated-navbar";
 
-export default function Header({
+export function UnauthenticatedHeader({
   className,
   ...props
 }: ComponentProps<"header">) {

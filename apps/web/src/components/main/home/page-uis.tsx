@@ -70,7 +70,7 @@ export function WhyChooseCards({ className, ...props }: ComponentProps<"div">) {
     <div
       data-slot={`section-sub-heading`}
       className={cn(
-        `bg-secondary-500/20 dark:bg-secondary-500/10 dark:border-secondary-500/15 group border-secondary-500/50 hover:border-secondary-500 dark:hover:border-secondary-500/30 relative space-y-3 overflow-clip rounded-2xl border p-10 transition-transform duration-500 hover:-translate-y-1`,
+        `bg-secondary-500/20 dark:bg-secondary-500/10 dark:border-secondary-500/15 group border-secondary-500/50 hover:border-secondary-500 dark:hover:border-secondary-500/30 relative space-y-3 overflow-clip rounded-2xl border p-6 transition-transform duration-500 hover:-translate-y-1 md:p-10`,
         `gsap-section-sub-heading relative top-10 opacity-0`,
         className,
       )}
@@ -181,7 +181,7 @@ export function AccountType({ className, ...props }: ComponentProps<"div">) {
     <div
       data-slot={`account-type`}
       className={cn(
-        `bg-secondary-500/10 border-secondary-500/50 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
+        `bg-secondary-500/10 border-secondary-500/50 overflow-clip rounded-2xl border px-3 py-4 transition-transform hover:-translate-y-1 md:px-6 md:py-8`,
         `gsap-account-type relative top-10 opacity-0`,
         className,
       )}
@@ -398,7 +398,7 @@ export function PromotionBonus({
     <div
       data-slot={`promotion-bonus`}
       className={cn(
-        `bg-secondary-500/10 border-secondary-500/50 relative space-y-4 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
+        `bg-secondary-500/10 border-secondary-500/50 relative space-y-4 overflow-clip rounded-2xl border px-4 py-6 transition-transform hover:-translate-y-1 md:px-6 md:py-8`,
         `gsap-account-type relative top-10 opacity-0`,
         className,
       )}
@@ -543,7 +543,7 @@ export function PassiveIncome({
       data-popular={popular}
       className={cn(
         `group`,
-        `bg-secondary-500/10 border-secondary-500/50 relative flex w-full flex-col items-center justify-center space-y-4 overflow-clip rounded-2xl border px-6 py-8 transition-transform hover:-translate-y-1`,
+        `bg-secondary-500/10 border-secondary-500/50 relative flex w-full flex-col items-center justify-center space-y-4 overflow-clip rounded-2xl border px-4 py-6 transition-transform hover:-translate-y-1 md:px-6 md:py-8`,
         `gsap-account-type relative top-10 opacity-0`,
         className,
       )}
@@ -655,7 +655,7 @@ export function PassiveIncomeCTA({
   return (
     <Button
       className={cn(
-        `group/btn border-accent-500 group-data-[popular=true]:hover:shadow-accent-500/30 relative h-16 w-full overflow-hidden rounded-xl border bg-transparent transition-shadow hover:bg-transparent group-data-[popular=true]:hover:shadow-xl`,
+        `group/btn border-accent-500 group-data-[popular=true]:hover:shadow-accent-500/30 relative h-12 w-full overflow-hidden rounded-xl border bg-transparent transition-shadow hover:bg-transparent group-data-[popular=true]:hover:shadow-xl md:h-16`,
         className,
       )}
       {...props}

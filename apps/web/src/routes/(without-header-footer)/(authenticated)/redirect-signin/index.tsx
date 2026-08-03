@@ -1,7 +1,12 @@
+import { RedirectOnlyPage } from "@/components/main/redirect-signin";
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
-import { fetchSession } from "@/lib/auth/session";
+import {
+  fetchSession,
+  fetchUserDetailsCookie,
+  setUserDetailsCookie,
+} from "@/lib/auth/session";
 import { signinPageSearchParams } from "@/utils/zod-schema/search-params-schema/signin-page";
-import { env } from "@repo/env/server";
+import { env } from "@repo/env/client";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 
@@ -26,9 +31,10 @@ export const Route = createFileRoute(
    * 2. Authenticated but onboarding incomplete -> Redirect to /welcome.
    * 3. Authenticated and onboarding complete -> Allow navigation to continue.
    */
-  beforeLoad: async ({ search: { referralCode } }) => {
+  beforeLoad: async ({ search: { referralCode, redirectUrl } }) => {
     // Check whether the user has an active session.
     const session = await fetchSession();
+    const userDetailsFromCookie = await fetchUserDetailsCookie();
 
     // User is not authenticated.
     // Redirect to sign-in while preserving the intended redirect URL.
@@ -36,31 +42,54 @@ export const Route = createFileRoute(
       throw redirect({
         to: "/signin",
         search: {
-          redirectUrl: new URL("", env.WEB_APP_HOST).toString(),
+          redirectUrl: new URL("", env.VITE_WEB_APP_HOST).toString(),
         },
       });
     }
 
-    const {
-      user: { email },
-    } = session;
+    if (!userDetailsFromCookie) {
+      const {
+        user: { email },
+      } = session;
 
-    // Verify that the authenticated user has completed
-    // the application's onboarding/profile creation.
-    const userDetails = await serverFn__readOneUser({
-      data: { identifier: { email } },
-    });
+      // Verify that the authenticated user has completed
+      // the application's onboarding/profile creation.
+      const userDetails = await serverFn__readOneUser({
+        data: { identifier: { email } },
+      });
 
-    // Authenticated but onboarding is incomplete.
-    // Forward the referral code so onboarding can continue.
-    if (!userDetails) {
+      // Authenticated but onboarding is incomplete.
+      // Forward the referral code so onboarding can continue.
+      if (!userDetails) {
+        throw redirect({
+          to: "/welcome",
+          search: { referralCode },
+        });
+      }
+
+      const { age, avatarUrl, fullName, phoneNumber, role, id } = userDetails;
+
+      await setUserDetailsCookie({
+        data: {
+          age,
+          avatarUrl,
+          email,
+          fullName,
+          phone: phoneNumber,
+          role,
+          userId: id,
+        },
+      });
+
       throw redirect({
-        to: "/welcome",
-        search: { referralCode },
+        to: redirectUrl ?? "/dashboard",
       });
     }
-
-    // User is authenticated and fully onboarded.
-    // No redirect is required, so navigation continues to the target route.
   },
+
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  return <RedirectOnlyPage />;
+}

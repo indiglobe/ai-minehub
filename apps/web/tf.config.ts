@@ -20,7 +20,7 @@ export default defineConfig({
           : ".env.development",
     },
     "sb:dev": {
-      execute: "storybook dev -p 6006 --no-open",
+      execute: "storybook dev -p 6006",
       envFile:
         env.PLATFORM === "devcontainer"
           ? ".env.devcontainer"

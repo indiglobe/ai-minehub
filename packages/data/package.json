@@ -1,35 +1,5 @@
 {
   "name": "@repo/data",
-  "exports": {
-    "./querries/*": {
-      "require": {
-        "types": "./dist/querries/*.d.cts",
-        "default": "./dist/querries/*.cjs"
-      },
-      "import": {
-        "types": "./dist/querries/*.d.mts",
-        "default": "./dist/querries/*.mjs"
-      }
-    },
-    "./validators/*": {
-      "require": {
-        "types": "./dist/validators/*.d.cts",
-        "default": "./dist/validators/*.cjs"
-      },
-      "import": {
-        "types": "./dist/validators/*.d.mts",
-        "default": "./dist/validators/*.mjs"
-      }
-    }
-  },
-  "version": "0.0.0",
-  "description": "",
-  "type": "module",
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "pnpm format"
-    ]
-  },
   "scripts": {
     "dev": "pkgroll --watch",
     "prebuild": "rimraf ./dist",
@@ -90,6 +60,36 @@
     "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.4"
+  },
+  "exports": {
+    "./querries/*": {
+      "require": {
+        "types": "./dist/querries/*.d.cts",
+        "default": "./dist/querries/*.cjs"
+      },
+      "import": {
+        "types": "./dist/querries/*.d.mts",
+        "default": "./dist/querries/*.mjs"
+      }
+    },
+    "./validators/*": {
+      "require": {
+        "types": "./dist/validators/*.d.cts",
+        "default": "./dist/validators/*.cjs"
+      },
+      "import": {
+        "types": "./dist/validators/*.d.mts",
+        "default": "./dist/validators/*.mjs"
+      }
+    }
+  },
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "pnpm format"
+    ]
   },
   "keywords": [],
   "author": "",

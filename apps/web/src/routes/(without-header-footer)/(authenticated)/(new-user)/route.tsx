@@ -45,9 +45,6 @@ export const Route = createFileRoute(
     return {
       session,
     };
-
-    // No profile found.
-    // Allow access to the onboarding flow.
   },
 });
 

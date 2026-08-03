@@ -1,5 +1,5 @@
-import Footer from "@/components/footer/footer";
-import Header from "@/components/header/header";
+import { Footer } from "@/components/footer/footer";
+import { UnauthenticatedHeader } from "@/components/header/unauthenticated-header";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(with-header-footer)")({
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/(with-header-footer)")({
 function RouteComponent() {
   return (
     <>
-      <Header />
+      <UnauthenticatedHeader />
       <Outlet />
       <Footer />
     </>

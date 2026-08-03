@@ -56,6 +56,8 @@ import {
   Grid2x2,
   Rocket,
   Check,
+  Video,
+  User,
 } from "lucide-react";
 import type {
   ClientToServerEvents,
@@ -88,7 +90,7 @@ export function HeroSection({
 }: ComponentProps<"section">) {
   return (
     <section
-      className={cn(`default-padding relative py-20`, className)}
+      className={cn(`default-padding relative pt-6 pb-20 md:py-20`, className)}
       {...props}
     >
       <div
@@ -135,7 +137,10 @@ export function HeroSection({
               variant={"primary"}
               corner={"circle"}
             >
-              Open Free Account
+              <span>
+                <User className={cn(`size-6`)} />
+              </span>
+              <span>Open Free Account</span>
             </Button>
 
             <Button
@@ -145,7 +150,10 @@ export function HeroSection({
               variant={"outline"}
               corner={"circle"}
             >
-              Watch Platform Demo
+              <span>
+                <Video className={cn(`size-6`)} />
+              </span>
+              <span>Watch Platform Demo</span>
             </Button>
           </div>
 
@@ -369,6 +377,7 @@ export function WhyUsSection({
         <SectionIdentifier>Why NexTrade</SectionIdentifier>
         <SectionHeading>
           <span>Why Traders </span>
+          <br className={cn(`md:hidden`)} />
           <span className={cn(`text-primary-500`)}>Choose Us</span>
         </SectionHeading>
         <SectionSubHeading>
@@ -975,7 +984,7 @@ export function PassiveIncomeSection({
 
       <div
         className={cn(
-          `bg-secondary-500/5 border-secondary-500/30 mt-24 grid grid-cols-1 gap-y-8 rounded-2xl border py-8 text-center md:grid-cols-2 lg:grid-cols-4`,
+          `bg-secondary-500/5 border-secondary-500/30 mt-24 grid grid-cols-2 gap-y-8 rounded-2xl border py-8 text-center lg:grid-cols-4`,
         )}
       >
         <div
@@ -1027,7 +1036,7 @@ export function BottomCTASection({
     <section className={cn(`default-padding`, className)} {...props}>
       <div
         className={cn(
-          `bg-secondary-500/10 border-secondary-500/20 flex w-full flex-col items-center gap-x-10 gap-y-8 rounded-2xl border p-8 lg:flex-row`,
+          `bg-secondary-500/10 border-secondary-500/20 flex w-full flex-col items-center gap-x-10 gap-y-8 rounded-2xl border p-4 md:p-8 lg:flex-row`,
         )}
       >
         <div className={cn(`space-y-4`)}>
@@ -1092,9 +1101,9 @@ export function BottomCTASection({
         >
           <Button
             corner={"circle"}
-            className={cn(`m-auto h-16 w-full text-lg md:w-60`)}
+            className={cn(`m-auto h-12 w-full text-lg md:h-16 md:w-60`)}
           >
-            <Rocket className={cn(`inline-block size-5`)} />{" "}
+            <Rocket className={cn(`inline-block size-5`)} />
             <span>Open Free Account</span>
           </Button>
         </div>
