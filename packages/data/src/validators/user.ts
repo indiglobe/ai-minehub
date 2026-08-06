@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const create__UserSchema = z.object({
-  email: z.email(),
+  email: z.string(),
   fullName: z.string(),
   avatarUrl: z.string(),
   age: z.number(),
@@ -27,10 +27,13 @@ export const read__AllUsersSchema = z
       .optional(),
     joinOptions: z
       .object({
-        ratingDetails: z.boolean(),
-        tradingWalletDetails: z.boolean(),
-        miningWalletDetails: z.boolean(),
-        referrals: z.boolean(),
+        tradingWallet: z.literal(true).optional(),
+        miningWallet: z.literal(true).optional(),
+        rating: z.literal(true).optional(),
+        referredBy: z.literal(true).optional(),
+        referrals: z.literal(true).optional(),
+        miningOrders: z.literal(true).optional(),
+        tradingOrders: z.literal(true).optional(),
       })
       .optional(),
   })
@@ -39,7 +42,7 @@ export const read__AllUsersSchema = z
 export const read__OneUserSchema = z.object({
   identifier: z.union([
     z.object({
-      email: z.email(),
+      email: z.string(),
     }),
     z.object({
       id: z.string(),
@@ -47,17 +50,27 @@ export const read__OneUserSchema = z.object({
   ]),
   joinOptions: z
     .object({
-      ratingDetails: z.boolean(),
-      tradingWalletDetails: z.boolean(),
-      miningWalletDetails: z.boolean(),
+      tradingWallet: z.literal(true),
+      miningWallet: z.literal(true),
+      rating: z.literal(true),
+      referredBy: z.literal(true),
+      referrals: z.literal(true),
+      miningOrders: z.literal(true),
+      tradingOrders: z.literal(true),
     })
+    .partial()
     .optional(),
 });
 
 export const update__UserSchema = z.object({
-  identifier: z.object({
-    email: z.email(),
-  }),
+  identifier: z.union([
+    z.object({
+      email: z.string(),
+    }),
+    z.object({
+      id: z.string(),
+    }),
+  ]),
   dataToUpdate: z.object({
     fullName: z.string().optional(),
     avatarUrl: z.string().optional(),
@@ -70,10 +83,10 @@ export const update__UserSchema = z.object({
   }),
 });
 
-z.object({
+export const delete__UserSchema = z.object({
   identifier: z.union([
     z.object({
-      email: z.email(),
+      email: z.string(),
     }),
     z.object({
       id: z.string(),

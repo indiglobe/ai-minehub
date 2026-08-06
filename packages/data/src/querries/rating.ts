@@ -31,9 +31,9 @@ export type TRating = typeof RatingTable.$inferSelect;
 /**
  * Type used for creating a rating.
  */
-export type TCreate__Rating = Omit<
+type TCreate__Rating = Omit<
   typeof RatingTable.$inferInsert,
-  "tableIdentifierToken"
+  "tableIdentifierToken" | "updatedAt" | "createdAt"
 >;
 
 /**
@@ -45,14 +45,14 @@ export type TCreate__Rating = Omit<
  * @param data - Rating payload excluding system-generated fields
  * @returns The newly created rating record
  */
-export const create__Rating = async (data: TCreate__Rating) => {
+const create__Rating = async (data: TCreate__Rating) => {
   await db.insert(RatingTable).values(data);
 
-  return await read__OneRating({
+  return (await read__OneRating({
     identifier: {
       associatedUser: data.associatedUser,
     },
-  });
+  }))!;
 };
 
 /**
@@ -61,7 +61,7 @@ export const create__Rating = async (data: TCreate__Rating) => {
  * ==========================================
  */
 
-export type TRead__AllRatings = {
+type TRead__AllRatings = {
   identifier?: {
     ratingStar?: (typeof RatingTable.$inferSelect)["ratingStar"];
   };
@@ -72,7 +72,7 @@ export type TRead__AllRatings = {
   };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -88,7 +88,7 @@ export type TRead__AllRatings = {
  * @param options.joinOptions.user - Include related user data
  * @returns Array of rating records
  */
-export const read__AllRatings = async (options?: TRead__AllRatings) => {
+const read__AllRatings = async (options?: TRead__AllRatings) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
@@ -98,7 +98,7 @@ export const read__AllRatings = async (options?: TRead__AllRatings) => {
     conditions.push(eq(RatingTable.ratingStar, options.identifier.ratingStar));
   }
 
-  return db.query.RatingTable.findMany({
+  return await db.query.RatingTable.findMany({
     limit,
     offset: skip,
     where: and(...conditions),
@@ -115,7 +115,7 @@ export const read__AllRatings = async (options?: TRead__AllRatings) => {
  * ==========================================
  */
 
-export type TRead__OneRating = {
+type TRead__OneRating = {
   identifier:
     | {
         associatedUser: (typeof RatingTable.$inferSelect)["associatedUser"];
@@ -125,7 +125,7 @@ export type TRead__OneRating = {
       };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -142,7 +142,7 @@ export type TRead__OneRating = {
  * @param options.joinOptions.user - Include related user data
  * @returns The rating record if found, otherwise null
  */
-export const read__OneRating = async (options: TRead__OneRating) => {
+const read__OneRating = async (options: TRead__OneRating) => {
   const { identifier } = options;
 
   const conditions: SQL[] = [];
@@ -171,10 +171,10 @@ export const read__OneRating = async (options: TRead__OneRating) => {
  * ==========================================
  */
 
-export type TRead__RatingStats = {
+type TRead__RatingStats = {
   joinOptions?: {
-    user: boolean;
-    rating: boolean;
+    user: true;
+    rating: true;
   };
 };
 
@@ -188,7 +188,7 @@ export type TRead__RatingStats = {
  * @param options.joinOptions.user - Include related user details in response
  * @returns Array of grouped rating statistics with optional JSON details
  */
-export const read__RatingStats = async (options: TRead__RatingStats) => {
+const read__RatingStats = async (options: TRead__RatingStats) => {
   const { joinOptions } = options;
 
   const ratingTableCol = getTableColumns(RatingTable);
@@ -261,7 +261,7 @@ export const read__RatingStats = async (options: TRead__RatingStats) => {
  * ==========================================
  */
 
-export type TUpdate__Rating = {
+type TUpdate__Rating = {
   identifier:
     | {
         associatedUser: (typeof RatingTable.$inferSelect)["associatedUser"];
@@ -273,7 +273,7 @@ export type TUpdate__Rating = {
   dataToUpdate: Partial<
     Omit<
       typeof RatingTable.$inferInsert,
-      "associatedUser" | "tableIdentifierToken"
+      "associatedUser" | "tableIdentifierToken" | "id"
     >
   >;
 };
@@ -293,7 +293,7 @@ export type TUpdate__Rating = {
  * @param options.dataToUpdate - Partial rating fields to update
  * @returns The updated rating record, or `null` if nothing was updated
  */
-export const update__Rating = async (options: TUpdate__Rating) => {
+const update__Rating = async (options: TUpdate__Rating) => {
   const { identifier, dataToUpdate } = options;
 
   const filteredData = Object.fromEntries(
@@ -330,7 +330,7 @@ export const update__Rating = async (options: TUpdate__Rating) => {
  * ==========================================
  */
 
-export type TDelete__Rating = {
+type TDelete__Rating = {
   identifier:
     | {
         associatedUser: (typeof RatingTable.$inferSelect)["associatedUser"];
@@ -351,7 +351,7 @@ export type TDelete__Rating = {
  * (either `id` or `associatedUser`)
  * @returns The deleted rating record if it existed, otherwise `null`
  */
-export const delete__Rating = async ({ identifier }: TDelete__Rating) => {
+const delete__Rating = async ({ identifier }: TDelete__Rating) => {
   const existingRating = await read__OneRating({
     identifier,
   });
@@ -373,4 +373,22 @@ export const delete__Rating = async ({ identifier }: TDelete__Rating) => {
   await db.delete(RatingTable).where(and(...conditions));
 
   return existingRating;
+};
+
+export type {
+  TCreate__Rating,
+  TRead__AllRatings,
+  TRead__OneRating,
+  TRead__RatingStats,
+  TUpdate__Rating,
+  TDelete__Rating,
+};
+
+export {
+  create__Rating,
+  read__AllRatings,
+  read__OneRating,
+  read__RatingStats,
+  update__Rating,
+  delete__Rating,
 };

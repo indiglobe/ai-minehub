@@ -5,7 +5,7 @@ name: ai-minehub-prod-local
 # const c = require('crypto');
 # const n = process.argv[1];
 # const h = c.createHash('sha256').update(n).digest().readUInt32BE(0);
-# 30000 + (h % 10000);
+# 10000 + (h % 10000);
 # " \
 # container-name
 
@@ -21,7 +21,7 @@ services:
       MYSQL_ROOT_USER: admin
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - 31220:3306
+      - 11220:3306
     networks:
       - ai-minehub-prod-local
     volumes:
@@ -31,7 +31,7 @@ services:
     container_name: ai-minehub-prod-local-phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
-      - "35231:80"
+      - "15231:80"
     environment:
       PMA_HOST: ai-minehub-prod-local-database
       PMA_PORT: 3306
@@ -51,10 +51,31 @@ services:
     networks:
       - ai-minehub-prod-local
     volumes:
-      # - ../nginx.dev.conf:/etc/nginx/nginx.conf:ro
       - ../nginx.secure.prod.local.conf:/etc/nginx/nginx.conf:ro
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
+
+  ai-minehub-web-app:
+    container_name: ai-minehub-web-app
+    # pull_policy: "always"
+    image: "nirvikpurkait/ai-minehub/web-app"
+    env_file:
+      - ../.env.production.local
+    ports:
+      - 15445:3000
+    networks:
+      - ai-minehub-prod-local
+
+  ai-minehub-socket-app:
+    container_name: ai-minehub-socket-app
+    # pull_policy: "always"
+    image: "nirvikpurkait/ai-minehub/socket-app"
+    env_file:
+      - ../.env.production.local
+    ports:
+      - 15728:3030
+    networks:
+      - ai-minehub-prod-local
 
 volumes:
   database:

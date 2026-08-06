@@ -1,7 +1,6 @@
 import { RedirectOnlyPage } from "@/components/main/redirect-signin";
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import {
-  fetchSession,
   fetchUserDetailsCookie,
   setUserDetailsCookie,
 } from "@/lib/auth/session";
@@ -31,21 +30,10 @@ export const Route = createFileRoute(
    * 2. Authenticated but onboarding incomplete -> Redirect to /welcome.
    * 3. Authenticated and onboarding complete -> Allow navigation to continue.
    */
-  beforeLoad: async ({ search: { referralCode, redirectUrl } }) => {
+  beforeLoad: async ({ search: { referralCode, redirectUrl }, context }) => {
     // Check whether the user has an active session.
-    const session = await fetchSession();
+    const session = context.session;
     const userDetailsFromCookie = await fetchUserDetailsCookie();
-
-    // User is not authenticated.
-    // Redirect to sign-in while preserving the intended redirect URL.
-    if (!session) {
-      throw redirect({
-        to: "/signin",
-        search: {
-          redirectUrl: new URL("", env.VITE_WEB_APP_HOST).toString(),
-        },
-      });
-    }
 
     if (!userDetailsFromCookie) {
       const {
@@ -82,7 +70,9 @@ export const Route = createFileRoute(
       });
 
       throw redirect({
-        to: redirectUrl ?? "/dashboard",
+        href:
+          redirectUrl ??
+          new URL("/dashboard", env.VITE_WEB_APP_HOST).toString(),
       });
     }
   },

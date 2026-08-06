@@ -7,6 +7,9 @@ import {
   TradingWalletTable,
   RatingTable,
   NewsTable,
+  MiningOrderTable,
+  MiningProfileTable,
+  TradingOrderTable,
 } from "../schema";
 
 /* -------------------------------------------------------- */
@@ -28,6 +31,9 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
+  await db.delete(TradingOrderTable);
+  await db.delete(MiningOrderTable);
+  await db.delete(MiningProfileTable);
   await db.delete(NewsTable);
   await db.delete(RatingTable);
   await db.delete(MiningWalletTable);
@@ -149,6 +155,68 @@ async function seedRating() {
 }
 
 /* -------------------------------------------------------- */
+/*                    MiningProfileTable                    */
+/* -------------------------------------------------------- */
+
+async function seedMiningProfile() {
+  console.log("🔃 Seeding MiningProfileTable...");
+
+  const __dummyMiningProfile = Array.from({ length: 4 }).map<
+    typeof MiningProfileTable.$inferInsert
+  >(() => {
+    const maximumAllowedAmount = randomInt(2, 5) * 100 - 1;
+    return {
+      category: faker.lorem.sentence({ min: 1, max: 3 }),
+      dailyReturn: Number(Math.random().toFixed(2)),
+      lockinPeriod: randomInt(1, 3) * 30,
+      maximumAllowedAmount: maximumAllowedAmount,
+      minimumAllowedAmount: maximumAllowedAmount - 100,
+    };
+  });
+
+  await db.insert(MiningProfileTable).values([...__dummyMiningProfile]);
+
+  console.log("✅ MiningProfileTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    MiningOrderTable                    */
+/* -------------------------------------------------------- */
+
+async function seedMiningOrder() {
+  console.log("🔃 Seeding MiningOrderTable...");
+
+  const miningProfile = await db.select().from(MiningProfileTable);
+  const users = await db.select().from(UserTable);
+
+  const __dummyMiningOrder = users
+    .filter(() => Math.random() > 0.6)
+    .map<typeof MiningOrderTable.$inferInsert>((user) => {
+      const randomMiningProfile =
+        miningProfile[randomInt(0, miningProfile.length - 1)]!;
+
+      const isCompleted = Math.random() > 0.6;
+
+      const amountInvested = randomInt(
+        randomMiningProfile.minimumAllowedAmount,
+        randomMiningProfile.maximumAllowedAmount,
+      );
+
+      return {
+        amountInvested: amountInvested,
+        miningProfileUsed: randomMiningProfile.id,
+        orderedBy: user.id,
+        miningStatus: isCompleted ? "completed" : "active",
+        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+      };
+    });
+
+  await db.insert(MiningOrderTable).values([...__dummyMiningOrder]);
+
+  console.log("✅ MiningOrderTable seeded");
+}
+
+/* -------------------------------------------------------- */
 /*                    NewsTable                    */
 /* -------------------------------------------------------- */
 
@@ -172,6 +240,35 @@ async function seedNews() {
 }
 
 /* -------------------------------------------------------- */
+/*                    TradingOrderTable                    */
+/* -------------------------------------------------------- */
+
+async function seedTradingOrder() {
+  console.log("🔃 Seeding TradingOrderTable...");
+
+  const users = await db.select().from(UserTable);
+
+  const __dummyTradingOrder = users
+    .filter(() => Math.random() > 0.6)
+    .map<typeof TradingOrderTable.$inferInsert>((user) => {
+      const isCompleted = Math.random() > 0.6;
+
+      const amountInvested = randomInt(1000, 2000);
+
+      return {
+        amountInvested: amountInvested,
+        orderedBy: user.id,
+        miningStatus: isCompleted ? "completed" : "active",
+        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+      };
+    });
+
+  await db.insert(TradingOrderTable).values([...__dummyTradingOrder]);
+
+  console.log("✅ TradingOrderTable seeded");
+}
+
+/* -------------------------------------------------------- */
 /*                           MAIN                           */
 /* -------------------------------------------------------- */
 
@@ -186,6 +283,9 @@ export async function seed() {
     await seedMiningWallet();
     await seedRating();
     await seedNews();
+    await seedMiningProfile();
+    await seedMiningOrder();
+    await seedTradingOrder();
 
     console.log("🎉 SEEDING COMPLETED");
 

@@ -1,5 +1,5 @@
 // .storybook/main.ts
-import type { StorybookConfig } from "@storybook/react-vite";
+import type { StorybookConfig } from "@storybook/tanstack-react";
 import type { InlineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -12,11 +12,12 @@ const config: StorybookConfig = {
     "@storybook/addon-themes",
   ],
 
-  framework: "@storybook/react-vite",
+  framework: "@storybook/tanstack-react",
 
   core: {
     enableCrashReports: false,
     disableWhatsNewNotifications: true,
+    disableTelemetry: true,
   },
 
   async viteFinal(inlineConfig: InlineConfig) {

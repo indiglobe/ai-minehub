@@ -10,12 +10,10 @@ export const Route = createFileRoute("/(with-header-footer)/company/news/")({
   }),
 
   loader: async () => {
-    const newsData = serverFn__readAllNewsSchema({
-      data: { queryOptions: { limit: 4 } },
-    });
-
     return {
-      newsData,
+      newsData: serverFn__readAllNewsSchema({
+        data: { queryOptions: { limit: 4 } },
+      }),
     };
   },
 });

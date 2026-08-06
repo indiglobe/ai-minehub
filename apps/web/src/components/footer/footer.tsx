@@ -26,8 +26,8 @@ export function Footer({ className, ...props }: ComponentProps<"footer">) {
             support.
           </p>
           <p className={cn(`flex items-start gap-2`)}>
-            <MapPin className={cn(`text-secondary-500 size-6`)} />
-            <span>
+            <MapPin className={cn(`text-secondary-500 mt-0.5 size-4`)} />
+            <span className={cn(`fs-3.5`)}>
               403, Building 6, Bay Square, Business Bay, Dubai, UAE. P.O. Box -
               242644.
             </span>

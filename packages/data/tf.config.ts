@@ -38,8 +38,11 @@ export default defineConfig({
       },
     },
     "db:prod": {
+      execute: "pnpm db:prod:setup && pnpm db:prod:push && pnpm db:prod:seed",
+    },
+    "db:prod:local": {
       execute:
-        "pnpm db:prod:setup && pnpm db:prod:push && pnpm db:prod:seed && pnpm db:prod:studio",
+        "pnpm db:prod:setup:local && pnpm db:prod:push:local && pnpm db:prod:seed:local",
     },
     "db:dev:setup": {
       execute: "tsx src/helpers/setup-db.ts",
@@ -92,6 +95,22 @@ export default defineConfig({
     "db:prod:studio": {
       execute: "drizzle-kit studio",
       envFile: ".env.production",
+    },
+    "db:prod:setup:local": {
+      execute: "tsx src/helpers/setup-db.ts",
+      envFile: ".env.production.local",
+    },
+    "db:prod:push:local": {
+      execute: "drizzle-kit push",
+      envFile: ".env.production.local",
+    },
+    "db:prod:seed:local": {
+      execute: "tsx src/helpers/seed-prod.ts",
+      envFile: ".env.production.local",
+    },
+    "db:prod:studio:local": {
+      execute: "drizzle-kit studio",
+      envFile: ".env.production.local",
     },
   },
 });

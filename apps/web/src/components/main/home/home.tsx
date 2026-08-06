@@ -77,7 +77,6 @@ export default function Home() {
       <WhyUsSection />
       <AccountTypesSection />
       <ExclusiveOffersSection />
-      {/* <EverythingYouNeedSection /> */}
       <PassiveIncomeSection />
       <BottomCTASection />
     </Main>

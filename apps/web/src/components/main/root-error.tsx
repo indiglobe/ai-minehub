@@ -12,7 +12,7 @@ export function RootError({ error }: { error: unknown }) {
     >
       <div
         className={cn(
-          `bg-background border-accent-200 dark:border-accent-800 w-full max-w-md rounded-none border p-6`,
+          `bg-background border-accent-200 dark:border-accent-800 w-full max-w-md rounded-3xl border p-6`,
         )}
       >
         <div className={cn(`flex flex-col gap-4`)}>
@@ -22,27 +22,31 @@ export function RootError({ error }: { error: unknown }) {
             </h1>
           </div>
 
-          <p className={cn(`text-sm`)}>
+          <p className={cn(`text-foreground/70 text-sm`)}>
             An unexpected error occurred. You can try again or reload the page.
           </p>
 
-          <div className={cn(`flex items-center gap-3 pt-2`)}>
-            <button
-              onClick={() => router.navigate({ to: "/" })}
-              className={cn(
-                `bg-accent-600 hover:bg-accent-700 dark:bg-accent-500 dark:hover:bg-accent-400 focus-visible:ring-accent-500 inline-flex items-center justify-center rounded-none px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:ring-2 focus-visible:outline-none`,
-              )}
-            >
-              Try again
-            </button>
-
+          <div
+            className={cn(
+              `flex w-full items-center justify-between gap-3 pt-2`,
+            )}
+          >
             <button
               onClick={() => window.location.reload()}
               className={cn(
-                `border-accent-200 text-foreground hover:bg-accent-50 dark:border-accent-800 dark:hover:bg-accent-900/30 focus-visible:ring-accent-500 inline-flex items-center justify-center rounded-none border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none`,
+                `border-accent-200 text-foreground hover:bg-accent-50 dark:border-accent-800 dark:hover:bg-accent-900/30 focus-visible:ring-accent-500 inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none`,
               )}
             >
               Reload
+            </button>
+
+            <button
+              onClick={() => router.navigate({ to: "/" })}
+              className={cn(
+                `bg-accent-600 hover:bg-accent-700 dark:bg-accent-500 dark:hover:bg-accent-400 focus-visible:ring-accent-500 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:ring-2 focus-visible:outline-none`,
+              )}
+            >
+              Try again
             </button>
           </div>
 

@@ -1,5 +1,5 @@
 import AuthenticatedHeader from "@/components/header/authenticated-header";
-import { fetchSession, fetchUserDetailsCookie } from "@/lib/auth/session";
+import { fetchUserDetailsCookie } from "@/lib/auth/session";
 import { env } from "@repo/env/client";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
@@ -19,14 +19,7 @@ export const Route = createFileRoute(
    * - Valid existing user → allow access to child routes
    */
   beforeLoad: async ({ location }) => {
-    // Check authentication state
-    const session = await fetchSession();
     const userDetailsFromCookie = await fetchUserDetailsCookie();
-
-    // Block unauthenticated users
-    if (!session) {
-      throw redirect({ to: "/signin" });
-    }
 
     if (!userDetailsFromCookie) {
       throw redirect({

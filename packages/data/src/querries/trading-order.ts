@@ -1,15 +1,15 @@
 import { db } from "@/index";
-import { MiningOrderTable } from "@/schema";
+import { TradingOrderTable } from "@/schema";
 import { id } from "@repo/utils/id";
 import { and, desc, eq, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
- * MINING ORDER MODULE
+ * TRADING ORDER MODULE
  * ==========================================
  */
 
-export type TMiningOrder = typeof MiningOrderTable.$inferSelect;
+export type TTradingOrder = typeof TradingOrderTable.$inferSelect;
 
 /**
  * ==========================================
@@ -17,20 +17,20 @@ export type TMiningOrder = typeof MiningOrderTable.$inferSelect;
  * ==========================================
  */
 
-type TCreate__MiningOrder = Omit<
-  typeof MiningOrderTable.$inferInsert,
+type TCreate__TradingOrder = Omit<
+  typeof TradingOrderTable.$inferInsert,
   "tableIdentifierToken" | "createdAt" | "updatedAt"
 >;
 
-const create__MiningOrder = async (data: TCreate__MiningOrder) => {
+const create__TradingOrder = async (data: TCreate__TradingOrder) => {
   const generatedId = data.id ?? id();
 
-  await db.insert(MiningOrderTable).values({
+  await db.insert(TradingOrderTable).values({
     ...data,
     id: generatedId,
   });
 
-  return (await read__OneMiningOrder({
+  return (await read__OneTradingOrder({
     identifier: {
       id: generatedId,
     },
@@ -43,10 +43,9 @@ const create__MiningOrder = async (data: TCreate__MiningOrder) => {
  * ==========================================
  */
 
-type TRead__AllMiningOrders = {
+type TRead__AllTradingOrders = {
   identifier?: Partial<{
     id: string;
-    miningProfileUsed: string;
   }>;
 
   queryOptions?: {
@@ -56,37 +55,26 @@ type TRead__AllMiningOrders = {
 
   joinOptions?: Partial<{
     user: true;
-    miningProfile: true;
   }>;
 };
 
-const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
+const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
   const conditions: SQL[] = [];
 
   if (options?.identifier?.id) {
-    conditions.push(eq(MiningOrderTable.id, options.identifier.id));
+    conditions.push(eq(TradingOrderTable.id, options.identifier.id));
   }
 
-  if (options?.identifier?.miningProfileUsed) {
-    conditions.push(
-      eq(
-        MiningOrderTable.miningProfileUsed,
-        options.identifier.miningProfileUsed,
-      ),
-    );
-  }
-
-  return await db.query.MiningOrderTable.findMany({
+  return await db.query.TradingOrderTable.findMany({
     where: and(...conditions),
     limit,
     offset: skip,
-    orderBy: [desc(MiningOrderTable.createdAt)],
+    orderBy: [desc(TradingOrderTable.createdAt)],
     with: {
       ...(options?.joinOptions?.user ? { user: true } : {}),
-      ...(options?.joinOptions?.miningProfile ? { miningProfile: true } : {}),
     },
   });
 };
@@ -97,27 +85,25 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
  * ==========================================
  */
 
-type TRead__OneMiningOrder = {
+type TRead__OneTradingOrder = {
   identifier: { id: string };
 
   joinOptions?: Partial<{
     user: true;
-    miningProfile: true;
   }>;
 };
 
-const read__OneMiningOrder = async (options: TRead__OneMiningOrder) => {
+const read__OneTradingOrder = async (options: TRead__OneTradingOrder) => {
   const conditions: SQL[] = [];
 
   if ("id" in options.identifier) {
-    conditions.push(eq(MiningOrderTable.id, options.identifier.id));
+    conditions.push(eq(TradingOrderTable.id, options.identifier.id));
   }
 
-  const order = await db.query.MiningOrderTable.findFirst({
+  const order = await db.query.TradingOrderTable.findFirst({
     where: and(...conditions),
     with: {
       ...(options.joinOptions?.user ? { user: true } : {}),
-      ...(options.joinOptions?.miningProfile ? { miningProfile: true } : {}),
     },
   });
 
@@ -130,17 +116,17 @@ const read__OneMiningOrder = async (options: TRead__OneMiningOrder) => {
  * ==========================================
  */
 
-type TUpdate__MiningOrder = {
+type TUpdate__TradingOrder = {
   identifier: {
     id: string;
   };
 
   dataToUpdate: Partial<
-    Omit<typeof MiningOrderTable.$inferInsert, "tableIdentifierToken" | "id">
+    Omit<typeof TradingOrderTable.$inferInsert, "tableIdentifierToken" | "id">
   >;
 };
 
-const update__MiningOrder = async (options: TUpdate__MiningOrder) => {
+const update__TradingOrder = async (options: TUpdate__TradingOrder) => {
   const filteredData = Object.fromEntries(
     Object.entries(options.dataToUpdate).filter(
       ([, value]) => value !== undefined,
@@ -152,11 +138,11 @@ const update__MiningOrder = async (options: TUpdate__MiningOrder) => {
   }
 
   await db
-    .update(MiningOrderTable)
+    .update(TradingOrderTable)
     .set(filteredData)
-    .where(eq(MiningOrderTable.id, options.identifier.id));
+    .where(eq(TradingOrderTable.id, options.identifier.id));
 
-  return read__OneMiningOrder({
+  return await read__OneTradingOrder({
     identifier: options.identifier,
   });
 };
@@ -167,14 +153,14 @@ const update__MiningOrder = async (options: TUpdate__MiningOrder) => {
  * ==========================================
  */
 
-type TDelete__MiningOrder = {
+type TDelete__TradingOrder = {
   identifier: {
     id: string;
   };
 };
 
-const delete__MiningOrder = async (options: TDelete__MiningOrder) => {
-  const existing = await read__OneMiningOrder({
+const delete__TradingOrder = async (options: TDelete__TradingOrder) => {
+  const existing = await read__OneTradingOrder({
     identifier: options.identifier,
   });
 
@@ -183,24 +169,24 @@ const delete__MiningOrder = async (options: TDelete__MiningOrder) => {
   }
 
   await db
-    .delete(MiningOrderTable)
-    .where(eq(MiningOrderTable.id, options.identifier.id));
+    .delete(TradingOrderTable)
+    .where(eq(TradingOrderTable.id, options.identifier.id));
 
   return existing;
 };
 
 export type {
-  TCreate__MiningOrder,
-  TRead__AllMiningOrders,
-  TRead__OneMiningOrder,
-  TUpdate__MiningOrder,
-  TDelete__MiningOrder,
+  TCreate__TradingOrder,
+  TRead__AllTradingOrders,
+  TRead__OneTradingOrder,
+  TUpdate__TradingOrder,
+  TDelete__TradingOrder,
 };
 
 export {
-  create__MiningOrder,
-  read__AllMiningOrders,
-  read__OneMiningOrder,
-  update__MiningOrder,
-  delete__MiningOrder,
+  create__TradingOrder,
+  read__AllTradingOrders,
+  read__OneTradingOrder,
+  update__TradingOrder,
+  delete__TradingOrder,
 };

@@ -24,23 +24,23 @@ export type TTradingWallet = typeof TradingWalletTable.$inferSelect;
 /**
  * Type used for creating a trading wallet.
  */
-export type TCreate__TradingWallet = Omit<
+type TCreate__TradingWallet = Omit<
   typeof TradingWalletTable.$inferInsert,
-  "tableIdentifierToken" | "id"
+  "tableIdentifierToken" | "id" | "createdAt" | "updatedAt"
 >;
 
 /**
  * Insert a new trading wallet into the database.
  * Returns the created wallet by re-fetching it using associatedUser.
  */
-export const create__TradingWallet = async (data: TCreate__TradingWallet) => {
+const create__TradingWallet = async (data: TCreate__TradingWallet) => {
   await db.insert(TradingWalletTable).values(data);
 
-  return await read__OneTradingWallet({
+  return (await read__OneTradingWallet({
     identifier: {
       associatedUser: data.associatedUser,
     },
-  });
+  }))!;
 };
 
 /**
@@ -49,14 +49,14 @@ export const create__TradingWallet = async (data: TCreate__TradingWallet) => {
  * ==========================================
  */
 
-export type TRead__AllTradingWallets = {
+type TRead__AllTradingWallets = {
   queryOptions?: {
     skip?: number;
     limit?: number;
   };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -72,9 +72,7 @@ export type TRead__AllTradingWallets = {
  * @returns Array of trading wallet records
  */
 
-export const read__AllTradingWallets = async (
-  options: TRead__AllTradingWallets,
-) => {
+const read__AllTradingWallets = async (options: TRead__AllTradingWallets) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
@@ -107,7 +105,7 @@ export const read__AllTradingWallets = async (
  * ==========================================
  */
 
-export type TRead__OneTradingWallet = {
+type TRead__OneTradingWallet = {
   identifier:
     | {
         id: (typeof TradingWalletTable.$inferSelect)["id"];
@@ -117,7 +115,7 @@ export type TRead__OneTradingWallet = {
       };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -135,9 +133,7 @@ export type TRead__OneTradingWallet = {
  * @returns Trading wallet record if found, otherwise null
  */
 
-export const read__OneTradingWallet = async (
-  options: TRead__OneTradingWallet,
-) => {
+const read__OneTradingWallet = async (options: TRead__OneTradingWallet) => {
   const { identifier } = options;
 
   const conditions: SQL[] = [];
@@ -168,7 +164,7 @@ export const read__OneTradingWallet = async (
  * ==========================================
  */
 
-export type TUpdate__TradingWallet = {
+type TUpdate__TradingWallet = {
   identifier:
     | {
         id: (typeof TradingWalletTable.$inferSelect)["id"];
@@ -180,7 +176,7 @@ export type TUpdate__TradingWallet = {
   dataToUpdate: Partial<
     Omit<
       typeof TradingWalletTable.$inferInsert,
-      "associatedUser" | "tableIdentifierToken"
+      "associatedUser" | "tableIdentifierToken" | "id"
     >
   >;
 };
@@ -196,9 +192,7 @@ export type TUpdate__TradingWallet = {
  * @returns The updated trading wallet record if successful, otherwise null
  */
 
-export const update__TradingWallet = async (
-  options: TUpdate__TradingWallet,
-) => {
+const update__TradingWallet = async (options: TUpdate__TradingWallet) => {
   const { identifier, dataToUpdate } = options;
 
   const filteredData = Object.fromEntries(
@@ -237,7 +231,7 @@ export const update__TradingWallet = async (
  * ==========================================
  */
 
-export type TDelete__TradingWallet = {
+type TDelete__TradingWallet = {
   identifier:
     | {
         id: (typeof TradingWalletTable.$inferSelect)["id"];
@@ -257,9 +251,7 @@ export type TDelete__TradingWallet = {
  * @returns The deleted trading wallet record if it existed, otherwise null
  */
 
-export const delete__TradingWallet = async (
-  options: TDelete__TradingWallet,
-) => {
+const delete__TradingWallet = async (options: TDelete__TradingWallet) => {
   const existing = await read__OneTradingWallet({
     identifier: options.identifier,
   });
@@ -283,4 +275,20 @@ export const delete__TradingWallet = async (
   await db.delete(TradingWalletTable).where(and(...conditions));
 
   return existing;
+};
+
+export {
+  create__TradingWallet,
+  read__AllTradingWallets,
+  read__OneTradingWallet,
+  update__TradingWallet,
+  delete__TradingWallet,
+};
+
+export type {
+  TCreate__TradingWallet,
+  TRead__AllTradingWallets,
+  TRead__OneTradingWallet,
+  TUpdate__TradingWallet,
+  TDelete__TradingWallet,
 };

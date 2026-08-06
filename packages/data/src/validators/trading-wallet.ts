@@ -2,8 +2,6 @@ import z from "zod";
 
 export const create__TradingWalletSchema = z.object({
   balance: z.number().nullish(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
   associatedUser: z.string(),
 });
 
@@ -17,7 +15,7 @@ export const read__AllTradingWalletsSchema = z
       .optional(),
     joinOptions: z
       .object({
-        userDetails: z.boolean(),
+        user: z.literal(true).optional(),
       })
       .optional(),
   })
@@ -34,12 +32,12 @@ export const read__OneTradingWalletSchema = z.object({
   ]),
   joinOptions: z
     .object({
-      userDetails: z.boolean(),
+      user: z.literal(true).optional(),
     })
     .optional(),
 });
 
-export const update__TradingWalletSchema = z.object({
+export const TUpdate__TradingWalletSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -49,8 +47,7 @@ export const update__TradingWalletSchema = z.object({
     }),
   ]),
   dataToUpdate: z.object({
-    id: z.string().optional(),
-    balance: z.number().optional(),
+    balance: z.number().nullish(),
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
   }),

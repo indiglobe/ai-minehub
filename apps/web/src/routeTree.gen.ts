@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as withHeaderFooterRouteRouteImport } from './routes/(with-header-footer)/route'
 import { Route as withHeaderFooterIndexRouteImport } from './routes/(with-header-footer)/index'
+import { Route as withoutHeaderFooterauthenticatedRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/route'
 import { Route as withHeaderFooterCompanyIndexRouteImport } from './routes/(with-header-footer)/company/index'
 import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(with-header-footer)/partnership/index'
 import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
@@ -47,6 +48,11 @@ const withHeaderFooterIndexRoute = withHeaderFooterIndexRouteImport.update({
   path: '/',
   getParentRoute: () => withHeaderFooterRouteRoute,
 } as any)
+const withoutHeaderFooterauthenticatedRouteRoute =
+  withoutHeaderFooterauthenticatedRouteRouteImport.update({
+    id: '/(without-header-footer)/(authenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const withHeaderFooterCompanyIndexRoute =
   withHeaderFooterCompanyIndexRouteImport.update({
     id: '/company/',
@@ -73,13 +79,13 @@ const withHeaderFooterTradingIndexRoute =
   } as any)
 const withoutHeaderFooterauthenticatedexistingUserRouteRoute =
   withoutHeaderFooterauthenticatedexistingUserRouteRouteImport.update({
-    id: '/(without-header-footer)/(authenticated)/(existing-user)',
-    getParentRoute: () => rootRouteImport,
+    id: '/(existing-user)',
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
   } as any)
 const withoutHeaderFooterauthenticatednewUserRouteRoute =
   withoutHeaderFooterauthenticatednewUserRouteRouteImport.update({
-    id: '/(without-header-footer)/(authenticated)/(new-user)',
-    getParentRoute: () => rootRouteImport,
+    id: '/(new-user)',
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
   } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -142,9 +148,9 @@ const withHeaderFooterTradingSyntxIndexRoute =
   } as any)
 const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
   withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
-    id: '/(without-header-footer)/(authenticated)/redirect-signin/',
+    id: '/redirect-signin/',
     path: '/redirect-signin/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => withoutHeaderFooterauthenticatedRouteRoute,
   } as any)
 const withoutHeaderFooterguestSigninIndexRoute =
   withoutHeaderFooterguestSigninIndexRouteImport.update({
@@ -262,6 +268,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(with-header-footer)': typeof withHeaderFooterRouteRouteWithChildren
+  '/(without-header-footer)/(authenticated)': typeof withoutHeaderFooterauthenticatedRouteRouteWithChildren
   '/(with-header-footer)/': typeof withHeaderFooterIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)': typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
   '/(without-header-footer)/(authenticated)/(new-user)': typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
@@ -348,6 +355,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/(with-header-footer)'
+    | '/(without-header-footer)/(authenticated)'
     | '/(with-header-footer)/'
     | '/(without-header-footer)/(authenticated)/(existing-user)'
     | '/(without-header-footer)/(authenticated)/(new-user)'
@@ -379,10 +387,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   withHeaderFooterRouteRoute: typeof withHeaderFooterRouteRouteWithChildren
-  withoutHeaderFooterauthenticatedexistingUserRouteRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
-  withoutHeaderFooterauthenticatednewUserRouteRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
+  withoutHeaderFooterauthenticatedRouteRoute: typeof withoutHeaderFooterauthenticatedRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  withoutHeaderFooterauthenticatedRedirectSigninIndexRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
   withoutHeaderFooterguestSigninIndexRoute: typeof withoutHeaderFooterguestSigninIndexRoute
   withoutHeaderFooterleagalPagesCookiePolicyIndexRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
   withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
@@ -404,6 +410,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof withHeaderFooterIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)': {
+      id: '/(without-header-footer)/(authenticated)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/company/': {
       id: '/(with-header-footer)/company/'
@@ -438,14 +451,14 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
     }
     '/(without-header-footer)/(authenticated)/(new-user)': {
       id: '/(without-header-footer)/(authenticated)/(new-user)'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -522,7 +535,7 @@ declare module '@tanstack/react-router' {
       path: '/redirect-signin'
       fullPath: '/redirect-signin/'
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedRouteRoute
     }
     '/(without-header-footer)/(guest)/signin/': {
       id: '/(without-header-footer)/(guest)/signin/'
@@ -676,15 +689,32 @@ const withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren =
     withoutHeaderFooterauthenticatednewUserRouteRouteChildren,
   )
 
+interface withoutHeaderFooterauthenticatedRouteRouteChildren {
+  withoutHeaderFooterauthenticatedexistingUserRouteRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
+  withoutHeaderFooterauthenticatednewUserRouteRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
+  withoutHeaderFooterauthenticatedRedirectSigninIndexRoute: typeof withoutHeaderFooterauthenticatedRedirectSigninIndexRoute
+}
+
+const withoutHeaderFooterauthenticatedRouteRouteChildren: withoutHeaderFooterauthenticatedRouteRouteChildren =
+  {
+    withoutHeaderFooterauthenticatedexistingUserRouteRoute:
+      withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren,
+    withoutHeaderFooterauthenticatednewUserRouteRoute:
+      withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren,
+    withoutHeaderFooterauthenticatedRedirectSigninIndexRoute:
+      withoutHeaderFooterauthenticatedRedirectSigninIndexRoute,
+  }
+
+const withoutHeaderFooterauthenticatedRouteRouteWithChildren =
+  withoutHeaderFooterauthenticatedRouteRoute._addFileChildren(
+    withoutHeaderFooterauthenticatedRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   withHeaderFooterRouteRoute: withHeaderFooterRouteRouteWithChildren,
-  withoutHeaderFooterauthenticatedexistingUserRouteRoute:
-    withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren,
-  withoutHeaderFooterauthenticatednewUserRouteRoute:
-    withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren,
+  withoutHeaderFooterauthenticatedRouteRoute:
+    withoutHeaderFooterauthenticatedRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  withoutHeaderFooterauthenticatedRedirectSigninIndexRoute:
-    withoutHeaderFooterauthenticatedRedirectSigninIndexRoute,
   withoutHeaderFooterguestSigninIndexRoute:
     withoutHeaderFooterguestSigninIndexRoute,
   withoutHeaderFooterleagalPagesCookiePolicyIndexRoute:

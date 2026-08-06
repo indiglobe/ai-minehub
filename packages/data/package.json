@@ -16,6 +16,7 @@
     "show:coverage": "http-server -p 9900 ./coverage -o",
     "db:dev": "tf run db:dev",
     "db:prod": "tf run db:prod",
+    "db:prod:local": "tf run db:prod:local",
     "db:generate": "tf run db:generate",
     "db:migrate": "tf run db:migrate",
     "db:pull": "tf run db:pull",
@@ -30,7 +31,11 @@
     "db:prod:setup": "tf run db:prod:setup",
     "db:prod:push": "tf run db:prod:push",
     "db:prod:seed": "tf run db:prod:seed",
-    "db:prod:studio": "tf run db:prod:studio"
+    "db:prod:studio": "tf run db:prod:studio",
+    "db:prod:setup:local": "tf run db:prod:setup:local",
+    "db:prod:push:local": "tf run db:prod:push:local",
+    "db:prod:seed:local": "tf run db:prod:seed:local",
+    "db:prod:studio:local": "tf run db:prod:studio:local"
   },
   "dependencies": {
     "@repo/env": "workspace:*",

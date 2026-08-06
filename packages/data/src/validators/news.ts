@@ -5,8 +5,6 @@ export const create__NewsSchema = z.object({
   effectiveDate: z.date(),
   heading: z.string(),
   details: z.string(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
 });
 
 export const read__AllNewsSchema = z
@@ -37,11 +35,11 @@ export const update__NewsSchema = z.object({
     id: z.string(),
   }),
   dataToUpdate: z.object({
-    createdAt: z.date().optional(),
-    updatedAt: z.date().optional(),
     effectiveDate: z.date().optional(),
     heading: z.string().optional(),
     details: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
   }),
 });
 

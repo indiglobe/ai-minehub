@@ -1,5 +1,4 @@
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
-import { fetchSession } from "@/lib/auth/session";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -17,14 +16,9 @@ export const Route = createFileRoute(
    * - Authenticated but already onboarded -> Redirect to the dashboard.
    * - Authenticated and not yet onboarded -> Allow access to child routes.
    */
-  beforeLoad: async () => {
+  beforeLoad: async ({ context }) => {
     // Verify that the user is authenticated.
-    const session = await fetchSession();
-
-    // Guests are not allowed to access onboarding routes.
-    if (!session) {
-      throw redirect({ to: "/signin" });
-    }
+    const session = context.session;
 
     const {
       user: { email },

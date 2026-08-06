@@ -25,9 +25,9 @@ export type TNews = typeof NewsTable.$inferSelect;
 /**
  * Type used for creating a news record.
  */
-export type TCreate__News = Omit<
+type TCreate__News = Omit<
   typeof NewsTable.$inferInsert,
-  "tableIdentifierToken"
+  "tableIdentifierToken" | "createdAt" | "updatedAt"
 >;
 
 /**
@@ -38,16 +38,16 @@ export type TCreate__News = Omit<
  * @param data - News payload excluding system-generated fields
  * @returns The newly created news record
  */
-export const create__News = async (data: TCreate__News) => {
+const create__News = async (data: TCreate__News) => {
   const generatedId = data.id ?? id();
 
   await db.insert(NewsTable).values({ ...data, id: generatedId });
 
-  return await read__OneNews({
+  return (await read__OneNews({
     identifier: {
       id: generatedId,
     },
-  });
+  }))!;
 };
 
 /**
@@ -59,7 +59,7 @@ export const create__News = async (data: TCreate__News) => {
 /**
  * Options for reading multiple news records.
  */
-export type TRead__AllNews = {
+type TRead__AllNews = {
   identifier?: {
     fromDate?: Date;
     toDate?: Date;
@@ -83,7 +83,7 @@ export type TRead__AllNews = {
  * @param options.queryOptions.limit - Max records to return
  * @returns Array of news records
  */
-export const read__AllNews = async (options?: TRead__AllNews) => {
+const read__AllNews = async (options?: TRead__AllNews) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
@@ -114,7 +114,7 @@ export const read__AllNews = async (options?: TRead__AllNews) => {
 /**
  * Options for fetching a single news record.
  */
-export type TRead__OneNews = {
+type TRead__OneNews = {
   identifier: {
     id: (typeof NewsTable.$inferSelect)["id"];
   };
@@ -126,7 +126,7 @@ export type TRead__OneNews = {
  * @param options.identifier.id - Unique news ID
  * @returns News record if found, otherwise null
  */
-export const read__OneNews = async (options: TRead__OneNews) => {
+const read__OneNews = async (options: TRead__OneNews) => {
   const queryResult = await db.query.NewsTable.findFirst({
     where: eq(NewsTable.id, options.identifier.id),
   });
@@ -143,7 +143,7 @@ export const read__OneNews = async (options: TRead__OneNews) => {
 /**
  * Options for updating a news record.
  */
-export type TUpdate__News = {
+type TUpdate__News = {
   identifier: {
     id: (typeof NewsTable.$inferSelect)["id"];
   };
@@ -162,7 +162,7 @@ export type TUpdate__News = {
  * @param options.dataToUpdate - Fields to update
  * @returns Updated news record or null if no update occurred
  */
-export const update__News = async (options: TUpdate__News) => {
+const update__News = async (options: TUpdate__News) => {
   const filteredData = Object.fromEntries(
     Object.entries(options.dataToUpdate).filter(
       ([, value]) => value !== undefined,
@@ -192,7 +192,7 @@ export const update__News = async (options: TUpdate__News) => {
 /**
  * Options for deleting a news record.
  */
-export type TDelete__News = {
+type TDelete__News = {
   identifier: {
     id: (typeof NewsTable.$inferSelect)["id"];
   };
@@ -204,7 +204,7 @@ export type TDelete__News = {
  * @param options.identifier.id - News ID
  * @returns Deleted news record if it existed, otherwise null
  */
-export const delete__News = async (options: TDelete__News) => {
+const delete__News = async (options: TDelete__News) => {
   const existing = await read__OneNews({
     identifier: options.identifier,
   });
@@ -216,4 +216,20 @@ export const delete__News = async (options: TDelete__News) => {
   await db.delete(NewsTable).where(eq(NewsTable.id, options.identifier.id));
 
   return existing;
+};
+
+export type {
+  TCreate__News,
+  TRead__AllNews,
+  TRead__OneNews,
+  TUpdate__News,
+  TDelete__News,
+};
+
+export {
+  create__News,
+  read__AllNews,
+  read__OneNews,
+  update__News,
+  delete__News,
 };

@@ -47,7 +47,7 @@ export const Route = createFileRoute(
       });
     }
 
-    deleteUserDetailsCookie();
+    await deleteUserDetailsCookie();
   },
 });
 

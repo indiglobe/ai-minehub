@@ -1,4 +1,4 @@
-name: ai-minehub
+name: ai-minehub-prod-local
 
 networks:
   ai-minehub-prod-local:
@@ -7,7 +7,7 @@ networks:
 services:
   web:
     container_name: ai-minehub-web-app
-    pull_policy: "always"
+    # pull_policy: "always"
     image: "nirvikpurkait/ai-minehub/web-app"
     build:
       context: ../../
@@ -16,6 +16,7 @@ services:
         VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
         VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
         VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+
         BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
         BETTER_AUTH_URL: ${BETTER_AUTH_URL}
         GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -29,13 +30,13 @@ services:
     env_file:
       - ../../.env.production.local
     ports:
-      - 35445:3000
+      - 15445:3000
     networks:
       - ai-minehub-prod-local
 
   socket:
     container_name: ai-minehub-socket-app
-    pull_policy: "always"
+    # pull_policy: "always"
     image: "nirvikpurkait/ai-minehub/socket-app"
     build:
       context: ../../
@@ -44,6 +45,7 @@ services:
         VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
         VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
         VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+
         BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
         BETTER_AUTH_URL: ${BETTER_AUTH_URL}
         GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -57,6 +59,6 @@ services:
     env_file:
       - ../../.env.production.local
     ports:
-      - 35728:3030
+      - 15728:3030
     networks:
       - ai-minehub-prod-local

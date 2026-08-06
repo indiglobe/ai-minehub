@@ -3,40 +3,20 @@ import type {
   TypedMetaOptions,
   TypedStoryOptions,
 } from "@/integrations/storybook/sb.types";
-import type { FileRouteTypes } from "@/routeTree.gen";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRoute,
-  createRouter,
-  RouterProvider,
-} from "@tanstack/react-router";
+import type { Meta, StoryObj } from "@storybook/tanstack-react";
+import { Route } from "@/routes/(without-header-footer)/(guest)/signin/index";
+import type { TSigninPageSearchParams } from "@/utils/zod-schema/search-params-schema/signin-page";
 
-const meta: Meta<typeof SigninComp> & TypedMetaOptions = {
-  component: SigninComp,
-
-  decorators: (Story) => {
-    const rootRoute = createRootRoute();
-
-    const route = createRoute({
-      getParentRoute: () => rootRoute,
-      id: "/(without-header-footer)/(guest)/signin/" satisfies FileRouteTypes["id"],
-      loader: () => null,
-      component: Story,
-    });
-
-    const routeTree = rootRoute.addChildren([route]);
-
-    const router = createRouter({
-      routeTree,
-      history: createMemoryHistory({
-        initialEntries: ["/"],
-      }),
-    });
-    return <RouterProvider router={router} />;
+const meta = {
+  parameters: {
+    tanstack: {
+      router: {
+        route: Route,
+        query: {} satisfies TSigninPageSearchParams,
+      },
+    },
   },
-};
+} satisfies Meta<typeof Route> & TypedMetaOptions;
 
 export default meta;
 
@@ -44,4 +24,5 @@ type Story = StoryObj<typeof SigninComp> & TypedStoryOptions;
 
 export const SigninCompStory: Story = {
   args: {},
+  render: SigninComp,
 };

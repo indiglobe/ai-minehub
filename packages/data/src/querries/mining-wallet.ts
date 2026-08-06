@@ -27,9 +27,9 @@ export type TMiningWallet = typeof MiningWalletTable.$inferSelect;
  * ==========================================
  */
 
-export type TCreate__MiningWallet = Omit<
+type TCreate__MiningWallet = Omit<
   typeof MiningWalletTable.$inferInsert,
-  "tableIdentifierToken"
+  "tableIdentifierToken" | "createdAt" | "updatedAt"
 >;
 
 /**
@@ -41,14 +41,14 @@ export type TCreate__MiningWallet = Omit<
  * @param data - Mining wallet data excluding system-generated fields
  * @returns The newly created mining wallet record
  */
-export const create__MiningWallet = async (data: TCreate__MiningWallet) => {
+const create__MiningWallet = async (data: TCreate__MiningWallet) => {
   await db.insert(MiningWalletTable).values(data);
 
-  return await read__OneMiningWallet({
+  return (await read__OneMiningWallet({
     identifier: {
       associatedUser: data.associatedUser,
     },
-  });
+  }))!;
 };
 
 /**
@@ -57,14 +57,14 @@ export const create__MiningWallet = async (data: TCreate__MiningWallet) => {
  * ==========================================
  */
 
-export type TRead__AllMiningWallets = {
+type TRead__AllMiningWallets = {
   queryOptions?: {
     skip?: number;
     limit?: number;
   };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -80,9 +80,7 @@ export type TRead__AllMiningWallets = {
  * @returns Array of mining wallet records
  */
 
-export const read__AllMiningWallets = async (
-  options?: TRead__AllMiningWallets,
-) => {
+const read__AllMiningWallets = async (options?: TRead__AllMiningWallets) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
@@ -105,7 +103,7 @@ export const read__AllMiningWallets = async (
  * ==========================================
  */
 
-export type TRead__OneMiningWallet = {
+type TRead__OneMiningWallet = {
   identifier:
     | {
         id: (typeof MiningWalletTable.$inferSelect)["id"];
@@ -115,7 +113,7 @@ export type TRead__OneMiningWallet = {
       };
 
   joinOptions?: Partial<{
-    user: boolean;
+    user: true;
   }>;
 };
 
@@ -133,9 +131,7 @@ export type TRead__OneMiningWallet = {
  * @returns Mining wallet record if found, otherwise null
  */
 
-export const read__OneMiningWallet = async (
-  options: TRead__OneMiningWallet,
-) => {
+const read__OneMiningWallet = async (options: TRead__OneMiningWallet) => {
   const { identifier } = options;
 
   const conditions: SQL[] = [];
@@ -166,7 +162,7 @@ export const read__OneMiningWallet = async (
  * ==========================================
  */
 
-export type TUpdate__MiningWallet = {
+type TUpdate__MiningWallet = {
   identifier:
     | {
         id: (typeof MiningWalletTable.$inferSelect)["id"];
@@ -178,7 +174,7 @@ export type TUpdate__MiningWallet = {
   dataToUpdate: Partial<
     Omit<
       typeof MiningWalletTable.$inferInsert,
-      "associatedUser" | "tableIdentifierToken"
+      "associatedUser" | "tableIdentifierToken" | "id"
     >
   >;
 };
@@ -194,7 +190,7 @@ export type TUpdate__MiningWallet = {
  * @returns The updated mining wallet record if successful, otherwise null
  */
 
-export const update__MiningWallet = async (options: TUpdate__MiningWallet) => {
+const update__MiningWallet = async (options: TUpdate__MiningWallet) => {
   const { identifier, dataToUpdate } = options;
 
   const filteredData = Object.fromEntries(
@@ -233,7 +229,7 @@ export const update__MiningWallet = async (options: TUpdate__MiningWallet) => {
  * ==========================================
  */
 
-export type TDelete__MiningWallet = {
+type TDelete__MiningWallet = {
   identifier:
     | {
         id: (typeof MiningWalletTable.$inferSelect)["id"];
@@ -253,7 +249,7 @@ export type TDelete__MiningWallet = {
  * @returns The deleted mining wallet record if it existed, otherwise null
  */
 
-export const delete__MiningWallet = async (options: TDelete__MiningWallet) => {
+const delete__MiningWallet = async (options: TDelete__MiningWallet) => {
   const existing = await read__OneMiningWallet({
     identifier: options.identifier,
   });
@@ -277,4 +273,20 @@ export const delete__MiningWallet = async (options: TDelete__MiningWallet) => {
   await db.delete(MiningWalletTable).where(and(...conditions));
 
   return existing;
+};
+
+export type {
+  TCreate__MiningWallet,
+  TRead__AllMiningWallets,
+  TRead__OneMiningWallet,
+  TUpdate__MiningWallet,
+  TDelete__MiningWallet,
+};
+
+export {
+  create__MiningWallet,
+  read__AllMiningWallets,
+  read__OneMiningWallet,
+  update__MiningWallet,
+  delete__MiningWallet,
 };

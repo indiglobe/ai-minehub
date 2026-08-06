@@ -17,21 +17,21 @@ export type TMiningProfile = typeof MiningProfileTable.$inferSelect;
  * ==========================================
  */
 
-export type TCreate__MiningProfile = Omit<
+type TCreate__MiningProfile = Omit<
   typeof MiningProfileTable.$inferInsert,
   "tableIdentifierToken" | "updatedAt" | "createdAt"
 >;
 
-export const create__MiningProfile = async (data: TCreate__MiningProfile) => {
+const create__MiningProfile = async (data: TCreate__MiningProfile) => {
   const generatedId = data.id ?? id();
 
   await db.insert(MiningProfileTable).values({ ...data, id: generatedId });
 
-  return read__OneMiningProfile({
+  return (await read__OneMiningProfile({
     identifier: {
       id: generatedId,
     },
-  });
+  }))!;
 };
 
 /**
@@ -40,7 +40,7 @@ export const create__MiningProfile = async (data: TCreate__MiningProfile) => {
  * ==========================================
  */
 
-export type TRead__AllMiningProfiles = {
+type TRead__AllMiningProfiles = {
   identifier?: {
     id?: string;
     category?: string;
@@ -52,13 +52,11 @@ export type TRead__AllMiningProfiles = {
   };
 
   joinOptions?: Partial<{
-    orders: boolean;
+    orders: true;
   }>;
 };
 
-export const read__AllMiningProfiles = async (
-  options?: TRead__AllMiningProfiles,
-) => {
+const read__AllMiningProfiles = async (options?: TRead__AllMiningProfiles) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
@@ -74,7 +72,7 @@ export const read__AllMiningProfiles = async (
     );
   }
 
-  return db.query.MiningProfileTable.findMany({
+  return await db.query.MiningProfileTable.findMany({
     where: and(...conditions),
     limit,
     offset: skip,
@@ -91,7 +89,7 @@ export const read__AllMiningProfiles = async (
  * ==========================================
  */
 
-export type TRead__OneMiningProfile = {
+type TRead__OneMiningProfile = {
   identifier:
     | {
         id: string;
@@ -101,13 +99,11 @@ export type TRead__OneMiningProfile = {
       };
 
   joinOptions?: Partial<{
-    orders: boolean;
+    orders: true;
   }>;
 };
 
-export const read__OneMiningProfile = async (
-  options: TRead__OneMiningProfile,
-) => {
+const read__OneMiningProfile = async (options: TRead__OneMiningProfile) => {
   const conditions: SQL[] = [];
 
   if ("id" in options.identifier) {
@@ -136,7 +132,7 @@ export const read__OneMiningProfile = async (
  * ==========================================
  */
 
-export type TUpdate__MiningProfile = {
+type TUpdate__MiningProfile = {
   identifier: {
     id: string;
   };
@@ -146,9 +142,7 @@ export type TUpdate__MiningProfile = {
   >;
 };
 
-export const update__MiningProfile = async (
-  options: TUpdate__MiningProfile,
-) => {
+const update__MiningProfile = async (options: TUpdate__MiningProfile) => {
   const filteredData = Object.fromEntries(
     Object.entries(options.dataToUpdate).filter(
       ([, value]) => value !== undefined,
@@ -164,7 +158,7 @@ export const update__MiningProfile = async (
     .set(filteredData)
     .where(eq(MiningProfileTable.id, options.identifier.id));
 
-  return read__OneMiningProfile({
+  return await read__OneMiningProfile({
     identifier: options.identifier,
   });
 };
@@ -175,15 +169,13 @@ export const update__MiningProfile = async (
  * ==========================================
  */
 
-export type TDelete__MiningProfile = {
+type TDelete__MiningProfile = {
   identifier: {
     id: string;
   };
 };
 
-export const delete__MiningProfile = async (
-  options: TDelete__MiningProfile,
-) => {
+const delete__MiningProfile = async (options: TDelete__MiningProfile) => {
   const existing = await read__OneMiningProfile({
     identifier: options.identifier,
   });
@@ -197,4 +189,20 @@ export const delete__MiningProfile = async (
     .where(eq(MiningProfileTable.id, options.identifier.id));
 
   return existing;
+};
+
+export type {
+  TCreate__MiningProfile,
+  TRead__AllMiningProfiles,
+  TRead__OneMiningProfile,
+  TUpdate__MiningProfile,
+  TDelete__MiningProfile,
+};
+
+export {
+  create__MiningProfile,
+  read__AllMiningProfiles,
+  read__OneMiningProfile,
+  update__MiningProfile,
+  delete__MiningProfile,
 };
