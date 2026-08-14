@@ -1,26 +1,24 @@
 import type { ComponentProps } from "react";
 import Main from "@/components/main/main";
 import { cn } from "@repo/styles/cn";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import {
-  StatCard,
-  StatCardData,
-  StatCardFooter,
-  StatCardHeader,
-  StatCardHeadingIcon,
-  StatCardHeadingText,
+  ActiveInvestment,
+  GainedAmount,
+  InvestedAmount,
+  MiningWallet,
+  TradingWallet,
+} from "@/components/main/dashboard/dashboard-stats";
+import { extractMonthName } from "@repo/utils/date";
+import { useMiningOrdersData } from "@/hooks/dashboard/use-mining-orders";
+import { round } from "es-toolkit/math";
+import {
+  ActiveDenoteBadge,
+  ActiveSessionStatCard,
+  Progress,
+  ProgressBar,
+  ProgressStat,
 } from "./dashboard-uis";
-import { Building2, CircleDollarSign, TrendingUp, Zap } from "lucide-react";
-import { useRouteContext } from "@tanstack/react-router";
-import { Button } from "@repo/ui/button";
-import {
-  useCreateMiningWallet,
-  useFetchMiningWallet,
-} from "@/hooks/dashboard/use-miningwallet";
-import {
-  useCreateTradingWallet,
-  useFetchTradingWallet,
-} from "@/hooks/dashboard/use-tradingwallet";
-import { useInvestmentData } from "@/hooks/dashboard/use-investment";
 
 export function Dashboard({
   className,
@@ -31,6 +29,26 @@ export function Dashboard({
       <GreetSection />
 
       <StatSection />
+
+      <div
+        className={cn(
+          `default-padding`,
+          `grid gap-4 py-10 md:grid-cols-2 lg:grid-cols-3`,
+        )}
+      >
+        <div className={cn(`space-y-4 md:col-span-2`)}>
+          <ActiveMiningSession />
+
+          <RecentTransaction />
+        </div>
+        <div className={cn(`space-y-4`)}>
+          <QuickActions />
+
+          <PortfolioSummary />
+
+          <InviteEarn />
+        </div>
+      </div>
     </Main>
   );
 }
@@ -95,189 +113,292 @@ export function StatSection({
   );
 }
 
-export function MiningWallet() {
-  const { userDetailsFromCookie } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
-  });
-
-  const { mutate } = useCreateMiningWallet();
-  const { data: userDetails, error, isLoading } = useFetchMiningWallet();
+export function ActiveMiningSession({
+  className,
+  ...props
+}: ComponentProps<"section">) {
+  const {
+    data: activeMiningSessions,
+    isPending,
+    error,
+  } = useMiningOrdersData();
 
   return (
-    <StatCard>
-      <StatCardHeader>
-        <StatCardHeadingText>Mining Wallet</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-secondary-500`)}>
-          <CircleDollarSign />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
+    <section className={cn(``, className)} {...props}>
+      <div
+        className={cn(
+          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+        )}
+      >
+        <div className={cn(`flex w-full items-center justify-between`)}>
+          <h2 className={cn(`font-brand-secondary`)}>
+            ⛏️ Active Mining Sessions
+          </h2>
+          <Link to="/" className={cn(`text-sm text-purple-500`)}>
+            View all →
+          </Link>
+        </div>
 
-      {error && <div>Error</div>}
+        <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
 
-      {isLoading && <div>Loading</div>}
+        {error && (
+          <div
+            className={cn(
+              `flex flex-col items-center justify-center py-10 text-center`,
+            )}
+          >
+            <div
+              className={cn(
+                `mb-4 flex size-12 items-center justify-center rounded-full border border-red-500/30 bg-red-500/20`,
+              )}
+            >
+              ⚠️
+            </div>
 
-      {userDetails && !userDetails.miningWallet && (
-        <Button
-          variant="secondary"
-          className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
-          onClick={() =>
-            mutate({
-              data: {
-                associatedUser: userDetailsFromCookie.userId,
-              },
-            })
-          }
-        >
-          Create mining wallet
-        </Button>
-      )}
+            <h3 className={cn(`font-brand-secondary font-semibold`)}>
+              Something went wrong
+            </h3>
 
-      {userDetails && userDetails.miningWallet && (
-        <>
-          <StatCardData className={cn("text-secondary-500")}>
-            ₹ {userDetails.miningWallet.balance}
-          </StatCardData>
+            <p className={cn(`text-foreground/50 mt-1 max-w-sm text-sm`)}>
+              We couldn't load your active mining sessions. Please try again
+              later.
+            </p>
+          </div>
+        )}
 
-          <StatCardFooter>Ready to mine</StatCardFooter>
-        </>
-      )}
-    </StatCard>
+        {isPending && (
+          <div className={cn(`space-y-5 py-4`)}>
+            <div className={cn(`flex w-full gap-4`)}>
+              <div
+                className={cn(
+                  `bg-foreground/10 size-10 shrink-0 animate-pulse rounded-md`,
+                )}
+              />
+
+              <div className={cn(`flex-1 space-y-2`)}>
+                <div
+                  className={cn(
+                    `bg-foreground/10 h-4 w-32 animate-pulse rounded`,
+                  )}
+                />
+
+                <div
+                  className={cn(
+                    `bg-foreground/10 h-3 w-24 animate-pulse rounded`,
+                  )}
+                />
+              </div>
+
+              <div
+                className={cn(
+                  `bg-foreground/10 h-6 w-16 animate-pulse rounded-full`,
+                )}
+              />
+            </div>
+
+            <div className={cn(`space-y-2`)}>
+              <div className={cn(`flex justify-between`)}>
+                <div
+                  className={cn(
+                    `bg-foreground/10 h-3 w-14 animate-pulse rounded`,
+                  )}
+                />
+
+                <div
+                  className={cn(
+                    `bg-foreground/10 h-3 w-8 animate-pulse rounded`,
+                  )}
+                />
+              </div>
+
+              <div
+                className={cn(
+                  `bg-foreground/10 h-1 w-full animate-pulse rounded-full`,
+                )}
+              />
+            </div>
+
+            <div className={cn(`flex w-full gap-4 max-md:flex-wrap`)}>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    `bg-foreground/10 h-20 min-w-0 flex-1 animate-pulse rounded-md max-md:min-w-[calc(50%-0.5rem)]`,
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeMiningSessions && (
+          <div className={cn(`space-y-4`)}>
+            {activeMiningSessions.length === 0 && (
+              <div
+                className={cn(
+                  `flex flex-col items-center justify-center py-10 text-center`,
+                  className,
+                )}
+                data-slot="active-mining-session-empty"
+              >
+                <div
+                  className={cn(
+                    `bg-secondary-500/10 border-secondary-500/20 mb-4 flex size-12 items-center justify-center rounded-full border text-xl`,
+                  )}
+                >
+                  ⛏️
+                </div>
+
+                <h3 className={cn(`font-brand-secondary font-semibold`)}>
+                  No active mining sessions
+                </h3>
+
+                <p className={cn(`text-foreground/50 mt-1 text-sm`)}>
+                  You don't have any active mining sessions right now.
+                </p>
+              </div>
+            )}
+
+            {activeMiningSessions.length > 0 &&
+              activeMiningSessions.map((activeSession) => {
+                const ONE_DAY = 1000 * 60 * 60 * 24;
+
+                const now = Date.now();
+                const createdAt = new Date(activeSession.createdAt).getTime();
+                const durationMs =
+                  ONE_DAY * activeSession.miningProfile.lockinPeriod;
+                const elapsedMs = now - createdAt;
+                let progress = (elapsedMs / durationMs) * 100;
+
+                progress = Math.floor(Math.min(100, Math.max(0, progress)));
+                const remainingMs = Math.max(0, durationMs - elapsedMs);
+                const remainingDays = Math.ceil(remainingMs / ONE_DAY);
+                const approxReturnTillToday =
+                  activeSession.miningProfile.dailyReturn *
+                  (elapsedMs / ONE_DAY);
+
+                return (
+                  <div
+                    key={activeSession.id}
+                    className={cn(
+                      `bg-foreground/5 border-foreground/10 space-y-4 rounded-md border px-4 py-4`,
+                    )}
+                  >
+                    <div className={cn(`flex w-full gap-4`)}>
+                      <div
+                        className={cn(
+                          `from-primary-500/30 to-secondary-500/30 flex size-10 items-center justify-center rounded-md bg-linear-to-r`,
+                        )}
+                      >
+                        ⛏️
+                      </div>
+
+                      <div>
+                        <h2 className={cn(`font-semibold`)}>
+                          {activeSession.miningProfile.category}
+                        </h2>
+
+                        <p className={cn(`text-foreground/50 text-xs`)}>
+                          Started {extractMonthName(activeSession.createdAt)}{" "}
+                          {activeSession.createdAt.getDate()}
+                          {", "}
+                          {activeSession.createdAt.getFullYear()}
+                        </p>
+                      </div>
+
+                      <ActiveDenoteBadge />
+                    </div>
+
+                    <Progress>
+                      <ProgressStat progress={progress} />
+                      <ProgressBar progress={progress} />
+                    </Progress>
+
+                    <div className={cn(`flex w-full gap-4 max-md:flex-wrap`)}>
+                      <ActiveSessionStatCard>
+                        <p
+                          className={cn(
+                            `text-secondary-500 text-xl font-semibold`,
+                          )}
+                        >
+                          ₹ {activeSession.amountInvested}
+                        </p>
+                        <p className={cn(`text-foreground/50 text-xs`)}>
+                          Amount Invested
+                        </p>
+                      </ActiveSessionStatCard>
+                      <ActiveSessionStatCard>
+                        <p
+                          className={cn(
+                            `text-secondary-500 text-xl font-semibold`,
+                          )}
+                        >
+                          ₹ {round(approxReturnTillToday, 2)}
+                        </p>
+                        <p className={cn(`text-foreground/50 text-xs`)}>
+                          Approx. Profit
+                        </p>
+                      </ActiveSessionStatCard>
+                      <ActiveSessionStatCard>
+                        <p
+                          className={cn(
+                            `text-secondary-500 text-xl font-semibold`,
+                          )}
+                        >
+                          {round(remainingDays, 0)}
+                        </p>
+                        <p className={cn(`text-foreground/50 text-xs`)}>
+                          Days Left
+                        </p>
+                      </ActiveSessionStatCard>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 
-export function TradingWallet() {
-  const { userDetailsFromCookie } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
-  });
-
-  const { mutate } = useCreateTradingWallet();
-  const { data: userDetails, error, isLoading } = useFetchTradingWallet();
-
+export function RecentTransaction({
+  className,
+  ...props
+}: ComponentProps<"section">) {
   return (
-    <StatCard>
-      <StatCardHeader>
-        <StatCardHeadingText>Trading Wallet</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-accent-500`)}>
-          <CircleDollarSign />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      {error && <div>Error</div>}
-
-      {isLoading && <div>Loading</div>}
-
-      {userDetails && !userDetails.tradingWallet && (
-        <Button
-          variant="accent"
-          className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
-          onClick={() =>
-            mutate({
-              data: {
-                associatedUser: userDetailsFromCookie.userId,
-              },
-            })
-          }
-        >
-          Create trading wallet
-        </Button>
-      )}
-
-      {userDetails && userDetails.tradingWallet && (
-        <>
-          <StatCardData className={cn("text-accent-500")}>
-            ₹ {userDetails.tradingWallet.balance}
-          </StatCardData>
-
-          <StatCardFooter>Trading fund</StatCardFooter>
-        </>
-      )}
-    </StatCard>
+    <section className={cn(``, className)} {...props}>
+      RecentTransaction
+    </section>
   );
 }
 
-export function InvestedAmount() {
-  const { data: investment, error, isLoading } = useInvestmentData();
-
+export function QuickActions({
+  className,
+  ...props
+}: ComponentProps<"section">) {
   return (
-    <StatCard>
-      <StatCardHeader>
-        <StatCardHeadingText>Invested</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-red-500`)}>
-          <Building2 />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      {error && <div>Error</div>}
-
-      {isLoading && <div>Loading</div>}
-
-      {investment && (
-        <>
-          <StatCardData className={cn("text-red-500")}>
-            ₹ {investment.investedAmount}
-          </StatCardData>
-
-          <StatCardFooter>Amount invested</StatCardFooter>
-        </>
-      )}
-    </StatCard>
+    <section className={cn(``, className)} {...props}>
+      QuickActions
+    </section>
   );
 }
 
-export function GainedAmount() {
-  const { data: investment, error, isLoading } = useInvestmentData();
-
+export function PortfolioSummary({
+  className,
+  ...props
+}: ComponentProps<"section">) {
   return (
-    <StatCard>
-      <StatCardHeader>
-        <StatCardHeadingText>Total Gained</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-green-500`)}>
-          <TrendingUp />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      {error && <div>Error</div>}
-
-      {isLoading && <div>Loading</div>}
-
-      {investment && (
-        <>
-          <StatCardData className={cn("text-green-500")}>
-            ₹ {investment.profitAmount}
-          </StatCardData>
-
-          <StatCardFooter>Amount profit</StatCardFooter>
-        </>
-      )}
-    </StatCard>
+    <section className={cn(``, className)} {...props}>
+      PortfolioSummary
+    </section>
   );
 }
 
-export function ActiveInvestment() {
-  const { data: investment, error, isLoading } = useInvestmentData();
-
+export function InviteEarn({ className, ...props }: ComponentProps<"section">) {
   return (
-    <StatCard>
-      <StatCardHeader>
-        <StatCardHeadingText>Investment Live</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-green-500`)}>
-          <Zap />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      {error && <div>Error</div>}
-
-      {isLoading && <div>Loading</div>}
-
-      {investment && (
-        <>
-          <StatCardData className={cn("text-green-500")}>
-            {investment.activeInvestmentsCount}
-          </StatCardData>
-
-          <StatCardFooter>Active sessions</StatCardFooter>
-        </>
-      )}
-    </StatCard>
+    <section className={cn(``, className)} {...props}>
+      InviteEarn
+    </section>
   );
 }

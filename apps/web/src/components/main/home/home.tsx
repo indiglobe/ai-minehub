@@ -290,7 +290,7 @@ export function Rating({ className, ...props }: ComponentProps<"div">) {
                 {/* rating text */}
                 <div className="flex items-baseline gap-2">
                   <span className="text-secondary-600 text-sm font-semibold">
-                    {averageRating.toFixed(2)}
+                    {isNaN(averageRating) ? 0 : averageRating.toFixed(2)}
                   </span>
                   <span className="text-xs text-gray-500">/ 5</span>
                 </div>
@@ -869,6 +869,13 @@ export function PassiveIncomeSection({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const {
+    allMiningProfiles: allMiningProfilesProm,
+    allMiningOrders: allMiningOrdersProm,
+  } = useLoaderData({
+    from: "/(with-header-footer)/",
+  });
+
   return (
     <section className={cn(`default-padding py-20`, className)} {...props}>
       <div className={cn(`flex flex-col items-center`)}>
@@ -883,103 +890,68 @@ export function PassiveIncomeSection({
         </SectionSubHeading>
       </div>
 
-      <div
-        className={cn(
-          `grid grid-cols-1 gap-4 pt-24 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
-        )}
-      >
-        <PassiveIncome className={cn(`min-w-60`)}>
-          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
-            ⛏️
-          </PassiveIncomeIcon>
-          <PassiveIncomeTitle>Starter</PassiveIncomeTitle>
-          <PassiveIncomeReturn>+15%</PassiveIncomeReturn>
-          <PassiveIncomeDescription>
-            <PassiveIncomeDescriptionItem>
-              Min: $50
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              Max: $500
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              0.5% Daily
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              30 Days Lock
-            </PassiveIncomeDescriptionItem>
-          </PassiveIncomeDescription>
-          <PassiveIncomeCTA />
-        </PassiveIncome>
-
-        <PassiveIncome popular className={cn(`min-w-60`)}>
-          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
-            ⚡
-          </PassiveIncomeIcon>
-          <PassiveIncomeTitle>Basic</PassiveIncomeTitle>
-          <PassiveIncomeReturn>+36%</PassiveIncomeReturn>
-          <PassiveIncomeDescription>
-            <PassiveIncomeDescriptionItem>
-              Min: $500
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              Max: $2,000
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              0.8% Daily
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              45 Days Lock
-            </PassiveIncomeDescriptionItem>
-          </PassiveIncomeDescription>
-          <PassiveIncomeCTA />
-        </PassiveIncome>
-
-        <PassiveIncome className={cn(`min-w-60`)}>
-          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
-            💎
-          </PassiveIncomeIcon>
-          <PassiveIncomeTitle>Professional</PassiveIncomeTitle>
-          <PassiveIncomeReturn>+72%</PassiveIncomeReturn>
-          <PassiveIncomeDescription>
-            <PassiveIncomeDescriptionItem>
-              Min: $2,000
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              Max: $10,000
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              1.2% Daily
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              60 Days Lock
-            </PassiveIncomeDescriptionItem>
-          </PassiveIncomeDescription>
-          <PassiveIncomeCTA />
-        </PassiveIncome>
-
-        <PassiveIncome className={cn(`min-w-60`)}>
-          <PassiveIncomeIcon className={cn(`bg-secondary-500/20 rounded-2xl`)}>
-            🏆
-          </PassiveIncomeIcon>
-          <PassiveIncomeTitle>Enterprise</PassiveIncomeTitle>
-          <PassiveIncomeReturn>+162%</PassiveIncomeReturn>
-          <PassiveIncomeDescription>
-            <PassiveIncomeDescriptionItem>
-              Min: $10,000
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              Max: $1,00,000
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              1.8% Daily
-            </PassiveIncomeDescriptionItem>
-            <PassiveIncomeDescriptionItem>
-              90 Days Lock
-            </PassiveIncomeDescriptionItem>
-          </PassiveIncomeDescription>
-          <PassiveIncomeCTA />
-        </PassiveIncome>
-      </div>
+      <ErrorBoundary fallback={<div>Error...</div>}>
+        <Await promise={allMiningProfilesProm} fallback={<div>Loading...</div>}>
+          {(allMiningProfiles) => {
+            return (
+              <div
+                className={cn(
+                  `grid grid-cols-1 gap-4 pt-24 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
+                )}
+              >
+                {allMiningProfiles.map(
+                  ({
+                    id,
+                    category,
+                    minimumAllowedAmount,
+                    maximumAllowedAmount,
+                    dailyReturn,
+                    lockinPeriod,
+                    isPopular,
+                  }) => {
+                    return (
+                      <PassiveIncome
+                        key={id}
+                        className={cn(`min-w-60`)}
+                        popular={isPopular}
+                      >
+                        <PassiveIncomeIcon
+                          className={cn(`bg-secondary-500/20 rounded-2xl`)}
+                        >
+                          ⛏️
+                        </PassiveIncomeIcon>
+                        <PassiveIncomeTitle>{category}</PassiveIncomeTitle>
+                        <PassiveIncomeReturn>
+                          +
+                          {new Intl.NumberFormat("en-IN", {
+                            minimumFractionDigits: 2,
+                          }).format(lockinPeriod * dailyReturn)}
+                          %
+                        </PassiveIncomeReturn>
+                        <PassiveIncomeDescription>
+                          <PassiveIncomeDescriptionItem>
+                            Min: ₹{minimumAllowedAmount}
+                          </PassiveIncomeDescriptionItem>
+                          <PassiveIncomeDescriptionItem>
+                            Max: ₹{maximumAllowedAmount}
+                          </PassiveIncomeDescriptionItem>
+                          <PassiveIncomeDescriptionItem>
+                            {dailyReturn}% Daily
+                          </PassiveIncomeDescriptionItem>
+                          <PassiveIncomeDescriptionItem>
+                            {lockinPeriod} Days Lock
+                          </PassiveIncomeDescriptionItem>
+                        </PassiveIncomeDescription>
+                        <PassiveIncomeCTA />
+                      </PassiveIncome>
+                    );
+                  },
+                )}
+              </div>
+            );
+          }}
+        </Await>
+      </ErrorBoundary>
 
       <div
         className={cn(
@@ -988,36 +960,69 @@ export function PassiveIncomeSection({
       >
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
-            `*:nth-[2]:text-foreground/50`,
+            `*:nth-[1]:text-secondary-500 *:nth-[2]:text-foreground/50 flex w-full flex-col items-center justify-center *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
           )}
         >
-          <span>$2.5M+</span> <span>Total Mined</span>
+          <ErrorBoundary fallback={<div>Error...</div>}>
+            <Await
+              promise={allMiningOrdersProm}
+              fallback={<div>Loading...</div>}
+            >
+              {(allMiningOrders) => {
+                let totalAmount = 0;
+
+                totalAmount = allMiningOrders.reduce((acc, curr) => {
+                  return (
+                    acc +
+                    (curr.amountRecived !== null ? curr.amountInvested : 0)
+                  );
+                }, totalAmount);
+                return (
+                  <>
+                    <span>₹{totalAmount}+</span> <span>Total Mined</span>
+                  </>
+                );
+              }}
+            </Await>
+          </ErrorBoundary>
         </div>
+
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
-            `*:nth-[2]:text-foreground/50`,
+            `*:nth-[1]:text-secondary-500 *:nth-[2]:text-foreground/50 flex w-full flex-col items-center justify-center *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
           )}
         >
-          <span>15,000+</span> <span>Active Miners</span>
+          <ErrorBoundary fallback={<div>Error...</div>}>
+            <Await
+              promise={allMiningOrdersProm}
+              fallback={<div>Loading...</div>}
+            >
+              {(allMiningOrders) => {
+                const activeMiners = allMiningOrders.filter(
+                  (miningOrder) => miningOrder.miningStatus === "active",
+                );
+                return (
+                  <>
+                    <span>{activeMiners.length}+</span>{" "}
+                    <span>Active Miners</span>
+                  </>
+                );
+              }}
+            </Await>
+          </ErrorBoundary>
         </div>
+
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
-            `*:nth-[2]:text-foreground/50`,
+            `*:nth-[1]:text-secondary-500 *:nth-[2]:text-foreground/50 flex w-full flex-col items-center justify-center *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
           )}
         >
           <span>99.9%</span> <span>Uptime</span>
         </div>
+
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-secondary-500 *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
-            `*:nth-[2]:text-foreground/50`,
+            `*:nth-[1]:text-secondary-500 *:nth-[2]:text-foreground/50 flex w-full flex-col items-center justify-center *:nth-[1]:text-3xl *:nth-[1]:font-semibold`,
           )}
         >
           <span>24/7</span> <span>Auto Payouts</span>

@@ -78,3 +78,84 @@ export function StatCardFooter({ className, ...props }: ComponentProps<"div">) {
     />
   );
 }
+
+export function ActiveSessionStatCard({
+  className,
+  ...props
+}: ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        `bg-foreground/10 flex grow flex-col items-center justify-center rounded-md px-10 py-4`,
+        className,
+      )}
+      data-slot={`active-session-stat-card`}
+      {...props}
+    />
+  );
+}
+
+export function Progress({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(`space-y-2 py-2`, className)}
+      data-slot={`progress`}
+      {...props}
+    />
+  );
+}
+
+export function ProgressStat({
+  className,
+  progress,
+  ...props
+}: ComponentProps<"div"> & { progress: number }) {
+  return (
+    <div
+      className={cn(`flex w-full items-center justify-between`, className)}
+      data-slot={`progress-stat`}
+      {...props}
+    >
+      <span className={cn(`text-foreground/50 text-xs`)}>Progress</span>
+      <span className={cn(`text-foreground/50 text-xs`)}>{progress} %</span>
+    </div>
+  );
+}
+
+export function ProgressBar({
+  className,
+  progress,
+  ...props
+}: ComponentProps<"div"> & { progress: number }) {
+  return (
+    <div
+      className={cn(
+        `bg-foreground/10 relative isolate h-1 w-full overflow-clip rounded-full`,
+        className,
+      )}
+      data-slot={`progress-bar`}
+      {...props}
+    >
+      <div
+        className={cn(
+          `absolute inset-0 h-full w-full rounded-full bg-blue-500`,
+        )}
+        style={{ left: `-${100 - progress}%` }}
+      />
+    </div>
+  );
+}
+
+export function ActiveDenoteBadge() {
+  return (
+    <div
+      className={cn(
+        `ml-auto flex max-h-max max-w-max items-center space-x-1 rounded-full border border-green-500/50 bg-green-500/20 px-3 py-1`,
+      )}
+      data-slot={`active-denote-badge`}
+    >
+      <span className={cn(`inline-block size-2 rounded-full bg-green-500`)} />
+      <span className={cn(`text-xs text-green-500`)}>Active</span>
+    </div>
+  );
+}

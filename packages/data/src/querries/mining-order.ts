@@ -45,8 +45,9 @@ const create__MiningOrder = async (data: TCreate__MiningOrder) => {
 
 type TRead__AllMiningOrders = {
   identifier?: Partial<{
-    id: string;
     miningProfileUsed: string;
+    miningStatus: "active" | "completed";
+    userId: string;
   }>;
 
   queryOptions?: {
@@ -66,8 +67,8 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
 
   const conditions: SQL[] = [];
 
-  if (options?.identifier?.id) {
-    conditions.push(eq(MiningOrderTable.id, options.identifier.id));
+  if (options?.identifier?.userId) {
+    conditions.push(eq(MiningOrderTable.orderedBy, options.identifier.userId));
   }
 
   if (options?.identifier?.miningProfileUsed) {
@@ -76,6 +77,12 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
         MiningOrderTable.miningProfileUsed,
         options.identifier.miningProfileUsed,
       ),
+    );
+  }
+
+  if (options?.identifier?.miningStatus) {
+    conditions.push(
+      eq(MiningOrderTable.miningStatus, options.identifier.miningStatus),
     );
   }
 

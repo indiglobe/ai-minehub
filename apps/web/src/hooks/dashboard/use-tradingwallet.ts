@@ -4,16 +4,16 @@ import {
   useQueryClient,
   queryOptions,
 } from "@tanstack/react-query";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import {
-serverFn__createTradingWallet,
+  serverFn__createTradingWallet,
+  serverFn__readOneTradingWallet,
 } from "@/integrations/server-function/trading-wallet";
 import { useServerFn } from "@tanstack/react-start";
 import { DASHBOARD, TRADING_WALLET } from "@/utils/mutation-keys";
 import { useRouteContext } from "@tanstack/react-router";
 
 export function useFetchTradingWallet() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
+  const readOneTradingWallet = useServerFn(serverFn__readOneTradingWallet);
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
@@ -25,13 +25,10 @@ export function useFetchTradingWallet() {
       queryKey: [DASHBOARD, TRADING_WALLET],
 
       queryFn: () =>
-        readOneUser({
+        readOneTradingWallet({
           data: {
             identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              tradingWallet: true,
+              associatedUser: userId,
             },
           },
         }),

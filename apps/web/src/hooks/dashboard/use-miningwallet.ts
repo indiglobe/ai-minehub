@@ -4,14 +4,16 @@ import {
   useQueryClient,
   queryOptions,
 } from "@tanstack/react-query";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
-import { serverFn__createMiningWallet } from "@/integrations/server-function/mining-wallet";
+import {
+  serverFn__createMiningWallet,
+  serverFn__readOneMiningWallet,
+} from "@/integrations/server-function/mining-wallet";
 import { useServerFn } from "@tanstack/react-start";
 import { DASHBOARD, MINING_WALLET } from "@/utils/mutation-keys";
 import { useRouteContext } from "@tanstack/react-router";
 
 export function useFetchMiningWallet() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
+  const readOneMiningWallet = useServerFn(serverFn__readOneMiningWallet);
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
@@ -23,13 +25,10 @@ export function useFetchMiningWallet() {
       queryKey: [DASHBOARD, MINING_WALLET],
 
       queryFn: () =>
-        readOneUser({
+        readOneMiningWallet({
           data: {
             identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              miningWallet: true,
+              associatedUser: userId,
             },
           },
         }),

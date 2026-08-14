@@ -1,5 +1,7 @@
 import Home from "@/components/main/home/home";
+import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
 import { serverFn__readAllRatings } from "@/integrations/server-function/rating";
+import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(with-header-footer)/")({
@@ -12,6 +14,8 @@ export const Route = createFileRoute("/(with-header-footer)/")({
   loader: async () => {
     return {
       allRatings: serverFn__readAllRatings(),
+      allMiningProfiles: serverFn__readAllMiningProfiles(),
+      allMiningOrders: serverFn__readAllMiningOrders(),
     };
   },
 });

@@ -91,7 +91,7 @@ const read__AllUsers = async (options?: TRead__AllUsers) => {
     conditions.push(eq(UserTable.referrerId, options.identifier.referrerId));
   }
 
-  const queryResult = db.query.UserTable.findMany({
+  const queryResult = await db.query.UserTable.findMany({
     limit: limit,
     offset: skip,
     where: and(...conditions),

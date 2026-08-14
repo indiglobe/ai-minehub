@@ -50,15 +50,14 @@ export const read__OneUserSchema = z.object({
   ]),
   joinOptions: z
     .object({
-      tradingWallet: z.literal(true),
-      miningWallet: z.literal(true),
-      rating: z.literal(true),
-      referredBy: z.literal(true),
-      referrals: z.literal(true),
-      miningOrders: z.literal(true),
-      tradingOrders: z.literal(true),
+      tradingWallet: z.literal(true).optional(),
+      miningWallet: z.literal(true).optional(),
+      rating: z.literal(true).optional(),
+      referredBy: z.literal(true).optional(),
+      referrals: z.literal(true).optional(),
+      miningOrders: z.literal(true).optional(),
+      tradingOrders: z.literal(true).optional(),
     })
-    .partial()
     .optional(),
 });
 

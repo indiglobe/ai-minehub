@@ -7,26 +7,31 @@ export const create__MiningOrderSchema = z.object({
   miningProfileUsed: z.string(),
 });
 
-export const read__AllMiningOrdersSchema = z.object({
-  identifier: z
-    .object({
-      id: z.string().optional(),
-      miningProfileUsed: z.string().optional(),
-    })
-    .optional(),
-  queryOptions: z
-    .object({
-      skip: z.number().optional(),
-      limit: z.number().optional(),
-    })
-    .optional(),
-  joinOptions: z
-    .object({
-      user: z.literal(true).optional(),
-      miningProfile: z.literal(true).optional(),
-    })
-    .optional(),
-});
+export const read__AllMiningOrdersSchema = z
+  .object({
+    identifier: z
+      .object({
+        miningProfileUsed: z.string().optional(),
+        miningStatus: z
+          .union([z.literal("active"), z.literal("completed")])
+          .optional(),
+        userId: z.string().optional(),
+      })
+      .optional(),
+    queryOptions: z
+      .object({
+        skip: z.number().optional(),
+        limit: z.number().optional(),
+      })
+      .optional(),
+    joinOptions: z
+      .object({
+        user: z.literal(true).optional(),
+        miningProfile: z.literal(true).optional(),
+      })
+      .optional(),
+  })
+  .optional();
 
 export const read__OneMiningOrderSchema = z.object({
   identifier: z.object({

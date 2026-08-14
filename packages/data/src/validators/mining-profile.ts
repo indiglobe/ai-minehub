@@ -9,25 +9,27 @@ export const create__MiningProfileSchema = z.object({
   dailyReturn: z.number(),
 });
 
-export const read__AllMiningProfilesSchema = z.object({
-  identifier: z
-    .object({
-      id: z.string().optional(),
-      category: z.string().optional(),
-    })
-    .optional(),
-  queryOptions: z
-    .object({
-      skip: z.number().optional(),
-      limit: z.number().optional(),
-    })
-    .optional(),
-  joinOptions: z
-    .object({
-      orders: z.literal(true).optional(),
-    })
-    .optional(),
-});
+export const read__AllMiningProfilesSchema = z
+  .object({
+    identifier: z
+      .object({
+        id: z.string().optional(),
+        category: z.string().optional(),
+      })
+      .optional(),
+    queryOptions: z
+      .object({
+        skip: z.number().optional(),
+        limit: z.number().optional(),
+      })
+      .optional(),
+    joinOptions: z
+      .object({
+        orders: z.literal(true).optional(),
+      })
+      .optional(),
+  })
+  .optional();
 
 export const read__OneMiningProfileSchema = z.object({
   identifier: z.union([
