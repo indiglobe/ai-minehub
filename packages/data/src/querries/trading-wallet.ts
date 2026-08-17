@@ -17,11 +17,6 @@ import { and, desc, eq, SQL } from "drizzle-orm";
  */
 
 /**
- * Type representing a Trading Wallet record.
- */
-export type TTradingWallet = typeof TradingWalletTable.$inferSelect;
-
-/**
  * Type used for creating a trading wallet.
  */
 type TCreate__TradingWallet = Omit<
@@ -283,12 +278,4 @@ export {
   read__OneTradingWallet,
   update__TradingWallet,
   delete__TradingWallet,
-};
-
-export type {
-  TCreate__TradingWallet,
-  TRead__AllTradingWallets,
-  TRead__OneTradingWallet,
-  TUpdate__TradingWallet,
-  TDelete__TradingWallet,
 };

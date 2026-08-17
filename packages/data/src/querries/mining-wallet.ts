@@ -17,11 +17,6 @@ import { and, desc, eq, SQL } from "drizzle-orm";
  */
 
 /**
- * Type representing a Mining Wallet record.
- */
-export type TMiningWallet = typeof MiningWalletTable.$inferSelect;
-
-/**
  * ==========================================
  * CREATE
  * ==========================================
@@ -273,14 +268,6 @@ const delete__MiningWallet = async (options: TDelete__MiningWallet) => {
   await db.delete(MiningWalletTable).where(and(...conditions));
 
   return existing;
-};
-
-export type {
-  TCreate__MiningWallet,
-  TRead__AllMiningWallets,
-  TRead__OneMiningWallet,
-  TUpdate__MiningWallet,
-  TDelete__MiningWallet,
 };
 
 export {

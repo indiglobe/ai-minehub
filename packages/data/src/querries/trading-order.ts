@@ -1,15 +1,7 @@
 import { db } from "@/index";
 import { TradingOrderTable } from "@/schema";
 import { id } from "@repo/utils/id";
-import { and, desc, eq, SQL } from "drizzle-orm";
-
-/**
- * ==========================================
- * TRADING ORDER MODULE
- * ==========================================
- */
-
-export type TTradingOrder = typeof TradingOrderTable.$inferSelect;
+import { and, desc, eq, inArray, sql, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
@@ -39,13 +31,13 @@ const create__TradingOrder = async (data: TCreate__TradingOrder) => {
 
 /**
  * ==========================================
- * READ (ALL)
+ * READ (ALL) (OPTIONAL)
  * ==========================================
  */
 
 type TRead__AllTradingOrders = {
   identifier?: Partial<{
-    id: string;
+    userId: string;
   }>;
 
   queryOptions?: {
@@ -64,8 +56,8 @@ const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
 
   const conditions: SQL[] = [];
 
-  if (options?.identifier?.id) {
-    conditions.push(eq(TradingOrderTable.id, options.identifier.id));
+  if (options?.identifier?.userId) {
+    conditions.push(eq(TradingOrderTable.orderedBy, options.identifier.userId));
   }
 
   return await db.query.TradingOrderTable.findMany({
@@ -77,6 +69,19 @@ const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
       ...(options?.joinOptions?.user ? { user: true } : {}),
     },
   });
+};
+
+const read__TraderCount = async () => {
+  const res = await db
+    .select({
+      status: TradingOrderTable.tradingStatus,
+      count: sql<number>`count(*)`,
+    })
+    .from(TradingOrderTable)
+    .where(inArray(TradingOrderTable.tradingStatus, ["active", "completed"]))
+    .groupBy(TradingOrderTable.tradingStatus);
+
+  return res;
 };
 
 /**
@@ -175,18 +180,11 @@ const delete__TradingOrder = async (options: TDelete__TradingOrder) => {
   return existing;
 };
 
-export type {
-  TCreate__TradingOrder,
-  TRead__AllTradingOrders,
-  TRead__OneTradingOrder,
-  TUpdate__TradingOrder,
-  TDelete__TradingOrder,
-};
-
 export {
   create__TradingOrder,
   read__AllTradingOrders,
   read__OneTradingOrder,
+  read__TraderCount,
   update__TradingOrder,
   delete__TradingOrder,
 };

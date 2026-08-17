@@ -12,11 +12,6 @@ import { and, desc, eq, gte, lte, SQL } from "drizzle-orm";
  */
 
 /**
- * News record type.
- */
-export type TNews = typeof NewsTable.$inferSelect;
-
-/**
  * ==========================================
  * CREATE
  * ==========================================
@@ -216,14 +211,6 @@ const delete__News = async (options: TDelete__News) => {
   await db.delete(NewsTable).where(eq(NewsTable.id, options.identifier.id));
 
   return existing;
-};
-
-export type {
-  TCreate__News,
-  TRead__AllNews,
-  TRead__OneNews,
-  TUpdate__News,
-  TDelete__News,
 };
 
 export {

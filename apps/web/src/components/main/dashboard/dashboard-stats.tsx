@@ -1,12 +1,10 @@
-import { useInvestmentData } from "@/hooks/dashboard/use-investment";
-import {
-  useCreateMiningWallet,
-  useFetchMiningWallet,
-} from "@/hooks/dashboard/use-miningwallet";
 import {
   useCreateTradingWallet,
   useFetchTradingWallet,
-} from "@/hooks/dashboard/use-tradingwallet";
+  useCreateMiningWallet,
+  useFetchMiningWallet,
+  useInvestmentData,
+} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { useRouteContext } from "@tanstack/react-router";

@@ -132,11 +132,12 @@ function LargeScreenNavCTA({
   if (isPending) {
     return (
       <Button
-        variant={"primary"}
+        variant={"ghost"}
         corner={"rounded"}
         className={cn(`max-lg:hidden`, className)}
+        asChild
       >
-        Loading...
+        <span>Loading...</span>
       </Button>
     );
   }

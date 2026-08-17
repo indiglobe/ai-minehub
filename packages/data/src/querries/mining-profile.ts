@@ -5,14 +5,6 @@ import { and, desc, eq, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
- * MINING PROFILE MODULE
- * ==========================================
- */
-
-export type TMiningProfile = typeof MiningProfileTable.$inferSelect;
-
-/**
- * ==========================================
  * CREATE
  * ==========================================
  */
@@ -189,14 +181,6 @@ const delete__MiningProfile = async (options: TDelete__MiningProfile) => {
     .where(eq(MiningProfileTable.id, options.identifier.id));
 
   return existing;
-};
-
-export type {
-  TCreate__MiningProfile,
-  TRead__AllMiningProfiles,
-  TRead__OneMiningProfile,
-  TUpdate__MiningProfile,
-  TDelete__MiningProfile,
 };
 
 export {

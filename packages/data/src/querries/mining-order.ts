@@ -5,14 +5,6 @@ import { and, desc, eq, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
- * MINING ORDER MODULE
- * ==========================================
- */
-
-export type TMiningOrder = typeof MiningOrderTable.$inferSelect;
-
-/**
- * ==========================================
  * CREATE
  * ==========================================
  */
@@ -194,14 +186,6 @@ const delete__MiningOrder = async (options: TDelete__MiningOrder) => {
     .where(eq(MiningOrderTable.id, options.identifier.id));
 
   return existing;
-};
-
-export type {
-  TCreate__MiningOrder,
-  TRead__AllMiningOrders,
-  TRead__OneMiningOrder,
-  TUpdate__MiningOrder,
-  TDelete__MiningOrder,
 };
 
 export {

@@ -14,7 +14,7 @@ export const read__AllTradingOrdersSchema = z
   .object({
     identifier: z
       .object({
-        id: z.string().optional(),
+        userId: z.string().optional(),
       })
       .optional(),
     queryOptions: z

@@ -4,14 +4,6 @@ import { and, desc, eq, sql, SQL } from "drizzle-orm";
 
 /**
  * ----------------------------------------
- * TYPES
- * ----------------------------------------
- */
-
-export type TUser = typeof UserTable.$inferSelect;
-
-/**
- * ----------------------------------------
  * CREATE
  * ----------------------------------------
  */
@@ -291,14 +283,6 @@ const delete__User = async (options: TDelete__User) => {
   await db.delete(UserTable).where(and(...conditions));
 
   return existingUser;
-};
-
-export type {
-  TCreate__User,
-  TRead__AllUsers,
-  TRead__OneUser,
-  TUpdate__User,
-  TDelete__User,
 };
 
 export {

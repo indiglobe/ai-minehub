@@ -18,11 +18,6 @@ import { and, count, desc, eq, getTableColumns, sql, SQL } from "drizzle-orm";
  */
 
 /**
- * Type representing a Rating record.
- */
-export type TRating = typeof RatingTable.$inferSelect;
-
-/**
  * ==========================================
  * CREATE
  * ==========================================
@@ -373,15 +368,6 @@ const delete__Rating = async ({ identifier }: TDelete__Rating) => {
   await db.delete(RatingTable).where(and(...conditions));
 
   return existingRating;
-};
-
-export type {
-  TCreate__Rating,
-  TRead__AllRatings,
-  TRead__OneRating,
-  TRead__RatingStats,
-  TUpdate__Rating,
-  TDelete__Rating,
 };
 
 export {

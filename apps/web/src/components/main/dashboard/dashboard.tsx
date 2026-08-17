@@ -1,7 +1,8 @@
+import { Fragment } from "react";
 import type { ComponentProps } from "react";
 import Main from "@/components/main/main";
 import { cn } from "@repo/styles/cn";
-import { Link, useRouteContext } from "@tanstack/react-router";
+import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 import {
   ActiveInvestment,
   GainedAmount,
@@ -10,7 +11,10 @@ import {
   TradingWallet,
 } from "@/components/main/dashboard/dashboard-stats";
 import { extractMonthName } from "@repo/utils/date";
-import { useMiningOrdersData } from "@/hooks/dashboard/use-mining-orders";
+import {
+  useMiningOrdersData,
+  useRecentTransactionsHistory,
+} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { round } from "es-toolkit/math";
 import {
   ActiveDenoteBadge,
@@ -18,7 +22,9 @@ import {
   Progress,
   ProgressBar,
   ProgressStat,
-} from "./dashboard-uis";
+} from "@/components/main/dashboard/dashboard-uis";
+import { Button } from "@repo/ui/button";
+import { env } from "@repo/env/client";
 
 export function Dashboard({
   className,
@@ -43,8 +49,6 @@ export function Dashboard({
         </div>
         <div className={cn(`space-y-4`)}>
           <QuickActions />
-
-          <PortfolioSummary />
 
           <InviteEarn />
         </div>
@@ -366,9 +370,149 @@ export function RecentTransaction({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const { data, isError, isLoading } = useRecentTransactionsHistory();
+
   return (
     <section className={cn(``, className)} {...props}>
-      RecentTransaction
+      <div
+        className={cn(
+          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+        )}
+      >
+        <div className={cn(`flex w-full items-center justify-between`)}>
+          <h2 className={cn(`font-brand-secondary`)}>⛏️ Recent Transactions</h2>
+          <Link to="/" className={cn(`text-sm text-purple-500`)}>
+            View all →
+          </Link>
+        </div>
+
+        <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
+
+        {isLoading && (
+          <div className={cn(`space-y-5`)}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className={cn(
+                  `flex w-full animate-pulse items-center justify-between`,
+                )}
+              >
+                <div className={cn(`flex flex-col gap-y-2`)}>
+                  <div className={cn(`bg-foreground/10 h-4 w-28 rounded`)} />
+                  <div className={cn(`bg-foreground/10 h-3 w-20 rounded`)} />
+                </div>
+
+                <div className={cn(`flex flex-col items-end gap-y-2`)}>
+                  <div className={cn(`bg-foreground/10 h-4 w-20 rounded`)} />
+                  <div
+                    className={cn(`bg-foreground/10 h-5 w-16 rounded-full`)}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isError && (
+          <div
+            className={cn(
+              `flex flex-col items-center justify-center py-10 text-center`,
+            )}
+          >
+            <span className={cn(`mb-2 text-2xl`)}>⚠️</span>
+            <p className={cn(`text-sm font-semibold`)}>
+              Unable to load transactions
+            </p>
+            <p className={cn(`text-foreground/50 mt-1 text-xs`)}>
+              Something went wrong while fetching your recent transactions.
+            </p>
+          </div>
+        )}
+
+        {data && (
+          <>
+            {data.length === 0 ? (
+              <div
+                className={cn(
+                  `flex flex-col items-center justify-center py-10 text-center`,
+                )}
+              >
+                <span className={cn(`mb-2 text-2xl`)}>📭</span>
+                <p className={cn(`text-sm font-semibold`)}>
+                  No recent transactions
+                </p>
+                <p className={cn(`text-foreground/50 mt-1 text-xs`)}>
+                  Your recent transactions will appear here.
+                </p>
+              </div>
+            ) : (
+              <>
+                {data.map(
+                  ({ id, category, createdAt, amount, status, type }) => {
+                    return (
+                      <Fragment key={id}>
+                        <div
+                          className={cn(
+                            `flex w-full items-center justify-between`,
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              `flex flex-col justify-start gap-y-2`,
+                            )}
+                          >
+                            <span className={cn(`text-sm`)}>{category}</span>
+                            <span className={cn(`text-foreground/50 text-xs`)}>
+                              {extractMonthName(new Date(createdAt))}{" "}
+                              {createdAt.getDate()}, {createdAt.getFullYear()}
+                            </span>
+                          </div>
+
+                          <div
+                            className={cn(
+                              `flex flex-col justify-start gap-y-2`,
+                            )}
+                          >
+                            <span
+                              className={cn(`text-sm font-semibold`, {
+                                "text-green-500":
+                                  type === "gain" || type === "receive",
+                                "text-red-500": type === "spend",
+                              })}
+                            >
+                              {(type === "gain" || type === "receive") && "+"}
+                              {type === "spend" && "-"} ₹ {amount}
+                            </span>
+                            <span
+                              className={cn(
+                                `fs-2.5 rounded-full border px-2 py-0.5 font-bold`,
+                                {
+                                  "border-green-500/20 bg-green-500/10 text-green-500":
+                                    status === "completed",
+                                  "border-red-500/20 bg-red-500/10 text-red-500":
+                                    status === "pending",
+                                },
+                              )}
+                            >
+                              {status.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+
+                        <hr
+                          className={cn(
+                            `border-foreground/20 -mx-6 my-5 last:hidden`,
+                          )}
+                        />
+                      </Fragment>
+                    );
+                  },
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </section>
   );
 }
@@ -379,26 +523,146 @@ export function QuickActions({
 }: ComponentProps<"section">) {
   return (
     <section className={cn(``, className)} {...props}>
-      QuickActions
-    </section>
-  );
-}
+      <div
+        className={cn(
+          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+        )}
+      >
+        <div className={cn(`flex w-full items-center justify-between`)}>
+          <h2 className={cn(`font-brand-secondary`)}>⛏️ Quick Actions</h2>
+        </div>
 
-export function PortfolioSummary({
-  className,
-  ...props
-}: ComponentProps<"section">) {
-  return (
-    <section className={cn(``, className)} {...props}>
-      PortfolioSummary
+        <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
+
+        <div className={cn(`grid grid-cols-2 gap-4`)}>
+          <Link
+            to="/"
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
+            )}
+          >
+            <span
+              className={cn(
+                `bg-secondary-500/5 flex size-12 items-center justify-center rounded-md`,
+              )}
+            >
+              ⛏️
+            </span>
+            <span className={cn(`pt-4 text-xs`)}>Start mining</span>
+          </Link>
+
+          <Link
+            to="/"
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
+            )}
+          >
+            <span
+              className={cn(
+                `bg-secondary-500/5 flex size-12 items-center justify-center rounded-md`,
+              )}
+            >
+              💰
+            </span>
+            <span className={cn(`pt-4 text-xs`)}>Deposit</span>
+          </Link>
+
+          <Link
+            to="/"
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
+            )}
+          >
+            <span
+              className={cn(
+                `bg-secondary-500/5 flex size-12 items-center justify-center rounded-md`,
+              )}
+            >
+              🎁
+            </span>
+            <span className={cn(`pt-4 text-xs`)}>Referral</span>
+          </Link>
+
+          <Link
+            to="/"
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
+            )}
+          >
+            <span
+              className={cn(
+                `bg-secondary-500/5 flex size-12 items-center justify-center rounded-md`,
+              )}
+            >
+              📋
+            </span>
+            <span className={cn(`pt-4 text-xs`)}>History</span>
+          </Link>
+
+          <Link
+            to="/"
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
+            )}
+          >
+            <span
+              className={cn(
+                `bg-secondary-500/5 flex size-12 items-center justify-center rounded-md`,
+              )}
+            >
+              💬
+            </span>
+            <span className={cn(`pt-4 text-xs`)}>Support chat</span>
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }
 
 export function InviteEarn({ className, ...props }: ComponentProps<"section">) {
+  const router = useRouter();
+  const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+  });
+
+  const referralLink = new URL(
+    router.buildLocation({
+      to: "/signin",
+      search: { referralCode: userId },
+    }).href,
+    env.VITE_WEB_APP_HOST,
+  ).toString();
+
+  async function copyLinkToClipboard() {
+    await navigator.clipboard.writeText(referralLink);
+  }
+
   return (
     <section className={cn(``, className)} {...props}>
-      InviteEarn
+      <div
+        className={cn(
+          `from-accent-500/10 border-secondary-500/20 to-secondary-500/10 flex flex-col items-center justify-center gap-y-4 rounded-lg border bg-linear-to-tl p-6 text-center`,
+        )}
+      >
+        <span className={cn(`text-4xl`)}>🎁</span>
+        <span className={cn(`font-semibold`)}>Invite & Earn</span>
+        <span className={cn(`text-foreground/50 text-xs`)}>
+          Refer friends and earn 10% bonus on their every investment
+          automatically.
+        </span>
+
+        <Button
+          variant={"secondary"}
+          corner={"rounded"}
+          onClick={copyLinkToClipboard}
+        >
+          <span>Get Referral Link</span>
+          <span>→</span>
+        </Button>
+      </div>
     </section>
   );
 }

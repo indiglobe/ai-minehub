@@ -1,5 +1,6 @@
 import {
   ActiveMiningSession,
+  RecentTransaction,
   StatSection,
 } from "@/components/main/dashboard/dashboard";
 import type { Dashboard } from "@/components/main/dashboard/dashboard";
@@ -16,6 +17,7 @@ import { serverFn__readOneMiningWallet } from "@/integrations/server-function/mi
 import { serverFn__readOneTradingWallet } from "@/integrations/server-function/trading-wallet";
 import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import type { DeepPartial } from "@/utils/types/storybook";
+import { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
 
 const meta = {
   beforeEach: () => {
@@ -33,6 +35,9 @@ const meta = {
     );
     mocked(serverFn__readAllMiningOrders).mockResolvedValue(
       querryData__readAllMiningOrders() as any,
+    );
+    mocked(serverFn__readAllTradingOrders).mockResolvedValue(
+      querryData__readAllTradingOrders() as any,
     );
   },
 
@@ -78,6 +83,11 @@ export const StatSectionStory: Story = {
 export const ActiveMiningSessionStory: Story = {
   args: {},
   render: ActiveMiningSession,
+};
+
+export const RecentTransactionStory: Story = {
+  args: {},
+  render: RecentTransaction,
 };
 
 function contextData__userDetailsFromCookies() {
@@ -213,5 +223,30 @@ function querryData__readAllMiningOrders() {
     },
   ] satisfies DeepPartial<
     Awaited<ReturnType<typeof serverFn__readAllMiningOrders>>
+  >;
+}
+
+function querryData__readAllTradingOrders() {
+  return [
+    {
+      amountInvested: 3000,
+      amountRecived: 3500,
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+      id: "21",
+      orderedBy: "",
+      tableIdentifierToken: "TORD",
+      updatedAt: new Date(Date.now()),
+    },
+    {
+      amountInvested: 3000,
+      amountRecived: 3500,
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+      id: "22",
+      orderedBy: "",
+      tableIdentifierToken: "TORD",
+      updatedAt: new Date(Date.now()),
+    },
+  ] satisfies DeepPartial<
+    Awaited<ReturnType<typeof serverFn__readAllTradingOrders>>
   >;
 }
