@@ -37,6 +37,7 @@ import { Route as withoutHeaderFooterauthenticatedexistingUserDashboardIndexRout
 import { Route as withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/deposit/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/mining/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/referral/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/support-chat/index'
 import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
 
 const withHeaderFooterRouteRoute = withHeaderFooterRouteRouteImport.update({
@@ -204,6 +205,15 @@ const withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute =
     getParentRoute: () =>
       withoutHeaderFooterauthenticatedexistingUserRouteRoute,
   } as any)
+const withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport.update(
+    {
+      id: '/support-chat/',
+      path: '/support-chat/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+    } as any,
+  )
 const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
   withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
     id: '/welcome/',
@@ -236,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
+  '/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
   '/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -263,6 +274,7 @@ export interface FileRoutesByTo {
   '/deposit': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/mining': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/referral': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
+  '/support-chat': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
   '/welcome': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesById {
@@ -295,6 +307,7 @@ export interface FileRoutesById {
   '/(without-header-footer)/(authenticated)/(existing-user)/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
   '/(without-header-footer)/(authenticated)/(new-user)/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRouteTypes {
@@ -324,6 +337,7 @@ export interface FileRouteTypes {
     | '/deposit/'
     | '/mining/'
     | '/referral/'
+    | '/support-chat/'
     | '/welcome/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -351,6 +365,7 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/mining'
     | '/referral'
+    | '/support-chat'
     | '/welcome'
   id:
     | '__root__'
@@ -382,6 +397,7 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(authenticated)/(existing-user)/deposit/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/'
     | '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
   fileRoutesById: FileRoutesById
 }
@@ -593,6 +609,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
     }
+    '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/'
+      path: '/support-chat'
+      fullPath: '/support-chat/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
     '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
       id: '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
       path: '/welcome'
@@ -655,6 +678,7 @@ interface withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren {
   withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
 }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren =
@@ -667,6 +691,8 @@ const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHea
       withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute,
     withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute,
   }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren =

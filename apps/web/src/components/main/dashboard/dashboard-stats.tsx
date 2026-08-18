@@ -24,7 +24,7 @@ export function MiningWallet() {
   });
 
   const { mutate } = useCreateMiningWallet();
-  const { data: miningWallet, error, isLoading } = useFetchMiningWallet();
+  const { data: miningWallet, isError, isLoading } = useFetchMiningWallet();
 
   return (
     <StatCard>
@@ -35,11 +35,31 @@ export function MiningWallet() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && <div>Error</div>}
+      {isError && (
+        <div className="flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-destructive font-medium">
+              Unable to load mining wallet
+            </p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Please try again later.
+            </p>
+          </div>
+        </div>
+      )}
 
-      {isLoading && <div>Loading</div>}
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="border-secondary-200 border-t-secondary-500 h-8 w-8 animate-spin rounded-full border-4" />
+            <p className="text-muted-foreground text-sm">
+              Mining Loading wallet...
+            </p>
+          </div>
+        </div>
+      )}
 
-      {!miningWallet && (
+      {!isError && !isLoading && !miningWallet && (
         <Button
           variant="secondary"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
@@ -74,7 +94,7 @@ export function TradingWallet() {
   });
 
   const { mutate } = useCreateTradingWallet();
-  const { data: tradingwallet, error, isLoading } = useFetchTradingWallet();
+  const { data: tradingwallet, isError, isLoading } = useFetchTradingWallet();
 
   return (
     <StatCard>
@@ -85,11 +105,31 @@ export function TradingWallet() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && <div>Error</div>}
+      {isError && (
+        <div className="flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-destructive font-medium">
+              Unable to load trading wallet
+            </p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Please try again later.
+            </p>
+          </div>
+        </div>
+      )}
 
-      {isLoading && <div>Loading</div>}
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="border-accent-200 border-t-accent-500 h-8 w-8 animate-spin rounded-full border-4" />
+            <p className="text-muted-foreground text-sm">
+              Loading Trading Wallet...
+            </p>
+          </div>
+        </div>
+      )}
 
-      {!tradingwallet && (
+      {!isError && !isLoading && !tradingwallet && (
         <Button
           variant="accent"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
@@ -119,7 +159,7 @@ export function TradingWallet() {
 }
 
 export function InvestedAmount() {
-  const { data: investment, error, isLoading } = useInvestmentData();
+  const { data: investment, isError, isLoading } = useInvestmentData();
 
   return (
     <StatCard>
@@ -130,9 +170,28 @@ export function InvestedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && <div>Error</div>}
+      {isError && (
+        <div className="flex flex-col items-center justify-center text-center">
+          <p className="text-destructive font-medium">
+            Unable to load investment
+          </p>
 
-      {isLoading && <div>Loading</div>}
+          <p className="text-muted-foreground mt-1 text-sm">
+            Please try again later.
+          </p>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-200 border-t-red-500" />
+            <p className="text-muted-foreground text-sm">
+              Loading investment...
+            </p>
+          </div>
+        </div>
+      )}
 
       {investment && (
         <>
@@ -159,9 +218,24 @@ export function GainedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && <div>Error</div>}
+      {error && (
+        <div className="flex flex-col items-center justify-center text-center">
+          <p className="text-destructive font-medium">Unable to load profit</p>
 
-      {isLoading && <div>Loading</div>}
+          <p className="text-muted-foreground mt-1 text-sm">
+            Please try again later.
+          </p>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />
+            <p className="text-muted-foreground text-sm">Loading profit...</p>
+          </div>
+        </div>
+      )}
 
       {investment && (
         <>
@@ -188,9 +262,28 @@ export function ActiveInvestment() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && <div>Error</div>}
+      {error && (
+        <div className="flex flex-col items-center justify-center text-center">
+          <p className="text-destructive font-medium">
+            Unable to load investment
+          </p>
 
-      {isLoading && <div>Loading</div>}
+          <p className="text-muted-foreground mt-1 text-sm">
+            Please try again later.
+          </p>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />
+            <p className="text-muted-foreground text-sm">
+              Loading investment...
+            </p>
+          </div>
+        </div>
+      )}
 
       {investment && (
         <>

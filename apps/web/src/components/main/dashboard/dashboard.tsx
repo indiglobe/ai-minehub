@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import type { ComponentProps } from "react";
-import Main from "@/components/main/main";
 import { cn } from "@repo/styles/cn";
 import { Link, useRouteContext, useRouter } from "@tanstack/react-router";
 import {
@@ -26,14 +25,9 @@ import {
 import { Button } from "@repo/ui/button";
 import { env } from "@repo/env/client";
 
-export function Dashboard({
-  className,
-  ...props
-}: ComponentProps<typeof Main>) {
+export function Dashboard() {
   return (
-    <Main className={cn(``, className)} {...props}>
-      <GreetSection />
-
+    <>
       <StatSection />
 
       <div
@@ -53,40 +47,7 @@ export function Dashboard({
           <InviteEarn />
         </div>
       </div>
-    </Main>
-  );
-}
-
-export function GreetSection({
-  className,
-  ...props
-}: ComponentProps<"section">) {
-  const {
-    userDetailsFromCookie: { fullName },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
-  });
-
-  return (
-    <section className={cn(`default-padding`, `py-10`, className)} {...props}>
-      <h1
-        className={cn(`font-brand-secondary text-2xl md:text-3xl lg:text-4xl`)}
-      >
-        <span>Good day, </span>
-        <span
-          className={cn(
-            `from-accent-500 to-secondary-500 bg-linear-to-r bg-clip-text font-semibold text-transparent`,
-          )}
-        >
-          {fullName}
-        </span>
-        <span> 👋</span>
-      </h1>
-
-      <p className={cn(`text-foreground/50 pt-4`)}>
-        Your portfolio is running smoothly. Here's your overview.
-      </p>
-    </section>
+    </>
   );
 }
 
@@ -437,11 +398,19 @@ export function RecentTransaction({
                   `flex flex-col items-center justify-center py-10 text-center`,
                 )}
               >
-                <span className={cn(`mb-2 text-2xl`)}>📭</span>
-                <p className={cn(`text-sm font-semibold`)}>
+                <div
+                  className={cn(
+                    `bg-secondary-500/10 border-secondary-500/20 mb-4 flex size-12 items-center justify-center rounded-full border text-xl`,
+                  )}
+                >
+                  📭
+                </div>
+
+                <h3 className={cn(`font-brand-secondary font-semibold`)}>
                   No recent transactions
-                </p>
-                <p className={cn(`text-foreground/50 mt-1 text-xs`)}>
+                </h3>
+
+                <p className={cn(`text-foreground/50 mt-1 text-sm`)}>
                   Your recent transactions will appear here.
                 </p>
               </div>
