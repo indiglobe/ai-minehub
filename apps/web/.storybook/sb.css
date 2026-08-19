@@ -9,6 +9,10 @@
 @import "tailwindcss";
 @import "../src/styles.css";
 
+.sb-show-main.sb-main-padded {
+  padding: 0 !important;
+}
+
 .sbdocs-wrapper {
   background-color: hsl(0, 0%, 11%) !important;
 }

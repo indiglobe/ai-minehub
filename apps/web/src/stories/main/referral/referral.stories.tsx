@@ -4,11 +4,23 @@ import type {
 } from "@/integrations/storybook/sb.types";
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
 import { Route } from "@/routes/(without-header-footer)/(authenticated)/(existing-user)/referral";
-import Referral from "@/components/main/referral/referral";
+import {
+  Referral,
+  ReferralStats,
+  ReferralCode,
+  YourReferrals,
+} from "@/components/main/referral/referral";
 import type { fetchUserDetailsCookie } from "@/lib/auth/session";
 import type { DeepPartial } from "@/utils/types/storybook";
+import { mocked } from "storybook/test";
+import { serverFn__readOneUser } from "@/integrations/server-function/user";
 
 const meta = {
+  beforeEach: () => {
+    mocked(serverFn__readOneUser).mockResolvedValue(
+      mocked__serverFn__readOneUser() as any,
+    );
+  },
   parameters: {
     tanstack: {
       router: {
@@ -30,9 +42,30 @@ export const ReferralStory: Story = {
   render: () => <Referral />,
 };
 
+export const ReferralCodeStory: Story = {
+  args: {},
+  render: () => <ReferralCode />,
+};
+
+export const ReferralStatsStory: Story = {
+  args: {},
+  render: () => <ReferralStats />,
+};
+
+export const YourReferralsStory: Story = {
+  args: {},
+  render: () => <YourReferrals />,
+};
+
 function contextData__userDetailsFromCookies() {
   return {
     userId: "someid",
     fullName: "Indiglobe IT",
   } satisfies DeepPartial<Awaited<ReturnType<typeof fetchUserDetailsCookie>>>;
+}
+
+function mocked__serverFn__readOneUser() {
+  return { referrals: [] } satisfies DeepPartial<
+    Awaited<ReturnType<typeof serverFn__readOneUser>>
+  >;
 }

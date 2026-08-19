@@ -34,10 +34,10 @@ import { Route as withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport } f
 import { Route as withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/privacy-policy/index'
 import { Route as withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/terms-of-service/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/dashboard/index'
-import { Route as withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/deposit/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/mining/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/referral/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/support-chat/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/wallet/index'
 import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
 
 const withHeaderFooterRouteRoute = withHeaderFooterRouteRouteImport.update({
@@ -184,13 +184,6 @@ const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
     getParentRoute: () =>
       withoutHeaderFooterauthenticatedexistingUserRouteRoute,
   } as any)
-const withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute =
-  withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport.update({
-    id: '/deposit/',
-    path: '/deposit/',
-    getParentRoute: () =>
-      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
-  } as any)
 const withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute =
   withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport.update({
     id: '/mining/',
@@ -214,6 +207,13 @@ const withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute =
         withoutHeaderFooterauthenticatedexistingUserRouteRoute,
     } as any,
   )
+const withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport.update({
+    id: '/wallet/',
+    path: '/wallet/',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
 const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
   withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
     id: '/welcome/',
@@ -243,10 +243,10 @@ export interface FileRoutesByFullPath {
   '/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
+  '/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -271,10 +271,10 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/deposit': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/mining': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/referral': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/support-chat': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
+  '/wallet': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/welcome': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRoutesById {
@@ -304,10 +304,10 @@ export interface FileRoutesById {
   '/(without-header-footer)/(leagal-pages)/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/(without-header-footer)/(leagal-pages)/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/(without-header-footer)/(authenticated)/(existing-user)/deposit/': typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/(without-header-footer)/(authenticated)/(new-user)/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
 }
 export interface FileRouteTypes {
@@ -334,10 +334,10 @@ export interface FileRouteTypes {
     | '/privacy-policy/'
     | '/terms-of-service/'
     | '/dashboard/'
-    | '/deposit/'
     | '/mining/'
     | '/referral/'
     | '/support-chat/'
+    | '/wallet/'
     | '/welcome/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -362,10 +362,10 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-of-service'
     | '/dashboard'
-    | '/deposit'
     | '/mining'
     | '/referral'
     | '/support-chat'
+    | '/wallet'
     | '/welcome'
   id:
     | '__root__'
@@ -394,10 +394,10 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(leagal-pages)/privacy-policy/'
     | '/(without-header-footer)/(leagal-pages)/terms-of-service/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
-    | '/(without-header-footer)/(authenticated)/(existing-user)/deposit/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/wallet/'
     | '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
   fileRoutesById: FileRoutesById
 }
@@ -588,13 +588,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
     }
-    '/(without-header-footer)/(authenticated)/(existing-user)/deposit/': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)/deposit/'
-      path: '/deposit'
-      fullPath: '/deposit/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
-    }
     '/(without-header-footer)/(authenticated)/(existing-user)/mining/': {
       id: '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
       path: '/mining'
@@ -614,6 +607,13 @@ declare module '@tanstack/react-router' {
       path: '/support-chat'
       fullPath: '/support-chat/'
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/wallet/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/wallet/'
+      path: '/wallet'
+      fullPath: '/wallet/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
     }
     '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
@@ -675,24 +675,24 @@ const withHeaderFooterRouteRouteWithChildren =
 
 interface withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren {
   withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute
   withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
   withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
   withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
 }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren =
   {
     withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute,
-    withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute:
-      withoutHeaderFooterauthenticatedexistingUserDepositIndexRoute,
     withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute,
     withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute,
     withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute,
   }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren =

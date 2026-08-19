@@ -19,6 +19,10 @@ export function RouteTabs({ className, ...props }: ComponentProps<"div">) {
             Dashboard
           </TabButton>
 
+          <TabButton to="/wallet" activationLinks={["/wallet/", "/wallet"]}>
+            Wallet
+          </TabButton>
+
           <TabButton to="/mining" activationLinks={["/mining/", "/mining"]}>
             Mining
           </TabButton>
