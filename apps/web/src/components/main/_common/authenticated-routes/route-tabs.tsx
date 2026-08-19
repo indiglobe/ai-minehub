@@ -11,7 +11,7 @@ export function RouteTabs({ className, ...props }: ComponentProps<"div">) {
         className={cn("w-full scrollbar-none overflow-x-auto pb-4", className)}
         {...props}
       >
-        <div className="flex min-w-max gap-2 rounded-2xl border border-white/10 bg-white/5 p-1.5">
+        <div className="flex min-w-max justify-between gap-1 rounded-2xl border border-white/10 bg-white/5 p-1.5 *:grow">
           <TabButton
             to="/dashboard"
             activationLinks={["/dashboard/", "/dashboard"]}

@@ -1,16 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
+import Main from "@/components/main/main";
+import Referral from "@/components/main/referral/referral";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  '/(without-header-footer)/(authenticated)/(existing-user)/referral/',
+  "/(without-header-footer)/(authenticated)/(existing-user)/referral/",
 )({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
-    <div>
-      Hello
-      "/(without-header-footer)/(authenticated)/(existing-user)/referral/"!
-    </div>
-  )
+    <Main>
+      <Referral />
+    </Main>
+  );
 }
