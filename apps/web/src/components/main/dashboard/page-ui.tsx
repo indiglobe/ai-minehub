@@ -146,12 +146,17 @@ export function ProgressBar({
   );
 }
 
-export function ActiveDenoteBadge() {
+export function ActiveDenoteBadge({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        `ml-auto flex max-h-max max-w-max items-center space-x-1 rounded-full border border-green-500/50 bg-green-500/20 px-3 py-1`,
+        `flex max-h-max max-w-max items-center space-x-1 rounded-full border border-green-500/50 bg-green-500/20 px-3 py-1`,
+        className,
       )}
+      {...props}
       data-slot={`active-denote-badge`}
     >
       <span className={cn(`inline-block size-2 rounded-full bg-green-500`)} />

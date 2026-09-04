@@ -27,6 +27,7 @@ export function useFetchReferrals() {
             },
             joinOptions: {
               referrals: true,
+              referredBy: true,
             },
           },
         }),

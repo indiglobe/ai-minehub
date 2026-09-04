@@ -36,7 +36,7 @@ export function useFetchActiveMiningSessions() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -73,7 +73,7 @@ export function useInvestmentData() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -162,7 +162,7 @@ export function useMiningOrdersData() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -187,7 +187,7 @@ export function useFetchMiningWallet() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -226,7 +226,7 @@ export function useFetchTradingWallet() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -265,7 +265,7 @@ export function useTradingOrdersData() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   return useQuery(
@@ -291,7 +291,7 @@ export function useRecentTransactionsHistory() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   type TRespose = {

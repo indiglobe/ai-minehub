@@ -11,6 +11,7 @@ import {
   MiningProfileTable,
   TradingOrderTable,
 } from "../schema";
+import { eq } from "drizzle-orm";
 
 /* -------------------------------------------------------- */
 /*                          HELPERS                         */
@@ -58,7 +59,7 @@ async function seedUsers() {
     return {
       age: faker.number.int({ min: 18, max: 80 }),
       avatarUrl: faker.image.avatar(),
-      email: `${fullName.toLowerCase()}-${idx}@email.com`,
+      email: `${fullName.toLowerCase().split(" ").join("-")}-${idx}@email.com`,
       phoneNumber: Math.floor(Math.random() * 10000000000).toString(),
       fullName,
     };
@@ -68,19 +69,16 @@ async function seedUsers() {
 
   const users = await db.select().from(UserTable);
 
-  const updatedUsers = users.map<typeof UserTable.$inferInsert>((u) => {
-    return {
-      ...u,
-      referrerId:
-        users[Math.floor(Math.random() * users.length)]?.id === u.id
-          ? undefined
-          : users[Math.floor(Math.random() * users.length)]?.id,
-    };
+  users.forEach(async (u) => {
+    const randomSelectedUser = users[randomInt(0, users.length - 1)];
+
+    if (randomSelectedUser && randomSelectedUser.id !== u.id) {
+      await db
+        .update(UserTable)
+        .set({ referrerId: randomSelectedUser.id })
+        .where(eq(UserTable.id, u.id));
+    }
   });
-
-  await db.delete(UserTable);
-
-  await db.insert(UserTable).values([...updatedUsers]);
 
   console.log("✅ UserTable seeded");
 }

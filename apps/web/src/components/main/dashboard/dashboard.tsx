@@ -21,7 +21,7 @@ import {
   Progress,
   ProgressBar,
   ProgressStat,
-} from "@/components/main/dashboard/dashboard-uis";
+} from "@/components/main/dashboard/page-ui";
 import { Button } from "@repo/ui/button";
 import { env } from "@repo/env/client";
 
@@ -247,31 +247,40 @@ export function ActiveMiningSession({
                     key={activeSession.id}
                     className={cn(
                       `bg-foreground/5 border-foreground/10 space-y-4 rounded-md border px-4 py-4`,
+                      `@container`,
                     )}
                   >
-                    <div className={cn(`flex w-full gap-4`)}>
+                    <div
+                      className={cn(`flex w-full flex-col gap-4 @md:flex-row`)}
+                    >
                       <div
                         className={cn(
-                          `from-primary-500/30 to-secondary-500/30 flex size-10 items-center justify-center rounded-md bg-linear-to-r`,
+                          `flex flex-row flex-wrap items-center gap-4`,
                         )}
                       >
-                        ⛏️
+                        <div
+                          className={cn(
+                            `from-primary-500/30 to-secondary-500/30 flex size-10 items-center justify-center rounded-md bg-linear-to-r`,
+                          )}
+                        >
+                          ⛏️
+                        </div>
+
+                        <div>
+                          <h2 className={cn(`font-semibold`)}>
+                            {activeSession.miningProfile.category}
+                          </h2>
+
+                          <p className={cn(`text-foreground/50 text-xs`)}>
+                            Started {extractMonthName(activeSession.createdAt)}{" "}
+                            {activeSession.createdAt.getDate()}
+                            {", "}
+                            {activeSession.createdAt.getFullYear()}
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <h2 className={cn(`font-semibold`)}>
-                          {activeSession.miningProfile.category}
-                        </h2>
-
-                        <p className={cn(`text-foreground/50 text-xs`)}>
-                          Started {extractMonthName(activeSession.createdAt)}{" "}
-                          {activeSession.createdAt.getDate()}
-                          {", "}
-                          {activeSession.createdAt.getFullYear()}
-                        </p>
-                      </div>
-
-                      <ActiveDenoteBadge />
+                      <ActiveDenoteBadge className={cn(`@md:ml-auto`)} />
                     </div>
 
                     <Progress>
@@ -594,7 +603,7 @@ export function InviteEarn({ className, ...props }: ComponentProps<"section">) {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   const referralLink = new URL(

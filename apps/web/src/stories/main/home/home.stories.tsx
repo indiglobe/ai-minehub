@@ -9,6 +9,8 @@ import type { DeepPartial } from "@/utils/types/storybook";
 import type { serverFn__readAllRatings } from "@/integrations/server-function/rating";
 import type { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
 import type { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import { mocked__serverFn__readAllRatings } from "@/integrations/storybook/mock/rating.mock";
+import { mocked__serverFn__readAllMiningProfiles } from "@/integrations/storybook/mock/mining-profile.mock";
 
 const meta = {
   parameters: {
@@ -46,58 +48,9 @@ export const PassiveIncomeSectionStory: Story = {
 
 function routeLoader() {
   return {
-    allRatings: new Promise((res) => res([])),
+    allRatings: new Promise((res) => res(mocked__serverFn__readAllRatings())),
     allMiningProfiles: new Promise((res) =>
-      res([
-        {
-          id: "21fb49a3ac",
-          maximumAllowedAmount: 399,
-          minimumAllowedAmount: 299,
-          lockinPeriod: 90,
-          category: "Considero vinum.",
-          dailyReturn: 0.25,
-          isPopular: true,
-          createdAt: "2026-08-11 10:25:21.615000",
-          updatedAt: "2026-08-11 10:25:21.615000",
-          tableIdentifierToken: "MPRO",
-        },
-        {
-          id: "879e7fb30f",
-          maximumAllowedAmount: 399,
-          minimumAllowedAmount: 299,
-          lockinPeriod: 30,
-          category: "Deludo conicio.",
-          dailyReturn: 0.8,
-          isPopular: false,
-          createdAt: "2026-08-11 10:25:21.615000",
-          updatedAt: "2026-08-11 10:25:21.615000",
-          tableIdentifierToken: "MPRO",
-        },
-        {
-          id: "b60d41e4a9",
-          maximumAllowedAmount: 499,
-          minimumAllowedAmount: 399,
-          lockinPeriod: 30,
-          category: "Trans.",
-          dailyReturn: 0.06,
-          isPopular: false,
-          createdAt: "2026-08-11 10:25:21.615000",
-          updatedAt: "2026-08-11 10:25:21.615000",
-          tableIdentifierToken: "MPRO",
-        },
-        {
-          id: "ec205152b8",
-          maximumAllowedAmount: 499,
-          minimumAllowedAmount: 399,
-          lockinPeriod: 90,
-          category: "Vesper.",
-          dailyReturn: 0.65,
-          isPopular: false,
-          createdAt: "2026-08-11 10:25:21.615000",
-          updatedAt: "2026-08-11 10:25:21.615000",
-          tableIdentifierToken: "MPRO",
-        },
-      ]),
+      res(mocked__serverFn__readAllMiningProfiles()),
     ),
     allMiningOrders: new Promise((res) =>
       res([

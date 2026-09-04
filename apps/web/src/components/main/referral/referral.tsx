@@ -8,7 +8,7 @@ import {
   ReferralStatDescription,
   ReferralStatHeading,
   ReferralStatIcon,
-} from "./referral-ui";
+} from "./page-ui";
 import { useFetchReferrals } from "@/integrations/tanstack/react-querry/referrals/referrals";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@repo/ui/table";
 import { Image } from "@unpic/react";
@@ -20,6 +20,60 @@ export function Referral() {
       <ReferralCode />
       <YourReferrals />
     </>
+  );
+}
+
+export function ReferralStats({
+  className,
+  ...props
+}: ComponentProps<"section">) {
+  const { data, isLoading, isError } = useFetchReferrals();
+
+  return (
+    <section
+      className={cn(`default-padding w-full`, `@container pb-20`, className)}
+      {...props}
+    >
+      <div
+        className={cn(
+          `flex w-full flex-col items-center justify-center gap-4 @lg:flex-row`,
+        )}
+      >
+        <ReferralStatCard>
+          <ReferralStatIcon>👥</ReferralStatIcon>
+          <ReferralStatHeading>
+            {isLoading && (
+              <span className={cn(`text-foreground/50`)}>loading...</span>
+            )}
+            {isError && (
+              <span className={cn(`text-foreground/50`)}>error!!!</span>
+            )}
+            {data && <span>{data.referrals.length}</span>}
+          </ReferralStatHeading>
+          <ReferralStatDescription>Total Referrals</ReferralStatDescription>
+        </ReferralStatCard>
+
+        <ReferralStatCard>
+          <ReferralStatIcon>💰</ReferralStatIcon>
+          <ReferralStatHeading>
+            {isLoading && (
+              <span className={cn(`text-foreground/50`)}>loading...</span>
+            )}
+            {isError && (
+              <span className={cn(`text-foreground/50`)}>error!!!</span>
+            )}
+            {data && <span>${data.referrals.length * 10}</span>}
+          </ReferralStatHeading>
+          <ReferralStatDescription>Referral Earnings</ReferralStatDescription>
+        </ReferralStatCard>
+
+        <ReferralStatCard>
+          <ReferralStatIcon>🎁</ReferralStatIcon>
+          <ReferralStatHeading>10%</ReferralStatHeading>
+          <ReferralStatDescription>Commission Rate</ReferralStatDescription>
+        </ReferralStatCard>
+      </div>
+    </section>
   );
 }
 
@@ -71,7 +125,7 @@ export function ReferralCode({
 
       <div
         className={cn(
-          `from-secondary-500/20 to-primary-500/20 border-foreground/20 space-y-8 rounded-3xl border bg-linear-to-br p-8 text-center`,
+          `from-secondary-500/20 to-primary-500/20 border-foreground/20 w-full space-y-8 rounded-3xl border bg-linear-to-br px-4 py-8 text-center md:px-8 @lg:max-w-[70svw]`,
         )}
       >
         <div className={cn(``)}>
@@ -119,13 +173,15 @@ export function ReferralCode({
 
           <hr className={cn(`border-foreground/20 border`)} />
 
-          <div>
+          <div className={cn(`@container`)}>
             <p className={cn(`text-foreground/50 pb-8 text-xs`)}>
               Or share your referral link
             </p>
 
             <div
-              className={cn(`flex flex-col items-center justify-center gap-4`)}
+              className={cn(
+                `flex flex-col items-center justify-center gap-4 @md:flex-row`,
+              )}
             >
               <span className={cn(`text-foreground/50`)}>
                 {env.VITE_WEB_APP_HOST}
@@ -133,7 +189,7 @@ export function ReferralCode({
               </span>
               <Button
                 variant={"secondary"}
-                className={cn(`h-12 w-full rounded-xl bg-purple-500`)}
+                className={cn(`h-12 w-full rounded-xl bg-purple-500 @md:w-max`)}
                 onClick={copyReferralLink}
               >
                 🔗 Copy Link
@@ -146,67 +202,13 @@ export function ReferralCode({
   );
 }
 
-export function ReferralStats({
-  className,
-  ...props
-}: ComponentProps<"section">) {
-  const { data, isLoading, isError } = useFetchReferrals();
-
-  console.log();
-
-  return (
-    <section
-      className={cn(`default-padding w-full`, `@container pb-20`, className)}
-      {...props}
-    >
-      <div
-        className={cn(
-          `flex w-full flex-col items-center justify-center gap-4 @lg:flex-row`,
-        )}
-      >
-        <ReferralStatCard>
-          <ReferralStatIcon>👥</ReferralStatIcon>
-          <ReferralStatHeading>
-            {isLoading && (
-              <span className={cn(`text-foreground/50`)}>loading...</span>
-            )}
-            {isError && (
-              <span className={cn(`text-foreground/50`)}>error!!!</span>
-            )}
-            {data && <span>{data.referrals.length}</span>}
-          </ReferralStatHeading>
-          <ReferralStatDescription>Total Referrals</ReferralStatDescription>
-        </ReferralStatCard>
-
-        <ReferralStatCard>
-          <ReferralStatIcon>💰</ReferralStatIcon>
-          <ReferralStatHeading>
-            {isLoading && (
-              <span className={cn(`text-foreground/50`)}>loading...</span>
-            )}
-            {isError && (
-              <span className={cn(`text-foreground/50`)}>error!!!</span>
-            )}
-            {data && <span>${data.referrals.length * 10}</span>}
-          </ReferralStatHeading>
-          <ReferralStatDescription>Referral Earnings</ReferralStatDescription>
-        </ReferralStatCard>
-
-        <ReferralStatCard>
-          <ReferralStatIcon>🎁</ReferralStatIcon>
-          <ReferralStatHeading>10%</ReferralStatHeading>
-          <ReferralStatDescription>Commission Rate</ReferralStatDescription>
-        </ReferralStatCard>
-      </div>
-    </section>
-  );
-}
-
 export function YourReferrals({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data, isLoading, isError } = useFetchReferrals();
+  const { data, isLoading, isError , error} = useFetchReferrals();
+
+  console.log(error)
 
   return (
     <section className={cn(`default-padding pb-20`, className)} {...props}>
@@ -274,7 +276,7 @@ export function YourReferrals({
             </div>
           )}
           {data.referrals.length > 0 && (
-            <div>
+            <div className={cn(`overflow-x-auto`)}>
               <Table
                 className={cn(
                   `w-full border-collapse overflow-hidden rounded-xl border border-slate-700`,
@@ -289,6 +291,7 @@ export function YourReferrals({
                     <Th>Avatar</Th>
                     <Th>Name</Th>
                     <Th>Email</Th>
+                    <Th>Your bonus</Th>
                   </Tr>
                 </Thead>
 
@@ -301,18 +304,23 @@ export function YourReferrals({
                           `*:data-[table-cell=ask]:text-sm *:data-[table-cell=bid]:text-sm *:data-[table-cell=change]:text-sm`,
                         )}
                       >
-                        <Td
-                          data-table-cell="avatarUrl"
-                          className={cn(`font-medium`)}
-                        >
-                          <Image
-                            src={avatarUrl}
-                            alt={`avatarImage of ${fullName}`}
-                            layout="fullWidth"
-                          />
+                        <Td data-table-cell="avatarUrl" className={cn(``)}>
+                          <span
+                            className={cn(
+                              `relative inline-block size-10 overflow-clip rounded-full`,
+                            )}
+                          >
+                            <Image
+                              src={avatarUrl}
+                              alt={`avatarImage of ${fullName}`}
+                              layout="fullWidth"
+                              className={cn(`absolute inset-0`)}
+                            />
+                          </span>
                         </Td>
                         <Td data-table-cell="fullName">{fullName}</Td>
                         <Td data-table-cell="email">{email}</Td>
+                        <Td data-table-cell="bonus">$10</Td>
                       </Tr>
                     );
                   })}

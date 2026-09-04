@@ -16,14 +16,14 @@ import {
   StatCardHeadingIcon,
   StatCardData,
   StatCardFooter,
-} from "./dashboard-uis";
+} from "./page-ui";
 
 export function MiningWallet() {
   const { userDetailsFromCookie } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
-  const { mutate } = useCreateMiningWallet();
+  const { mutate: createMiningWallet } = useCreateMiningWallet();
   const { data: miningWallet, isError, isLoading } = useFetchMiningWallet();
 
   return (
@@ -64,7 +64,7 @@ export function MiningWallet() {
           variant="secondary"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
           onClick={() =>
-            mutate({
+            createMiningWallet({
               data: {
                 associatedUser: userDetailsFromCookie.userId,
               },
@@ -90,7 +90,7 @@ export function MiningWallet() {
 
 export function TradingWallet() {
   const { userDetailsFromCookie } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/dashboard/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
   const { mutate } = useCreateTradingWallet();

@@ -158,7 +158,9 @@ async function seedNews() {
     typeof NewsTable.$inferInsert
   >(() => {
     return {
-      details: faker.lorem.paragraphs({ min: 3, max: 6 }, "\n\n"),
+      details: faker.lorem
+        .paragraphs({ min: 3, max: 6 }, "\n\n")
+        .slice(0, 1023),
       effectiveDate:
         Math.random() > 0.5 ? faker.date.future() : faker.date.past(),
       heading: faker.lorem.sentence(),

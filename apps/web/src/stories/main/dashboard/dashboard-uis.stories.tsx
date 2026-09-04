@@ -5,7 +5,7 @@ import {
   StatCardHeader,
   StatCardHeadingIcon,
   StatCardHeadingText,
-} from "@/components/main/dashboard/dashboard-uis";
+} from "@/components/main/dashboard/page-ui";
 import type {
   TypedMetaOptions,
   TypedStoryOptions,
@@ -29,7 +29,6 @@ function StatCardComp() {
 }
 
 const meta = {
-  component: StatCardComp,
   parameters: {
     layout: "centered",
   },
@@ -41,4 +40,5 @@ type Story = StoryObj<typeof StatCardComp> & TypedStoryOptions;
 
 export const StatCardCompStory: Story = {
   args: {},
+  render: () => <StatCardComp />,
 };

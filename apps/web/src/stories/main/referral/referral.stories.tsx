@@ -65,7 +65,13 @@ function contextData__userDetailsFromCookies() {
 }
 
 function mocked__serverFn__readOneUser() {
-  return { referrals: [] } satisfies DeepPartial<
-    Awaited<ReturnType<typeof serverFn__readOneUser>>
-  >;
+  return {
+    referrals: [
+      {
+        avatarUrl: "https://avatars.githubusercontent.com/u/93200363",
+        fullName: "Some Name",
+        email: "somename@email.com",
+      },
+    ],
+  } satisfies DeepPartial<Awaited<ReturnType<typeof serverFn__readOneUser>>>;
 }

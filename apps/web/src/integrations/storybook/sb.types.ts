@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { DecoratorFunction } from "storybook/internal/csf";
 
 /**
@@ -40,6 +41,11 @@ type TypedMetaOptions = Partial<{
    * - `"!autodocs"` Disables automatic documentation generation.
    */
   tags: Array<"autodocs" | "!autodocs">;
+
+  /**
+   * The component to render for this story.
+   */
+  // component: Element | (() => Element);
 }>;
 
 /**

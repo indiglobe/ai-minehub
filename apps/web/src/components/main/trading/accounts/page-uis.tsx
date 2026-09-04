@@ -10,6 +10,7 @@ export function AccountsCards({ className, ...props }: ComponentProps<"div">) {
         `hover:shadow-primary-500/10`,
         className,
       )}
+      data-slot={`accounts-cards`}
       {...props}
     />
   );
@@ -26,6 +27,7 @@ export function AccountsCardsIcon({
         `*:text-red-400`,
         className,
       )}
+      data-slot={`accounts-cards-icon`}
       {...props}
     />
   );
@@ -41,6 +43,7 @@ export function AccountsCardsHeading({
         `font-brand-secondary text-center text-xl font-semibold md:text-2xl`,
         className,
       )}
+      data-slot={`accounts-cards-heading`}
       {...props}
     />
   );
@@ -53,6 +56,7 @@ export function AccountsCardsSubHeading({
   return (
     <h3
       className={cn(`text-foreground/60 text-center text-sm`, className)}
+      data-slot={`accounts-cards-sub-heading`}
       {...props}
     />
   );
@@ -75,6 +79,7 @@ export function AccountsCardsOfferingItem({
         `border-b-foreground/10 flex items-center justify-between border-b py-3 last:border-b-0`,
         className,
       )}
+      data-slot={`accounts-cards-offering-list`}
       {...props}
     />
   );
@@ -90,6 +95,7 @@ export function AccountsCardsPopulerBadge({
         `bg-secondary-400 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-1 text-xs font-semibold`,
         className,
       )}
+      data-slot={`accounts-cards-populer-badge`}
       {...props}
     >
       ⭐ Most Popular
