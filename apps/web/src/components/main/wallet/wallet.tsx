@@ -1,11 +1,64 @@
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
+import { useState } from "react";
+import { DepositForm } from "./deposit-form";
+import { WithdrawForm } from "./withdraw=form";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
+  const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
+
   return (
     <section className={cn(``, className)} {...props}>
       <WalletHeading />
       <WalletBalance />
+
+      <section
+        className={cn(
+          `w-full bg-background px-4 pb-20 3xs:px-5 sm:px-8 md:px-10`,
+        )}
+      >
+        <div className={cn(`mx-auto w-full max-w-200`)}>
+          <div
+            className={cn(
+              `grid w-full grid-cols-2 gap-1 rounded-xl border p-1 border-secondary-200/20 bg-secondary-50/30 dark:border-secondary-200/30 dark:bg-secondary-50/20`,
+            )}
+          >
+            <button
+              type="button"
+              onClick={() => setActiveTab("deposit")}
+              className={cn(
+                `flex h-12 items-center justify-center gap-2.5 rounded-lg font-brand-primary text-sm font-semibold transition-all duration-300`,
+                activeTab === "deposit"
+                  ? `bg-primary-600 text-white shadow-[0_0_50px_var]`
+                  : `text-100/50 hover:bg-secondary-50/20 `,
+              )}
+            >
+              <span className="text-base">💎</span>
+              <span>Deposit</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("withdraw")}
+              className={cn(
+                `flex h-12 items-center justify-center gap-2.5 rounded-lg font-brand-primary text-sm font-semibold transition-all duration-300`,
+                activeTab === "withdraw"
+                  ? `bg-primary-600 text-white shadow-[0_0_50px_var]`
+                  : `text-/50 hover:bg-secondary-50/20`,
+              )}
+            >
+              <span className="text-base">📤</span>
+              <span>Withdraw</span>
+            </button>
+          </div>
+
+          <div className={cn(`mt-4`)}>
+            {activeTab === "deposit" && <DepositForm />}
+
+            {activeTab === "withdraw" && <WithdrawForm />}
+          </div>
+        </div>
+      </section>
     </section>
   );
 }
@@ -70,7 +123,7 @@ export function WalletBalance({
       >
         <div
           className={cn(
-            `flex min-h-45 flex-col justify-center rounded-4xl border border-[#1c2d4a] bg-[#0d1729] px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
+            `flex min-h-45 flex-col justify-center rounded-4xl border border-secondary-200/20 bg-secondary-50/30 px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10 dark:border-secondary-200/30 dark:bg-secondary-50/25`,
           )}
         >
           <p
@@ -92,7 +145,7 @@ export function WalletBalance({
 
         <div
           className={cn(
-            `flex min-h-45 flex-col justify-center rounded-4xl border border-[#1c2d4a] bg-[#0d1729] px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
+            `flex min-h-45 flex-col justify-center rounded-4xl border border-secondary-200/20 bg-secondary-50/30 px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10 dark:border-secondary-200/30 dark:bg-secondary-50/25`,
           )}
         >
           <p
@@ -105,7 +158,7 @@ export function WalletBalance({
 
           <h2
             className={cn(
-              `mt-6 font-brand-primary text-4xl leading-none font-semibold tracking-tight text-[#9b63ff] 3xs:text-4.5xl sm:text-5xl`,
+              `mt-6 font-brand-primary text-4xl leading-none font-semibold tracking-tight text-primary-500 3xs:text-4.5xl sm:text-5xl`,
             )}
           >
             $0.00
