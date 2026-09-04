@@ -1,3 +1,4 @@
+import { Wallet } from "@/components/main/wallet/wallet";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -8,8 +9,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <div>
-      Hello "/(without-header-footer)/(authenticated)/(existing-user)/wallet/"!
-    </div>
+    <>
+      <Wallet/>
+    </>
   );
 }

@@ -48,16 +48,48 @@ export function MiningBalance({
 
   return (
     <section
-      className={cn(`default-padding space-y-6 text-center`, className)}
+      className={cn(`default-padding`, className)}
       {...props}
     >
       {isError && <>isError</>}
       {isLoading && <>isLoading</>}
 
-      <div className={cn(`bg-foreground/10`)}>
-        <h2>Mining wallet</h2>
-        <p>{miningWalletInfo && <>miningWalletInfo</>}</p>
-      </div>
+      {!isError && !isLoading && (
+        <div
+          className={cn(
+            `flex min-h-38 w-full items-center justify-between rounded-2xl border border-foreground/10 bg-[#111118] px-8 py-7 3xs:px-6 md:px-8`,
+          )}
+        >
+          <div className={cn(`space-y-3 text-left`)}>
+            <p
+              className={cn(
+                `text-sm font-medium text-foreground/70 md:text-base`,
+              )}
+            >
+              Mining Balance
+            </p>
+
+            <h2
+              className={cn(
+                `font-brand-primary text-3xl font-semibold tracking-wide text-[#6268ff] md:text-4xl`,
+              )}
+            >
+              $987.00
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            className={cn(
+              `flex items-center justify-center gap-3 rounded-xl px-6 py-4 bg-linear-to-r from-[#626ee7] to-[#7849b7] text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:brightness-110 active:scale-95 md:px-7 md:text-base`,
+            )}
+          >
+            <span className={cn(`text-2xl leading-none font-light`)}>+</span>
+
+            <span>Deposit</span>
+          </button>
+        </div>
+      )}
     </section>
   );
 }
