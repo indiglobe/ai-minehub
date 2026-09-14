@@ -3,6 +3,10 @@ import type { ComponentProps } from "react";
 import { useState } from "react";
 import { DepositForm } from "./deposit-form";
 import { WithdrawForm } from "./withdraw=form";
+import {
+  useFetchMiningWallet,
+  useFetchTradingWallet,
+} from "../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
@@ -14,23 +18,23 @@ export function Wallet({ className, ...props }: ComponentProps<"section">) {
 
       <section
         className={cn(
-          `w-full bg-background px-4 pb-20 3xs:px-5 sm:px-8 md:px-10`,
+          `bg-background 3xs:px-5 w-full px-4 pb-20 sm:px-8 md:px-10`,
         )}
       >
         <div className={cn(`mx-auto w-full max-w-200`)}>
           <div
             className={cn(
-              `grid w-full grid-cols-2 gap-1 rounded-xl border p-1 border-secondary-200/20 bg-secondary-50/30 dark:border-secondary-200/30 dark:bg-secondary-50/20`,
+              `border-secondary-200/20 bg-secondary-50/30 dark:border-secondary-200/30 dark:bg-secondary-50/20 grid w-full grid-cols-2 gap-1 rounded-xl border p-1`,
             )}
           >
             <button
               type="button"
               onClick={() => setActiveTab("deposit")}
               className={cn(
-                `flex h-12 items-center justify-center gap-2.5 rounded-lg font-brand-primary text-sm font-semibold transition-all duration-300`,
+                `font-brand-primary flex h-12 items-center justify-center gap-2.5 rounded-lg text-sm font-semibold transition-all duration-300`,
                 activeTab === "deposit"
                   ? `bg-primary-600 text-white shadow-[0_0_50px_var]`
-                  : `text-100/50 hover:bg-secondary-50/20 `,
+                  : `text-100/50 hover:bg-secondary-50/20`,
               )}
             >
               <span className="text-base">💎</span>
@@ -41,7 +45,7 @@ export function Wallet({ className, ...props }: ComponentProps<"section">) {
               type="button"
               onClick={() => setActiveTab("withdraw")}
               className={cn(
-                `flex h-12 items-center justify-center gap-2.5 rounded-lg font-brand-primary text-sm font-semibold transition-all duration-300`,
+                `font-brand-primary flex h-12 items-center justify-center gap-2.5 rounded-lg text-sm font-semibold transition-all duration-300`,
                 activeTab === "withdraw"
                   ? `bg-primary-600 text-white shadow-[0_0_50px_var]`
                   : `text-/50 hover:bg-secondary-50/20`,
@@ -70,7 +74,7 @@ export function WalletHeading({
   return (
     <section
       className={cn(
-        `flex w-full items-center justify-center bg-background px-4 py-10 3xs:px-5 3xs:py-12 sm:px-8 sm:py-14 md:min-h-53 md:px-10 md:py-16`,
+        `bg-background 3xs:px-5 3xs:py-12 flex w-full items-center justify-center px-4 py-10 sm:px-8 sm:py-14 md:min-h-53 md:px-10 md:py-16`,
         className,
       )}
       {...props}
@@ -78,12 +82,12 @@ export function WalletHeading({
       <div className="flex w-full max-w-4xl flex-col items-center text-center">
         <h1
           className={cn(
-            `flex flex-col items-center justify-center gap-3 font-brand-primary text-2xl leading-tight font-bold tracking-tight text-foreground 3xs:text-3xl sm:flex-row sm:gap-4 sm:text-4xl md:text-10.5 md:leading-none`,
+            `font-brand-primary text-foreground 3xs:text-3xl md:text-10.5 flex flex-col items-center justify-center gap-3 text-2xl leading-tight font-bold tracking-tight sm:flex-row sm:gap-4 sm:text-4xl md:leading-none`,
           )}
         >
           <span
             className={cn(
-              `text-3xl leading-none 3xs:text-4xl sm:text-10.5 md:text-11.5`,
+              `3xs:text-4xl sm:text-10.5 md:text-11.5 text-3xl leading-none`,
             )}
           >
             💰
@@ -94,7 +98,7 @@ export function WalletHeading({
 
         <p
           className={cn(
-            `mt-4 max-w-180 px-2 font-brand-primary text-sm leading-6 font-medium text-foreground/50 3xs:text-3.75 sm:mt-5 sm:text-base md:mt-6 md:text-4.75`,
+            `font-brand-primary text-foreground/50 3xs:text-3.75 md:text-4.75 mt-4 max-w-180 px-2 text-sm leading-6 font-medium sm:mt-5 sm:text-base md:mt-6`,
           )}
         >
           Manage your funds securely with instant cryptocurrency deposits
@@ -108,10 +112,21 @@ export function WalletBalance({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const {
+    data: miningWalletData,
+    isLoading: isMiningWalletLoading,
+    isError: isMiningWalletError,
+  } = useFetchMiningWallet();
+  const {
+    data: tradingWalletData,
+    isLoading: isTradingWalletLoading,
+    isError: isTradingWalletError,
+  } = useFetchTradingWallet();
+
   return (
     <section
       className={cn(
-        `w-full bg-background px-4 pb-10 3xs:px-5 sm:px-8 md:px-10 md:pb-14`,
+        `bg-background 3xs:px-5 w-full px-4 pb-10 sm:px-8 md:px-10 md:pb-14`,
         className,
       )}
       {...props}
@@ -123,12 +138,12 @@ export function WalletBalance({
       >
         <div
           className={cn(
-            `flex min-h-45 flex-col justify-center rounded-4xl border border-secondary-200/20 bg-secondary-50/30 px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10 dark:border-secondary-200/30 dark:bg-secondary-50/25`,
+            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
           )}
         >
           <p
             className={cn(
-              `font-brand-primary text-sm font-semibold tracking-wide text-foreground/50 uppercase sm:text-base`,
+              `font-brand-primary text-foreground/50 text-sm font-semibold tracking-wide uppercase sm:text-base`,
             )}
           >
             Mining Wallet
@@ -136,21 +151,23 @@ export function WalletBalance({
 
           <h2
             className={cn(
-              `mt-6 font-brand-primary text-4xl leading-none font-semibold tracking-tight text-secondary-500 3xs:text-4.5xl sm:text-5xl`,
+              `font-brand-primary text-secondary-500 3xs:text-4.5xl mt-6 text-4xl leading-none font-semibold tracking-tight sm:text-5xl`,
             )}
           >
-            $987.00
+            {isMiningWalletError && <span>Error...</span>}
+            {isMiningWalletLoading && <span>Loading...</span>}
+            {miningWalletData && <>${miningWalletData.balance}</>}
           </h2>
         </div>
 
         <div
           className={cn(
-            `flex min-h-45 flex-col justify-center rounded-4xl border border-secondary-200/20 bg-secondary-50/30 px-6 py-8 3xs:px-7 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10 dark:border-secondary-200/30 dark:bg-secondary-50/25`,
+            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
           )}
         >
           <p
             className={cn(
-              `font-brand-primary text-sm font-semibold tracking-wide text-foreground/50 uppercase sm:text-base`,
+              `font-brand-primary text-foreground/50 text-sm font-semibold tracking-wide uppercase sm:text-base`,
             )}
           >
             Trading Wallet
@@ -158,10 +175,12 @@ export function WalletBalance({
 
           <h2
             className={cn(
-              `mt-6 font-brand-primary text-4xl leading-none font-semibold tracking-tight text-primary-500 3xs:text-4.5xl sm:text-5xl`,
+              `font-brand-primary text-primary-500 3xs:text-4.5xl mt-6 text-4xl leading-none font-semibold tracking-tight sm:text-5xl`,
             )}
           >
-            $0.00
+            {isTradingWalletError && <span>Error...</span>}
+            {isTradingWalletLoading && <span>Loading...</span>}
+            {tradingWalletData && <>${tradingWalletData.balance}</>}
           </h2>
         </div>
       </div>

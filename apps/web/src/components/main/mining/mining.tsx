@@ -1,12 +1,17 @@
 import { useFetchMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
+import { ActiveMiningSession } from "../dashboard/dashboard";
 
 export function Mining() {
   return (
     <>
       <MiningHeading />
       <MiningBalance />
+
+      <div className={cn(`default-padding`)}>
+        <ActiveMiningSession />
+      </div>
     </>
   );
 }
@@ -44,26 +49,27 @@ export function MiningBalance({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data: miningWalletInfo, isError, isLoading } = useFetchMiningWallet();
+  const {
+    data: miningWalletData,
+    isError: isMiningWalletError,
+    isLoading: isMiningWalletLoading,
+  } = useFetchMiningWallet();
 
   return (
-    <section
-      className={cn(`default-padding`, className)}
-      {...props}
-    >
-      {isError && <>isError</>}
-      {isLoading && <>isLoading</>}
+    <section className={cn(`default-padding`, className)} {...props}>
+      {isMiningWalletError && <>isMiningWalletError</>}
+      {isMiningWalletLoading && <>isMiningWalletLoading</>}
 
-      {!isError && !isLoading && (
+      {!isMiningWalletError && !isMiningWalletLoading && (
         <div
           className={cn(
-            `flex min-h-38 w-full items-center justify-between rounded-2xl border border-foreground/10 bg-[#111118] px-8 py-7 3xs:px-6 md:px-8`,
+            `border-foreground/10 3xs:px-6 flex min-h-38 w-full items-center justify-between rounded-2xl border bg-[#111118] px-8 py-7 md:px-8`,
           )}
         >
           <div className={cn(`space-y-3 text-left`)}>
             <p
               className={cn(
-                `text-sm font-medium text-foreground/70 md:text-base`,
+                `text-foreground/70 text-sm font-medium md:text-base`,
               )}
             >
               Mining Balance
@@ -74,14 +80,14 @@ export function MiningBalance({
                 `font-brand-primary text-3xl font-semibold tracking-wide text-[#6268ff] md:text-4xl`,
               )}
             >
-              $987.00
+              {miningWalletData && <span>${miningWalletData.balance}</span>}
             </h2>
           </div>
 
           <button
             type="button"
             className={cn(
-              `flex items-center justify-center gap-3 rounded-xl px-6 py-4 bg-linear-to-r from-[#626ee7] to-[#7849b7] text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:brightness-110 active:scale-95 md:px-7 md:text-base`,
+              `flex items-center justify-center gap-3 rounded-xl bg-linear-to-r from-[#626ee7] to-[#7849b7] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:brightness-110 active:scale-95 md:px-7 md:text-base`,
             )}
           >
             <span className={cn(`text-2xl leading-none font-light`)}>+</span>
