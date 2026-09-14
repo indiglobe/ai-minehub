@@ -2,11 +2,11 @@ import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { DepositForm } from "./deposit-form";
-import { WithdrawForm } from "./withdraw=form";
+import { WithdrawForm } from "./withdraw-form";
 import {
   useFetchMiningWallet,
   useFetchTradingWallet,
-} from "../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "../../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
@@ -133,12 +133,12 @@ export function WalletBalance({
     >
       <div
         className={cn(
-          `mx-auto grid w-full max-w-280 grid-cols-1 gap-5 md:grid-cols-2 md:gap-6`,
+          `mx-auto grid w-full max-w-200 grid-cols-1 gap-5 md:grid-cols-2 md:gap-6`,
         )}
       >
         <div
           className={cn(
-            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
+            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 pt-2 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
           )}
         >
           <p
@@ -162,7 +162,7 @@ export function WalletBalance({
 
         <div
           className={cn(
-            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
+            `border-secondary-200/20 bg-secondary-50/30 3xs:px-7 dark:border-secondary-200/30 dark:bg-secondary-50/25 flex min-h-45 flex-col justify-center rounded-4xl border px-6 py-8 pt-2 sm:min-h-48 sm:px-8 md:min-h-50 md:px-10`,
           )}
         >
           <p

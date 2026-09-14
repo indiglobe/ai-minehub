@@ -1,4 +1,4 @@
-import { Wallet } from "@/components/main/wallet/wallet";
+import { Wallet } from "@/components/main/user-dashboard/wallet/wallet";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

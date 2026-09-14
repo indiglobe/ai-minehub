@@ -5,7 +5,7 @@ import {
   StatCardHeader,
   StatCardHeadingIcon,
   StatCardHeadingText,
-} from "@/components/main/dashboard/page-ui";
+} from "@/components/main/user-dashboard/dashboard/page-ui";
 import type {
   TypedMetaOptions,
   TypedStoryOptions,
