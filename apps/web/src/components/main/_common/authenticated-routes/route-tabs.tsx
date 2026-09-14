@@ -4,7 +4,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import type { ComponentProps } from "react";
 
-export function RouteTabs({ className, ...props }: ComponentProps<"div">) {
+export function UserRouteTabs({ className, ...props }: ComponentProps<"div">) {
   return (
     <div className="default-padding">
       <div
@@ -14,29 +14,29 @@ export function RouteTabs({ className, ...props }: ComponentProps<"div">) {
         <div className="flex min-w-max justify-between gap-1 rounded-2xl border border-white/10 bg-white/5 p-1.5 *:grow">
           <TabButton
             to="/dashboard"
-            activationLinks={["/dashboard/", "/dashboard"]}
+            activationLinkShouldStartWith={"dashboard"}
           >
             Dashboard
           </TabButton>
 
-          <TabButton to="/wallet" activationLinks={["/wallet/", "/wallet"]}>
+          <TabButton to="/wallet" activationLinkShouldStartWith={"wallet"}>
             Wallet
           </TabButton>
 
-          <TabButton to="/mining" activationLinks={["/mining/", "/mining"]}>
+          <TabButton to="/mining" activationLinkShouldStartWith={"mining"}>
             Mining
           </TabButton>
 
           <TabButton
             to="/referral"
-            activationLinks={["/referral/", "/referral"]}
+            activationLinkShouldStartWith={"referral"}
           >
             Invite & Earn
           </TabButton>
 
           <TabButton
             to="/support-chat"
-            activationLinks={["/support-chat/", "/support-chat"]}
+            activationLinkShouldStartWith={"support-chat"}
           >
             Support chat
           </TabButton>
@@ -46,22 +46,82 @@ export function RouteTabs({ className, ...props }: ComponentProps<"div">) {
   );
 }
 
+export function AdminRouteTabs({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div className="default-padding">
+      <div
+        className={cn("w-full scrollbar-none overflow-x-auto pb-4", className)}
+        {...props}
+      >
+        <div className="flex min-w-max justify-between gap-1 rounded-2xl border border-white/10 bg-white/5 p-1.5 *:grow">
+          <TabButton
+            to="/dashboard"
+            activationLinkShouldStartWith={"dashboard"}
+          >
+            Dashboard
+          </TabButton>
+
+          <TabButton
+            to="/users"
+            activationLinkShouldStartWith={"users"}
+          >
+            Users
+          </TabButton>
+
+          <TabButton
+            to="/deposits"
+            activationLinkShouldStartWith={"deposits"}
+          >
+            Deposits
+          </TabButton>
+
+          <TabButton
+            to="/withdraws"
+            activationLinkShouldStartWith={"withdraws"}
+          >
+            Withdraws
+          </TabButton>
+
+          <TabButton
+            to="/mining-plans"
+            activationLinkShouldStartWith={"mining-plans"}
+          >
+            Mining plans
+          </TabButton>
+
+          <TabButton
+            to="/mining-sesions"
+            activationLinkShouldStartWith={"mining-sesions"}
+          >
+            Mining sesions
+          </TabButton>
+
+          <TabButton to="/message" activationLinkShouldStartWith={"message"}>
+            Message
+          </TabButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TabButton({
   className,
-  activationLinks,
+  activationLinkShouldStartWith,
   to,
   ...props
 }: ComponentProps<typeof Button> & {
-  activationLinks: string[];
+  activationLinkShouldStartWith: string;
 } & Pick<LinkProps, "to">) {
   const location = useLocation();
 
-  const href = location.publicHref;
+  const href = location.publicHref.split('/')[1];
+
 
   return (
     <Button
       asChild
-      variant={activationLinks.includes(href) ? "secondary" : "ghost"}
+      variant={activationLinkShouldStartWith.startsWith(href) ? "secondary" : "ghost"}
       className={cn(``, className)}
       {...props}
     >

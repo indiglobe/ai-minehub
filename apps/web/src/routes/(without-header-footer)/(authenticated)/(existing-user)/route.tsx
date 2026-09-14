@@ -1,9 +1,13 @@
 import AuthenticatedHeader from "@/components/header/authenticated-header";
 import { GreetSection } from "@/components/main/_common/authenticated-routes/greet";
-import { RouteTabs } from "@/components/main/_common/authenticated-routes/route-tabs";
+import {
+  AdminRouteTabs,
+  UserRouteTabs,
+} from "@/components/main/_common/authenticated-routes/route-tabs";
 import Main from "@/components/main/main";
 import { fetchUserDetailsCookie } from "@/lib/auth/session";
 import { env } from "@repo/env/client";
+import { cn } from "@repo/styles/cn";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -44,12 +48,23 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const {
+    userDetailsFromCookie: { role },
+  } = Route.useRouteContext();
+
   return (
     <>
       <AuthenticatedHeader />
-      <Main>
+      <Main className={cn(`pb-20 md:pb-30 lg:pb-40`)}>
         <GreetSection />
-        <RouteTabs />
+        {
+          role === 'admin' && 
+        <AdminRouteTabs />
+        }
+        {
+          role === 'basic' && 
+          <UserRouteTabs />
+        }
         <Outlet />
       </Main>
     </>

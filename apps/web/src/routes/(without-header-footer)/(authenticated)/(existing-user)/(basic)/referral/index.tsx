@@ -3,7 +3,7 @@ import { Referral } from "@/components/main/user-dashboard/referral/referral";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/(without-header-footer)/(authenticated)/(existing-user)/referral/",
+  "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
 )({
   component: RouteComponent,
 });

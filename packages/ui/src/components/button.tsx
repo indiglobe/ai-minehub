@@ -55,7 +55,7 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
-  corner,
+  corner = "rounded",
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {

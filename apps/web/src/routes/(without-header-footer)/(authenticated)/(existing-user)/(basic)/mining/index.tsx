@@ -4,7 +4,7 @@ import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/(without-header-footer)/(authenticated)/(existing-user)/mining/",
+  "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/",
 )({
   component: RouteComponent,
 

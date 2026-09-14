@@ -28,17 +28,27 @@ import { Route as withHeaderFooterTradingAccountsIndexRouteImport } from './rout
 import { Route as withHeaderFooterTradingInstrumentsIndexRouteImport } from './routes/(with-header-footer)/trading/instruments/index'
 import { Route as withHeaderFooterTradingPlatformsIndexRouteImport } from './routes/(with-header-footer)/trading/platforms/index'
 import { Route as withHeaderFooterTradingSyntxIndexRouteImport } from './routes/(with-header-footer)/trading/syntx/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/route'
+import { Route as withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/route'
 import { Route as withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/redirect-signin/index'
 import { Route as withoutHeaderFooterguestSigninIndexRouteImport } from './routes/(without-header-footer)/(guest)/signin/index'
 import { Route as withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/cookie-policy/index'
 import { Route as withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/privacy-policy/index'
 import { Route as withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport } from './routes/(without-header-footer)/(leagal-pages)/terms-of-service/index'
 import { Route as withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/dashboard/index'
-import { Route as withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/mining/index'
-import { Route as withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/referral/index'
-import { Route as withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/support-chat/index'
-import { Route as withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/wallet/index'
 import { Route as withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/welcome/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/deposits/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-plans/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-sesions/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/withdraws/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/support-chat/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/index'
+import { Route as withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/wallet/index'
 
 const withHeaderFooterRouteRoute = withHeaderFooterRouteRouteImport.update({
   id: '/(with-header-footer)',
@@ -147,6 +157,18 @@ const withHeaderFooterTradingSyntxIndexRoute =
     path: '/trading/syntx/',
     getParentRoute: () => withHeaderFooterRouteRoute,
   } as any)
+const withoutHeaderFooterauthenticatedexistingUseradminRouteRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminRouteRouteImport.update({
+    id: '/(admin)',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
+const withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute =
+  withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteImport.update({
+    id: '/(basic)',
+    getParentRoute: () =>
+      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
+  } as any)
 const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
   withoutHeaderFooterauthenticatedRedirectSigninIndexRouteImport.update({
     id: '/redirect-signin/',
@@ -184,42 +206,120 @@ const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
     getParentRoute: () =>
       withoutHeaderFooterauthenticatedexistingUserRouteRoute,
   } as any)
-const withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute =
-  withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport.update({
-    id: '/mining/',
-    path: '/mining/',
-    getParentRoute: () =>
-      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
-  } as any)
-const withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute =
-  withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport.update({
-    id: '/referral/',
-    path: '/referral/',
-    getParentRoute: () =>
-      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
-  } as any)
-const withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute =
-  withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport.update(
-    {
-      id: '/support-chat/',
-      path: '/support-chat/',
-      getParentRoute: () =>
-        withoutHeaderFooterauthenticatedexistingUserRouteRoute,
-    } as any,
-  )
-const withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute =
-  withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport.update({
-    id: '/wallet/',
-    path: '/wallet/',
-    getParentRoute: () =>
-      withoutHeaderFooterauthenticatedexistingUserRouteRoute,
-  } as any)
 const withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute =
   withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport.update({
     id: '/welcome/',
     path: '/welcome/',
     getParentRoute: () => withoutHeaderFooterauthenticatednewUserRouteRoute,
   } as any)
+const withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRouteImport.update(
+    {
+      id: '/deposits/',
+      path: '/deposits/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRouteImport.update(
+    {
+      id: '/message/',
+      path: '/message/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRouteImport.update(
+    {
+      id: '/mining-plans/',
+      path: '/mining-plans/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRouteImport.update(
+    {
+      id: '/mining-sesions/',
+      path: '/mining-sesions/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRouteImport.update(
+    {
+      id: '/users/',
+      path: '/users/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRouteImport.update(
+    {
+      id: '/withdraws/',
+      path: '/withdraws/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRouteImport.update(
+    {
+      id: '/mining/',
+      path: '/mining/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRouteImport.update(
+    {
+      id: '/referral/',
+      path: '/referral/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRouteImport.update(
+    {
+      id: '/support-chat/',
+      path: '/support-chat/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRouteImport.update(
+    {
+      id: '/wallet/',
+      path: '/wallet/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRouteImport.update(
+    {
+      id: '/users/$userId/',
+      path: '/users/$userId/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
+const withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute =
+  withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRouteImport.update(
+    {
+      id: '/users/$userId/wallet/',
+      path: '/users/$userId/wallet/',
+      getParentRoute: () =>
+        withoutHeaderFooterauthenticatedexistingUseradminRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof withHeaderFooterIndexRoute
@@ -243,11 +343,19 @@ export interface FileRoutesByFullPath {
   '/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
-  '/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
-  '/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
-  '/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
+  '/deposits/': typeof withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute
+  '/message/': typeof withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute
+  '/mining-plans/': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute
+  '/mining-sesions/': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute
+  '/users/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute
+  '/withdraws/': typeof withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute
+  '/mining/': typeof withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute
+  '/referral/': typeof withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute
+  '/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute
+  '/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute
+  '/users/$userId/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute
+  '/users/$userId/wallet/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof withHeaderFooterIndexRoute
@@ -271,11 +379,19 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/terms-of-service': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/dashboard': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/mining': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
-  '/referral': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
-  '/support-chat': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
-  '/wallet': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/welcome': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
+  '/deposits': typeof withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute
+  '/message': typeof withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute
+  '/mining-plans': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute
+  '/mining-sesions': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute
+  '/users': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute
+  '/withdraws': typeof withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute
+  '/mining': typeof withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute
+  '/referral': typeof withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute
+  '/support-chat': typeof withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute
+  '/wallet': typeof withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute
+  '/users/$userId': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute
+  '/users/$userId/wallet': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -289,6 +405,8 @@ export interface FileRoutesById {
   '/(with-header-footer)/partnership/': typeof withHeaderFooterPartnershipIndexRoute
   '/(with-header-footer)/tools/': typeof withHeaderFooterToolsIndexRoute
   '/(with-header-footer)/trading/': typeof withHeaderFooterTradingIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)': typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRouteWithChildren
+  '/(without-header-footer)/(authenticated)/(existing-user)/(basic)': typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteWithChildren
   '/(with-header-footer)/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/(with-header-footer)/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/(with-header-footer)/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -304,11 +422,19 @@ export interface FileRoutesById {
   '/(without-header-footer)/(leagal-pages)/privacy-policy/': typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
   '/(without-header-footer)/(leagal-pages)/terms-of-service/': typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  '/(without-header-footer)/(authenticated)/(existing-user)/mining/': typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
-  '/(without-header-footer)/(authenticated)/(existing-user)/referral/': typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
-  '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
-  '/(without-header-footer)/(authenticated)/(existing-user)/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
   '/(without-header-footer)/(authenticated)/(new-user)/welcome/': typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/deposits/': typeof withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/': typeof withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-plans/': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-sesions/': typeof withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/withdraws/': typeof withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/': typeof withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/': typeof withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/support-chat/': typeof withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/': typeof withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/wallet/': typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -334,11 +460,19 @@ export interface FileRouteTypes {
     | '/privacy-policy/'
     | '/terms-of-service/'
     | '/dashboard/'
+    | '/welcome/'
+    | '/deposits/'
+    | '/message/'
+    | '/mining-plans/'
+    | '/mining-sesions/'
+    | '/users/'
+    | '/withdraws/'
     | '/mining/'
     | '/referral/'
     | '/support-chat/'
     | '/wallet/'
-    | '/welcome/'
+    | '/users/$userId/'
+    | '/users/$userId/wallet/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -362,11 +496,19 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/terms-of-service'
     | '/dashboard'
+    | '/welcome'
+    | '/deposits'
+    | '/message'
+    | '/mining-plans'
+    | '/mining-sesions'
+    | '/users'
+    | '/withdraws'
     | '/mining'
     | '/referral'
     | '/support-chat'
     | '/wallet'
-    | '/welcome'
+    | '/users/$userId'
+    | '/users/$userId/wallet'
   id:
     | '__root__'
     | '/(with-header-footer)'
@@ -379,6 +521,8 @@ export interface FileRouteTypes {
     | '/(with-header-footer)/partnership/'
     | '/(with-header-footer)/tools/'
     | '/(with-header-footer)/trading/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)'
     | '/(with-header-footer)/company/about/'
     | '/(with-header-footer)/company/awards/'
     | '/(with-header-footer)/company/news/'
@@ -394,11 +538,19 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(leagal-pages)/privacy-policy/'
     | '/(without-header-footer)/(leagal-pages)/terms-of-service/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
-    | '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
-    | '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
-    | '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/'
-    | '/(without-header-footer)/(authenticated)/(existing-user)/wallet/'
     | '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/deposits/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-plans/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-sesions/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/withdraws/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/support-chat/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/'
+    | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/wallet/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -546,6 +698,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withHeaderFooterTradingSyntxIndexRouteImport
       parentRoute: typeof withHeaderFooterRouteRoute
     }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(basic)': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(basic)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
+    }
     '/(without-header-footer)/(authenticated)/redirect-signin/': {
       id: '/(without-header-footer)/(authenticated)/redirect-signin/'
       path: '/redirect-signin'
@@ -588,40 +754,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
     }
-    '/(without-header-footer)/(authenticated)/(existing-user)/mining/': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)/mining/'
-      path: '/mining'
-      fullPath: '/mining/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
-    }
-    '/(without-header-footer)/(authenticated)/(existing-user)/referral/': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)/referral/'
-      path: '/referral'
-      fullPath: '/referral/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
-    }
-    '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/'
-      path: '/support-chat'
-      fullPath: '/support-chat/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
-    }
-    '/(without-header-footer)/(authenticated)/(existing-user)/wallet/': {
-      id: '/(without-header-footer)/(authenticated)/(existing-user)/wallet/'
-      path: '/wallet'
-      fullPath: '/wallet/'
-      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRouteImport
-      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserRouteRoute
-    }
     '/(without-header-footer)/(authenticated)/(new-user)/welcome/': {
       id: '/(without-header-footer)/(authenticated)/(new-user)/welcome/'
       path: '/welcome'
       fullPath: '/welcome/'
       preLoaderRoute: typeof withoutHeaderFooterauthenticatednewUserWelcomeIndexRouteImport
       parentRoute: typeof withoutHeaderFooterauthenticatednewUserRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/deposits/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/deposits/'
+      path: '/deposits'
+      fullPath: '/deposits/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/'
+      path: '/message'
+      fullPath: '/message/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-plans/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-plans/'
+      path: '/mining-plans'
+      fullPath: '/mining-plans/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-sesions/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/mining-sesions/'
+      path: '/mining-sesions'
+      fullPath: '/mining-sesions/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/withdraws/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/withdraws/'
+      path: '/withdraws'
+      fullPath: '/withdraws/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/'
+      path: '/mining'
+      fullPath: '/mining/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/'
+      path: '/referral'
+      fullPath: '/referral/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/support-chat/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/support-chat/'
+      path: '/support-chat'
+      fullPath: '/support-chat/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/'
+      path: '/wallet'
+      fullPath: '/wallet/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/'
+      path: '/users/$userId'
+      fullPath: '/users/$userId/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
+    }
+    '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/wallet/': {
+      id: '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/wallet/'
+      path: '/users/$userId/wallet'
+      fullPath: '/users/$userId/wallet/'
+      preLoaderRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRouteImport
+      parentRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRoute
     }
   }
 }
@@ -673,26 +895,80 @@ const withHeaderFooterRouteRouteWithChildren =
     withHeaderFooterRouteRouteChildren,
   )
 
+interface withoutHeaderFooterauthenticatedexistingUseradminRouteRouteChildren {
+  withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute
+  withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute
+}
+
+const withoutHeaderFooterauthenticatedexistingUseradminRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUseradminRouteRouteChildren =
+  {
+    withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminDepositsIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminMessageIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminMiningPlansIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminMiningSesionsIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminUsersIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminWithdrawsIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRoute,
+  }
+
+const withoutHeaderFooterauthenticatedexistingUseradminRouteRouteWithChildren =
+  withoutHeaderFooterauthenticatedexistingUseradminRouteRoute._addFileChildren(
+    withoutHeaderFooterauthenticatedexistingUseradminRouteRouteChildren,
+  )
+
+interface withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteChildren {
+  withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute
+  withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute
+}
+
+const withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteChildren =
+  {
+    withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserbasicMiningIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserbasicReferralIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserbasicSupportChatIndexRoute,
+    withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute:
+      withoutHeaderFooterauthenticatedexistingUserbasicWalletIndexRoute,
+  }
+
+const withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteWithChildren =
+  withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute._addFileChildren(
+    withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteChildren,
+  )
+
 interface withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren {
+  withoutHeaderFooterauthenticatedexistingUseradminRouteRoute: typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRouteWithChildren
+  withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute: typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteWithChildren
   withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute
-  withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute
-  withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute
-  withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute
-  withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute: typeof withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute
 }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren: withoutHeaderFooterauthenticatedexistingUserRouteRouteChildren =
   {
+    withoutHeaderFooterauthenticatedexistingUseradminRouteRoute:
+      withoutHeaderFooterauthenticatedexistingUseradminRouteRouteWithChildren,
+    withoutHeaderFooterauthenticatedexistingUserbasicRouteRoute:
+      withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteWithChildren,
     withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute:
       withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute,
-    withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute:
-      withoutHeaderFooterauthenticatedexistingUserMiningIndexRoute,
-    withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute:
-      withoutHeaderFooterauthenticatedexistingUserReferralIndexRoute,
-    withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute:
-      withoutHeaderFooterauthenticatedexistingUserSupportChatIndexRoute,
-    withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute:
-      withoutHeaderFooterauthenticatedexistingUserWalletIndexRoute,
   }
 
 const withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren =

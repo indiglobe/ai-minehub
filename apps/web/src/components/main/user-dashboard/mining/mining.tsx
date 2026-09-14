@@ -116,10 +116,8 @@ export function AvailableMiningOptions({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const {
-    allMiningProfiles: allMiningProfilesProm
-  } = useLoaderData({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/mining/",
+  const { allMiningProfiles: allMiningProfilesProm } = useLoaderData({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/",
   });
 
   return (

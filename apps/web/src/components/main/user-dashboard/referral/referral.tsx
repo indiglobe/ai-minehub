@@ -90,7 +90,7 @@ export function ReferralCode({
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/referral/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
   });
 
   const router = useRouter();

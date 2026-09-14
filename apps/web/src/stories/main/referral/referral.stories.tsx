@@ -3,7 +3,7 @@ import type {
   TypedStoryOptions,
 } from "@/integrations/storybook/sb.types";
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
-import { Route } from "@/routes/(without-header-footer)/(authenticated)/(existing-user)/referral";
+import { Route } from "@/routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral";
 import {
   Referral,
   ReferralStats,

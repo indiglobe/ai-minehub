@@ -1,8 +1,8 @@
-import { SupportChat } from '@/components/main/user-dashboard/support-chat/support-chat'
+import { Conversations } from '@/components/main/admin-dashboard/message/message'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/(without-header-footer)/(authenticated)/(existing-user)/support-chat/',
+  '/(without-header-footer)/(authenticated)/(existing-user)/(admin)/message/',
 )({
   component: RouteComponent,
 })
@@ -10,7 +10,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      <SupportChat/>
+      <Conversations/>
     </>
   )
 }

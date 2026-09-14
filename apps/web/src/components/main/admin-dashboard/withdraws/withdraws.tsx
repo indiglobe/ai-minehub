@@ -1,0 +1,162 @@
+import type { ComponentProps } from "react";
+import { cn } from "@repo/styles/cn";
+import { ArrowUpRight, Search, ChevronDown } from "lucide-react";
+import { Button } from "@repo/ui/button";
+
+export function AllWithdrawals({
+  className,
+  ...props
+}: ComponentProps<"section">) {
+  const withdrawals = [
+    {
+      id: "w-1",
+      user: {
+        name: "Shanu Mridha",
+        email: "mridhashanu240420...",
+        initial: "S",
+        bg: "bg-secondary-500",
+      },
+      amount: "$12.00",
+      wallet: "Mining",
+      walletAddress: "Dhhavnnkjiioyhjijnnnn",
+      transactionId: "N/A",
+      description: "Withdrawal from ...",
+      status: "Completed",
+      date: "Jun 01, 202...",
+    },
+  ];
+
+  return (
+    <section className={cn(`default-padding py-10 @container`, className)} {...props}>
+      <div
+        className={cn(
+          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+        )}
+      >
+        <div className={cn(`flex w-full flex-col gap-4 @md:flex-row @md:items-center @md:justify-between`)}>
+          <div className={cn(`flex items-center gap-2`)}>
+            <ArrowUpRight className={cn(`size-4 text-primary-600`)} />
+            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
+              All Withdrawals
+            </h2>
+          </div>
+
+          <div className={cn(`flex items-center gap-3`)}>
+            <div className={cn(`relative`)}>
+              <Search className={cn(`absolute left-3 top-1/2 size-4 -translate-y-1/2 text-foreground/40`)} />
+              <input
+                type="text"
+                placeholder="Search by email..."
+                className={cn(
+                  `h-9 w-full rounded-lg border border-foreground/20 bg-foreground/5 pl-9 pr-4 text-xs text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-1 focus:ring-secondary-500 @md:w-48`,
+                )}
+              />
+            </div>
+
+            <div className={cn(`relative`)}>
+              <select
+                className={cn(
+                  `h-9 appearance-none rounded-lg border border-foreground/20 bg-foreground/5 px-3 pr-8 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-secondary-500`,
+                )}
+                defaultValue="pending"
+              >
+                <option value="pending" className={cn(`bg-background text-foreground`)}>
+                  Pending
+                </option>
+                <option value="completed" className={cn(`bg-background text-foreground`)}>
+                  Completed
+                </option>
+                <option value="all" className={cn(`bg-background text-foreground`)}>
+                  All Status
+                </option>
+              </select>
+              <ChevronDown className={cn(`pointer-events-none absolute right-2.5 top-1/2 size-3.5 -translate-y-1/2 text-foreground/40`)} />
+            </div>
+
+            <Button
+              size="sm"
+              className={cn(
+                `bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs h-9 px-4 gap-1.5`,
+              )}
+            >
+              <Search className={cn(`size-3.5`)} />
+              Search
+            </Button>
+          </div>
+        </div>
+
+        <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
+
+        <div className={cn(`overflow-x-auto`)}>
+          <table className={cn(`w-full text-left border-collapse`)}>
+            <thead>
+              <tr className={cn(`text-foreground/50 text-2.75 uppercase tracking-wider`)}>
+                <th className={cn(`py-3 font-medium`)}>User</th>
+                <th className={cn(`py-3 font-medium`)}>Amount</th>
+                <th className={cn(`py-3 font-medium`)}>Wallet</th>
+                <th className={cn(`py-3 font-medium`)}>Wallet Address</th>
+                <th className={cn(`py-3 font-medium`)}>Transaction ID</th>
+                <th className={cn(`py-3 font-medium`)}>Description</th>
+                <th className={cn(`py-3 font-medium`)}>Status</th>
+                <th className={cn(`py-3 font-medium`)}>Date</th>
+                <th className={cn(`py-3 font-medium text-right`)}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={cn(`divide-y divide-foreground/10 text-sm`)}>
+              {withdrawals.map((item) => (
+                <tr key={item.id} className={cn(`group`)}>
+                  <td className={cn(`py-4 pr-4`)}>
+                    <div className={cn(`flex items-center gap-3`)}>
+                      <div
+                        className={cn(
+                          `flex size-10 shrink-0 items-center justify-center rounded-full text-white font-semibold text-xs`,
+                          item.user.bg,
+                        )}
+                      >
+                        {item.user.initial}
+                      </div>
+                      <div className={cn(`flex flex-col`)}>
+                        <span className={cn(`font-medium`)}>{item.user.name}</span>
+                        <span className={cn(`text-foreground/50 text-xs`)}>
+                          {item.user.email}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={cn(`py-4 pr-4 font-semibold text-red-500`)}>
+                    {item.amount}
+                  </td>
+                  <td className={cn(`py-4 pr-4`)}>
+                    <span className={cn(`rounded-md border border-secondary-500/20 bg-secondary-500/20 px-2 py-0.5 text-xs font-semibold text-secondary-300`)}>
+                      {item.wallet}
+                    </span>
+                  </td>
+                  <td className={cn(`py-4 pr-4 font-mono text-xs text-foreground/80`)}>
+                    {item.walletAddress}
+                  </td>
+                  <td className={cn(`py-4 pr-4 font-mono text-xs text-foreground/60`)}>
+                    {item.transactionId}
+                  </td>
+                  <td className={cn(`py-4 pr-4 text-foreground/70 text-xs`)}>
+                    {item.description}
+                  </td>
+                  <td className={cn(`py-4 pr-4`)}>
+                    <span className={cn(`inline-flex items-center rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-0.5 text-xs font-semibold text-green-500`)}>
+                      {item.status}
+                    </span>
+                  </td>
+                  <td className={cn(`py-4 pr-4 text-foreground/60 text-xs`)}>
+                    {item.date}
+                  </td>
+                  <td className={cn(`py-4 text-right text-foreground/40`)}>
+                    —
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
