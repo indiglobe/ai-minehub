@@ -10,7 +10,11 @@ import {
   MiningOrderTable,
   MiningProfileTable,
   TradingOrderTable,
-} from "../schema";
+  MiningWalletDepositsTable,
+  MiningWalletWithdrawTable,
+  TradingWalletDepositsTable,
+  TradingWalletWithdrawTable,
+} from "@/schema";
 import { eq } from "drizzle-orm";
 
 /* -------------------------------------------------------- */
@@ -32,6 +36,10 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
+  await db.delete(MiningWalletDepositsTable);
+  await db.delete(MiningWalletWithdrawTable);
+  await db.delete(TradingWalletDepositsTable);
+  await db.delete(TradingWalletWithdrawTable);
   await db.delete(TradingOrderTable);
   await db.delete(MiningOrderTable);
   await db.delete(MiningProfileTable);
@@ -62,6 +70,7 @@ async function seedUsers() {
       email: `${fullName.toLowerCase().split(" ").join("-")}-${idx}@email.com`,
       phoneNumber: Math.floor(Math.random() * 10000000000).toString(),
       fullName,
+      userStatus: faker.helpers.arrayElement(["active", "inactive", "blocked"]),
     };
   });
 
@@ -267,6 +276,164 @@ async function seedTradingOrder() {
 }
 
 /* -------------------------------------------------------- */
+/*                    TradingWalletDepositsTable                    */
+/* -------------------------------------------------------- */
+
+async function seedTradingWalletDeposits() {
+  console.log("🔃 Seeding TradingWalletDepositsTable...");
+
+  const usersWithTradingWallet = await db
+    .select()
+    .from(UserTable)
+    .innerJoin(
+      TradingWalletTable,
+      eq(TradingWalletTable.associatedUser, UserTable.id),
+    );
+
+  const __dummyTradingWalletDeposits = usersWithTradingWallet.map<
+    typeof TradingWalletDepositsTable.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      depositMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+      depositProof: faker.image.personPortrait(),
+      orderedBy: u.users.id,
+      transactionId: crypto.randomUUID(),
+      wallet: u.trading_wallet.id,
+    };
+  }) satisfies (typeof TradingWalletDepositsTable.$inferInsert)[];
+
+  await db
+    .insert(TradingWalletDepositsTable)
+    .values([...__dummyTradingWalletDeposits]);
+
+  console.log("✅ TradingWalletDepositsTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    TradingWalletWithdrawTable                    */
+/* -------------------------------------------------------- */
+
+async function seedTradingWalletWithdraw() {
+  console.log("🔃 Seeding TradingWalletWithdrawTable...");
+
+  const usersWithTradingWallet = await db
+    .select()
+    .from(UserTable)
+    .innerJoin(
+      TradingWalletTable,
+      eq(TradingWalletTable.associatedUser, UserTable.id),
+    );
+
+  const __dummyTradingWalletWithdraw = usersWithTradingWallet.map<
+    typeof TradingWalletWithdrawTable.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      cryptoWaletAddress: crypto.randomUUID(),
+      orderedBy: u.users.id,
+      wallet: u.trading_wallet.id,
+      withdrawlMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+    };
+  }) satisfies (typeof TradingWalletWithdrawTable.$inferInsert)[];
+
+  await db
+    .insert(TradingWalletWithdrawTable)
+    .values([...__dummyTradingWalletWithdraw]);
+
+  console.log("✅ TradingWalletWithdrawTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    TradingWalletDepositsTable            */
+/* -------------------------------------------------------- */
+
+async function seedMiningWalletDeposits() {
+  console.log("🔃 Seeding MiningWalletDepositsTable...");
+
+  const usersWithMiningWallet = await db
+    .select()
+    .from(UserTable)
+    .innerJoin(
+      MiningWalletTable,
+      eq(MiningWalletTable.associatedUser, UserTable.id),
+    );
+
+  const __dummyMiningWalletDeposits = usersWithMiningWallet.map<
+    typeof MiningWalletDepositsTable.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      depositMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+      depositProof: faker.image.personPortrait(),
+      orderedBy: u.users.id,
+      transactionId: crypto.randomUUID(),
+      wallet: u.mining_wallet.id,
+    };
+  }) satisfies (typeof MiningWalletDepositsTable.$inferInsert)[];
+
+  await db
+    .insert(MiningWalletDepositsTable)
+    .values([...__dummyMiningWalletDeposits]);
+
+  console.log("✅ MiningWalletDepositsTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    TradingWalletWithdrawTable                    */
+/* -------------------------------------------------------- */
+
+async function seedMiningWalletWithdraw() {
+  console.log("🔃 Seeding MiningWalletWithdrawTable...");
+
+  const usersWithMiningWallet = await db
+    .select()
+    .from(UserTable)
+    .innerJoin(
+      MiningWalletTable,
+      eq(MiningWalletTable.associatedUser, UserTable.id),
+    );
+
+  const __dummyMiningWalletWithdraw = usersWithMiningWallet.map<
+    typeof MiningWalletWithdrawTable.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      cryptoWaletAddress: crypto.randomUUID(),
+      orderedBy: u.users.id,
+      wallet: u.mining_wallet.id,
+      withdrawlMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+    };
+  }) satisfies (typeof MiningWalletWithdrawTable.$inferInsert)[];
+
+  await db
+    .insert(MiningWalletWithdrawTable)
+    .values([...__dummyMiningWalletWithdraw]);
+
+  console.log("✅ MiningWalletWithdrawTable seeded");
+}
+
+/* -------------------------------------------------------- */
 /*                           MAIN                           */
 /* -------------------------------------------------------- */
 
@@ -284,6 +451,10 @@ export async function seed() {
     await seedMiningProfile();
     await seedMiningOrder();
     await seedTradingOrder();
+    await seedTradingWalletDeposits();
+    await seedTradingWalletWithdraw();
+    await seedMiningWalletDeposits();
+    await seedMiningWalletWithdraw();
 
     console.log("🎉 SEEDING COMPLETED");
 
