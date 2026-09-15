@@ -5,11 +5,13 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
 
-  beforeLoad: async ({
-    context: {
+  beforeLoad: async ({ context }) => {
+    console.log(context);
+
+    const {
       userDetailsFromCookie: { role },
-    },
-  }) => {
+    } = context;
+
     if (role === "admin") {
       throw redirect({ to: "/dashboard" });
     }

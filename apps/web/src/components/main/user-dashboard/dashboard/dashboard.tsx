@@ -41,6 +41,7 @@ export function UserDashboard() {
 
           <RecentTransaction />
         </div>
+
         <div className={cn(`space-y-4`)}>
           <QuickActions />
 
@@ -272,10 +273,13 @@ export function ActiveMiningSession({
                           </h2>
 
                           <p className={cn(`text-foreground/50 text-xs`)}>
-                            Started {extractMonthName(activeSession.createdAt)}{" "}
-                            {activeSession.createdAt.getDate()}
+                            Started{" "}
+                            {extractMonthName(
+                              new Date(activeSession.createdAt),
+                            )}{" "}
+                            {new Date(activeSession.createdAt).getDate()}
                             {", "}
-                            {activeSession.createdAt.getFullYear()}
+                            {new Date(activeSession.createdAt).getFullYear()}
                           </p>
                         </div>
                       </div>

@@ -135,7 +135,6 @@ export function PendingDepositsStat({
     </StatCard>
   );
 }
-
 export function PendingWithdrawalsStat({
   className,
   ...props

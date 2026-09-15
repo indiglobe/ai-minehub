@@ -17,35 +17,51 @@ import { serverFn__readAllTradingOrders } from "@/integrations/server-function/t
 import { serverFn__readOneTradingWallet } from "@/integrations/server-function/trading-wallet";
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { QueryClient } from "@tanstack/react-query";
+import { mocked__fetchUserDetailsCookie } from "./session.mock";
+import type { DeepPartial } from "@/utils/types/storybook";
 
 const queryClient = new QueryClient();
 
 export function beforeEach() {
   queryClient.clear();
 
-  mocked(fetchUserDetailsCookie).mockResolvedValue({} as any);
+  mocked(fetchUserDetailsCookie).mockResolvedValue(
+    mocked__fetchUserDetailsCookie(),
+  );
   mocked(serverFn__readAllMiningOrders).mockResolvedValue(
-    mocked__serverFn__readAllMiningOrders as any,
+    mocked__serverFn__readAllMiningOrders() as any,
   );
   mocked(serverFn__readAllMiningProfiles).mockResolvedValue(
-    mocked__serverFn__readAllMiningProfiles as any,
+    mocked__serverFn__readAllMiningProfiles() as any,
   );
   mocked(serverFn__readAllNewsSchema).mockResolvedValue(
-    mocked__serverFn__readAllNewsSchema as any,
+    mocked__serverFn__readAllNewsSchema(),
   );
   mocked(serverFn__readAllRatings).mockResolvedValue(
-    mocked__serverFn__readAllRatings as any,
+    mocked__serverFn__readAllRatings(),
   );
   mocked(serverFn__readAllTradingOrders).mockResolvedValue(
-    mocked__serverFn__readAllTradingOrders as any,
+    mocked__serverFn__readAllTradingOrders(),
   );
   mocked(serverFn__readOneMiningWallet).mockResolvedValue(
-    mocked__serverFn__readOneMiningWallet as any,
+    mocked__serverFn__readOneMiningWallet(),
   );
   mocked(serverFn__readOneTradingWallet).mockResolvedValue(
-    mocked__serverFn__readOneTradingWallet as any,
+    mocked__serverFn__readOneTradingWallet(),
   );
   mocked(serverFn__readOneUser).mockResolvedValue(
-    mocked__serverFn__readOneUser as any,
+    mocked__serverFn__readOneUser({ role: "basic" }) as any,
   );
+}
+
+export function mocked__contextData__userDetailsFromCookies() {
+  return {
+    userId: "some-id",
+    fullName: "Indiglobe IT",
+    role: "basic",
+    age: 30,
+    avatarUrl: "",
+    email: "",
+    phone: "",
+  } satisfies DeepPartial<Awaited<ReturnType<typeof fetchUserDetailsCookie>>>;
 }

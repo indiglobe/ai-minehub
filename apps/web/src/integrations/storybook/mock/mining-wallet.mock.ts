@@ -10,10 +10,10 @@ export function mocked__serverFn__readOneMiningWallet() {
     tableIdentifierToken: "MWAL",
     updatedAt: new Date("2022-07-31T01:33:29.567Z"),
     user: {
-      id: "2121212121",
-      fullName: "Indiglobe IT",
       age: 30,
       avatarUrl: "https://avatars.githubusercontent.com/u/97165289",
+      id: "2121212121",
+      fullName: "Indiglobe IT",
       createdAt: new Date("2022-07-31T01:33:29.567Z"),
       email: "Jeanne63@yahoo.com",
       phoneNumber: "13-850175-913761-7",
