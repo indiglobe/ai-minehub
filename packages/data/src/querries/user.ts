@@ -28,6 +28,18 @@ const create__User = async (data: TCreate__User) => {
 
 /**
  * ----------------------------------------
+ * READ (USER COUNT)
+ * ----------------------------------------
+ */
+
+const read__UserCount = async () => {
+  const queryResult = await db.$count(UserTable);
+
+  return queryResult;
+};
+
+/**
+ * ----------------------------------------
  * READ (ALL)
  * ----------------------------------------
  */
@@ -290,5 +302,5 @@ export {
   read__AllUsers,
   read__OneUser,
   update__User,
-  delete__User,
+  delete__User,read__UserCount
 };
