@@ -1,7 +1,9 @@
+import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@repo/ui/button";
+import { ConversationsError, ConversationsLoading } from "@/components/main/admin-dashboard/message/boundary-comps";
 
 export function Conversations({
   className,
@@ -100,16 +102,25 @@ export function Conversations({
     },
   ];
 
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   return (
-    <section className={cn(`default-padding py-10 @container`, className)} {...props}>
+    <section
+      className={cn(`default-padding @container py-10`, className)}
+      {...props}
+    >
       <div
         className={cn(
           `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
         )}
       >
-        <div className={cn(`flex w-full flex-col gap-2 @md:flex-row @md:items-center @md:justify-between`)}>
+        <div
+          className={cn(
+            `flex w-full flex-col gap-2 @md:flex-row @md:items-center @md:justify-between`,
+          )}
+        >
           <div className={cn(`flex items-center gap-2`)}>
-            <MessageSquare className={cn(`size-4 text-secondary-500`)} />
+            <MessageSquare className={cn(`text-secondary-500 size-4`)} />
             <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
               Conversations
             </h2>
@@ -122,55 +133,67 @@ export function Conversations({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        <div className={cn(`overflow-x-auto`)}>
-          <table className={cn(`w-full text-left border-collapse`)}>
-            <thead>
-              <tr className={cn(`text-foreground/50 text-2.75 uppercase tracking-wider`)}>
-                <th className={cn(`py-3 font-medium`)}>User</th>
-                <th className={cn(`py-3 font-medium`)}>Trader ID</th>
-                <th className={cn(`py-3 font-medium`)}>Last Message</th>
-                <th className={cn(`py-3 font-medium`)}>Updated</th>
-                <th className={cn(`py-3 font-medium text-right`)}>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={cn(`divide-y divide-foreground/10 text-sm`)}>
-              {conversations.map((item) => (
-                <tr key={item.id} className={cn(`group`)}>
-                  <td className={cn(`py-4 pr-4`)}>
-                    <div className={cn(`flex flex-col`)}>
-                      <span className={cn(`font-medium text-foreground`)}>
-                        {item.user.name}
-                      </span>
-                      <span className={cn(`text-foreground/50 text-xs`)}>
-                        {item.user.email}
-                      </span>
-                    </div>
-                  </td>
-                  <td className={cn(`py-4 pr-4 font-mono text-xs text-foreground/80`)}>
-                    {item.traderId}
-                  </td>
-                  <td className={cn(`py-4 pr-4 text-foreground/80 text-xs`)}>
-                    {item.lastMessage}
-                  </td>
-                  <td className={cn(`py-4 pr-4 text-foreground/60 text-xs`)}>
-                    {item.updated}
-                  </td>
-                  <td className={cn(`py-4 text-right`)}>
-                    <Button
-                      size="sm"
+        {state === "error" && <ConversationsError></ConversationsError>}
+        {state === "loading" && <ConversationsLoading></ConversationsLoading>}
+        {state === "data" && (
+          <div className={cn(`overflow-x-auto`)}>
+            <table className={cn(`w-full border-collapse text-left`)}>
+              <thead>
+                <tr
+                  className={cn(
+                    `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                  )}
+                >
+                  <th className={cn(`py-3 font-medium`)}>User</th>
+                  <th className={cn(`py-3 font-medium`)}>Trader ID</th>
+                  <th className={cn(`py-3 font-medium`)}>Last Message</th>
+                  <th className={cn(`py-3 font-medium`)}>Updated</th>
+                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
+                </tr>
+              </thead>
+              <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
+                {conversations.map((item) => (
+                  <tr key={item.id} className={cn(`group`)}>
+                    <td className={cn(`py-4 pr-4`)}>
+                      <div className={cn(`flex flex-col`)}>
+                        <span className={cn(`text-foreground font-medium`)}>
+                          {item.user.name}
+                        </span>
+                        <span className={cn(`text-foreground/50 text-xs`)}>
+                          {item.user.email}
+                        </span>
+                      </div>
+                    </td>
+                    <td
                       className={cn(
-                        `bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs h-8 px-4 gap-1.5`,
+                        `text-foreground/80 py-4 pr-4 font-mono text-xs`,
                       )}
                     >
-                      Open
-                      <ArrowRight className={cn(`size-3.5`)} />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      {item.traderId}
+                    </td>
+                    <td className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}>
+                      {item.lastMessage}
+                    </td>
+                    <td className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}>
+                      {item.updated}
+                    </td>
+                    <td className={cn(`py-4 text-right`)}>
+                      <Button
+                        size="sm"
+                        className={cn(
+                          `h-8 gap-1.5 rounded-lg bg-blue-600 px-4 text-xs text-white hover:bg-blue-700`,
+                        )}
+                      >
+                        Open
+                        <ArrowRight className={cn(`size-3.5`)} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { cn } from "@repo/styles/cn";
 import { Layers, Plus, Edit, X } from "lucide-react";
 import { Button } from "@repo/ui/button";
 import { useFetchAllMiningPlans } from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
+import { MiningPlansError, MiningPlansLoading } from "@/components/main/admin-dashboard/mining-plans/boundary-comps";
 
 export function MiningPlans({
   className,
@@ -56,6 +57,8 @@ export function MiningPlans({
 
   const { data: plans } = useFetchAllMiningPlans();
 
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   return (
     <section
       className={cn(`default-padding @container py-10`, className)}
@@ -88,85 +91,95 @@ export function MiningPlans({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        <div className={cn(`overflow-x-auto`)}>
-          <table className={cn(`w-full border-collapse text-left`)}>
-            <thead>
-              <tr
-                className={cn(
-                  `text-foreground/50 text-2.75 tracking-wider uppercase`,
-                )}
-              >
-                <th className={cn(`py-3 font-medium`)}>Plan Name</th>
-                <th className={cn(`py-3 font-medium`)}>Daily Return</th>
-                <th className={cn(`py-3 font-medium`)}>Duration</th>
-                <th className={cn(`py-3 font-medium`)}>Min Deposit</th>
-                <th className={cn(`py-3 font-medium`)}>Max Deposit</th>
-                <th className={cn(`py-3 font-medium`)}>Total Return</th>
-                <th className={cn(`py-3 font-medium`)}>Status</th>
-                <th className={cn(`py-3 font-medium`)}>Popularity</th>
-                <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
-              {plans &&
-                plans.map((plan) => (
-                  <tr key={plan.id} className={cn(`group`)}>
-                    <td className={cn(`py-4 pr-4 font-semibold`)}>
-                      {plan.category}
-                    </td>
-                    <td
-                      className={cn(`py-4 pr-4 font-semibold text-green-500`)}
-                    >
-                      {plan.dailyReturn}
-                    </td>
-                    <td className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}>
-                      {plan.lockinPeriod}
-                    </td>
-                    <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                      {plan.minimumAllowedAmount}
-                    </td>
-                    <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                      {plan.maximumAllowedAmount}
-                    </td>
-                    <td
-                      className={cn(`text-primary-400 py-4 pr-4 font-semibold`)}
-                    >
-                      {Math.round(plan.dailyReturn * plan.lockinPeriod)}
-                    </td>
-                    <td className={cn(`py-4 pr-4`)}>
-                      <span
+        {state === "data" && (
+          <div className={cn(`overflow-x-auto`)}>
+            <table className={cn(`w-full border-collapse text-left`)}>
+              <thead>
+                <tr
+                  className={cn(
+                    `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                  )}
+                >
+                  <th className={cn(`py-3 font-medium`)}>Plan Name</th>
+                  <th className={cn(`py-3 font-medium`)}>Daily Return</th>
+                  <th className={cn(`py-3 font-medium`)}>Duration</th>
+                  <th className={cn(`py-3 font-medium`)}>Min Deposit</th>
+                  <th className={cn(`py-3 font-medium`)}>Max Deposit</th>
+                  <th className={cn(`py-3 font-medium`)}>Total Return</th>
+                  <th className={cn(`py-3 font-medium`)}>Status</th>
+                  <th className={cn(`py-3 font-medium`)}>Popularity</th>
+                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
+                </tr>
+              </thead>
+              <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
+                {plans &&
+                  plans.map((plan) => (
+                    <tr key={plan.id} className={cn(`group`)}>
+                      <td className={cn(`py-4 pr-4 font-semibold`)}>
+                        {plan.category}
+                      </td>
+                      <td
+                        className={cn(`py-4 pr-4 font-semibold text-green-500`)}
+                      >
+                        {plan.dailyReturn}
+                      </td>
+                      <td
+                        className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}
+                      >
+                        {plan.lockinPeriod}
+                      </td>
+                      <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                        {plan.minimumAllowedAmount}
+                      </td>
+                      <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                        {plan.maximumAllowedAmount}
+                      </td>
+                      <td
                         className={cn(
-                          `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
+                          `text-primary-400 py-4 pr-4 font-semibold`,
                         )}
                       >
-                        ---"plan"---
-                      </span>
-                    </td>
-                    <td className={cn(`py-4 pr-4`)}>
-                      <span
-                        className={cn(
-                          `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
-                        )}
-                      >
-                        {plan.isPopular ? "--true--" : "--false--"}
-                      </span>
-                    </td>
-                    <td className={cn(`py-4 text-right`)}>
-                      <Button
-                        size="sm"
-                        className={cn(
-                          `h-8 gap-1.5 rounded-md bg-blue-600 px-3 text-xs text-white hover:bg-blue-700`,
-                        )}
-                      >
-                        <Edit className={cn(`size-3.5`)} />
-                        Edit
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                        {Math.round(plan.dailyReturn * plan.lockinPeriod)}
+                      </td>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <span
+                          className={cn(
+                            `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
+                          )}
+                        >
+                          ---"plan"---
+                        </span>
+                      </td>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <span
+                          className={cn(
+                            `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
+                          )}
+                        >
+                          {plan.isPopular ? "--true--" : "--false--"}
+                        </span>
+                      </td>
+                      <td className={cn(`py-4 text-right`)}>
+                        <Button
+                          size="sm"
+                          className={cn(
+                            `h-8 gap-1.5 rounded-md bg-blue-600 px-3 text-xs text-white hover:bg-blue-700`,
+                          )}
+                        >
+                          <Edit className={cn(`size-3.5`)} />
+                          Edit
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {state === "error" && <MiningPlansError></MiningPlansError>}
+
+        {state === "loading" && <MiningPlansLoading></MiningPlansLoading>}
       </div>
 
       {/* Add Mining Plan Modal */}
