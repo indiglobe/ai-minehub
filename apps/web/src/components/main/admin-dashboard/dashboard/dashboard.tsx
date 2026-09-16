@@ -58,7 +58,7 @@ export function AdminStatsSection({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section
@@ -210,7 +210,7 @@ export function TotalMiningInvestedCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <>
@@ -246,7 +246,7 @@ export function ActiveMiningSessionsCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <>

@@ -18,7 +18,6 @@ services:
     container_name: ai-minehub-dev-database
     image: mysql:8.4
     environment:
-      MYSQL_ROOT_USER: admin
       MYSQL_ROOT_PASSWORD: password
     ports:
       - 14015:3306
@@ -55,19 +54,19 @@ services:
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
-  ai-minehub-dev-adguard:
-    container_name: ai-minehub-dev-adguardhome
-    image: adguard/adguardhome:edge
-    restart: unless-stopped
-    ports:
-      - "15042:3000/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
-    networks:
-      - ai-minehub-dev
-    # volumes:
-    #   - adguard-work:/opt/adguardhome/work
-    #   - adguard-conf:/opt/adguardhome/conf
+  # ai-minehub-dev-adguard:
+  #   container_name: ai-minehub-dev-adguardhome
+  #   image: adguard/adguardhome:edge
+  #   restart: unless-stopped
+  #   ports:
+  #     - "15042:3000/tcp"
+  #     - "53:53/tcp"
+  #     - "53:53/udp"
+  #   networks:
+  #     - ai-minehub-dev
+  # volumes:
+  #   - adguard-work:/opt/adguardhome/work
+  #   - adguard-conf:/opt/adguardhome/conf
 
 volumes:
   database:
