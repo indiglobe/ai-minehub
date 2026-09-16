@@ -5,7 +5,7 @@ export function mocked__serverFn__readAllTradingOrders() {
   return [
     {
       amountInvested: 20,
-      amountRecived: 30,
+      amountReceived: 30,
       createdAt: new Date(),
       id: "2121212121",
       tradingStatus: "active",
@@ -28,7 +28,7 @@ export function mocked__serverFn__readAllTradingOrders() {
     },
     {
       amountInvested: 20,
-      amountRecived: 30,
+      amountReceived: 30,
       createdAt: new Date(),
       id: "2121212122",
       tradingStatus: "completed",
@@ -51,7 +51,7 @@ export function mocked__serverFn__readAllTradingOrders() {
     },
     {
       amountInvested: 20,
-      amountRecived: 30,
+      amountReceived: 30,
       createdAt: new Date(),
       id: "2121212123",
       tradingStatus: "active",

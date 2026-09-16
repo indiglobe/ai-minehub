@@ -85,7 +85,7 @@ export function mocked__serverFn__readOneUser({
     miningOrders: [
       {
         amountInvested: 20,
-        amountRecived: 30,
+        amountReceived: 30,
         createdAt: new Date(),
         id: "12345678",
         miningProfileUsed: "Pro ",
@@ -96,7 +96,7 @@ export function mocked__serverFn__readOneUser({
       },
       {
         amountInvested: 20,
-        amountRecived: 30,
+        amountReceived: 30,
         createdAt: new Date(),
         id: "12345679",
         miningProfileUsed: "Pro ",
@@ -109,7 +109,7 @@ export function mocked__serverFn__readOneUser({
     tradingOrders: [
       {
         amountInvested: 20,
-        amountRecived: 30,
+        amountReceived: 30,
         createdAt: new Date(),
         id: "",
         tradingStatus: "active",
@@ -119,7 +119,7 @@ export function mocked__serverFn__readOneUser({
       },
       {
         amountInvested: 20,
-        amountRecived: 30,
+        amountReceived: 30,
         createdAt: new Date(),
         id: "",
         tradingStatus: "completed",
@@ -129,7 +129,7 @@ export function mocked__serverFn__readOneUser({
       },
       {
         amountInvested: 20,
-        amountRecived: 30,
+        amountReceived: 30,
         createdAt: new Date(),
         id: "",
         tradingStatus: "active",

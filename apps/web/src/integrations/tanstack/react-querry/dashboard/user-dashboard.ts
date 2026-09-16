@@ -122,9 +122,9 @@ export function useInvestmentData() {
             investedAmount: output.investedAmount + curr.amountInvested,
             profitAmount:
               output.profitAmount +
-              (curr.amountRecived === null || curr.amountRecived === 0
+              (curr.amountReceived === null || curr.amountReceived === 0
                 ? 0
-                : curr.amountRecived - curr.amountInvested),
+                : curr.amountReceived - curr.amountInvested),
           };
 
           return output;
@@ -143,9 +143,9 @@ export function useInvestmentData() {
             investedAmount: output.investedAmount + curr.amountInvested,
             profitAmount:
               output.profitAmount +
-              (curr.amountRecived === null || curr.amountRecived === 0
+              (curr.amountReceived === null || curr.amountReceived === 0
                 ? 0
-                : curr.amountRecived - curr.amountInvested),
+                : curr.amountReceived - curr.amountInvested),
           };
 
           return output;

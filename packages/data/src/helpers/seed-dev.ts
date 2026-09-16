@@ -215,7 +215,7 @@ async function seedMiningOrder() {
         miningProfileUsed: randomMiningProfile.id,
         orderedBy: user.id,
         miningStatus: isCompleted ? "completed" : "active",
-        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+        amountReceived: isCompleted ? amountInvested - randomInt(0, 5) : null,
       };
     });
 
@@ -267,7 +267,7 @@ async function seedTradingOrder() {
         amountInvested: amountInvested,
         orderedBy: user.id,
         miningStatus: isCompleted ? "completed" : "active",
-        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+        amountReceived: isCompleted ? amountInvested - randomInt(0, 5) : null,
       };
     });
 

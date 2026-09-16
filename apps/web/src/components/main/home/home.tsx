@@ -1233,7 +1233,7 @@ export function PassiveIncomeSection({
                 const totalAmount = allMiningOrders.reduce((acc, curr) => {
                   return (
                     acc +
-                    (curr.amountRecived !== null ? curr.amountInvested : 0)
+                    (curr.amountReceived !== null ? curr.amountInvested : 0)
                   );
                 }, 0);
 
