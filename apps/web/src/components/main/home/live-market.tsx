@@ -98,7 +98,7 @@ export function LiveMarkets({
         <div
           className={cn(
             `relative w-full overflow-hidden rounded-3xl border`,
-            `border-secondary-200/30 bg-secondary-50/70`,
+            `border-secondary-200/30 bg-transparent-50/10`,
           )}
         >
           {/* HEADER */}
