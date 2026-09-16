@@ -1,33 +1,6 @@
 import { db } from "@/index";
-import { MiningOrderTable } from "@/schema";
-import { id } from "@repo/utils/id";
-import { and, desc, eq, SQL } from "drizzle-orm";
-
-/**
- * ==========================================
- * CREATE
- * ==========================================
- */
-
-type TCreate__MiningOrder = Omit<
-  typeof MiningOrderTable.$inferInsert,
-  "tableIdentifierToken" | "createdAt" | "updatedAt"
->;
-
-const create__MiningOrder = async (data: TCreate__MiningOrder) => {
-  const generatedId = data.id ?? id();
-
-  await db.insert(MiningOrderTable).values({
-    ...data,
-    id: generatedId,
-  });
-
-  return (await read__OneMiningOrder({
-    identifier: {
-      id: generatedId,
-    },
-  }))!;
-};
+import { MiningOrderTable, MiningProfileTable, UserTable } from "@/schema";
+import { and, desc, eq, getTableColumns, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
@@ -47,17 +20,33 @@ type TRead__AllMiningOrders = {
     limit?: number;
   };
 
-  joinOptions?: Partial<{
+  joiningOptions?: Partial<{
     user: true;
     miningProfile: true;
   }>;
+
+  selectedFields?: Partial<
+    Record<keyof typeof MiningOrderTable.$inferSelect, true>
+  > &
+    Partial<{
+      user: Partial<Record<keyof typeof UserTable.$inferSelect, true>>;
+      miningProfile: Partial<
+        Record<keyof typeof MiningProfileTable.$inferSelect, true>
+      >;
+    }>;
 };
 
 const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
+  const userColumns = getTableColumns(UserTable);
+  const miningOrderColumns = getTableColumns(MiningOrderTable);
+  const miningProfileColumns = getTableColumns(MiningProfileTable);
+
   const conditions: SQL[] = [];
+
+  conditions.push(desc(MiningOrderTable.createdAt));
 
   if (options?.identifier?.userId) {
     conditions.push(eq(MiningOrderTable.orderedBy, options.identifier.userId));
@@ -78,120 +67,101 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
     );
   }
 
-  return await db.query.MiningOrderTable.findMany({
-    where: and(...conditions),
-    limit,
-    offset: skip,
-    orderBy: [desc(MiningOrderTable.createdAt)],
-    with: {
-      ...(options?.joinOptions?.user ? { user: true } : {}),
-      ...(options?.joinOptions?.miningProfile ? { miningProfile: true } : {}),
-    },
-  });
-};
+  const filteredMiningOrderTableFields = options?.selectedFields
+    ? (Object.fromEntries(
+        Object.entries(options.selectedFields)
+          .filter(
+            ([key, value]) =>
+              key in miningOrderColumns && typeof value === "boolean" && value,
+          )
+          .map(([key]) => [
+            key,
+            miningOrderColumns[key as keyof typeof miningOrderColumns],
+          ]),
+      ) as typeof miningOrderColumns)
+    : miningOrderColumns;
 
-/**
- * ==========================================
- * READ (ONE)
- * ==========================================
- */
+  const filteredUsersFields =
+    options?.joiningOptions?.user && options.selectedFields?.user
+      ? (Object.fromEntries(
+          Object.entries(options.selectedFields.user)
+            .filter(
+              ([key, value]) =>
+                key in userColumns && typeof value === "boolean" && value,
+            )
+            .map(([key]) => [
+              key,
+              userColumns[key as keyof typeof userColumns],
+            ]),
+        ) as typeof userColumns)
+      : options?.joiningOptions?.user
+        ? userColumns
+        : undefined;
 
-type TRead__OneMiningOrder = {
-  identifier: { id: string };
+  const filteredMiningProfileFields =
+    options?.joiningOptions?.miningProfile &&
+    options.selectedFields?.miningProfile
+      ? (Object.fromEntries(
+          Object.entries(options.selectedFields.miningProfile)
+            .filter(
+              ([key, value]) =>
+                key in miningProfileColumns &&
+                typeof value === "boolean" &&
+                value,
+            )
+            .map(([key]) => [
+              key,
+              miningProfileColumns[key as keyof typeof miningProfileColumns],
+            ]),
+        ) as typeof miningProfileColumns)
+      : options?.joiningOptions?.miningProfile
+        ? miningProfileColumns
+        : undefined;
 
-  joinOptions?: Partial<{
-    user: true;
-    miningProfile: true;
-  }>;
-};
+  const selectedQueryFields = {
+    ...filteredMiningOrderTableFields,
 
-const read__OneMiningOrder = async (options: TRead__OneMiningOrder) => {
-  const conditions: SQL[] = [];
+    ...(filteredUsersFields && options?.selectedFields?.user
+      ? {
+          users: {
+            ...filteredUsersFields,
+          },
+        }
+      : {}),
 
-  if ("id" in options.identifier) {
-    conditions.push(eq(MiningOrderTable.id, options.identifier.id));
-  }
-
-  const order = await db.query.MiningOrderTable.findFirst({
-    where: and(...conditions),
-    with: {
-      ...(options.joinOptions?.user ? { user: true } : {}),
-      ...(options.joinOptions?.miningProfile ? { miningProfile: true } : {}),
-    },
-  });
-
-  return order ? order : null;
-};
-
-/**
- * ==========================================
- * UPDATE
- * ==========================================
- */
-
-type TUpdate__MiningOrder = {
-  identifier: {
-    id: string;
+    ...(filteredMiningProfileFields && options?.selectedFields?.miningProfile
+      ? {
+          miningProfile: {
+            ...filteredMiningProfileFields,
+          },
+        }
+      : {}),
   };
 
-  dataToUpdate: Partial<
-    Omit<typeof MiningOrderTable.$inferInsert, "tableIdentifierToken" | "id">
-  >;
-};
+  const baseQuery = db
+    .select(selectedQueryFields)
+    .from(MiningOrderTable)
+    .limit(limit)
+    .offset(skip);
 
-const update__MiningOrder = async (options: TUpdate__MiningOrder) => {
-  const filteredData = Object.fromEntries(
-    Object.entries(options.dataToUpdate).filter(
-      ([, value]) => value !== undefined,
-    ),
-  );
-
-  if (Object.keys(filteredData).length === 0) {
-    return null;
+  if (conditions.length > 0) {
+    baseQuery.where(and(...conditions));
   }
 
-  await db
-    .update(MiningOrderTable)
-    .set(filteredData)
-    .where(eq(MiningOrderTable.id, options.identifier.id));
-
-  return read__OneMiningOrder({
-    identifier: options.identifier,
-  });
-};
-
-/**
- * ==========================================
- * DELETE
- * ==========================================
- */
-
-type TDelete__MiningOrder = {
-  identifier: {
-    id: string;
-  };
-};
-
-const delete__MiningOrder = async (options: TDelete__MiningOrder) => {
-  const existing = await read__OneMiningOrder({
-    identifier: options.identifier,
-  });
-
-  if (!existing) {
-    return null;
+  if (options?.joiningOptions?.user) {
+    baseQuery.leftJoin(UserTable, eq(UserTable.id, MiningOrderTable.orderedBy));
   }
 
-  await db
-    .delete(MiningOrderTable)
-    .where(eq(MiningOrderTable.id, options.identifier.id));
+  if (options?.joiningOptions?.miningProfile) {
+    baseQuery.leftJoin(
+      MiningProfileTable,
+      eq(MiningProfileTable.id, MiningOrderTable.miningProfileUsed),
+    );
+  }
 
-  return existing;
+  const queryResult = await baseQuery;
+
+  return queryResult;
 };
 
-export {
-  create__MiningOrder,
-  read__AllMiningOrders,
-  read__OneMiningOrder,
-  update__MiningOrder,
-  delete__MiningOrder,
-};
+export { read__AllMiningOrders };

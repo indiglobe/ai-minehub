@@ -237,9 +237,6 @@ export function AllDeposits({
                   </td>
                 </tr>
               ))}
-              {/* <DepositsLoading /> */}
-              {/* <DepositError /> */}
-              {/* <DepositsEmpty /> */}
             </tbody>
           </table>
         </div>

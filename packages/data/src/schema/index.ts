@@ -208,7 +208,7 @@ export const MiningOrderTable = mysqlTable("mining_order", {
       onUpdate: "cascade",
     }),
   amountInvested: int("amount_invested").notNull(),
-  amountReceived: int("amount_recived").default(0),
+  amountReceived: int("amount_received").default(0),
   miningProfileUsed: foreignId("mining_profile_used")
     .notNull()
     .references(() => MiningProfileTable.id, {
@@ -244,7 +244,7 @@ export const TradingOrderTable = mysqlTable("trading_order", {
       onUpdate: "cascade",
     }),
   amountInvested: int("amount_invested").notNull(),
-  amountReceived: int("amount_recived").default(0),
+  amountReceived: int("amount_received").default(0),
   tradingStatus: investmentStatusEnums().$defaultFn(() => "active"),
 
   ...metadata("TORD"),
@@ -364,11 +364,11 @@ export const MiningWalletWithdrawTable = mysqlTable("mining_wallet_withdraw", {
       onUpdate: "cascade",
     }),
   amount: int("amount").notNull(),
-  cryptoWaletAddress: varchar("crypto_walet_address", {
+  cryptoWalletAddress: varchar("crypto_wallet_address", {
     length: 255,
   }).notNull(),
   status: withdrawlStatusEnums(),
-  withdrawlMethod: transactionMethodEnums("withdrawl_method").notNull(),
+  withdrawalMethod: transactionMethodEnums("withdrawal_method").notNull(),
 
   ...metadata("MWWD"),
 });
@@ -492,7 +492,7 @@ export type TableIdentifierToken =
    */
   | "MWDP"
   /**
-   * MiningWalletWithdrawsTable
+   * MiningWalletWithdrawTable
    */
   | "MWWD";
 
@@ -601,9 +601,9 @@ const tableMap = {
   MORD: "MiningOrderTable",
   MPRO: "MiningProfileTable",
   TWDP: "TradingWalletDepositsTable",
-  TWWD: "TradingWalletWithdrawsTable",
+  TWWD: "TradingWalletWithdrawTable",
   MWDP: "MiningWalletDepositsTable",
-  MWWD: "MiningWalletWithdrawsTable",
+  MWWD: "MiningWalletWithdrawTable",
 } as const;
 
 /**

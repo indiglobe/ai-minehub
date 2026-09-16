@@ -1,65 +1,72 @@
-import { z } from "zod";
+import z from "zod";
 
-export const create__MiningOrderSchema = z.object({
-  id: z.string().optional(),
-  orderedBy: z.string(),
-  amountInvested: z.number(),
-  miningProfileUsed: z.string(),
-});
-
-export const read__AllMiningOrdersSchema = z
-  .object({
-    identifier: z
-      .object({
-        miningProfileUsed: z.string().optional(),
-        miningStatus: z
-          .union([z.literal("active"), z.literal("completed")])
-          .optional(),
-        userId: z.string().optional(),
-      })
-      .optional(),
-    queryOptions: z
-      .object({
-        skip: z.number().optional(),
-        limit: z.number().optional(),
-      })
-      .optional(),
-    joinOptions: z
-      .object({
-        user: z.literal(true).optional(),
-        miningProfile: z.literal(true).optional(),
-      })
-      .optional(),
-  })
-  .optional();
-
-export const read__OneMiningOrderSchema = z.object({
-  identifier: z.object({
-    id: z.string(),
-  }),
-  joinOptions: z
+export const read__AllMiningOrdersSchema = z.object({
+  identifier: z
+    .object({
+      miningProfileUsed: z.string().optional(),
+      miningStatus: z
+        .union([z.literal("active"), z.literal("completed")])
+        .optional(),
+      userId: z.string().optional(),
+    })
+    .optional(),
+  queryOptions: z
+    .object({
+      skip: z.number().optional(),
+      limit: z.number().optional(),
+    })
+    .optional(),
+  joiningOptions: z
     .object({
       user: z.literal(true).optional(),
       miningProfile: z.literal(true).optional(),
     })
     .optional(),
-});
-
-export const update__MiningOrderSchema = z.object({
-  identifier: z.object({
-    id: z.string(),
-  }),
-  dataToUpdate: z.object({
-    orderedBy: z.string().optional(),
-    amountInvested: z.number().optional(),
-    miningProfileUsed: z.string().optional(),
-    createdAt: z.date().optional(),
-    updatedAt: z.date().optional(),
-  }),
-});
-
-export const delete__MiningOrderSchema = z.object({
-  identifier: z.object({
-    id: z.string(),
-  }),
+  selectedFields: z
+    .intersection(
+      z.object({
+        miningProfileUsed: z.literal(true).optional(),
+        miningStatus: z.literal(true).optional(),
+        id: z.literal(true).optional(),
+        createdAt: z.literal(true).optional(),
+        updatedAt: z.literal(true).optional(),
+        tableIdentifierToken: z.literal(true).optional(),
+        orderedBy: z.literal(true).optional(),
+        amountInvested: z.literal(true).optional(),
+        amountReceived: z.literal(true).optional(),
+      }),
+      z.object({
+        user: z
+          .object({
+            id: z.literal(true).optional(),
+            email: z.literal(true).optional(),
+            fullName: z.literal(true).optional(),
+            avatarUrl: z.literal(true).optional(),
+            age: z.literal(true).optional(),
+            role: z.literal(true).optional(),
+            phoneNumber: z.literal(true).optional(),
+            referrerId: z.literal(true).optional(),
+            userStatus: z.literal(true).optional(),
+            createdAt: z.literal(true).optional(),
+            updatedAt: z.literal(true).optional(),
+            tableIdentifierToken: z.literal(true).optional(),
+          })
+          .optional(),
+        miningProfile: z
+          .object({
+            id: z.literal(true).optional(),
+            createdAt: z.literal(true).optional(),
+            updatedAt: z.literal(true).optional(),
+            tableIdentifierToken: z.literal(true).optional(),
+            maximumAllowedAmount: z.literal(true).optional(),
+            minimumAllowedAmount: z.literal(true).optional(),
+            lockinPeriod: z.literal(true).optional(),
+            category: z.literal(true).optional(),
+            dailyReturn: z.literal(true).optional(),
+            isPopular: z.literal(true).optional(),
+          })
+          .optional(),
+      }),
+    )
+    .optional(),
 });

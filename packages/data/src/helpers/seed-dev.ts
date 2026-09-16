@@ -16,6 +16,7 @@ import {
   TradingWalletWithdrawTable,
 } from "@/schema";
 import { eq } from "drizzle-orm";
+import { id } from "@repo/utils/id";
 
 /* -------------------------------------------------------- */
 /*                          HELPERS                         */
@@ -303,7 +304,7 @@ async function seedTradingWalletDeposits() {
       ]),
       depositProof: faker.image.personPortrait(),
       orderedBy: u.users.id,
-      transactionId: crypto.randomUUID(),
+      transactionId: id({ length: 20 }),
       wallet: u.trading_wallet.id,
     };
   }) satisfies (typeof TradingWalletDepositsTable.$inferInsert)[];
@@ -335,7 +336,7 @@ async function seedTradingWalletWithdraw() {
   >((u) => {
     return {
       amount: randomInt(200, 300),
-      cryptoWaletAddress: crypto.randomUUID(),
+      cryptoWaletAddress: id({ length: 20 }),
       orderedBy: u.users.id,
       wallet: u.trading_wallet.id,
       withdrawlMethod: faker.helpers.arrayElement([
@@ -382,7 +383,7 @@ async function seedMiningWalletDeposits() {
       ]),
       depositProof: faker.image.personPortrait(),
       orderedBy: u.users.id,
-      transactionId: crypto.randomUUID(),
+      transactionId: id({ length: 20 }),
       wallet: u.mining_wallet.id,
     };
   }) satisfies (typeof MiningWalletDepositsTable.$inferInsert)[];
@@ -414,15 +415,16 @@ async function seedMiningWalletWithdraw() {
   >((u) => {
     return {
       amount: randomInt(200, 300),
-      cryptoWaletAddress: crypto.randomUUID(),
+      cryptoWaletAddress: id({ length: 20 }),
       orderedBy: u.users.id,
       wallet: u.mining_wallet.id,
-      withdrawlMethod: faker.helpers.arrayElement([
+      withdrawalMethod: faker.helpers.arrayElement([
         "BSC",
         "TRX",
         "ETH",
         "Bitcoin",
       ]),
+      cryptoWalletAddress: id({ length: 20 }),
     };
   }) satisfies (typeof MiningWalletWithdrawTable.$inferInsert)[];
 
