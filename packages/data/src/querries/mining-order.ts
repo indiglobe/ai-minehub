@@ -46,8 +46,6 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
 
   const conditions: SQL[] = [];
 
-  conditions.push(desc(MiningOrderTable.createdAt));
-
   if (options?.identifier?.userId) {
     conditions.push(eq(MiningOrderTable.orderedBy, options.identifier.userId));
   }
@@ -142,7 +140,8 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
     .select(selectedQueryFields)
     .from(MiningOrderTable)
     .limit(limit)
-    .offset(skip);
+    .offset(skip)
+    .orderBy(desc(MiningOrderTable.createdAt));
 
   if (conditions.length > 0) {
     baseQuery.where(and(...conditions));

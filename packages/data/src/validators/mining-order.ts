@@ -69,4 +69,4 @@ export const read__AllMiningOrdersSchema = z.object({
       }),
     )
     .optional(),
-});
+}).optional();

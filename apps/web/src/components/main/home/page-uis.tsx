@@ -586,7 +586,7 @@ export function PassiveIncomeTitle({
   return (
     <h3
       data-slot={`passive-income-title`}
-      className={cn(`font-brand-secondary text-2xl font-bold`, className)}
+      className={cn(`font-brand-secondary text-2xl font-bold text-center`, className)}
       {...props}
     />
   );
