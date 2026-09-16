@@ -57,9 +57,7 @@ export function LiveMarkets({
   return (
     <section
       className={cn(
-        `relative w-full pt-8 pb-10`,
-        `sm:pt-10`,
-        `md:max-w-140 md:pt-8`,
+        `relative w-full pt-14 pb-10 sm:pt-16 md:max-w-140 md:pt-14`,
         className,
       )}
       {...props}
@@ -68,18 +66,12 @@ export function LiveMarkets({
         {/* TODAY'S VOLUME */}
         <div
           className={cn(
-            `absolute -top-8 right-2 z-30 hidden`,
-            `min-w-34 rounded-2xl border px-5 py-4`,
-            `border-secondary-200/30 bg-secondary-50`,
-            `shadow-xl`,
-            `sm:block`,
-            `animate-volume-dance`,
+            `absolute -top-14 right-2 z-30 hidden min-w-38 rounded-2xl border px-5 py-4 border-secondary-600/30 bg-background shadow-xl sm:block animate-volume-dance`,
           )}
         >
           <p
             className={cn(
-              `font-brand-primary text-[10px] font-medium`,
-              `text-foreground/40 tracking-wide uppercase`,
+              `font-brand-primary text-2.5 font-medium text-foreground/40 tracking-wide uppercase`,
             )}
           >
             Today's Volume
@@ -87,7 +79,7 @@ export function LiveMarkets({
 
           <p
             className={cn(
-              `font-brand-primary text-primary-400 mt-1 text-xl font-bold`,
+              `font-brand-primary mt-1 text-xl font-bold text-primary-400`,
             )}
           >
             $6.2B
@@ -97,33 +89,27 @@ export function LiveMarkets({
         {/* MAIN MARKET CARD */}
         <div
           className={cn(
-            `relative w-full overflow-hidden rounded-3xl border`,
-            `border-secondary-200/30 bg-transparent-50/10`,
+            `relative w-full overflow-hidden rounded-3xl border border-secondary-200/20 bg-secondary-100/10 backdrop-blur-md`,
           )}
         >
           {/* HEADER */}
           <div
             className={cn(
-              `flex flex-col gap-4 border-b`,
-              `border-secondary-200/25 px-5 py-5`,
-              `3xs:flex-row 3xs:items-center 3xs:justify-between`,
+              `flex flex-col gap-4 border-b border-secondary-200/25 px-5 py-5 3xs:flex-row 3xs:items-center 3xs:justify-between`,
             )}
           >
             <div className={cn(`flex items-center gap-2`)}>
               <span
                 className={cn(
-                  `flex size-7 items-center justify-center rounded-full`,
-                  `bg-accent-500/10`,
+                  `flex size-7 items-center justify-center rounded-full bg-accent-500/10`,
                 )}
               >
-                <span className={cn(`bg-accent-500 size-2 rounded-full`)} />
+                <span className={cn(`size-2 rounded-full bg-accent-500`)} />
               </span>
 
               <h2
                 className={cn(
-                  `font-brand-primary text-sm font-bold`,
-                  `text-foreground`,
-                  `sm:text-base`,
+                  `font-brand-primary text-sm font-bold text-foreground sm:text-base`,
                 )}
               >
                 Live Markets
@@ -135,9 +121,7 @@ export function LiveMarkets({
                 type="button"
                 onClick={() => setActiveTab("all")}
                 className={cn(
-                  `rounded-lg px-3 py-2`,
-                  `font-brand-primary text-xs font-medium`,
-                  `transition-all duration-200`,
+                  `rounded-lg px-3 py-2 font-brand-primary text-xs font-medium transition-all duration-200`,
                   activeTab === "all"
                     ? `bg-secondary-500/15 text-secondary-500`
                     : `text-foreground/40 hover:text-foreground`,
@@ -150,9 +134,7 @@ export function LiveMarkets({
                 type="button"
                 onClick={() => setActiveTab("crypto")}
                 className={cn(
-                  `rounded-lg px-3 py-2`,
-                  `font-brand-primary text-xs font-medium`,
-                  `transition-all duration-200`,
+                  `rounded-lg px-3 py-2 font-brand-primary text-xs font-medium transition-all duration-200`,
                   activeTab === "crypto"
                     ? `bg-secondary-500/15 text-secondary-500`
                     : `text-foreground/40 hover:text-foreground`,
@@ -165,9 +147,7 @@ export function LiveMarkets({
                 type="button"
                 onClick={() => setActiveTab("forex")}
                 className={cn(
-                  `rounded-lg px-3 py-2`,
-                  `font-brand-primary text-xs font-medium`,
-                  `transition-all duration-200`,
+                  `rounded-lg px-3 py-2 font-brand-primary text-xs font-medium transition-all duration-200`,
                   activeTab === "forex"
                     ? `bg-secondary-500/15 text-secondary-500`
                     : `text-foreground/40 hover:text-foreground`,
@@ -181,17 +161,14 @@ export function LiveMarkets({
           {/* TOP MARKET AREA */}
           <div
             className={cn(
-              `min-h-60 border-b`,
-              `border-secondary-200/25 px-5 py-5`,
-              `sm:min-h-64`,
+              `min-h-60 border-b border-secondary-200/25 px-5 py-5 sm:min-h-64`,
             )}
           >
             <div className={cn(`flex items-start justify-between gap-4`)}>
               <div>
                 <p
                   className={cn(
-                    `font-brand-primary text-sm`,
-                    `text-foreground/50`,
+                    `font-brand-primary text-sm text-foreground/50`,
                   )}
                 >
                   BTC / USD
@@ -199,9 +176,7 @@ export function LiveMarkets({
 
                 <h3
                   className={cn(
-                    `font-brand-primary mt-1 text-xl font-bold`,
-                    `text-foreground tracking-wide`,
-                    `sm:text-2xl`,
+                    `font-brand-primary mt-1 text-xl font-bold text-foreground tracking-wide sm:text-2xl`,
                   )}
                 >
                   $84,250.00
@@ -210,10 +185,7 @@ export function LiveMarkets({
 
               <span
                 className={cn(
-                  `bg-accent-500/10 rounded-lg px-3 py-2`,
-                  `font-brand-primary text-xs font-semibold`,
-                  `text-accent-500`,
-                  `sm:text-sm`,
+                  `rounded-lg bg-accent-500/10 px-3 py-2 font-brand-primary text-xs font-semibold text-accent-500 sm:text-sm`,
                 )}
               >
                 +2.14% ↑
@@ -226,15 +198,14 @@ export function LiveMarkets({
             {markets.map((market) => (
               <div
                 key={market.pair}
-                className={cn(`flex items-center justify-between gap-4 py-3`)}
+                className={cn(
+                  `flex items-center justify-between gap-4 py-3`,
+                )}
               >
                 <div className={cn(`flex min-w-0 items-center gap-3`)}>
                   <div
                     className={cn(
-                      `flex size-8 shrink-0 items-center justify-center`,
-                      `rounded-lg border`,
-                      `border-secondary-200/30 bg-secondary-50`,
-                      `font-brand-primary text-foreground text-sm`,
+                      `flex size-8 shrink-0 items-center justify-center rounded-lg border border-secondary-200/30 bg-secondary-50 font-brand-primary text-sm text-foreground`,
                     )}
                   >
                     {market.symbol}
@@ -243,8 +214,7 @@ export function LiveMarkets({
                   <div className={cn(`min-w-0`)}>
                     <p
                       className={cn(
-                        `font-brand-primary truncate text-sm font-bold`,
-                        `text-foreground`,
+                        `font-brand-primary truncate text-sm font-bold text-foreground`,
                       )}
                     >
                       {market.pair}
@@ -252,8 +222,7 @@ export function LiveMarkets({
 
                     <p
                       className={cn(
-                        `font-brand-primary mt-0.5 text-xs`,
-                        `text-foreground/35`,
+                        `font-brand-primary mt-0.5 text-xs text-foreground/35`,
                       )}
                     >
                       {market.name}
@@ -264,8 +233,7 @@ export function LiveMarkets({
                 <div className={cn(`shrink-0 text-right`)}>
                   <p
                     className={cn(
-                      `font-brand-primary text-sm font-bold`,
-                      `text-foreground`,
+                      `font-brand-primary text-sm font-bold text-foreground`,
                     )}
                   >
                     {market.price}
@@ -273,8 +241,7 @@ export function LiveMarkets({
 
                   <span
                     className={cn(
-                      `mt-1 inline-block rounded px-1.5 py-0.5`,
-                      `font-brand-primary text-[10px] font-semibold`,
+                      `mt-1 inline-block rounded px-1.5 py-0.5 font-brand-primary text-2.5 font-semibold`,
                       market.positive
                         ? `bg-accent-500/10 text-accent-500`
                         : `bg-primary-500/10 text-primary-500`,
@@ -290,17 +257,13 @@ export function LiveMarkets({
           {/* VIEW ALL */}
           <div
             className={cn(
-              `flex h-12 items-center justify-center border-t`,
-              `border-secondary-200/25`,
+              `flex h-12 items-center justify-center border-t border-secondary-200/25`,
             )}
           >
             <button
               type="button"
               className={cn(
-                `flex items-center gap-1`,
-                `font-brand-primary text-xs font-semibold`,
-                `text-secondary-500`,
-                `hover:text-secondary-400 transition-colors`,
+                `flex items-center gap-1 font-brand-primary text-xs font-semibold text-secondary-500 transition-colors hover:text-secondary-400`,
               )}
             >
               <span>View All Markets</span>
@@ -313,18 +276,12 @@ export function LiveMarkets({
         {/* NEW TRADER BONUS */}
         <div
           className={cn(
-            `absolute -bottom-3 -left-5 z-30 hidden`,
-            `min-w-39 rounded-2xl border px-4 py-4`,
-            `border-secondary-200/30 bg-secondary-50`,
-            `shadow-xl`,
-            `sm:block`,
-            `animate-bonus-dance`,
+            `absolute -bottom-1 -left-15 z-30 hidden min-w-39 rounded-2xl border px-4 py-4 border-secondary-200/30 bg-background shadow-xl sm:block animate-bonus-dance`,
           )}
         >
           <p
             className={cn(
-              `font-brand-primary text-[10px] font-medium`,
-              `text-foreground/35 tracking-wide uppercase`,
+              `font-brand-primary text-2.5 font-medium text-foreground/35 tracking-wide uppercase`,
             )}
           >
             New Trader Bonus
@@ -332,7 +289,7 @@ export function LiveMarkets({
 
           <p
             className={cn(
-              `font-brand-primary text-accent-500 mt-1 text-xl font-bold`,
+              `font-brand-primary mt-1 text-xl font-bold text-accent-500`,
             )}
           >
             2× Deposit
@@ -348,15 +305,12 @@ export function LiveMarkets({
           <button
             type="button"
             className={cn(
-              `flex h-9 items-center gap-2 rounded-lg border px-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
-              `font-brand-primary text-foreground/60 text-xs`,
+              `flex h-9 items-center gap-2 rounded-lg border px-3 border-secondary-200/30 bg-secondary-50/70 font-brand-primary text-xs text-foreground/60`,
             )}
           >
             <span
               className={cn(
-                `flex size-4 items-center justify-center rounded-full`,
-                `bg-secondary-500 text-[9px] font-bold text-white`,
+                `flex size-4 items-center justify-center rounded-full bg-secondary-500 text-2.25 font-bold text-white`,
               )}
             >
               4
@@ -368,15 +322,12 @@ export function LiveMarkets({
           <button
             type="button"
             className={cn(
-              `flex h-9 items-center gap-2 rounded-lg border px-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
-              `font-brand-primary text-foreground/60 text-xs`,
+              `flex h-9 items-center gap-2 rounded-lg border px-3 border-secondary-200/30 bg-secondary-50/70 font-brand-primary text-xs text-foreground/60`,
             )}
           >
             <span
               className={cn(
-                `flex size-4 items-center justify-center rounded-full`,
-                `bg-secondary-500 text-[9px] font-bold text-white`,
+                `flex size-4 items-center justify-center rounded-full bg-secondary-500 text-2.25 font-bold text-white`,
               )}
             >
               5
@@ -388,9 +339,7 @@ export function LiveMarkets({
           <button
             type="button"
             className={cn(
-              `flex h-9 items-center gap-2 rounded-lg border px-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
-              `font-brand-primary text-foreground/60 text-xs`,
+              `flex h-9 items-center gap-2 rounded-lg border px-3 border-secondary-200/30 bg-secondary-50/70 font-brand-primary text-xs text-foreground/60`,
             )}
           >
             <Globe2 className={cn(`size-3.5`)} />
@@ -401,9 +350,7 @@ export function LiveMarkets({
           <button
             type="button"
             className={cn(
-              `flex h-9 items-center gap-2 rounded-lg border px-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
-              `font-brand-primary text-foreground/60 text-xs`,
+              `flex h-9 items-center gap-2 rounded-lg border px-3 border-secondary-200/30 bg-secondary-50/70 font-brand-primary text-xs text-foreground/60`,
             )}
           >
             <Smartphone className={cn(`size-3.5`)} />
@@ -413,17 +360,16 @@ export function LiveMarkets({
         </div>
 
         {/* MOBILE STATS */}
-        <div className={cn(`mt-4 grid grid-cols-2 gap-3`, `sm:hidden`)}>
+        <div className={cn(`mt-4 grid grid-cols-2 gap-3 sm:hidden`)}>
+          {/* TODAY'S VOLUME */}
           <div
             className={cn(
-              `rounded-xl border p-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
+              `relative -top-2 rounded-xl border p-3 border-secondary-200/30 bg-secondary-50/70`,
             )}
           >
             <p
               className={cn(
-                `font-brand-primary text-[9px]`,
-                `text-foreground/35 uppercase`,
+                `font-brand-primary text-2.25 text-foreground/35 uppercase`,
               )}
             >
               Today's Volume
@@ -431,24 +377,22 @@ export function LiveMarkets({
 
             <p
               className={cn(
-                `font-brand-primary mt-1 font-bold`,
-                `text-primary-400`,
+                `font-brand-primary mt-1 font-bold text-primary-400`,
               )}
             >
               $6.2B
             </p>
           </div>
 
+          {/* NEW TRADER BONUS */}
           <div
             className={cn(
-              `rounded-xl border p-3`,
-              `border-secondary-200/30 bg-secondary-50/70`,
+              `rounded-xl border p-3 border-secondary-200/30 bg-secondary-50/70`,
             )}
           >
             <p
               className={cn(
-                `font-brand-primary text-[9px]`,
-                `text-foreground/35 uppercase`,
+                `font-brand-primary text-2.25 text-foreground/35 uppercase`,
               )}
             >
               New Trader Bonus
@@ -456,8 +400,7 @@ export function LiveMarkets({
 
             <p
               className={cn(
-                `font-brand-primary mt-1 font-bold`,
-                `text-accent-500`,
+                `font-brand-primary mt-1 font-bold text-accent-500`,
               )}
             >
               2× Deposit

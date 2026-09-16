@@ -1,11 +1,4 @@
 import { cn } from "@repo/styles/cn";
-import {
-  CircleDollarSign,
-  Clock3,
-  RefreshCcw,
-  TrendingUp,
-  Users,
-} from "lucide-react";
 import type { ComponentProps } from "react";
 
 export function DashboardStatsLoading({
@@ -15,9 +8,7 @@ export function DashboardStatsLoading({
   return (
     <section
       className={cn(
-        `grid w-full grid-cols-1 gap-5`,
-        `sm:grid-cols-2`,
-        `xl:grid-cols-4`,
+        `grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4`,
         className,
       )}
       {...props}
@@ -25,15 +16,12 @@ export function DashboardStatsLoading({
       {/* TOTAL USERS */}
       <div
         className={cn(
-          `relative min-h-43 overflow-hidden rounded-2xl border`,
-          `border-secondary-200/30 bg-secondary-50/20`,
-          `p-6`,
+          `relative min-h-43 overflow-hidden rounded-2xl border border-secondary-200/30 bg-secondary-50/20 p-6`,
         )}
       >
         <div
           className={cn(
-            `absolute top-0 left-0 h-0.5 w-full`,
-            `bg-secondary-500`,
+            `absolute top-0 left-0 h-0.5 w-fulld bg-secondary-500`,
           )}
         />
 
@@ -49,9 +37,7 @@ export function DashboardStatsLoading({
       {/* TOTAL DEPOSITS */}
       <div
         className={cn(
-          `relative min-h-43 overflow-hidden rounded-2xl border`,
-          `border-secondary-200/30 bg-secondary-50/20`,
-          `p-6`,
+          `relative min-h-43 overflow-hidden rounded-2xl border border-secondary-200/30 bg-secondary-50/20 p-6`,
         )}
       >
         <div
@@ -70,9 +56,7 @@ export function DashboardStatsLoading({
       {/* PENDING DEPOSITS */}
       <div
         className={cn(
-          `relative min-h-43 overflow-hidden rounded-2xl border`,
-          `border-secondary-200/30 bg-secondary-50/20`,
-          `p-6`,
+          `relative min-h-43 overflow-hidden rounded-2xl border border-secondary-200/30 bg-secondary-50/20 p-6`,
         )}
       >
         <div
@@ -91,9 +75,7 @@ export function DashboardStatsLoading({
       {/* PENDING WITHDRAWALS */}
       <div
         className={cn(
-          `relative min-h-43 overflow-hidden rounded-2xl border`,
-          `border-secondary-200/30 bg-secondary-50/20`,
-          `p-6`,
+          `relative min-h-43 overflow-hidden rounded-2xl border border-secondary-200/30 bg-secondary-50/20 p-6`,
         )}
       >
         <div
@@ -118,43 +100,36 @@ export function MiningStatsLoading({
   return (
     <section
       className={cn(
-        `relative min-h-43 w-full overflow-hidden rounded-2xl border`,
-        `border-secondary-200/30 bg-secondary-50/20`,
-        `p-6`,
+        `relative min-h-43 w-full overflow-hidden rounded-2xl border border-secondary-200/30 bg-secondary-50/20 p-6`,
         className,
       )}
       {...props}
     >
       <div
         className={cn(
-          `absolute top-0 left-0 h-0.5 w-full`,
-          `bg-secondary-500`,
+          `absolute top-0 left-0 h-0.5 w-full bg-secondary-500`,
         )}
       />
 
       <div className={cn(`animate-pulse`)}>
         <div
           className={cn(
-            `size-12 rounded-xl`,
-            `bg-secondary-500/15`,
+            `size-12 rounded-xld bg-secondary-500/15`,
           )}
         />
 
         <div
           className={cn(
-            `mt-6 h-8 w-40 rounded-md`,
-            `bg-foreground/10`,
+            `mt-6 h-8 w-40 rounded-mdd bg-foreground/10`,
           )}
         />
 
         <div
           className={cn(
-            `mt-2 h-4 w-32 rounded-md`,
-            `bg-foreground/10`,
+            `mt-2 h-4 w-32 rounded-mdd bg-foreground/10`,
           )}
         />
       </div>
     </section>
   );
 }
-
