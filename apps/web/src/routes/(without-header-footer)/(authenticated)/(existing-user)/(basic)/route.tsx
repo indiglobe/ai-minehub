@@ -1,8 +1,4 @@
-import {
-  createFileRoute,
-  Outlet,
-  redirect,
-} from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
   "/(without-header-footer)/(authenticated)/(existing-user)/(basic)",
@@ -10,8 +6,6 @@ export const Route = createFileRoute(
   component: RouteComponent,
 
   beforeLoad: async ({ context }) => {
-    console.log(context);
-
     const {
       userDetailsFromCookie: { role },
     } = context;

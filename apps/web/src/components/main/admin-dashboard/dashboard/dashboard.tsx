@@ -24,9 +24,25 @@ import {
   StatCardData,
   StatCardFooter,
 } from "./page-ui";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@repo/ui/button";
+import {
+  ActiveMiningSessionsCardError,
+  ActiveMiningSessionsCardLoading,
+  PendingDepositsTableError,
+  PendingDepositsTableLoading,
+  PendingWithdrawalsTableError,
+  PendingWithdrawalsTableLoading,
+  ThisMonthStatsCardError,
+  ThisMonthStatsCardLoading,
+  TotalMiningInvestedCardError,
+  TotalMiningInvestedCardLoading,
+  TotalUsersError,
+  TotalUsersLoading,
+  UserGrowthCardError,
+  UserGrowthCardLoading,
+} from "@/components/main/admin-dashboard/dashboard/boundary-comps";
 
 export default function AdminDashboard() {
   return (
@@ -42,6 +58,8 @@ export function AdminStatsSection({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   return (
     <section
       className={cn(
@@ -50,40 +68,46 @@ export function AdminStatsSection({
       )}
       {...props}
     >
-      <TotalUsersStat />
-      <TotalDepositsStat />
-      <PendingDepositsStat />
-      <PendingWithdrawalsStat />
+      {state === "error" && <TotalUsersError />}
+      {state === "loading" && <TotalUsersLoading />}
+      {state === "data" && (
+        <>
+          <TotalUsersStat />
+          <TotalDepositsStat />
+          <PendingDepositsStat />
+          <PendingWithdrawalsStat />
+        </>
+      )}
     </section>
   );
 }
-
 export function TotalUsersStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
   return (
-    <StatCard
-      className={cn(
-        `border-t-secondary-500 relative overflow-hidden border-t-4`,
-        className,
-      )}
-      {...props}
-    >
-      <StatCardHeader>
-        <StatCardHeadingText>Total Users</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-secondary-500`)}>
-          <Users />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
+    <>
+      <StatCard
+        className={cn(
+          `border-t-secondary-500 relative overflow-hidden border-t-4`,
+          className,
+        )}
+        {...props}
+      >
+        <StatCardHeader>
+          <StatCardHeadingText>Total Users</StatCardHeadingText>
+          <StatCardHeadingIcon className={cn(`text-secondary-500`)}>
+            <Users />
+          </StatCardHeadingIcon>
+        </StatCardHeader>
 
-      <StatCardData className={cn(`text-foreground`)}>11</StatCardData>
+        <StatCardData className={cn(`text-foreground`)}>11</StatCardData>
 
-      <StatCardFooter>Total registered users</StatCardFooter>
-    </StatCard>
+        <StatCardFooter>Total registered users</StatCardFooter>
+      </StatCard>
+    </>
   );
 }
-
 export function TotalDepositsStat({
   className,
   ...props
@@ -109,7 +133,6 @@ export function TotalDepositsStat({
     </StatCard>
   );
 }
-
 export function PendingDepositsStat({
   className,
   ...props
@@ -165,7 +188,7 @@ export function AdminOverviewDashboard() {
   return (
     <div
       className={cn(
-        `default-padding @container grid gap-4 py-10 grid-cols-1 lg:grid-cols-2`,
+        `default-padding @container grid grid-cols-1 gap-4 py-10 lg:grid-cols-2`,
       )}
     >
       <div className={cn(`space-y-4`)}>
@@ -187,25 +210,35 @@ export function TotalMiningInvestedCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   return (
-    <StatCard
-      className={cn(
-        `border-t-secondary-500 relative overflow-hidden border-t-4`,
-        className,
+    <>
+      {state === "error" && <TotalMiningInvestedCardError />}
+      {state === "loading" && <TotalMiningInvestedCardLoading />}
+      {state === "data" && (
+        <StatCard
+          className={cn(
+            `border-t-secondary-500 relative overflow-hidden border-t-4`,
+            className,
+          )}
+          {...props}
+        >
+          <StatCardHeader>
+            <StatCardHeadingText>Total Mining Invested</StatCardHeadingText>
+            <StatCardHeadingIcon className={cn(`text-secondary-500`)}>
+              <Layers />
+            </StatCardHeadingIcon>
+          </StatCardHeader>
+
+          <StatCardData className={cn(`text-foreground`)}>
+            $5,910.00
+          </StatCardData>
+
+          <StatCardFooter>Total mining active pool</StatCardFooter>
+        </StatCard>
       )}
-      {...props}
-    >
-      <StatCardHeader>
-        <StatCardHeadingText>Total Mining Invested</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-secondary-500`)}>
-          <Layers />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      <StatCardData className={cn(`text-foreground`)}>$5,910.00</StatCardData>
-
-      <StatCardFooter>Total mining active pool</StatCardFooter>
-    </StatCard>
+    </>
   );
 }
 
@@ -213,25 +246,33 @@ export function ActiveMiningSessionsCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   return (
-    <StatCard
-      className={cn(
-        `border-t-accent-500 relative overflow-hidden border-t-4`,
-        className,
+    <>
+      {state === "error" && <ActiveMiningSessionsCardError />}
+      {state === "loading" && <ActiveMiningSessionsCardLoading />}
+      {state === "data" && (
+        <StatCard
+          className={cn(
+            `border-t-accent-500 relative overflow-hidden border-t-4`,
+            className,
+          )}
+          {...props}
+        >
+          <StatCardHeader>
+            <StatCardHeadingText>Active Mining Sessions</StatCardHeadingText>
+            <StatCardHeadingIcon className={cn(`text-accent-500`)}>
+              <Zap />
+            </StatCardHeadingIcon>
+          </StatCardHeader>
+
+          <StatCardData className={cn(`text-foreground`)}>10</StatCardData>
+
+          <StatCardFooter>Live mining instances</StatCardFooter>
+        </StatCard>
       )}
-      {...props}
-    >
-      <StatCardHeader>
-        <StatCardHeadingText>Active Mining Sessions</StatCardHeadingText>
-        <StatCardHeadingIcon className={cn(`text-accent-500`)}>
-          <Zap />
-        </StatCardHeadingIcon>
-      </StatCardHeader>
-
-      <StatCardData className={cn(`text-foreground`)}>10</StatCardData>
-
-      <StatCardFooter>Live mining instances</StatCardFooter>
-    </StatCard>
+    </>
   );
 }
 
@@ -239,6 +280,8 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   const chartDays = [
     { date: "Sep 08", height: "h-2" },
     { date: "Sep 09", height: "h-2" },
@@ -250,49 +293,59 @@ export function UserGrowthCard({
   ];
 
   return (
-    <section className={cn(`@container`, className)} {...props}>
-      <div
-        className={cn(
-          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
-        )}
-      >
-        <div className={cn(`flex w-full items-center justify-between`)}>
-          <div className={cn(`flex items-center gap-2`)}>
-            <TrendingUp className={cn(`text-secondary-500 size-4`)} />
-            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
-              User Growth (Last 7 Days)
-            </h2>
-          </div>
-        </div>
-
-        <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
-
-        <div className={cn(`flex flex-col justify-end pt-8 pb-2`)}>
+    <>
+      {state === "error" && <UserGrowthCardError />}
+      {state === "loading" && <UserGrowthCardLoading />}
+      {state === "data" && (
+        <section className={cn(`@container`, className)} {...props}>
           <div
-            className={cn(`flex h-40 w-full items-end justify-between gap-2`)}
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+            )}
           >
-            {chartDays.map((item, index) => (
+            <div className={cn(`flex w-full items-center justify-between`)}>
+              <div className={cn(`flex items-center gap-2`)}>
+                <TrendingUp className={cn(`text-secondary-500 size-4`)} />
+                <h2
+                  className={cn(`font-brand-secondary text-sm font-semibold`)}
+                >
+                  User Growth (Last 7 Days)
+                </h2>
+              </div>
+            </div>
+
+            <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
+
+            <div className={cn(`flex flex-col justify-end pt-8 pb-2`)}>
               <div
-                key={index}
                 className={cn(
-                  `flex h-full flex-1 flex-col items-center justify-end gap-2`,
+                  `flex h-40 w-full items-end justify-between gap-2`,
                 )}
               >
-                <div
-                  className={cn(
-                    `bg-secondary-500 w-full rounded-t-sm transition-all`,
-                    item.height,
-                  )}
-                />
-                <span className={cn(`text-foreground/50 text-2.5`)}>
-                  {item.date}
-                </span>
+                {chartDays.map((item, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      `flex h-full flex-1 flex-col items-center justify-end gap-2`,
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        `bg-secondary-500 w-full rounded-t-sm transition-all`,
+                        item.height,
+                      )}
+                    />
+                    <span className={cn(`text-foreground/50 text-2.5`)}>
+                      {item.date}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -300,6 +353,8 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   const statsList = [
     {
       id: "monthly-deposits",
@@ -332,51 +387,61 @@ export function ThisMonthStatsCard({
   ];
 
   return (
-    <section className={cn(`@container`, className)} {...props}>
-      <div
-        className={cn(
-          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
-        )}
-      >
-        <div className={cn(`flex w-full items-center justify-between`)}>
-          <div className={cn(`flex items-center gap-2`)}>
-            <Calendar className={cn(`text-secondary-500 size-4`)} />
-            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
-              This Month Stats
-            </h2>
-          </div>
-        </div>
-
-        <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
-
-        <div className={cn(`space-y-4`)}>
-          {statsList.map((stat, index) => (
-            <Fragment key={stat.id}>
-              <div className={cn(`flex w-full items-center justify-between`)}>
-                <div className={cn(`flex flex-col gap-y-1`)}>
-                  <span className={cn(`text-foreground/50 text-xs`)}>
-                    {stat.label}
-                  </span>
-                  <span className={cn(`text-lg font-semibold`, stat.color)}>
-                    {stat.value}
-                  </span>
-                </div>
-                <div
-                  className={cn(
-                    `bg-foreground/5 border-foreground/10 flex size-10 items-center justify-center rounded-lg border`,
-                  )}
+    <>
+      {state === "error" && <ThisMonthStatsCardError />}
+      {state === "loading" && <ThisMonthStatsCardLoading />}
+      {state === "data" && (
+        <section className={cn(`@container`, className)} {...props}>
+          <div
+            className={cn(
+              `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+            )}
+          >
+            <div className={cn(`flex w-full items-center justify-between`)}>
+              <div className={cn(`flex items-center gap-2`)}>
+                <Calendar className={cn(`text-secondary-500 size-4`)} />
+                <h2
+                  className={cn(`font-brand-secondary text-sm font-semibold`)}
                 >
-                  {stat.icon}
-                </div>
+                  This Month Stats
+                </h2>
               </div>
-              {index < statsList.length - 1 && (
-                <hr className={cn(`border-foreground/10 -mx-6 my-4`)} />
-              )}
-            </Fragment>
-          ))}
-        </div>
-      </div>
-    </section>
+            </div>
+
+            <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
+
+            <div className={cn(`space-y-4`)}>
+              {statsList.map((stat, index) => (
+                <Fragment key={stat.id}>
+                  <div
+                    className={cn(`flex w-full items-center justify-between`)}
+                  >
+                    <div className={cn(`flex flex-col gap-y-1`)}>
+                      <span className={cn(`text-foreground/50 text-xs`)}>
+                        {stat.label}
+                      </span>
+                      <span className={cn(`text-lg font-semibold`, stat.color)}>
+                        {stat.value}
+                      </span>
+                    </div>
+                    <div
+                      className={cn(
+                        `bg-foreground/5 border-foreground/10 flex size-10 items-center justify-center rounded-lg border`,
+                      )}
+                    >
+                      {stat.icon}
+                    </div>
+                  </div>
+                  {index < statsList.length - 1 && (
+                    <hr className={cn(`border-foreground/10 -mx-6 my-4`)} />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -393,6 +458,8 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   const pendingDeposits = [
     {
       id: "dep-1",
@@ -410,128 +477,144 @@ export function PendingDepositsTable({
   ];
 
   return (
-    <section className={cn(`@container`, className)} {...props}>
-      <div
-        className={cn(
-          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
-        )}
-      >
-        <div className={cn(`flex w-full items-center justify-between`)}>
-          <div className={cn(`flex items-center gap-2`)}>
-            <ArrowDownLeft className={cn(`text-primary-500 size-4`)} />
-            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
-              Pending Deposits
-            </h2>
-          </div>
-          <Link
-            to="/"
+    <>
+      {state === "error" && <PendingDepositsTableError />}
+      {state === "loading" && <PendingDepositsTableLoading />}
+      {state === "data" && (
+        <section className={cn(`@container`, className)} {...props}>
+          <div
             className={cn(
-              `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
+              `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
             )}
           >
-            View All
-          </Link>
-        </div>
-
-        <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
-
-        <div className={cn(`overflow-x-auto`)}>
-          <table className={cn(`w-full border-collapse text-left`)}>
-            <thead>
-              <tr
+            <div className={cn(`flex w-full items-center justify-between`)}>
+              <div className={cn(`flex items-center gap-2`)}>
+                <ArrowDownLeft className={cn(`text-primary-500 size-4`)} />
+                <h2
+                  className={cn(`font-brand-secondary text-sm font-semibold`)}
+                >
+                  Pending Deposits
+                </h2>
+              </div>
+              <Link
+                to="/"
                 className={cn(
-                  `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                  `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
                 )}
               >
-                <th className={cn(`py-3 font-medium`)}>User</th>
-                <th className={cn(`py-3 font-medium`)}>Amount</th>
-                <th className={cn(`py-3 font-medium`)}>Method</th>
-                <th className={cn(`py-3 font-medium`)}>Proof</th>
-                <th className={cn(`py-3 font-medium`)}>Date</th>
-                <th className={cn(`py-3 font-medium`)}>Status</th>
-                <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
-              </tr>
-            </thead>
-            <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
-              {pendingDeposits.map((item) => (
-                <tr key={item.id} className={cn(`group`)}>
-                  <td className={cn(`py-4 pr-4`)}>
-                    <div className={cn(`flex items-center gap-3`)}>
-                      <div
-                        className={cn(
-                          `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
-                        )}
+                View All
+              </Link>
+            </div>
+
+            <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
+
+            <div className={cn(`overflow-x-auto`)}>
+              <table className={cn(`w-full border-collapse text-left`)}>
+                <thead>
+                  <tr
+                    className={cn(
+                      `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                    )}
+                  >
+                    <th className={cn(`py-3 font-medium`)}>User</th>
+                    <th className={cn(`py-3 font-medium`)}>Amount</th>
+                    <th className={cn(`py-3 font-medium`)}>Method</th>
+                    <th className={cn(`py-3 font-medium`)}>Proof</th>
+                    <th className={cn(`py-3 font-medium`)}>Date</th>
+                    <th className={cn(`py-3 font-medium`)}>Status</th>
+                    <th className={cn(`py-3 text-right font-medium`)}>
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
+                  {pendingDeposits.map((item) => (
+                    <tr key={item.id} className={cn(`group`)}>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <div className={cn(`flex items-center gap-3`)}>
+                          <div
+                            className={cn(
+                              `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                            )}
+                          >
+                            {item.user.initial}
+                          </div>
+                          <div className={cn(`flex flex-col`)}>
+                            <span className={cn(`font-medium`)}>
+                              {item.user.name}
+                            </span>
+                            <span className={cn(`text-foreground/50 text-xs`)}>
+                              {item.user.email}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td
+                        className={cn(`py-4 pr-4 font-semibold text-green-500`)}
                       >
-                        {item.user.initial}
-                      </div>
-                      <div className={cn(`flex flex-col`)}>
-                        <span className={cn(`font-medium`)}>
-                          {item.user.name}
+                        {item.amount}
+                      </td>
+                      <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                        {item.method}
+                      </td>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <a
+                          href={item.proof}
+                          className={cn(
+                            `border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium`,
+                          )}
+                        >
+                          <ImageIcon className={cn(`size-3.5`)} />
+                          View
+                        </a>
+                      </td>
+                      <td
+                        className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
+                      >
+                        {item.date}
+                      </td>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <span
+                          className={cn(
+                            `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
+                          )}
+                        >
+                          {item.status}
                         </span>
-                        <span className={cn(`text-foreground/50 text-xs`)}>
-                          {item.user.email}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className={cn(`py-4 pr-4 font-semibold text-green-500`)}>
-                    {item.amount}
-                  </td>
-                  <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                    {item.method}
-                  </td>
-                  <td className={cn(`py-4 pr-4`)}>
-                    <a
-                      href={item.proof}
-                      className={cn(
-                        `border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium`,
-                      )}
-                    >
-                      <ImageIcon className={cn(`size-3.5`)} />
-                      View
-                    </a>
-                  </td>
-                  <td className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}>
-                    {item.date}
-                  </td>
-                  <td className={cn(`py-4 pr-4`)}>
-                    <span
-                      className={cn(
-                        `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
-                      )}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className={cn(`py-4 text-right`)}>
-                    <div className={cn(`flex items-center justify-end gap-2`)}>
-                      <Button
-                        size="sm"
-                        className={cn(
-                          `h-8 gap-1 rounded-md bg-green-600 px-3 text-xs text-white hover:bg-green-700`,
-                        )}
-                      >
-                        <Check className={cn(`size-3.5`)} />
-                        Approve
-                      </Button>
-                      <Button
-                        size="sm"
-                        className={cn(
-                          `h-8 gap-1 rounded-md bg-red-600 px-3 text-xs text-white hover:bg-red-700`,
-                        )}
-                      >
-                        <X className={cn(`size-3.5`)} />
-                        Reject
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+                      </td>
+                      <td className={cn(`py-4 text-right`)}>
+                        <div
+                          className={cn(`flex items-center justify-end gap-2`)}
+                        >
+                          <Button
+                            size="sm"
+                            className={cn(
+                              `h-8 gap-1 rounded-md bg-green-600 px-3 text-xs text-white hover:bg-green-700`,
+                            )}
+                          >
+                            <Check className={cn(`size-3.5`)} />
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            className={cn(
+                              `h-8 gap-1 rounded-md bg-red-600 px-3 text-xs text-white hover:bg-red-700`,
+                            )}
+                          >
+                            <X className={cn(`size-3.5`)} />
+                            Reject
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -539,57 +622,67 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const [state] = useState<"error" | "loading" | "data">("data");
+
   const pendingWithdrawals: any[] = [];
 
   return (
-    <section className={cn(`@container`, className)} {...props}>
-      <div
-        className={cn(
-          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
-        )}
-      >
-        <div className={cn(`flex w-full items-center justify-between`)}>
-          <div className={cn(`flex items-center gap-2`)}>
-            <ArrowUpRight className={cn(`text-primary-600 size-4`)} />
-            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
-              Pending Withdrawals
-            </h2>
-          </div>
-          <Link
-            to="/"
-            className={cn(
-              `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
-            )}
-          >
-            View All
-          </Link>
-        </div>
-
-        <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
-
-        {pendingWithdrawals.length === 0 ? (
+    <>
+      {state === "error" && <PendingWithdrawalsTableError />}
+      {state === "loading" && <PendingWithdrawalsTableLoading />}
+      {state === "data" && (
+        <section className={cn(`@container`, className)} {...props}>
           <div
             className={cn(
-              `flex flex-col items-center justify-center py-12 text-center`,
+              `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
             )}
           >
-            <div
-              className={cn(
-                `mb-3 flex size-12 items-center justify-center rounded-full border border-green-500/40 bg-green-500/20 text-green-500`,
-              )}
-            >
-              <Check className={cn(`size-6`)} />
+            <div className={cn(`flex w-full items-center justify-between`)}>
+              <div className={cn(`flex items-center gap-2`)}>
+                <ArrowUpRight className={cn(`text-primary-600 size-4`)} />
+                <h2
+                  className={cn(`font-brand-secondary text-sm font-semibold`)}
+                >
+                  Pending Withdrawals
+                </h2>
+              </div>
+              <Link
+                to="/"
+                className={cn(
+                  `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
+                )}
+              >
+                View All
+              </Link>
             </div>
-            <p className={cn(`text-foreground/60 text-sm`)}>
-              No pending withdrawals
-            </p>
+
+            <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
+
+            {pendingWithdrawals.length === 0 ? (
+              <div
+                className={cn(
+                  `flex flex-col items-center justify-center py-12 text-center`,
+                )}
+              >
+                <div
+                  className={cn(
+                    `mb-3 flex size-12 items-center justify-center rounded-full border border-green-500/40 bg-green-500/20 text-green-500`,
+                  )}
+                >
+                  <Check className={cn(`size-6`)} />
+                </div>
+                <p className={cn(`text-foreground/60 text-sm`)}>
+                  No pending withdrawals
+                </p>
+              </div>
+            ) : (
+              <div className={cn(`overflow-x-auto`)}>
+                {/* Table layout for pending withdrawals when populated */}
+              </div>
+            )}
           </div>
-        ) : (
-          <div className={cn(`overflow-x-auto`)}>
-            {/* Table layout for pending withdrawals when populated */}
-          </div>
-        )}
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
