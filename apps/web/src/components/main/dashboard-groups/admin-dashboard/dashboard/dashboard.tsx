@@ -432,9 +432,9 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  //const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   const chartDays = [
     { date: "Sep 08", height: "h-2" },
@@ -451,7 +451,7 @@ export function UserGrowthCard({
       <section className={cn(`@container`, className)} {...props}>
         <div
           className={cn(
-            `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
+            `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border py-4`,
           )}
         >
           <div className={cn(`flex w-full items-center justify-between`)}>
@@ -463,7 +463,7 @@ export function UserGrowthCard({
             </div>
           </div>
 
-          <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
+          <hr className={cn(`border-foreground/20 my-5`)} />
 
           {state === "error" && <UserGrowthCardError />}
           {state === "loading" && <UserGrowthCardLoading />}
@@ -505,7 +505,7 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
+  //const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
   const [state] = useState<"error" | "loading" | "data">("error");
 
