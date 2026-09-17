@@ -3,7 +3,6 @@ import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { useEffect, useState } from "react";
 import type { ComponentProps } from "react";
-
 import {
   AccountType,
   AccountTypeCardOfferingItem,
@@ -39,12 +38,9 @@ import {
   WhyChooseCardIcon,
   WhyChooseCards,
 } from "@/components/main/home/page-uis";
-
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
-
 import { env } from "@repo/env/client";
-
 import {
   LayoutPanelLeft,
   Shield,
@@ -63,15 +59,12 @@ import {
   Video,
   User,
 } from "lucide-react";
-
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "@repo/types/socket/active-traders";
-
 import { Await, useLoaderData } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
-
 import { LiveMarkets } from "./live-market";
 
 const activeTradersSocket: Socket<ServerToClientEvents, ClientToServerEvents> =
@@ -111,22 +104,17 @@ export function HeroSection({
       <div
         aria-hidden
         className={cn(
-          `pointer-events-none absolute inset-0`,
-          `bg-[linear-gradient(color-mix(in_oklab,var(--color-secondary-500)_20%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_oklab,var(--color-primary-500)_20%,transparent)_1px,transparent_1px)]`,
-          `mask-[radial-gradient(ellipse_80%_80%_at_50%_50%,black_30%,transparent_100%)]`,
-          `bg-size-[56px_56px]`,
+          `pointer-events-none absolute inset-0 bg-[linear-gradient(color-mix(in_oklab,var(--color-secondary-500)_20%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_oklab,var(--color-primary-500)_20%,transparent)_1px,transparent_1px)] mask-[radial-gradient(ellipse_80%_80%_at_50%_50%,black_30%,transparent_100%)] bg-size-[56px_56px]`,
         )}
       />
 
       <div
         className={cn(
-          `relative z-10 flex w-full flex-col gap-14`,
-          `md:flex-row md:items-center md:gap-8`,
-          `lg:gap-12`,
+          `relative z-10 flex w-full flex-col gap-14 md:flex-row md:items-center md:gap-8 lg:gap-12`,
         )}
       >
         {/* LEFT SIDE */}
-        <div className={cn(`w-full min-w-0 md:basis-1/2`)}>
+        <div className={cn(`w-full min-w-0 md:basis-1/2 mb-90`)}>
           <div
             className={cn(
               `flex flex-wrap items-center gap-x-3 gap-y-2 pb-4`,
@@ -138,9 +126,7 @@ export function HeroSection({
 
           <h1
             className={cn(
-              `fs-12 font-brand-secondary leading-16 font-bold tracking-tighter`,
-              `sm:fs-16 sm:leading-20`,
-              `md:fs-20 md:leading-24`,
+              `fs-12 font-brand-secondary leading-16 font-bold tracking-tighter sm:fs-16 sm:leading-20 md:fs-20 md:leading-24`,
             )}
           >
             <span>The World's</span>
@@ -156,9 +142,7 @@ export function HeroSection({
 
           <p
             className={cn(
-              `text-secondary-800/50 fs-4 max-w-140`,
-              `sm:fs-4.5`,
-              `md:fs-5`,
+              `text-secondary-800/50 fs-4 max-w-140 sm:fs-4.5 md:fs-5`,
             )}
           >
             Access Forex, stocks, indices and our exclusive SyntX synthetic
@@ -168,15 +152,12 @@ export function HeroSection({
 
           <div
             className={cn(
-              `flex flex-col flex-wrap gap-4 pt-8`,
-              `sm:flex-row`,
+              `flex flex-col flex-wrap gap-4 pt-8 sm:flex-row`,
             )}
           >
             <Button
               className={cn(
-                `relative px-10 py-7 font-semibold`,
-                `transition-all duration-300`,
-                `hover:-translate-y-1`,
+                `relative px-10 py-7 font-semibold transition-all duration-300 hover:-translate-y-1`,
               )}
               variant={"primary"}
               corner={"circle"}
@@ -190,11 +171,7 @@ export function HeroSection({
 
             <Button
               className={cn(
-                `relative px-10 py-7 font-semibold`,
-                `transition-all duration-300`,
-                `hover:-translate-y-1`,
-                `hover:border-secondary-500`,
-                `hover:text-secondary-500`,
+                `relative px-10 py-7 font-semibold transition-all duration-300 hover:-translate-y-1 hover:border-secondary-500 hover:text-secondary-500`,
               )}
               variant={"outline"}
               corner={"circle"}
@@ -215,8 +192,7 @@ export function HeroSection({
         {/* RIGHT SIDE */}
         <div
           className={cn(
-            `relative flex w-full min-w-0 items-center justify-center`,
-            `md:basis-1/2 md:justify-end`,
+            `relative flex w-full min-w-0 items-center justify-centerd md:basis-1/2 md:justify-end`,
           )}
         >
           <LiveMarkets />
@@ -266,9 +242,7 @@ export function ActiveTraders({
     <div className={cn(``, className)} {...props}>
       <div
         className={cn(
-          `bg-accent-500/20 border-accent-500/60 text-accent-600`,
-          `flex max-w-max items-center gap-2 rounded-full border`,
-          `py-2 pr-6 pl-4 text-xs font-bold`,
+          `bg-accent-500/20 border-accent-500/60 text-accent-600 flex max-w-max items-center gap-2 rounded-full border py-2 pr-6 pl-4 text-xs font-bold`,
         )}
       >
         <span className={cn(`inline-block size-2 rounded-full bg-accent-500`)} />
@@ -291,9 +265,7 @@ export function YearsInMarket({
     <div className={cn(``, className)} {...props}>
       <div
         className={cn(
-          `border-primary-500/60 bg-primary-500/20 text-primary-600`,
-          `flex max-w-max items-center gap-2 rounded-full border`,
-          `py-2 pr-6 pl-4 text-xs font-bold`,
+          `border-primary-500/60 bg-primary-500/20 text-primary-600 flex max-w-max items-center gap-2 rounded-full border py-2 pr-6 pl-4 text-xs font-bold`,
         )}
       >
         <span>🏆</span>
@@ -425,9 +397,7 @@ export function TrustStatSection({
   return (
     <section
       className={cn(
-        `bg-secondary-500/5 border-t-secondary-500/30 border-b-secondary-500/30`,
-        `text-secondary-500/80`,
-        `space-y-6 border-t border-b py-10 text-sm`,
+        `bg-secondary-500/5 border-t-secondary-500/30 border-b-secondary-500/30 text-secondary-500/80 space-y-6 border-t border-b py-10 text-sm`,
         className,
       )}
       {...props}
@@ -656,8 +626,7 @@ export function AccountTypesSection({
           <AccountType>
             <AccountTypeHeader
               className={cn(
-                `**:aria-[hidden]:from-secondary-500/10`,
-                `**:aria-[hidden]:to-accent-500/10`,
+                `**:aria-[hidden]:from-secondary-500/10 **:aria-[hidden]:to-accent-500/10`,
               )}
             >
               <AccountTypeIcon className={cn(`text-secondary-500`)}>
@@ -704,8 +673,7 @@ export function AccountTypesSection({
 
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `border-accent-500/40 bg-accent-500/20`,
-                    `text-accent-500 rounded-md border px-2`,
+                    `border-accent-500/40 bg-accent-500/20 text-accent-500 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes
@@ -762,14 +730,12 @@ export function AccountTypesSection({
 
           <AccountType
             className={cn(
-              `md:col-span-2 md:col-start-1 md:row-start-1`,
-              `lg:col-span-1 lg:col-start-2`,
+              `md:col-span-2 md:col-start-1 md:row-start-1 lg:col-span-1 lg:col-start-2`,
             )}
           >
             <AccountTypeHeader
               className={cn(
-                `**:aria-[hidden]:from-primary-500/10`,
-                `**:aria-[hidden]:to-secondary-500/10`,
+                `**:aria-[hidden]:from-primary-500/10 **:aria-[hidden]:to-secondary-500/10`,
               )}
             >
               <AccountTypeIcon className={cn(`text-primary-500`)}>
@@ -818,8 +784,7 @@ export function AccountTypesSection({
 
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `border-accent-500/40 bg-accent-500/20`,
-                    `text-accent-500 rounded-md border px-2`,
+                    `border-accent-500/40 bg-accent-500/20 text-accent-500 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes
@@ -877,8 +842,7 @@ export function AccountTypesSection({
           <AccountType>
             <AccountTypeHeader
               className={cn(
-                `**:aria-[hidden]:from-accent-500/10`,
-                `**:aria-[hidden]:to-primary-500/10`,
+                `**:aria-[hidden]:from-accent-500/10 **:aria-[hidden]:to-primary-500/10`,
               )}
             >
               <AccountTypeIcon className={cn(`text-accent-500`)}>
@@ -925,8 +889,7 @@ export function AccountTypesSection({
 
                 <AccountTypeCardOfferingItemDetails
                   className={cn(
-                    `border-accent-500/40 bg-accent-500/20`,
-                    `text-accent-500 rounded-md border px-2`,
+                    `border-accent-500/40 bg-accent-500/20 text-accent-500 rounded-md border px-2`,
                   )}
                 >
                   ✓ Yes
@@ -1017,8 +980,7 @@ export function ExclusiveOffersSection({
         <PromotionBonus>
           <PromotionBonusIcon
             className={cn(
-              `border-secondary-500 bg-secondary-500/10`,
-              `rounded-2xl border`,
+              `border-secondary-500 bg-secondary-500/10 rounded-2xl border`,
             )}
           >
             <FingerprintIcon className={cn(`text-secondary-500`)} />
@@ -1036,8 +998,7 @@ export function ExclusiveOffersSection({
         <PromotionBonus offer>
           <PromotionBonusIcon
             className={cn(
-              `border-primary-500 bg-primary-500/10`,
-              `rounded-2xl border`,
+              `border-primary-500 bg-primary-500/10 rounded-2xl border`,
             )}
           >
             <Grid2x2 className={cn(`text-primary-500`)} />
@@ -1056,8 +1017,7 @@ export function ExclusiveOffersSection({
         <PromotionBonus>
           <PromotionBonusIcon
             className={cn(
-              `border-accent-500 bg-accent-500/10`,
-              `rounded-2xl border`,
+              `border-accent-500 bg-accent-500/10 rounded-2xl border`,
             )}
           >
             <RotateCcw className={cn(`text-accent-500`)} />
@@ -1141,10 +1101,7 @@ export function PassiveIncomeSection({
           {(allMiningProfiles) => (
             <div
               className={cn(
-                `grid grid-cols-1 gap-4 pt-24`,
-                `md:grid-cols-2`,
-                `lg:grid-cols-3`,
-                `xl:grid-cols-4`,
+                `grid grid-cols-1 gap-4 pt-24 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`,
               )}
             >
               {allMiningProfiles.map(
@@ -1207,21 +1164,14 @@ export function PassiveIncomeSection({
 
       <div
         className={cn(
-          `bg-secondary-500/5 border-secondary-500/30`,
-          `mt-24 grid grid-cols-2 gap-y-8 rounded-2xl border`,
-          `py-8 text-center`,
-          `lg:grid-cols-4`,
+          `bg-secondary-500/5 border-secondary-500/30 mt-24 grid grid-cols-2 gap-y-8 rounded-2xl border py-8 text-center lg:grid-cols-4`,
         )}
       >
         {/* TOTAL MINED */}
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-3xl`,
-            `*:nth-[1]:font-semibold`,
-            `*:nth-[1]:text-secondary-500`,
-            `*:nth-[2]:text-foreground/50`,
+            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
           )}
         >
           <ErrorBoundary fallback={<div>Error...</div>}>
@@ -1252,11 +1202,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-3xl`,
-            `*:nth-[1]:font-semibold`,
-            `*:nth-[1]:text-secondary-500`,
-            `*:nth-[2]:text-foreground/50`,
+            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
           )}
         >
           <ErrorBoundary fallback={<div>Error...</div>}>
@@ -1284,11 +1230,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-3xl`,
-            `*:nth-[1]:font-semibold`,
-            `*:nth-[1]:text-secondary-500`,
-            `*:nth-[2]:text-foreground/50`,
+            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
           )}
         >
           <span>99.9%</span>
@@ -1299,11 +1241,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-center`,
-            `*:nth-[1]:text-3xl`,
-            `*:nth-[1]:font-semibold`,
-            `*:nth-[1]:text-secondary-500`,
-            `*:nth-[2]:text-foreground/50`,
+            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
           )}
         >
           <span>24/7</span>
@@ -1326,18 +1264,13 @@ export function BottomCTASection({
     <section className={cn(`default-padding`, className)} {...props}>
       <div
         className={cn(
-          `bg-secondary-500/10 border-secondary-500/20`,
-          `flex w-full flex-col items-center gap-x-10 gap-y-8`,
-          `rounded-2xl border p-4`,
-          `md:p-8`,
-          `lg:flex-row`,
+          `bg-secondary-500/10 border-secondary-500/20 flex w-full flex-col items-center gap-x-10 gap-y-8 rounded-2xl border p-4 md:p-8 lg:flex-row`,
         )}
       >
         <div className={cn(`space-y-4`)}>
           <span
             className={cn(
-              `bg-secondary-500/10 border-secondary-500/20`,
-              `inline-block rounded-full border px-4 py-1`,
+              `bg-secondary-500/10 border-secondary-500/20 inline-block rounded-full border px-4 py-1`,
             )}
           >
             🚀 <span className={cn(`text-sm`)}>Start Today</span>
@@ -1360,15 +1293,13 @@ export function BottomCTASection({
 
           <ul
             className={cn(
-              `text-foreground/50`,
-              `flex flex-wrap gap-x-10 gap-y-2`,
+              `text-foreground/50 flex flex-wrap gap-x-10 gap-y-2`,
             )}
           >
             <li>
               <Check
                 className={cn(
-                  `bg-accent-500 inline-block size-4`,
-                  `rounded-full p-px text-white`,
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
                 )}
               />{" "}
               <span>No minimum deposit required</span>
@@ -1377,8 +1308,7 @@ export function BottomCTASection({
             <li>
               <Check
                 className={cn(
-                  `bg-accent-500 inline-block size-4`,
-                  `rounded-full p-px text-white`,
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
                 )}
               />{" "}
               <span>Access MT4 &amp; MT5 instantly</span>
@@ -1387,8 +1317,7 @@ export function BottomCTASection({
             <li>
               <Check
                 className={cn(
-                  `bg-accent-500 inline-block size-4`,
-                  `rounded-full p-px text-white`,
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
                 )}
               />{" "}
               <span>First deposit bonus up to $5,000</span>
@@ -1397,8 +1326,7 @@ export function BottomCTASection({
             <li>
               <Check
                 className={cn(
-                  `bg-accent-500 inline-block size-4`,
-                  `rounded-full p-px text-white`,
+                  `bg-accent-500 inline-block size-4 rounded-full p-px text-white`,
                 )}
               />{" "}
               <span>24/7 multilingual support</span>
@@ -1408,15 +1336,13 @@ export function BottomCTASection({
 
         <div
           className={cn(
-            `flex w-full items-center justify-center`,
-            `lg:max-w-max`,
+            `flex w-full items-center justify-centerd lg:max-w-max`,
           )}
         >
           <Button
             corner={"circle"}
             className={cn(
-              `m-auto h-12 w-full text-lg`,
-              `md:h-16 md:w-60`,
+              `m-auto h-12 w-full text-lg md:h-16 md:w-60`,
             )}
           >
             <Rocket className={cn(`inline-block size-5`)} />
