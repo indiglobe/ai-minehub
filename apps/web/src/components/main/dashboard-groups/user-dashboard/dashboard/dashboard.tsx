@@ -8,7 +8,7 @@ import {
   InvestedAmount,
   MiningWallet,
   TradingWallet,
-} from "@/components/main/user-dashboard/dashboard/dashboard-stats";
+} from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard-stats";
 import { extractMonthName } from "@repo/utils/date";
 import {
   useMiningOrdersData,
@@ -21,7 +21,7 @@ import {
   Progress,
   ProgressBar,
   ProgressStat,
-} from "@/components/main/user-dashboard/dashboard/page-ui";
+} from "@/components/main/dashboard-groups/user-dashboard/dashboard/page-ui";
 import { Button } from "@repo/ui/button";
 import { env } from "@repo/env/client";
 

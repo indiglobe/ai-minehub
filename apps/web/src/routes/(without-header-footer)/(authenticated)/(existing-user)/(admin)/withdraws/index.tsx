@@ -1,4 +1,4 @@
-import { AllWithdrawals } from "@/components/main/admin-dashboard/withdraws/withdraws";
+import { AllWithdrawals } from "@/components/main/dashboard-groups/admin-dashboard/withdraws/withdraws";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

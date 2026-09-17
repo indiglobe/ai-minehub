@@ -1,4 +1,4 @@
-import { AllDeposits } from "@/components/main/admin-dashboard/deposits/deposits";
+import { AllDeposits } from "@/components/main/dashboard-groups/admin-dashboard/deposits/deposits";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

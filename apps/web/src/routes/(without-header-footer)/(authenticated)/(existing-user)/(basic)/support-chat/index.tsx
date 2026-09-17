@@ -1,4 +1,4 @@
-import { SupportChat } from '@/components/main/user-dashboard/support-chat/support-chat'
+import { SupportChat } from '@/components/main/dashboard-groups/user-dashboard/support-chat/support-chat'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

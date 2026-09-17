@@ -9,7 +9,7 @@ import {
   ReferralStats,
   ReferralCode,
   YourReferrals,
-} from "@/components/main/user-dashboard/referral/referral";
+} from "@/components/main/dashboard-groups/user-dashboard/referral/referral";
 import type { fetchUserDetailsCookie } from "@/lib/auth/session";
 import type { DeepPartial } from "@/utils/types/storybook";
 import { mocked } from "storybook/test";

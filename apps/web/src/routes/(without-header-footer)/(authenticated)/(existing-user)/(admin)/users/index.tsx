@@ -1,4 +1,4 @@
-import { AllUsers } from '@/components/main/admin-dashboard/users/users'
+import { AllUsers } from '@/components/main/dashboard-groups/admin-dashboard/users/users'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

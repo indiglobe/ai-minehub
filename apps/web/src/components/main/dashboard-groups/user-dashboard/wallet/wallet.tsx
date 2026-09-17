@@ -6,7 +6,7 @@ import { WithdrawForm } from "./withdraw-form";
 import {
   useFetchMiningWallet,
   useFetchTradingWallet,
-} from "../../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "../../../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");

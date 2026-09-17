@@ -1,4 +1,4 @@
-import { Conversations } from '@/components/main/admin-dashboard/message/message'
+import { Conversations } from '@/components/main/dashboard-groups/admin-dashboard/message/message'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

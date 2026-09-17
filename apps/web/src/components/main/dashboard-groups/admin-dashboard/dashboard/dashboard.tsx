@@ -36,7 +36,7 @@ import {
   ThisMonthStatsCardLoading,
   UserGrowthCardError,
   UserGrowthCardLoading,
-} from "@/components/main/admin-dashboard/dashboard/boundary-comps";
+} from "@/components/main/dashboard-groups/admin-dashboard/dashboard/boundary-comps";
 
 export default function AdminDashboard() {
   return (

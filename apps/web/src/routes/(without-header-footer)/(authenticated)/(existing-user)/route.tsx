@@ -1,9 +1,9 @@
 import AuthenticatedHeader from "@/components/header/authenticated-header";
-import { GreetSection } from "@/components/main/_common/authenticated-routes/greet";
+import { GreetSection } from "@/components/main/dashboard-groups/greet";
 import {
   AdminRouteTabs,
   UserRouteTabs,
-} from "@/components/main/_common/authenticated-routes/route-tabs";
+} from "@/components/main/dashboard-groups/route-tabs";
 import Main from "@/components/main/main";
 import { fetchUserDetailsCookie } from "@/lib/auth/session";
 import { env } from "@repo/env/client";

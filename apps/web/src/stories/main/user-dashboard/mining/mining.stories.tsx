@@ -13,7 +13,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { Mining } from "@/components/main/user-dashboard/mining/mining";
+import { Mining } from "@/components/main/dashboard-groups/user-dashboard/mining/mining";
 
 const meta = {
   beforeEach: beforeEach,

@@ -1,4 +1,4 @@
-import { MiningSessions } from '@/components/main/admin-dashboard/mining-sesions/mining-sesions'
+import { MiningSessions } from '@/components/main/dashboard-groups/admin-dashboard/mining-sesions/mining-sesions'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

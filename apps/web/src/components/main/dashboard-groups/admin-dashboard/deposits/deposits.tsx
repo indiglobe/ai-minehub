@@ -6,7 +6,7 @@ import { Button } from "@repo/ui/button";
 import {
   AllDepositsError,
   AllDepositsLoading,
-} from "@/components/main/admin-dashboard/deposits/boundary-comps";
+} from "@/components/main/dashboard-groups/admin-dashboard/deposits/boundary-comps";
 
 export function AllDeposits({
   className,

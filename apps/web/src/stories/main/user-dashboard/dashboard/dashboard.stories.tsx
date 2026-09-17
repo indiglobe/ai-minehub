@@ -13,7 +13,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { UserDashboard } from "@/components/main/user-dashboard/dashboard/dashboard";
+import { UserDashboard } from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard";
 
 function renderWithMockRouter(initialPath: keyof FileRoutesByFullPath = "/") {
   const rootRoute = createRootRoute();

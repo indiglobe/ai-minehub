@@ -6,7 +6,7 @@ import { Button } from "@repo/ui/button";
 import {
   ConversationsError,
   ConversationsLoading,
-} from "@/components/main/admin-dashboard/message/boundary-comps";
+} from "@/components/main/dashboard-groups/admin-dashboard/message/boundary-comps";
 
 export function Conversations({
   className,

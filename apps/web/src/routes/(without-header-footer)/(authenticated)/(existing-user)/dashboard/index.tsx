@@ -1,5 +1,5 @@
-import AdminDashboard from "@/components/main/admin-dashboard/dashboard/dashboard";
-import { UserDashboard } from "@/components/main/user-dashboard/dashboard/dashboard";
+import AdminDashboard from "@/components/main/dashboard-groups/admin-dashboard/dashboard/dashboard";
+import { UserDashboard } from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

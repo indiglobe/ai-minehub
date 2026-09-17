@@ -1,4 +1,4 @@
-import { WalletManagement } from "@/components/main/admin-dashboard/users/user-wallet";
+import { WalletManagement } from "@/components/main/dashboard-groups/admin-dashboard/users/user-wallet";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

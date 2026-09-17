@@ -8,7 +8,7 @@ import {
   DepositError,
   DepositsEmpty,
   DepositsLoading,
-} from "@/components/main/admin-dashboard/deposits/deposits";
+} from "@/components/main/dashboard-groups/admin-dashboard/deposits/deposits";
 
 function Comp() {
   return (
