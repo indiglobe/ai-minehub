@@ -1,13 +1,7 @@
 import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import {
-  ArrowDownLeft,
-  Search,
-  ChevronDown,
-  Check,
-  X,
-} from "lucide-react";
+import { ArrowDownLeft, Search, ChevronDown, Check, X } from "lucide-react";
 import { Button } from "@repo/ui/button";
 import {
   AllDepositsError,
@@ -18,7 +12,9 @@ export function AllDeposits({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   const deposits = [
     {
@@ -121,36 +117,32 @@ export function AllDeposits({
             </Button>
           </div>
         </div>
-
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
+        {state === "error" && <AllDepositsError></AllDepositsError>}
+        {state === "loading" && <AllDepositsLoading></AllDepositsLoading>}{" "}
+        {state === "data" && (
+          <div className={cn(`overflow-x-auto`)}>
+            <table className={cn(`w-full border-collapse text-left`)}>
+              <thead>
+                <tr
+                  className={cn(
+                    `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                  )}
+                >
+                  <th className={cn(`py-3 font-medium`)}>User</th>
+                  <th className={cn(`py-3 font-medium`)}>Amount</th>
+                  <th className={cn(`py-3 font-medium`)}>Wallet</th>
+                  <th className={cn(`py-3 font-medium`)}>Method</th>
+                  <th className={cn(`py-3 font-medium`)}>Transaction ID</th>
+                  <th className={cn(`py-3 font-medium`)}>Description</th>
+                  <th className={cn(`py-3 font-medium`)}>Status</th>
+                  <th className={cn(`py-3 font-medium`)}>Date</th>
+                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
+                </tr>
+              </thead>
 
-        <>{state === "error" && <AllDepositsError></AllDepositsError>}</>
-
-        <div className={cn(`overflow-x-auto`)}>
-          <table className={cn(`w-full border-collapse text-left`)}>
-            <thead>
-              <tr
-                className={cn(
-                  `text-foreground/50 text-2.75 tracking-wider uppercase`,
-                )}
-              >
-                <th className={cn(`py-3 font-medium`)}>User</th>
-                <th className={cn(`py-3 font-medium`)}>Amount</th>
-                <th className={cn(`py-3 font-medium`)}>Wallet</th>
-                <th className={cn(`py-3 font-medium`)}>Method</th>
-                <th className={cn(`py-3 font-medium`)}>Transaction ID</th>
-                <th className={cn(`py-3 font-medium`)}>Description</th>
-                <th className={cn(`py-3 font-medium`)}>Status</th>
-                <th className={cn(`py-3 font-medium`)}>Date</th>
-                <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
-              {state === "loading" && <AllDepositsLoading></AllDepositsLoading>}
-
-              {state === "data" &&
-                deposits.map((item) => (
+              <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
+                {deposits.map((item) => (
                   <tr key={item.id} className={cn(`group`)}>
                     <td className={cn(`py-4 pr-4`)}>
                       <div className={cn(`flex items-center gap-3`)}>
@@ -250,9 +242,10 @@ export function AllDeposits({
                     </td>
                   </tr>
                 ))}
-            </tbody>
-          </table>
-        </div>
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );

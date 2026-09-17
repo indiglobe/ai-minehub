@@ -3,7 +3,10 @@ import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { ConversationsError, ConversationsLoading } from "@/components/main/admin-dashboard/message/boundary-comps";
+import {
+  ConversationsError,
+  ConversationsLoading,
+} from "@/components/main/admin-dashboard/message/boundary-comps";
 
 export function Conversations({
   className,
@@ -103,6 +106,8 @@ export function Conversations({
   ];
 
   const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section

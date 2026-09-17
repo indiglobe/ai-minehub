@@ -28,7 +28,10 @@ export function AllWithdrawals({
     },
   ];
 
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
+
 
   return (
     <section
