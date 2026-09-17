@@ -14,8 +14,6 @@ import {
 } from "@repo/ui/navigation-menu";
 import { useNavbarState } from "@/hooks/use-navstate";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { authClient } from "@/lib/auth/auth-client";
 import { useState } from "react";
 
@@ -99,7 +97,7 @@ const navItems = [
         subtext: "Earn commissions",
       },
     ],
-    text: "Pertnership",
+    text: "Partnership",
     to: "/partnership",
   },
   {
@@ -112,10 +110,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"nav">) {
   return (
     <nav
       className={cn(
-        `default-padding @container/navbar relative z-50`,
-        `flex w-full min-w-0 items-center justify-between`,
-        `gap-2 py-3`,
-        `@sm/navbar:gap-3 @sm/navbar:py-4`,
+        `default-padding @container/navbar relative z-50 flex w-full min-w-0 items-center justify-between gap-2 py-3 @sm/navbar:gap-3 @sm/navbar:py-4`,
         className,
       )}
       {...props}
@@ -125,8 +120,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"nav">) {
         <Link
           to="/"
           className={cn(
-            `flex min-w-0 items-center justify-start gap-2`,
-            `@sm/navbar:gap-3`,
+            `left-50 flex min-w-0 items-center justify-start gap-2 @sm/navbar:gap-3`,
           )}
         >
           <span className={cn(`shrink-0`)}>
@@ -135,11 +129,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"nav">) {
 
           <span
             className={cn(
-              `font-brand-primary font-semibold whitespace-nowrap`,
-              `hidden`,
-              `@sm/navbar:inline`,
-              `@lg/navbar:hidden`,
-              `@xl/navbar:inline`,
+              `font-brand-primary hidden font-semibold whitespace-nowrap @sm/navbar:inline @lg/navbar:hidden @xl/navbar:inline`,
             )}
           >
             AI Mine Hub
@@ -153,8 +143,7 @@ export default function Navbar({ className, ...props }: ComponentProps<"nav">) {
       {/* RIGHT SIDE */}
       <div
         className={cn(
-          `ml-auto flex shrink-0 items-center gap-2`,
-          `@sm/navbar:gap-3`,
+          `ml-auto flex shrink-0 items-center gap-2 @sm/navbar:gap-3`,
         )}
       >
         <LargeScreenNavCTA />
@@ -221,8 +210,7 @@ function HamburgerButton({
   return (
     <Button
       className={cn(
-        `flex size-10 shrink-0 items-center justify-center p-0`,
-        `@lg/navbar:hidden`,
+        `flex size-10 shrink-0 items-center justify-center p-0 @lg/navbar:hidden`,
         className,
       )}
       {...props}
@@ -232,9 +220,9 @@ function HamburgerButton({
       aria-label={isNavOpen ? "Close menu" : "Open menu"}
     >
       {isNavOpen ? (
-        <X className={cn(`size-7 text-foreground`)} />
+        <X className={cn(`text-foreground size-7`)} />
       ) : (
-        <Menu className={cn(`size-7 text-foreground`)} />
+        <Menu className={cn(`text-foreground size-7`)} />
       )}
     </Button>
   );
@@ -252,11 +240,7 @@ function MobileNav() {
   return (
     <div
       className={cn(
-        `absolute top-full right-0 left-0 z-50`,
-        `border-secondary-200/20 border-t`,
-        `bg-background`,
-        `transition-all duration-300`,
-        `@lg/navbar:hidden`,
+        `border-secondary-200/20 bg-background absolute top-full right-0 left-0 z-50 border-t transition-all duration-300 @lg/navbar:hidden`,
         isNavOpen
           ? `visible translate-y-0 opacity-100`
           : `pointer-events-none invisible -translate-y-2 opacity-0`,
@@ -264,8 +248,7 @@ function MobileNav() {
     >
       <div
         className={cn(
-          `default-padding flex max-h-[80vh] flex-col`,
-          `gap-2 overflow-y-auto py-5`,
+          `default-padding flex max-h-[80vh] flex-col gap-2 overflow-y-auto py-5`,
         )}
       >
         {navItems.map(({ text, to, children }) => {
@@ -280,12 +263,7 @@ function MobileNav() {
                   to={to}
                   onClick={toggleNavBar}
                   className={cn(
-                    `font-brand-primary flex w-full items-center`,
-                    `rounded-lg px-4 py-3`,
-                    `text-foreground`,
-                    `transition-colors`,
-                    `hover:bg-secondary-500/10`,
-                    `hover:text-secondary-500`,
+                    `font-brand-primary text-foreground hover:bg-secondary-500/10 hover:text-secondary-500 flex w-full items-center rounded-lg px-4 py-3 transition-colors`,
                   )}
                 >
                   {text}
@@ -298,12 +276,7 @@ function MobileNav() {
                   type="button"
                   onClick={() => toggleDropdown(text)}
                   className={cn(
-                    `font-brand-primary flex w-full items-center justify-between`,
-                    `rounded-lg px-4 py-3`,
-                    `text-foreground`,
-                    `transition-colors`,
-                    `hover:bg-secondary-500/10`,
-                    `hover:text-secondary-500`,
+                    `font-brand-primary text-foreground hover:bg-secondary-500/10 hover:text-secondary-500 left-50 flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors`,
                   )}
                 >
                   <span>{text}</span>
@@ -330,9 +303,7 @@ function MobileNav() {
                   <div className={cn(`min-h-0`)}>
                     <div
                       className={cn(
-                        `ml-4 flex flex-col gap-1`,
-                        `border-secondary-200/20 border-l`,
-                        `py-1 pl-3`,
+                        `border-secondary-200/20 ml-4 flex flex-col gap-1 border-l py-1 pl-3`,
                       )}
                     >
                       {children.map(({ text, to, subtext }) => (
@@ -341,15 +312,12 @@ function MobileNav() {
                           to={to}
                           onClick={toggleNavBar}
                           className={cn(
-                            `rounded-lg px-4 py-2.5`,
-                            `transition-colors`,
-                            `hover:bg-secondary-500/10`,
+                            `hover:bg-secondary-500/10 rounded-lg px-4 py-2.5 transition-colors`,
                           )}
                         >
                           <p
                             className={cn(
-                              `font-brand-primary text-sm`,
-                              `text-foreground`,
+                              `font-brand-primary text-foreground text-sm`,
                             )}
                           >
                             {text}
@@ -358,8 +326,7 @@ function MobileNav() {
                           {subtext && (
                             <p
                               className={cn(
-                                `font-brand-primary mt-0.5 text-xs`,
-                                `text-foreground/50`,
+                                `font-brand-primary text-foreground/50 mt-0.5 text-xs`,
                               )}
                             >
                               {subtext}
@@ -428,8 +395,7 @@ function LargeScreenNavItemList({
     <NavigationMenu
       viewport={false}
       className={cn(
-        `relative z-9999 hidden min-w-0`,
-        `@lg/navbar:flex`,
+        `z-9999 hidden min-w-0 @lg/navbar:absolute @lg/navbar:top-1/2 @lg/navbar:left-1/2 @lg/navbar:flex @lg/navbar:-translate-x-1/2 @lg/navbar:-translate-y-1/2`,
         className,
       )}
       {...props}
@@ -442,76 +408,60 @@ function LargeScreenNavItemList({
             <NavigationMenuItem key={text}>
               {children && children.length > 0 && (
                 <>
-                  <NavigationMenuTrigger className={cn(`px-0`)}>
+                  <NavigationMenuTrigger
+                    className={cn(`flex flex-row items-center px-0`)}
+                  >
                     <NavigationMenuLink asChild>
                       <Link
                         to={to}
-                        className={cn(
-                          `group/nav-item flex flex-row items-center gap-x-1`,
-                          `rounded-md px-2`,
-                          `font-brand-primary`,
-                          `transition-colors`,
-                          `hover:bg-secondary-500/10`,
-                          `hover:text-secondary-500`,
-                          `@xl/navbar:px-3`,
-                          `@2xl/navbar:px-4`,
-                        )}
                         tabIndex={-1}
+                        className={cn(
+                          `group/nav-item inline-flex flex-row items-center justify-center gap-1 rounded-md px-2 font-brand-primary whitespace-nowrap transition-colors hover:bg-secondary-500/10 hover:text-secondary-500 @xl/navbar:px-3 @2xl/navbar:px-4`,
+                        )}
                       >
-                        <span className={cn(`whitespace-nowrap`)}>{text}</span>
+                        <span>{text}</span>
 
                         <ChevronDown
                           className={cn(
-                            `size-4 shrink-0`,
-                            `transition-transform`,
-                            `group-hover/nav-item:rotate-180`,
+                            `size-4 shrink-0 transition-transform group-hover/nav-item:rotate-180`,
                           )}
                         />
                       </Link>
                     </NavigationMenuLink>
                   </NavigationMenuTrigger>
-
                   <NavigationMenuContent
                     className={cn(
-                      `min-w-max rounded-md`,
-                      `shadow-secondary-500/20`,
-                      `group-data-[viewport=false]/navigation-menu:border-secondary-500/15`,
+                      `min-w-max rounded-md shadow-secondary-500/20 group-data-[viewport=false]/navigation-menu:border-secondary-500/15`,
                     )}
                   >
                     <ul
                       className={cn(`relative flex min-w-60 flex-col gap-y-2`)}
                     >
-                      {children.map(({ text, to, subtext }) => {
-                        return (
-                          <li key={text}>
-                            <Button
-                              asChild
-                              corner="rounded"
-                              variant="ghost"
-                              className={cn(
-                                `h-14 w-full items-start`,
-                                `border border-transparent`,
-                                `bg-transparent px-2 text-left`,
-                                `hover:border-secondary-500/10`,
-                                `hover:bg-secondary-500/5`,
-                              )}
+                      {children.map(({ text, to, subtext }) => (
+                        <li key={text}>
+                          <Button
+                            asChild
+                            corner="rounded"
+                            variant="ghost"
+                            className={cn(
+                              `h-14 w-full items-start border border-transparent bg-transparent px-2 text-left hover:border-secondary-500/10 hover:bg-secondary-500/5`,
+                            )}
+                          >
+                            <Link
+                              to={to}
+                              className={cn(`flex flex-col gap-y-1`)}
                             >
-                              <Link
-                                to={to}
-                                className={cn(`flex flex-col gap-y-1`)}
-                              >
-                                <span className={cn(`text-foreground`)}>
-                                  {text}
-                                </span>
+                              <span className={cn(`text-foreground`)}>
+                                {text}
+                              </span>
 
-                                <span className={cn(`fs-3 text-foreground/60`)}>
-                                  {subtext}
-                                </span>
-                              </Link>
-                            </Button>
-                          </li>
-                        );
-                      })}
+                              <span className={cn(`fs-3 text-foreground/60`)}>
+                                {subtext}
+                              </span>
+                            </Link>
+                          </Button>
+                        </li>
+                      ))}
                     </ul>
                   </NavigationMenuContent>
                 </>
@@ -522,13 +472,7 @@ function LargeScreenNavItemList({
                   <Link
                     to={to}
                     className={cn(
-                      `rounded-sm px-2`,
-                      `font-brand-primary`,
-                      `transition-colors`,
-                      `hover:bg-secondary-500/10`,
-                      `hover:text-secondary-500`,
-                      `@xl/navbar:px-3`,
-                      `@2xl/navbar:px-4`,
+                      `rounded-sm px-2 font-brand-primary transition-colors hover:bg-secondary-500/10 hover:text-secondary-500 @xl/navbar:px-3 @2xl/navbar:px-4`,
                     )}
                   >
                     {text}
