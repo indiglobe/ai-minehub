@@ -37,8 +37,7 @@ export function UserGrowthCardError() {
   return (
     <div
       className={cn(
-        `flex min-h-72 w-full flex-col items-center justify-center`,
-        `px-7 py-8 text-center`,
+        `flex min-h-72 w-full flex-col items-center justify-center px-7 py-8 text-center`,
       )}
     >
       {/* ERROR MESSAGE */}
@@ -56,10 +55,7 @@ export function UserGrowthCardError() {
       <button
         type="button"
         className={cn(
-          `mt-5 rounded-xl px-5 py-2`,
-          `bg-secondary-500`,
-          `font-brand-primary text-sm font-semibold text-white`,
-          `hover:bg-secondary-600 transition-colors`,
+          `mt-5 rounded-xl px-5 py-2 bg-secondary-500 font-brand-primary text-sm font-semibold text-white hover:bg-secondary-600 transition-colors`,
         )}
       >
         Try again
@@ -74,8 +70,7 @@ export function ThisMonthStatsCardLoading() {
       {/* MONTHLY DEPOSITS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5`,
-          `border-secondary-200/20 border-b`,
+          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
         )}
       >
         <div>
@@ -86,8 +81,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border`,
-            `border-secondary-200/20 bg-foreground/5`,
+            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
           )}
         />
       </div>
@@ -95,8 +89,7 @@ export function ThisMonthStatsCardLoading() {
       {/* MONTHLY WITHDRAWALS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5`,
-          `border-secondary-200/20 border-b`,
+          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
         )}
       >
         <div>
@@ -109,8 +102,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border`,
-            `border-secondary-200/20 bg-foreground/5`,
+            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
           )}
         />
       </div>
@@ -118,8 +110,7 @@ export function ThisMonthStatsCardLoading() {
       {/* NEW USERS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5`,
-          `border-secondary-200/20 border-b`,
+          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
         )}
       >
         <div>
@@ -132,8 +123,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border`,
-            `border-secondary-200/20 bg-foreground/5`,
+            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
           )}
         />
       </div>
@@ -150,8 +140,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border`,
-            `border-secondary-200/20 bg-foreground/5`,
+            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
           )}
         />
       </div>
@@ -163,8 +152,7 @@ export function ThisMonthStatsCardError() {
   return (
     <div
       className={cn(
-        `flex min-h-80 w-full flex-col items-center justify-center`,
-        `px-6 py-8 text-center`,
+        `flex min-h-80 w-full flex-col items-center justify-center px-6 py-8 text-center`,
       )}
     >
       <p className={cn(`font-brand-primary text-2 font-bold`, `text-red-600`)}>
@@ -174,10 +162,7 @@ export function ThisMonthStatsCardError() {
       <button
         type="button"
         className={cn(
-          `mt-6 rounded-xl px-5 py-2.5`,
-          `bg-secondary-500`,
-          `font-brand-primary text-sm font-semibold text-white`,
-          `hover:bg-secondary-600 transition-colors`,
+          `mt-6 rounded-xl px-5 py-2.5 bg-secondary-500 font-brand-primary text-sm font-semibold text-white hover:bg-secondary-600 transition-colors`,
         )}
       >
         Try again
@@ -188,42 +173,31 @@ export function ThisMonthStatsCardError() {
 
 export function PendingDepositsTableLoading() {
   return (
-    <div
-      className={cn(
-        `w-full min-w-0 overflow-hidden rounded-2xl border`,
-        `border-secondary-200/30 bg-secondary-50/20`,
-      )}
-    >
-      
-
+    <div>
       {/* LOADING CONTENT */}
       <div
         className={cn(
-          `flex flex-col gap-6 px-5 py-7`,
-          `sm:px-7`,
+          `flex flex-col gap-6 px-5 py-7 sm:px-7`,
         )}
       >
         {/* USER */}
         <div className={cn(`flex items-center gap-4`)}>
           <div
             className={cn(
-              `size-12 shrink-0 animate-pulse rounded-full`,
-              `bg-secondary-500/20`,
+              `size-12 shrink-0 animate-pulse rounded-full bg-secondary-500/20`,
             )}
           />
 
           <div className={cn(`flex min-w-0 flex-col gap-2`)}>
             <div
               className={cn(
-                `h-4 w-32 animate-pulse rounded-md`,
-                `bg-foreground/10`,
+                `h-4 w-32 animate-pulse rounded-md bg-foreground/10`,
               )}
             />
 
             <div
               className={cn(
-                `h-3 w-48 max-w-full animate-pulse rounded-md`,
-                `bg-foreground/10`,
+                `h-3 w-48 max-w-full animate-pulse rounded-md bg-foreground/10`,
               )}
             />
           </div>
@@ -233,29 +207,25 @@ export function PendingDepositsTableLoading() {
         <div className={cn(`flex flex-wrap items-center gap-5`)}>
           <div
             className={cn(
-              `h-4 w-20 animate-pulse rounded-md`,
-              `bg-accent-500/15`,
+              `h-4 w-20 animate-pulse rounded-md bg-accent-500/15`,
             )}
           />
 
           <div
             className={cn(
-              `h-4 w-24 animate-pulse rounded-md`,
-              `bg-foreground/10`,
+              `h-4 w-24 animate-pulse rounded-md bg-foreground/10`,
             )}
           />
 
           <div
             className={cn(
-              `h-4 w-28 animate-pulse rounded-md`,
-              `bg-foreground/10`,
+              `h-4 w-28 animate-pulse rounded-md bg-foreground/10`,
             )}
           />
 
           <div
             className={cn(
-              `h-7 w-20 animate-pulse rounded-full`,
-              `bg-primary-500/15`,
+              `h-7 w-20 animate-pulse rounded-full bg-primary-500/15`,
             )}
           />
         </div>
@@ -265,7 +235,38 @@ export function PendingDepositsTableLoading() {
 }
 
 export function PendingDepositsTableEmpty() {
-  return <>PendingDepositsTableEmpty</>;
+  return (
+    <div>
+      {/* EMPTY STATE */}
+      <div
+        className={cn(
+          `flex min-h-45 flex-col items-center justify-center px-6 py-8 text-center`,
+        )}
+      >
+        <div
+          className={cn(
+            `flex size-15 items-center justify-center rounded-full bg-accent-500/15`,
+          )}
+        >
+          <span
+            className={cn(
+              `font-brand-primary text-2xl text-accent-500`,
+            )}
+          >
+            ✓
+          </span>
+        </div>
+
+        <p
+          className={cn(
+            `mt-5 font-brand-primary text-sm text-foreground/60`,
+          )}
+        >
+          No pending deposits
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export function PendingDepositsTableError() {

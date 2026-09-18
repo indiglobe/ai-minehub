@@ -606,9 +606,10 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  //const [state] = useState<"error" | "loading" |  "data">("data");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
   //const [state] = useState<"error" | "loading" | "data">("error");
+  //const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
   // const pendingDeposits = [];
   const pendingDeposits = [
@@ -655,7 +656,8 @@ export function PendingDepositsTable({
 
         {state === "error" && <PendingDepositsTableError />}
         {state === "loading" && <PendingDepositsTableLoading />}
-        {state === "data" && (
+        {state === "empty" && <PendingDepositsTableEmpty/>}
+        {state === "data" &&(
           <>
             {pendingDeposits.length === 0 ? (
               <PendingDepositsTableEmpty />
