@@ -432,9 +432,9 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  //const [state] = useState<"error" | "loading" | "data">("data");
   //const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   const chartDays = [
     { date: "Sep 08", height: "h-2" },
@@ -456,7 +456,7 @@ export function UserGrowthCard({
         >
           <div className={cn(`flex w-full items-center justify-between`)}>
             <div className={cn(`flex items-center gap-2`)}>
-              <TrendingUp className={cn(`text-secondary-500 size-4`)} />
+              <TrendingUp className={cn(`text-secondary-500 size-4 ml-5`)} />
               <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
                 User Growth (Last 7 Days)
               </h2>
@@ -506,8 +506,8 @@ export function ThisMonthStatsCard({
   ...props
 }: ComponentProps<"section">) {
   //const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  //const [state] = useState<"error" | "loading" | "data">("error");
 
   const statsList = [
     {
@@ -606,9 +606,9 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  //const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  //const [state] = useState<"error" | "loading" | "data">("error");
 
   // const pendingDeposits = [];
   const pendingDeposits = [
@@ -783,9 +783,9 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  //const [state] = useState<"error" | "loading" | "data">("data");
+  //const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   const pendingWithdrawls = [] as any[];
 
