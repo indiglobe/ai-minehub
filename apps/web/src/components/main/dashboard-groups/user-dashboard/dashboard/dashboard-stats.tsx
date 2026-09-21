@@ -26,8 +26,6 @@ export function MiningWallet() {
   const { mutate: createMiningWallet } = useCreateMiningWallet();
   const { data: miningWallet, isError, isLoading } = useFetchMiningWallet();
 
-  console.log(miningWallet)
-
   return (
     <StatCard>
       <StatCardHeader>

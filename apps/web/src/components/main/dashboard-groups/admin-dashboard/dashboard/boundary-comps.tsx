@@ -1,4 +1,5 @@
 import { cn } from "@repo/styles/cn";
+import { Button } from "@repo/ui/button";
 
 export function UserGrowthCardLoading() {
   const bars = [1, 2, 3, 4, 5, 6, 7];
@@ -52,14 +53,9 @@ export function UserGrowthCardError() {
       </p>
 
       {/* RETRY */}
-      <button
-        type="button"
-        className={cn(
-          `mt-5 rounded-xl px-5 py-2 bg-secondary-500 font-brand-primary text-sm font-semibold text-white hover:bg-secondary-600 transition-colors`,
-        )}
-      >
+      <Button type="button" size={"sm"} variant={'destructive'} className={cn(`mt-6`)}>
         Try again
-      </button>
+      </Button>
     </div>
   );
 }
@@ -70,7 +66,7 @@ export function ThisMonthStatsCardLoading() {
       {/* MONTHLY DEPOSITS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
+          `border-secondary-200/20 flex min-h-25 items-center justify-between border-b px-5`,
         )}
       >
         <div>
@@ -81,7 +77,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
+            `border-secondary-200/20 bg-foreground/5 size-12 rounded-xl border`,
           )}
         />
       </div>
@@ -89,7 +85,7 @@ export function ThisMonthStatsCardLoading() {
       {/* MONTHLY WITHDRAWALS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
+          `border-secondary-200/20 flex min-h-25 items-center justify-between border-b px-5`,
         )}
       >
         <div>
@@ -102,7 +98,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
+            `border-secondary-200/20 bg-foreground/5 size-12 rounded-xl border`,
           )}
         />
       </div>
@@ -110,7 +106,7 @@ export function ThisMonthStatsCardLoading() {
       {/* NEW USERS */}
       <div
         className={cn(
-          `flex min-h-25 items-center justify-between px-5 border-secondary-200/20 border-b`,
+          `border-secondary-200/20 flex min-h-25 items-center justify-between border-b px-5`,
         )}
       >
         <div>
@@ -123,7 +119,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
+            `border-secondary-200/20 bg-foreground/5 size-12 rounded-xl border`,
           )}
         />
       </div>
@@ -140,7 +136,7 @@ export function ThisMonthStatsCardLoading() {
 
         <div
           className={cn(
-            `size-12 rounded-xl border border-secondary-200/20 bg-foreground/5`,
+            `border-secondary-200/20 bg-foreground/5 size-12 rounded-xl border`,
           )}
         />
       </div>
@@ -159,14 +155,9 @@ export function ThisMonthStatsCardError() {
         Something went wrong !!!
       </p>
 
-      <button
-        type="button"
-        className={cn(
-          `mt-6 rounded-xl px-5 py-2.5 bg-secondary-500 font-brand-primary text-sm font-semibold text-white hover:bg-secondary-600 transition-colors`,
-        )}
-      >
+      <Button type="button" size={"sm"} variant={'destructive'} className={cn(`mt-6`)}>
         Try again
-      </button>
+      </Button>
     </div>
   );
 }
@@ -175,29 +166,25 @@ export function PendingDepositsTableLoading() {
   return (
     <div>
       {/* LOADING CONTENT */}
-      <div
-        className={cn(
-          `flex flex-col gap-6 px-5 py-7 sm:px-7`,
-        )}
-      >
+      <div className={cn(`flex flex-col gap-6 px-5 py-7 sm:px-7`)}>
         {/* USER */}
         <div className={cn(`flex items-center gap-4`)}>
           <div
             className={cn(
-              `size-12 shrink-0 animate-pulse rounded-full bg-secondary-500/20`,
+              `bg-secondary-500/20 size-12 shrink-0 animate-pulse rounded-full`,
             )}
           />
 
           <div className={cn(`flex min-w-0 flex-col gap-2`)}>
             <div
               className={cn(
-                `h-4 w-32 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-4 w-32 animate-pulse rounded-md`,
               )}
             />
 
             <div
               className={cn(
-                `h-3 w-48 max-w-full animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-3 w-48 max-w-full animate-pulse rounded-md`,
               )}
             />
           </div>
@@ -206,26 +193,20 @@ export function PendingDepositsTableLoading() {
         {/* DETAILS */}
         <div className={cn(`flex flex-wrap items-center gap-5`)}>
           <div
-            className={cn(
-              `h-4 w-20 animate-pulse rounded-md bg-accent-500/15`,
-            )}
+            className={cn(`bg-accent-500/15 h-4 w-20 animate-pulse rounded-md`)}
+          />
+
+          <div
+            className={cn(`bg-foreground/10 h-4 w-24 animate-pulse rounded-md`)}
+          />
+
+          <div
+            className={cn(`bg-foreground/10 h-4 w-28 animate-pulse rounded-md`)}
           />
 
           <div
             className={cn(
-              `h-4 w-24 animate-pulse rounded-md bg-foreground/10`,
-            )}
-          />
-
-          <div
-            className={cn(
-              `h-4 w-28 animate-pulse rounded-md bg-foreground/10`,
-            )}
-          />
-
-          <div
-            className={cn(
-              `h-7 w-20 animate-pulse rounded-full bg-primary-500/15`,
+              `bg-primary-500/15 h-7 w-20 animate-pulse rounded-full`,
             )}
           />
         </div>
@@ -245,23 +226,15 @@ export function PendingDepositsTableEmpty() {
       >
         <div
           className={cn(
-            `flex size-15 items-center justify-center rounded-full bg-accent-500/15`,
+            `bg-accent-500/15 flex size-15 items-center justify-center rounded-full`,
           )}
         >
-          <span
-            className={cn(
-              `font-brand-primary text-2xl text-accent-500`,
-            )}
-          >
+          <span className={cn(`font-brand-primary text-accent-500 text-2xl`)}>
             ✓
           </span>
         </div>
 
-        <p
-          className={cn(
-            `mt-5 font-brand-primary text-sm text-foreground/60`,
-          )}
-        >
+        <p className={cn(`font-brand-primary text-foreground/60 mt-5 text-sm`)}>
           No pending deposits
         </p>
       </div>
@@ -286,14 +259,9 @@ export function PendingDepositsTableError() {
           Unable to load pending deposits
         </p>
 
-        <button
-          type="button"
-          className={cn(
-            `bg-secondary-500 font-brand-primary hover:bg-secondary-600 mt-5 rounded-xl px-5 py-2 text-sm font-semibold text-white transition-colors`,
-          )}
-        >
-          Try again
-        </button>
+      <Button type="button" size={"sm"} variant={'destructive'} className={cn(`mt-6`)}>
+        Try again
+      </Button>
       </div>
     </div>
   );
@@ -343,14 +311,9 @@ export function PendingWithdrawalsTableError() {
           Unable to load pending withdrawals
         </p>
 
-        <button
-          type="button"
-          className={cn(
-            `bg-secondary-500 font-brand-primary hover:bg-secondary-600 mt-5 rounded-xl px-5 py-2 text-sm font-semibold text-white transition-colors`,
-          )}
-        >
-          Try again
-        </button>
+      <Button type="button" size={"sm"} variant={'destructive'} className={cn(`mt-6`)}>
+        Try again
+      </Button>
       </div>
     </div>
   );

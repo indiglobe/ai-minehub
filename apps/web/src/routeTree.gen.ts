@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as withHeaderFooterRouteRouteImport } from './routes/(with-header-footer)/route'
 import { Route as withHeaderFooterIndexRouteImport } from './routes/(with-header-footer)/index'
 import { Route as withoutHeaderFooterauthenticatedRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/route'
+import { Route as withoutHeaderFooterguestRouteRouteImport } from './routes/(without-header-footer)/(guest)/route'
+import { Route as withoutHeaderFooterleagalPagesRouteRouteImport } from './routes/(without-header-footer)/(leagal-pages)/route'
 import { Route as withHeaderFooterCompanyIndexRouteImport } from './routes/(with-header-footer)/company/index'
 import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(with-header-footer)/partnership/index'
 import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
@@ -62,6 +64,16 @@ const withHeaderFooterIndexRoute = withHeaderFooterIndexRouteImport.update({
 const withoutHeaderFooterauthenticatedRouteRoute =
   withoutHeaderFooterauthenticatedRouteRouteImport.update({
     id: '/(without-header-footer)/(authenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterguestRouteRoute =
+  withoutHeaderFooterguestRouteRouteImport.update({
+    id: '/(without-header-footer)/(guest)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const withoutHeaderFooterleagalPagesRouteRoute =
+  withoutHeaderFooterleagalPagesRouteRouteImport.update({
+    id: '/(without-header-footer)/(leagal-pages)',
     getParentRoute: () => rootRouteImport,
   } as any)
 const withHeaderFooterCompanyIndexRoute =
@@ -177,27 +189,27 @@ const withoutHeaderFooterauthenticatedRedirectSigninIndexRoute =
   } as any)
 const withoutHeaderFooterguestSigninIndexRoute =
   withoutHeaderFooterguestSigninIndexRouteImport.update({
-    id: '/(without-header-footer)/(guest)/signin/',
+    id: '/signin/',
     path: '/signin/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => withoutHeaderFooterguestRouteRoute,
   } as any)
 const withoutHeaderFooterleagalPagesCookiePolicyIndexRoute =
   withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/cookie-policy/',
+    id: '/cookie-policy/',
     path: '/cookie-policy/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => withoutHeaderFooterleagalPagesRouteRoute,
   } as any)
 const withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute =
   withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/privacy-policy/',
+    id: '/privacy-policy/',
     path: '/privacy-policy/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => withoutHeaderFooterleagalPagesRouteRoute,
   } as any)
 const withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute =
   withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport.update({
-    id: '/(without-header-footer)/(leagal-pages)/terms-of-service/',
+    id: '/terms-of-service/',
     path: '/terms-of-service/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => withoutHeaderFooterleagalPagesRouteRoute,
   } as any)
 const withoutHeaderFooterauthenticatedexistingUserDashboardIndexRoute =
   withoutHeaderFooterauthenticatedexistingUserDashboardIndexRouteImport.update({
@@ -397,6 +409,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(with-header-footer)': typeof withHeaderFooterRouteRouteWithChildren
   '/(without-header-footer)/(authenticated)': typeof withoutHeaderFooterauthenticatedRouteRouteWithChildren
+  '/(without-header-footer)/(guest)': typeof withoutHeaderFooterguestRouteRouteWithChildren
+  '/(without-header-footer)/(leagal-pages)': typeof withoutHeaderFooterleagalPagesRouteRouteWithChildren
   '/(with-header-footer)/': typeof withHeaderFooterIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)': typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
   '/(without-header-footer)/(authenticated)/(new-user)': typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
@@ -513,6 +527,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(with-header-footer)'
     | '/(without-header-footer)/(authenticated)'
+    | '/(without-header-footer)/(guest)'
+    | '/(without-header-footer)/(leagal-pages)'
     | '/(with-header-footer)/'
     | '/(without-header-footer)/(authenticated)/(existing-user)'
     | '/(without-header-footer)/(authenticated)/(new-user)'
@@ -556,11 +572,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   withHeaderFooterRouteRoute: typeof withHeaderFooterRouteRouteWithChildren
   withoutHeaderFooterauthenticatedRouteRoute: typeof withoutHeaderFooterauthenticatedRouteRouteWithChildren
+  withoutHeaderFooterguestRouteRoute: typeof withoutHeaderFooterguestRouteRouteWithChildren
+  withoutHeaderFooterleagalPagesRouteRoute: typeof withoutHeaderFooterleagalPagesRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  withoutHeaderFooterguestSigninIndexRoute: typeof withoutHeaderFooterguestSigninIndexRoute
-  withoutHeaderFooterleagalPagesCookiePolicyIndexRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
-  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
-  withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -584,6 +598,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterauthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(guest)': {
+      id: '/(without-header-footer)/(guest)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterguestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(without-header-footer)/(leagal-pages)': {
+      id: '/(without-header-footer)/(leagal-pages)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof withoutHeaderFooterleagalPagesRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/company/': {
@@ -724,28 +752,28 @@ declare module '@tanstack/react-router' {
       path: '/signin'
       fullPath: '/signin/'
       preLoaderRoute: typeof withoutHeaderFooterguestSigninIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterguestRouteRoute
     }
     '/(without-header-footer)/(leagal-pages)/cookie-policy/': {
       id: '/(without-header-footer)/(leagal-pages)/cookie-policy/'
       path: '/cookie-policy'
       fullPath: '/cookie-policy/'
       preLoaderRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterleagalPagesRouteRoute
     }
     '/(without-header-footer)/(leagal-pages)/privacy-policy/': {
       id: '/(without-header-footer)/(leagal-pages)/privacy-policy/'
       path: '/privacy-policy'
       fullPath: '/privacy-policy/'
       preLoaderRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterleagalPagesRouteRoute
     }
     '/(without-header-footer)/(leagal-pages)/terms-of-service/': {
       id: '/(without-header-footer)/(leagal-pages)/terms-of-service/'
       path: '/terms-of-service'
       fullPath: '/terms-of-service/'
       preLoaderRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof withoutHeaderFooterleagalPagesRouteRoute
     }
     '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/': {
       id: '/(without-header-footer)/(authenticated)/(existing-user)/dashboard/'
@@ -1012,19 +1040,51 @@ const withoutHeaderFooterauthenticatedRouteRouteWithChildren =
     withoutHeaderFooterauthenticatedRouteRouteChildren,
   )
 
+interface withoutHeaderFooterguestRouteRouteChildren {
+  withoutHeaderFooterguestSigninIndexRoute: typeof withoutHeaderFooterguestSigninIndexRoute
+}
+
+const withoutHeaderFooterguestRouteRouteChildren: withoutHeaderFooterguestRouteRouteChildren =
+  {
+    withoutHeaderFooterguestSigninIndexRoute:
+      withoutHeaderFooterguestSigninIndexRoute,
+  }
+
+const withoutHeaderFooterguestRouteRouteWithChildren =
+  withoutHeaderFooterguestRouteRoute._addFileChildren(
+    withoutHeaderFooterguestRouteRouteChildren,
+  )
+
+interface withoutHeaderFooterleagalPagesRouteRouteChildren {
+  withoutHeaderFooterleagalPagesCookiePolicyIndexRoute: typeof withoutHeaderFooterleagalPagesCookiePolicyIndexRoute
+  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute: typeof withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute
+  withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute: typeof withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute
+}
+
+const withoutHeaderFooterleagalPagesRouteRouteChildren: withoutHeaderFooterleagalPagesRouteRouteChildren =
+  {
+    withoutHeaderFooterleagalPagesCookiePolicyIndexRoute:
+      withoutHeaderFooterleagalPagesCookiePolicyIndexRoute,
+    withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute:
+      withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute,
+    withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute:
+      withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute,
+  }
+
+const withoutHeaderFooterleagalPagesRouteRouteWithChildren =
+  withoutHeaderFooterleagalPagesRouteRoute._addFileChildren(
+    withoutHeaderFooterleagalPagesRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   withHeaderFooterRouteRoute: withHeaderFooterRouteRouteWithChildren,
   withoutHeaderFooterauthenticatedRouteRoute:
     withoutHeaderFooterauthenticatedRouteRouteWithChildren,
+  withoutHeaderFooterguestRouteRoute:
+    withoutHeaderFooterguestRouteRouteWithChildren,
+  withoutHeaderFooterleagalPagesRouteRoute:
+    withoutHeaderFooterleagalPagesRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  withoutHeaderFooterguestSigninIndexRoute:
-    withoutHeaderFooterguestSigninIndexRoute,
-  withoutHeaderFooterleagalPagesCookiePolicyIndexRoute:
-    withoutHeaderFooterleagalPagesCookiePolicyIndexRoute,
-  withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute:
-    withoutHeaderFooterleagalPagesPrivacyPolicyIndexRoute,
-  withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute:
-    withoutHeaderFooterleagalPagesTermsOfServiceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
