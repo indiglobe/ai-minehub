@@ -1,39 +1,6 @@
 import { db } from "@/index";
-import { TradingOrderTable } from "@/schema";
-import { id } from "@repo/utils/id";
-import { and, desc, eq, inArray, sql, SQL } from "drizzle-orm";
-
-/**
- * ==========================================
- * CREATE
- * ==========================================
- */
-
-type TCreate__TradingOrder = Omit<
-  typeof TradingOrderTable.$inferInsert,
-  "tableIdentifierToken" | "createdAt" | "updatedAt"
->;
-
-const create__TradingOrder = async (data: TCreate__TradingOrder) => {
-  const generatedId = data.id ?? id();
-
-  await db.insert(TradingOrderTable).values({
-    ...data,
-    id: generatedId,
-  });
-
-  return (await read__OneTradingOrder({
-    identifier: {
-      id: generatedId,
-    },
-  }))!;
-};
-
-/**
- * ==========================================
- * READ (ALL) (OPTIONAL)
- * ==========================================
- */
+import { TradingOrderTable, UserTable } from "@/schema";
+import { and, desc, eq, getTableColumns, SQL } from "drizzle-orm";
 
 type TRead__AllTradingOrders = {
   identifier?: Partial<{
@@ -45,14 +12,24 @@ type TRead__AllTradingOrders = {
     limit?: number;
   };
 
-  joinOptions?: Partial<{
+  joiningOptions?: Partial<{
     user: true;
   }>;
+
+  selectedFields?: Partial<
+    Record<keyof typeof TradingOrderTable.$inferSelect, true>
+  > &
+    Partial<{
+      user: Partial<Record<keyof typeof UserTable.$inferSelect, true>>;
+    }>;
 };
 
 const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
+
+  const userColumns = getTableColumns(UserTable);
+  const tradingOrderColumns = getTableColumns(TradingOrderTable);
 
   const conditions: SQL[] = [];
 
@@ -60,29 +37,175 @@ const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
     conditions.push(eq(TradingOrderTable.orderedBy, options.identifier.userId));
   }
 
-  return await db.query.TradingOrderTable.findMany({
-    where: and(...conditions),
-    limit,
-    offset: skip,
-    orderBy: [desc(TradingOrderTable.createdAt)],
-    with: {
-      ...(options?.joinOptions?.user ? { user: true } : {}),
-    },
-  });
-};
+  const filteredTradingTableFields = options?.selectedFields
+    ? (Object.fromEntries(
+        Object.entries(options.selectedFields)
+          .filter(
+            ([key, value]) =>
+              key in tradingOrderColumns && typeof value === "boolean" && value,
+          )
+          .map(([key]) => [
+            key,
+            tradingOrderColumns[key as keyof typeof tradingOrderColumns],
+          ]),
+      ) as typeof tradingOrderColumns)
+    : tradingOrderColumns;
 
-const read__TraderCount = async () => {
-  const res = await db
-    .select({
-      status: TradingOrderTable.tradingStatus,
-      count: sql<number>`count(*)`,
-    })
+  const filteredUsersFields =
+    options?.joiningOptions?.user && options.selectedFields?.user
+      ? (Object.fromEntries(
+          Object.entries(options.selectedFields.user)
+            .filter(
+              ([key, value]) =>
+                key in userColumns && typeof value === "boolean" && value,
+            )
+            .map(([key]) => [
+              key,
+              userColumns[key as keyof typeof userColumns],
+            ]),
+        ) as typeof userColumns)
+      : options?.joiningOptions?.user && !options.selectedFields
+        ? userColumns
+        : undefined;
+
+  const selectedQueryFields = {
+    ...filteredTradingTableFields,
+
+    ...(filteredUsersFields && options?.joiningOptions?.user
+      ? {
+          users: {
+            ...filteredUsersFields,
+          },
+        }
+      : {}),
+  };
+
+  const baseQuery = db
+    .select(selectedQueryFields)
     .from(TradingOrderTable)
-    .where(inArray(TradingOrderTable.tradingStatus, ["active", "completed"]))
-    .groupBy(TradingOrderTable.tradingStatus);
+    .limit(limit)
+    .offset(skip)
+    .orderBy(desc(TradingOrderTable.createdAt));
 
-  return res;
+  if (conditions.length > 0) {
+    baseQuery.where(and(...conditions));
+  }
+
+  if (options?.joiningOptions?.user) {
+    baseQuery.leftJoin(
+      UserTable,
+      eq(UserTable.id, TradingOrderTable.orderedBy),
+    );
+  }
+
+  const dbResponse = await baseQuery;
+
+  return dbResponse;
 };
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+/**
+ * ==========================================
+ * CREATE
+ * ==========================================
+ */
+
+// type TCreate__TradingOrder = Omit<
+//   typeof TradingOrderTable.$inferInsert,
+//   "tableIdentifierToken" | "createdAt" | "updatedAt"
+// >;
+
+// const create__TradingOrder = async (data: TCreate__TradingOrder) => {
+//   const generatedId = data.id ?? id();
+
+//   await db.insert(TradingOrderTable).values({
+//     ...data,
+//     id: generatedId,
+//   });
+
+//   return (await read__OneTradingOrder({
+//     identifier: {
+//       id: generatedId,
+//     },
+//   }))!;
+// };
+
+/**
+ * ==========================================
+ * READ (ALL) (OPTIONAL)
+ * ==========================================
+ */
+
+// type TRead__AllTradingOrders = {
+//   identifier?: Partial<{
+//     userId: string;
+//   }>;
+
+//   queryOptions?: {
+//     skip?: number;
+//     limit?: number;
+//   };
+
+//   joinOptions?: Partial<{
+//     user: true;
+//   }>;
+// };
+
+// const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
+//   const skip = options?.queryOptions?.skip ?? 0;
+//   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
+
+//   const conditions: SQL[] = [];
+
+//   if (options?.identifier?.userId) {
+//     conditions.push(eq(TradingOrderTable.orderedBy, options.identifier.userId));
+//   }
+
+//   return await db.query.TradingOrderTable.findMany({
+//     where: and(...conditions),
+//     limit,
+//     offset: skip,
+//     orderBy: [desc(TradingOrderTable.createdAt)],
+//     with: {
+//       ...(options?.joinOptions?.user ? { user: true } : {}),
+//     },
+//   });
+// };
+
+// const read__TraderCount = async () => {
+//   const res = await db
+//     .select({
+//       status: TradingOrderTable.tradingStatus,
+//       count: sql<number>`count(*)`,
+//     })
+//     .from(TradingOrderTable)
+//     .where(inArray(TradingOrderTable.tradingStatus, ["active", "completed"]))
+//     .groupBy(TradingOrderTable.tradingStatus);
+
+//   return res;
+// };
 
 /**
  * ==========================================
@@ -90,30 +213,30 @@ const read__TraderCount = async () => {
  * ==========================================
  */
 
-type TRead__OneTradingOrder = {
-  identifier: { id: string };
+// type TRead__OneTradingOrder = {
+//   identifier: { id: string };
 
-  joinOptions?: Partial<{
-    user: true;
-  }>;
-};
+//   joinOptions?: Partial<{
+//     user: true;
+//   }>;
+// };
 
-const read__OneTradingOrder = async (options: TRead__OneTradingOrder) => {
-  const conditions: SQL[] = [];
+// const read__OneTradingOrder = async (options: TRead__OneTradingOrder) => {
+//   const conditions: SQL[] = [];
 
-  if ("id" in options.identifier) {
-    conditions.push(eq(TradingOrderTable.id, options.identifier.id));
-  }
+//   if ("id" in options.identifier) {
+//     conditions.push(eq(TradingOrderTable.id, options.identifier.id));
+//   }
 
-  const order = await db.query.TradingOrderTable.findFirst({
-    where: and(...conditions),
-    with: {
-      ...(options.joinOptions?.user ? { user: true } : {}),
-    },
-  });
+//   const order = await db.query.TradingOrderTable.findFirst({
+//     where: and(...conditions),
+//     with: {
+//       ...(options.joinOptions?.user ? { user: true } : {}),
+//     },
+//   });
 
-  return order ? order : null;
-};
+//   return order ? order : null;
+// };
 
 /**
  * ==========================================
@@ -121,36 +244,36 @@ const read__OneTradingOrder = async (options: TRead__OneTradingOrder) => {
  * ==========================================
  */
 
-type TUpdate__TradingOrder = {
-  identifier: {
-    id: string;
-  };
+// type TUpdate__TradingOrder = {
+//   identifier: {
+//     id: string;
+//   };
 
-  dataToUpdate: Partial<
-    Omit<typeof TradingOrderTable.$inferInsert, "tableIdentifierToken" | "id">
-  >;
-};
+//   dataToUpdate: Partial<
+//     Omit<typeof TradingOrderTable.$inferInsert, "tableIdentifierToken" | "id">
+//   >;
+// };
 
-const update__TradingOrder = async (options: TUpdate__TradingOrder) => {
-  const filteredData = Object.fromEntries(
-    Object.entries(options.dataToUpdate).filter(
-      ([, value]) => value !== undefined,
-    ),
-  );
+// const update__TradingOrder = async (options: TUpdate__TradingOrder) => {
+//   const filteredData = Object.fromEntries(
+//     Object.entries(options.dataToUpdate).filter(
+//       ([, value]) => value !== undefined,
+//     ),
+//   );
 
-  if (Object.keys(filteredData).length === 0) {
-    return null;
-  }
+//   if (Object.keys(filteredData).length === 0) {
+//     return null;
+//   }
 
-  await db
-    .update(TradingOrderTable)
-    .set(filteredData)
-    .where(eq(TradingOrderTable.id, options.identifier.id));
+//   await db
+//     .update(TradingOrderTable)
+//     .set(filteredData)
+//     .where(eq(TradingOrderTable.id, options.identifier.id));
 
-  return await read__OneTradingOrder({
-    identifier: options.identifier,
-  });
-};
+//   return await read__OneTradingOrder({
+//     identifier: options.identifier,
+//   });
+// };
 
 /**
  * ==========================================
@@ -158,33 +281,33 @@ const update__TradingOrder = async (options: TUpdate__TradingOrder) => {
  * ==========================================
  */
 
-type TDelete__TradingOrder = {
-  identifier: {
-    id: string;
-  };
-};
+// type TDelete__TradingOrder = {
+//   identifier: {
+//     id: string;
+//   };
+// };
 
-const delete__TradingOrder = async (options: TDelete__TradingOrder) => {
-  const existing = await read__OneTradingOrder({
-    identifier: options.identifier,
-  });
+// const delete__TradingOrder = async (options: TDelete__TradingOrder) => {
+//   const existing = await read__OneTradingOrder({
+//     identifier: options.identifier,
+//   });
 
-  if (!existing) {
-    return null;
-  }
+//   if (!existing) {
+//     return null;
+//   }
 
-  await db
-    .delete(TradingOrderTable)
-    .where(eq(TradingOrderTable.id, options.identifier.id));
+//   await db
+//     .delete(TradingOrderTable)
+//     .where(eq(TradingOrderTable.id, options.identifier.id));
 
-  return existing;
-};
+//   return existing;
+// };
 
 export {
-  create__TradingOrder,
+  // create__TradingOrder,
   read__AllTradingOrders,
-  read__OneTradingOrder,
-  read__TraderCount,
-  update__TradingOrder,
-  delete__TradingOrder,
+  // read__OneTradingOrder,
+  // read__TraderCount,
+  // update__TradingOrder,
+  // delete__TradingOrder,
 };

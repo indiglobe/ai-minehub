@@ -1,3 +1,36 @@
+/**
+ * ⚠️ WARNING: ENTERING THE FORBIDDEN REALM OF DRIZZLE.
+ *
+ * This query is significantly more complicated than it has any right to be.
+ * If you're reading this, congratulations — you have made it this far.
+ *
+ * Do not assume that you will understand this query immediately.
+ * I certainly didn't.
+ * I wrote it.
+ * I stared at it for several hours.
+ * I questioned several of my life choices.
+ * I eventually got it working.
+ *
+ * At some point, I understood exactly what every join, subquery, condition,
+ * and deeply questionable piece of SQL wizardry was doing.
+ *
+ * That understanding has since left my body.
+ *
+ * If you're planning to modify this query, please take a moment to ask yourself:
+ * "Do I really need to do this?"
+ *
+ * If the answer is yes, may God have mercy on both of us.
+ *
+ * Also, future me:
+ * If you're reading this and thinking,
+ * "What the hell was I thinking when I wrote this?"
+ * The answer is: I don't know.
+ *
+ * Good luck.
+ * May your types be inferred, your joins be correct,
+ * and your query planner show mercy.
+ */
+
 import { db } from "@/index";
 import { MiningOrderTable, MiningProfileTable, UserTable } from "@/schema";
 import { and, desc, eq, getTableColumns, SQL } from "drizzle-orm";
@@ -92,7 +125,7 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
               userColumns[key as keyof typeof userColumns],
             ]),
         ) as typeof userColumns)
-      : options?.joiningOptions?.user
+      : options?.joiningOptions?.user && !options.selectedFields
         ? userColumns
         : undefined;
 
@@ -112,14 +145,15 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
               miningProfileColumns[key as keyof typeof miningProfileColumns],
             ]),
         ) as typeof miningProfileColumns)
-      : options?.joiningOptions?.miningProfile
+      : options?.joiningOptions?.miningProfile && !options.selectedFields
         ? miningProfileColumns
         : undefined;
+
 
   const selectedQueryFields = {
     ...filteredMiningOrderTableFields,
 
-    ...(filteredUsersFields && options?.selectedFields?.user
+    ...(filteredUsersFields && options?.joiningOptions?.user
       ? {
           users: {
             ...filteredUsersFields,
@@ -127,7 +161,7 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
         }
       : {}),
 
-    ...(filteredMiningProfileFields && options?.selectedFields?.miningProfile
+    ...(filteredMiningProfileFields && options?.joiningOptions?.miningProfile
       ? {
           miningProfile: {
             ...filteredMiningProfileFields,

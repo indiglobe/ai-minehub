@@ -14,6 +14,46 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
 
+  head: () => {
+    const title = "Sign In | AI Minehub";
+    const description =
+      "Sign in to your AI Minehub account to access your dashboard, manage mining activities, view your wallet, track referrals, and more.";
+
+    return {
+      meta: [
+        { title },
+        {
+          name: "description",
+          content: description,
+        },
+        {
+          name: "twitter:title",
+          content: title,
+        },
+        {
+          name: "og:title",
+          content: title,
+        },
+        {
+          name: "twitter:description",
+          content: description,
+        },
+        {
+          name: "og:description",
+          content: description,
+        },
+        {
+          name: "twitter:url",
+          content: `${env.VITE_WEB_APP_HOST}/signin`,
+        },
+        {
+          name: "og:url",
+          content: `${env.VITE_WEB_APP_HOST}/signin`,
+        },
+      ],
+    };
+  },
+
   /**
    * Validates and parses the URL search parameters
    * using the Zod schema before rendering the route.

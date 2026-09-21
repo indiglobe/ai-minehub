@@ -22,9 +22,8 @@ import {
   StatCardHeadingIcon,
   StatCardData,
   StatCardFooter,
-} from "./page-ui";
+} from "@/components/main/dashboard-groups/admin-dashboard/dashboard/page-ui";
 import { Fragment, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { Button } from "@repo/ui/button";
 import {
   PendingDepositsTableEmpty,
@@ -101,13 +100,18 @@ export function TotalUsersStat({
         <>
           <p
             className={cn(
-              `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+              `font-brand-primary text-2 mt-5 font-bold text-red-500`,
             )}
           >
             Something went wrong !!!
           </p>
 
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"destructive"}
+            className={cn(`mt-3`)}
+          >
             Try again
           </Button>
         </>
@@ -126,9 +130,9 @@ export function TotalDepositsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -156,13 +160,18 @@ export function TotalDepositsStat({
         <>
           <p
             className={cn(
-              `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+              `font-brand-primary text-2 mt-5 font-bold text-red-500`,
             )}
           >
             Something went wrong !!!
           </p>
 
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"destructive"}
+            className={cn(`mt-3`)}
+          >
             Try again
           </Button>
         </>
@@ -182,8 +191,8 @@ export function PendingDepositsStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -212,13 +221,18 @@ export function PendingDepositsStat({
         <>
           <p
             className={cn(
-              `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+              `font-brand-primary text-2 mt-5 font-bold text-red-500`,
             )}
           >
             Something went wrong !!!
           </p>
 
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"destructive"}
+            className={cn(`mt-3`)}
+          >
             Try again
           </Button>
         </>
@@ -237,9 +251,9 @@ export function PendingWithdrawalsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -268,13 +282,18 @@ export function PendingWithdrawalsStat({
         <>
           <p
             className={cn(
-              `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+              `font-brand-primary text-2 mt-5 font-bold text-red-500`,
             )}
           >
             Something went wrong !!!
           </p>
 
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"destructive"}
+            className={cn(`mt-3`)}
+          >
             Try again
           </Button>
         </>
@@ -316,9 +335,9 @@ export function TotalMiningInvestedCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -348,13 +367,18 @@ export function TotalMiningInvestedCard({
         <>
           <p
             className={cn(
-              `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+              `font-brand-primary text-2 mt-5 font-bold text-red-500`,
             )}
           >
             Something went wrong !!!
           </p>
 
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            type="button"
+            size={"sm"}
+            variant={"destructive"}
+            className={cn(`mt-3`)}
+          >
             Try again
           </Button>
         </>
@@ -405,13 +429,18 @@ export function ActiveMiningSessionsCard({
           <>
             <p
               className={cn(
-                `font-brand-primary text-2 mt-5 mb-6 font-bold text-red-600`,
+                `font-brand-primary text-2 mt-5 font-bold text-red-600`,
               )}
             >
               Something went wrong !!!
             </p>
 
-            <Button variant={"secondary"} size={"sm"}>
+            <Button
+              type="button"
+              size={"sm"}
+              variant={"destructive"}
+              className={cn(`mt-3`)}
+            >
               Try again
             </Button>
           </>
@@ -432,8 +461,8 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" | "data">("data");
-  //const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
   const [state] = useState<"error" | "loading" | "data">("error");
 
   const chartDays = [
@@ -456,7 +485,7 @@ export function UserGrowthCard({
         >
           <div className={cn(`flex w-full items-center justify-between`)}>
             <div className={cn(`flex items-center gap-2`)}>
-              <TrendingUp className={cn(`text-secondary-500 size-4 ml-5`)} />
+              <TrendingUp className={cn(`text-secondary-500 ml-5 size-4`)} />
               <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
                 User Growth (Last 7 Days)
               </h2>
@@ -505,9 +534,9 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  //const [state] = useState<"error" | "loading" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   const statsList = [
     {
@@ -606,10 +635,10 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" |  "data">("data");
-  const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
-  //const [state] = useState<"error" | "loading" | "data">("error");
-  //const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
   // const pendingDeposits = [];
   const pendingDeposits = [
@@ -642,22 +671,14 @@ export function PendingDepositsTable({
               Pending Deposits
             </h2>
           </div>
-          <Link
-            to="/"
-            className={cn(
-              `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
-            )}
-          >
-            View All
-          </Link>
         </div>
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
         {state === "error" && <PendingDepositsTableError />}
         {state === "loading" && <PendingDepositsTableLoading />}
-        {state === "empty" && <PendingDepositsTableEmpty/>}
-        {state === "data" &&(
+        {state === "empty" && <PendingDepositsTableEmpty />}
+        {state === "data" && (
           <>
             {pendingDeposits.length === 0 ? (
               <PendingDepositsTableEmpty />
@@ -749,19 +770,17 @@ export function PendingDepositsTable({
                             )}
                           >
                             <Button
-                              size="sm"
-                              className={cn(
-                                `h-8 gap-1 rounded-md bg-green-600 px-3 text-xs text-white hover:bg-green-700`,
-                              )}
+                              size="xs"
+                              variant={"success"}
+                              className={cn(``)}
                             >
                               <Check className={cn(`size-3.5`)} />
                               Approve
                             </Button>
                             <Button
-                              size="sm"
-                              className={cn(
-                                `h-8 gap-1 rounded-md bg-red-600 px-3 text-xs text-white hover:bg-red-700`,
-                              )}
+                              size="xs"
+                              variant={"destructive"}
+                              className={cn(``)}
                             >
                               <X className={cn(`size-3.5`)} />
                               Reject
@@ -785,9 +804,10 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" | "data">("data");
-  //const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
   const pendingWithdrawls = [] as any[];
 
@@ -805,14 +825,6 @@ export function PendingWithdrawalsTable({
               Pending Withdrawals
             </h2>
           </div>
-          <Link
-            to="/"
-            className={cn(
-              `bg-secondary-500 text-secondary-50 hover:bg-secondary-600 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors`,
-            )}
-          >
-            View All
-          </Link>
         </div>
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />

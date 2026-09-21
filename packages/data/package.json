@@ -8,6 +8,7 @@
     "lint:staged": "lint-staged",
     "lint": "eslint",
     "pretest": "tf run db:test",
+    "test:query": "tf run test:query",
     "test": "tf test",
     "test:watch": "tf run test:watch",
     "test:coverage": "tf run test:run --coverage",
