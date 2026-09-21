@@ -105,9 +105,9 @@ export function Conversations({
     },
   ];
 
-  const [state] = useState<"error" | "loading" | "data">("data");
+  //const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+   const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section

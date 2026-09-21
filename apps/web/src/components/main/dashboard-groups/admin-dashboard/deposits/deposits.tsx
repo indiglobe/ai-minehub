@@ -12,9 +12,9 @@ export function AllDeposits({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+  //const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("error");
 
   const deposits = [
     {
