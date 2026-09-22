@@ -65,11 +65,7 @@ type DashboardDialogContextValue = {
 const DashboardDialogContext =
   createContext<DashboardDialogContextValue | null>(null);
 
-function Dialog({
-  children,
-}: {
-  children: ReactNode;
-}) {
+function Dialog({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -94,13 +90,10 @@ function DialogTrigger({
 }: {
   asChild?: boolean;
   children: ReactElement<{
-    onClick?: (
-      event: MouseEvent<HTMLElement>,
-    ) => void;
+    onClick?: (event: MouseEvent<HTMLElement>) => void;
   }>;
 }) {
-  const context =
-    useContext(DashboardDialogContext);
+  const context = useContext(DashboardDialogContext);
 
   if (!context) {
     return children;
@@ -110,8 +103,7 @@ function DialogTrigger({
     return null;
   }
 
-  const originalOnClick =
-    children.props.onClick;
+  const originalOnClick = children.props.onClick;
 
   return cloneElement(children, {
     onClick: (event) => {
@@ -131,8 +123,7 @@ function DialogContent({
   children,
   ...props
 }: ComponentProps<"div">) {
-  const context =
-    useContext(DashboardDialogContext);
+  const context = useContext(DashboardDialogContext);
 
   const open = context?.open;
   const setOpen = context?.setOpen;
@@ -144,24 +135,16 @@ function DialogContent({
       return;
     }
 
-    const handleKeyDown = (
-      event: KeyboardEvent,
-    ) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen?.(false);
       }
     };
 
-    document.addEventListener(
-      "keydown",
-      handleKeyDown,
-    );
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener(
-        "keydown",
-        handleKeyDown,
-      );
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open, setOpen]);
 
@@ -172,15 +155,12 @@ function DialogContent({
       return;
     }
 
-    const previousOverflow =
-      document.body.style.overflow;
+    const previousOverflow = document.body.style.overflow;
 
-    document.body.style.overflow =
-      "hidden";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow =
-        previousOverflow;
+      document.body.style.overflow = previousOverflow;
     };
   }, [open]);
 
@@ -198,10 +178,7 @@ function DialogContent({
          * Close only when clicking the backdrop.
          * Clicking inside the dialog will not close it.
          */
-        if (
-          event.target ===
-          event.currentTarget
-        ) {
+        if (event.target === event.currentTarget) {
           setOpen?.(false);
         }
       }}
@@ -210,7 +187,7 @@ function DialogContent({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full max-h-[90vh] overflow-y-auto",
+          "relative max-h-[90vh] w-full overflow-y-auto",
           className,
         )}
         onMouseDown={(event) => {
@@ -227,7 +204,7 @@ function DialogContent({
             setOpen?.(false);
           }}
           className={cn(
-            "absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-md text-foreground/50 transition hover:bg-foreground/10 hover:text-foreground",
+            "text-foreground/50 hover:bg-foreground/10 hover:text-foreground absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-md transition",
           )}
         >
           <X className={cn("size-4")} />
@@ -244,40 +221,16 @@ function DialogContent({
 /*                               DIALOG HEADER                                */
 /* -------------------------------------------------------------------------- */
 
-function DialogHeader({
-  className,
-  ...props
-}: ComponentProps<"div">) {
-  return (
-    <div
-      className={cn("", className)}
-      {...props}
-    />
-  );
+function DialogHeader({ className, ...props }: ComponentProps<"div">) {
+  return <div className={cn("", className)} {...props} />;
 }
 
-function DialogTitle({
-  className,
-  ...props
-}: ComponentProps<"h2">) {
-  return (
-    <h2
-      className={cn("", className)}
-      {...props}
-    />
-  );
+function DialogTitle({ className, ...props }: ComponentProps<"h2">) {
+  return <h2 className={cn("", className)} {...props} />;
 }
 
-function DialogDescription({
-  className,
-  ...props
-}: ComponentProps<"p">) {
-  return (
-    <p
-      className={cn("", className)}
-      {...props}
-    />
-  );
+function DialogDescription({ className, ...props }: ComponentProps<"p">) {
+  return <p className={cn("", className)} {...props} />;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -332,10 +285,7 @@ export function TotalUsersStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
   // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
@@ -347,32 +297,18 @@ export function TotalUsersStat({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Total Users
-        </StatCardHeadingText>
+        <StatCardHeadingText>Total Users</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-secondary-500",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-secondary-500")}>
           <Users />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
-            11
-          </StatCardData>
+          <StatCardData className={cn("text-foreground")}>11</StatCardData>
 
-          <StatCardFooter>
-            Total registered users
-          </StatCardFooter>
+          <StatCardFooter>Total registered users</StatCardFooter>
         </>
       )}
 
@@ -398,22 +334,10 @@ export function TotalUsersStat({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -428,10 +352,7 @@ export function TotalDepositsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   return (
     <StatCard
@@ -442,32 +363,18 @@ export function TotalDepositsStat({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Total Deposits
-        </StatCardHeadingText>
+        <StatCardHeadingText>Total Deposits</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-accent-500",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-accent-500")}>
           <DollarSign />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
-            $0.00
-          </StatCardData>
+          <StatCardData className={cn("text-foreground")}>$0.00</StatCardData>
 
-          <StatCardFooter>
-            Cumulative deposits
-          </StatCardFooter>
+          <StatCardFooter>Cumulative deposits</StatCardFooter>
         </>
       )}
 
@@ -493,22 +400,10 @@ export function TotalDepositsStat({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -523,10 +418,7 @@ export function PendingDepositsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   return (
     <StatCard
@@ -537,32 +429,18 @@ export function PendingDepositsStat({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Pending Deposits
-        </StatCardHeadingText>
+        <StatCardHeadingText>Pending Deposits</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-primary-500",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-primary-500")}>
           <Clock />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
-            1
-          </StatCardData>
+          <StatCardData className={cn("text-foreground")}>1</StatCardData>
 
-          <StatCardFooter>
-            Awaiting confirmation
-          </StatCardFooter>
+          <StatCardFooter>Awaiting confirmation</StatCardFooter>
         </>
       )}
 
@@ -588,22 +466,10 @@ export function PendingDepositsStat({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -618,10 +484,7 @@ export function PendingWithdrawalsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   return (
     <StatCard
@@ -632,32 +495,18 @@ export function PendingWithdrawalsStat({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Pending Withdrawals
-        </StatCardHeadingText>
+        <StatCardHeadingText>Pending Withdrawals</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-primary-600",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-primary-600")}>
           <ArrowUpRight />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
-            0
-          </StatCardData>
+          <StatCardData className={cn("text-foreground")}>0</StatCardData>
 
-          <StatCardFooter>
-            Awaiting processing
-          </StatCardFooter>
+          <StatCardFooter>Awaiting processing</StatCardFooter>
         </>
       )}
 
@@ -683,22 +532,10 @@ export function PendingWithdrawalsStat({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -717,11 +554,7 @@ export function AdminOverviewDashboard() {
       )}
     >
       <div className={cn("space-y-4")}>
-        <div
-          className={cn(
-            "grid grid-cols-1 gap-4 @xs:grid-cols-2",
-          )}
-        >
+        <div className={cn("grid grid-cols-1 gap-4 @xs:grid-cols-2")}>
           <TotalMiningInvestedCard />
 
           <ActiveMiningSessionsCard />
@@ -745,10 +578,7 @@ export function TotalMiningInvestedCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   return (
     <StatCard
@@ -759,32 +589,20 @@ export function TotalMiningInvestedCard({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Total Mining Invested
-        </StatCardHeadingText>
+        <StatCardHeadingText>Total Mining Invested</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-secondary-500",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-secondary-500")}>
           <Layers />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
+          <StatCardData className={cn("text-foreground")}>
             $5,910.00
           </StatCardData>
 
-          <StatCardFooter>
-            Total mining active pool
-          </StatCardFooter>
+          <StatCardFooter>Total mining active pool</StatCardFooter>
         </>
       )}
 
@@ -810,22 +628,10 @@ export function TotalMiningInvestedCard({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -840,10 +646,7 @@ export function ActiveMiningSessionsCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   return (
     <StatCard
@@ -854,32 +657,18 @@ export function ActiveMiningSessionsCard({
       {...props}
     >
       <StatCardHeader>
-        <StatCardHeadingText>
-          Active Mining Sessions
-        </StatCardHeadingText>
+        <StatCardHeadingText>Active Mining Sessions</StatCardHeadingText>
 
-        <StatCardHeadingIcon
-          className={cn(
-            "text-secondary-500",
-          )}
-        >
+        <StatCardHeadingIcon className={cn("text-secondary-500")}>
           <Layers />
         </StatCardHeadingIcon>
       </StatCardHeader>
 
       {state === "data" && (
         <>
-          <StatCardData
-            className={cn(
-              "text-foreground",
-            )}
-          >
-            10
-          </StatCardData>
+          <StatCardData className={cn("text-foreground")}>10</StatCardData>
 
-          <StatCardFooter>
-            Live mining instances
-          </StatCardFooter>
+          <StatCardFooter>Live mining instances</StatCardFooter>
         </>
       )}
 
@@ -905,22 +694,10 @@ export function ActiveMiningSessionsCard({
       )}
 
       {state === "loading" && (
-        <div
-          className={cn(
-            "animate-pulse space-y-4",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-foreground/10 mt-5 h-8 w-36 rounded-md",
-            )}
-          />
+        <div className={cn("animate-pulse space-y-4")}>
+          <div className={cn("bg-foreground/10 mt-5 h-8 w-36 rounded-md")} />
 
-          <div
-            className={cn(
-              "bg-foreground/10 mt-2 h-4 w-32 rounded-md",
-            )}
-          />
+          <div className={cn("bg-foreground/10 mt-2 h-4 w-32 rounded-md")} />
         </div>
       )}
     </StatCard>
@@ -935,10 +712,7 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   const chartDays = [
     {
@@ -972,94 +746,52 @@ export function UserGrowthCard({
   ];
 
   return (
-    <section
-      className={cn(
-        "@container",
-        className,
-      )}
-      {...props}
-    >
+    <section className={cn("@container", className)} {...props}>
       <div
         className={cn(
           "bg-secondary-500/5 border-secondary-500/20 rounded-2xl border py-4",
         )}
       >
-        <div
-          className={cn(
-            "flex w-full items-center justify-between",
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center gap-2",
-            )}
-          >
-            <TrendingUp
-              className={cn(
-                "text-secondary-500 ml-5 size-4",
-              )}
-            />
+        <div className={cn("flex w-full items-center justify-between")}>
+          <div className={cn("flex items-center gap-2")}>
+            <TrendingUp className={cn("text-secondary-500 ml-5 size-4")} />
 
-            <h2
-              className={cn(
-                "font-brand-secondary text-sm font-semibold",
-              )}
-            >
+            <h2 className={cn("font-brand-secondary text-sm font-semibold")}>
               User Growth (Last 7 Days)
             </h2>
           </div>
         </div>
 
-        <hr
-          className={cn(
-            "border-foreground/20 my-5",
-          )}
-        />
+        <hr className={cn("border-foreground/20 my-5")} />
 
-        {state === "error" && (
-          <UserGrowthCardError />
-        )}
+        {state === "error" && <UserGrowthCardError />}
 
-        {state === "loading" && (
-          <UserGrowthCardLoading />
-        )}
+        {state === "loading" && <UserGrowthCardLoading />}
 
         {state === "data" && (
-          <div
-            className={cn(
-              "flex flex-col justify-end pt-8 pb-2",
-            )}
-          >
+          <div className={cn("flex flex-col justify-end pt-8 pb-2")}>
             <div
-              className={cn(
-                "flex h-40 w-full items-end justify-between gap-2",
-              )}
+              className={cn("flex h-40 w-full items-end justify-between gap-2")}
             >
-              {chartDays.map(
-                (item, index) => (
+              {chartDays.map((item, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex h-full flex-1 flex-col items-center justify-end gap-2",
+                  )}
+                >
                   <div
-                    key={index}
                     className={cn(
-                      "flex h-full flex-1 flex-col items-center justify-end gap-2",
+                      "bg-secondary-500 w-full rounded-t-sm transition-all",
+                      item.height,
                     )}
-                  >
-                    <div
-                      className={cn(
-                        "bg-secondary-500 w-full rounded-t-sm transition-all",
-                        item.height,
-                      )}
-                    />
+                  />
 
-                    <span
-                      className={cn(
-                        "text-foreground/50 text-2.5",
-                      )}
-                    >
-                      {item.date}
-                    </span>
-                  </div>
-                ),
-              )}
+                  <span className={cn("text-foreground/50 text-2.5")}>
+                    {item.date}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -1076,10 +808,7 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] =
-    useState<
-      "error" | "loading" | "data"
-    >("loading");
+  const [state] = useState<"error" | "loading" | "data">("loading");
 
   const statsList = [
     {
@@ -1087,170 +816,85 @@ export function ThisMonthStatsCard({
       label: "Monthly Deposits",
       value: "$0.00",
       color: "text-green-500",
-      icon: (
-        <ArrowDownRight
-          className={cn(
-            "size-5 text-green-500",
-          )}
-        />
-      ),
+      icon: <ArrowDownRight className={cn("size-5 text-green-500")} />,
     },
     {
       id: "monthly-withdrawals",
       label: "Monthly Withdrawals",
       value: "$0.00",
       color: "text-red-500",
-      icon: (
-        <ArrowUpRight
-          className={cn(
-            "size-5 text-red-500",
-          )}
-        />
-      ),
+      icon: <ArrowUpRight className={cn("size-5 text-red-500")} />,
     },
     {
       id: "new-users",
       label: "New Users",
       value: "1",
       color: "text-secondary-500",
-      icon: (
-        <UserPlus
-          className={cn(
-            "text-secondary-500 size-5",
-          )}
-        />
-      ),
+      icon: <UserPlus className={cn("text-secondary-500 size-5")} />,
     },
     {
       id: "mining-invested",
       label: "Mining Invested",
       value: "$0.00",
       color: "text-primary-500",
-      icon: (
-        <Layers
-          className={cn(
-            "text-primary-500 size-5",
-          )}
-        />
-      ),
+      icon: <Layers className={cn("text-primary-500 size-5")} />,
     },
   ];
 
   return (
-    <section
-      className={cn(
-        "@container",
-        className,
-      )}
-      {...props}
-    >
+    <section className={cn("@container", className)} {...props}>
       <div
         className={cn(
           "bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4",
         )}
       >
-        <div
-          className={cn(
-            "flex w-full items-center justify-between",
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center gap-2",
-            )}
-          >
-            <Calendar
-              className={cn(
-                "text-secondary-500 size-4",
-              )}
-            />
+        <div className={cn("flex w-full items-center justify-between")}>
+          <div className={cn("flex items-center gap-2")}>
+            <Calendar className={cn("text-secondary-500 size-4")} />
 
-            <h2
-              className={cn(
-                "font-brand-secondary text-sm font-semibold",
-              )}
-            >
+            <h2 className={cn("font-brand-secondary text-sm font-semibold")}>
               This Month Stats
             </h2>
           </div>
         </div>
 
-        <hr
-          className={cn(
-            "border-foreground/20 -mx-6 my-5",
-          )}
-        />
+        <hr className={cn("border-foreground/20 -mx-6 my-5")} />
 
-        {state === "error" && (
-          <ThisMonthStatsCardError />
-        )}
+        {state === "error" && <ThisMonthStatsCardError />}
 
-        {state === "loading" && (
-          <ThisMonthStatsCardLoading />
-        )}
+        {state === "loading" && <ThisMonthStatsCardLoading />}
 
         {state === "data" && (
-          <div
-            className={cn(
-              "space-y-4",
-            )}
-          >
-            {statsList.map(
-              (stat, index) => (
-                <Fragment
-                  key={stat.id}
-                >
-                  <div
-                    className={cn(
-                      "flex w-full items-center justify-between",
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "flex flex-col gap-y-1",
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "text-foreground/50 text-xs",
-                        )}
-                      >
-                        {stat.label}
-                      </span>
+          <div className={cn("space-y-4")}>
+            {statsList.map((stat, index) => (
+              <Fragment key={stat.id}>
+                <div className={cn("flex w-full items-center justify-between")}>
+                  <div className={cn("flex flex-col gap-y-1")}>
+                    <span className={cn("text-foreground/50 text-xs")}>
+                      {stat.label}
+                    </span>
 
-                      <span
-                        className={cn(
-                          "text-lg font-semibold",
-                          stat.color,
-                        )}
-                      >
-                        {stat.value}
-                      </span>
-                    </div>
-
-                    <div
-                      className={cn(
-                        "bg-foreground/5 border-foreground/10",
-                        "flex size-10 items-center justify-center",
-                        "rounded-lg border",
-                      )}
-                    >
-                      {stat.icon}
-                    </div>
+                    <span className={cn("text-lg font-semibold", stat.color)}>
+                      {stat.value}
+                    </span>
                   </div>
 
-                  {index <
-                    statsList.length -
-                      1 && (
-                    <hr
-                      className={cn(
-                        "border-foreground/10 -mx-6 my-4",
-                      )}
-                    />
-                  )}
-                </Fragment>
-              ),
-            )}
+                  <div
+                    className={cn(
+                      "bg-foreground/5 border-foreground/10",
+                      "flex size-10 items-center justify-center",
+                      "rounded-lg border",
+                    )}
+                  >
+                    {stat.icon}
+                  </div>
+                </div>
+
+                {index < statsList.length - 1 && (
+                  <hr className={cn("border-foreground/10 -mx-6 my-4")} />
+                )}
+              </Fragment>
+            ))}
           </div>
         )}
       </div>
@@ -1264,11 +908,7 @@ export function ThisMonthStatsCard({
 
 export function PendingTransactionsSection() {
   return (
-    <div
-      className={cn(
-        "default-padding @container space-y-6 py-10",
-      )}
-    >
+    <div className={cn("default-padding @container space-y-6 py-10")}>
       <PendingDepositsTable />
 
       <PendingWithdrawalsTable />
@@ -1284,10 +924,7 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] =
-    useState<
-      "error" | "loading" | "empty" | "data"
-    >("data");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
 
   const pendingDeposits = [
     {
@@ -1295,8 +932,7 @@ export function PendingDepositsTable({
 
       user: {
         name: "Surajit Sarder",
-        email:
-          "surajitsarder2000@gmail.com",
+        email: "surajitsarder2000@gmail.com",
         initial: "S",
       },
 
@@ -1314,13 +950,7 @@ export function PendingDepositsTable({
   ];
 
   return (
-    <section
-      className={cn(
-        "@container",
-        className,
-      )}
-      {...props}
-    >
+    <section className={cn("@container", className)} {...props}>
       <div
         className={cn(
           "bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4",
@@ -1328,440 +958,242 @@ export function PendingDepositsTable({
       >
         {/* Header */}
 
-        <div
-          className={cn(
-            "flex w-full items-center justify-between",
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center gap-2",
-            )}
-          >
-            <ArrowDownLeft
-              className={cn(
-                "text-primary-500 size-4",
-              )}
-            />
+        <div className={cn("flex w-full items-center justify-between")}>
+          <div className={cn("flex items-center gap-2")}>
+            <ArrowDownLeft className={cn("text-primary-500 size-4")} />
 
-            <h2
-              className={cn(
-                "font-brand-secondary text-sm font-semibold",
-              )}
-            >
+            <h2 className={cn("font-brand-secondary text-sm font-semibold")}>
               Pending Deposits
             </h2>
           </div>
         </div>
 
-        <hr
-          className={cn(
-            "border-foreground/20 -mx-6 my-4",
-          )}
-        />
+        <hr className={cn("border-foreground/20 -mx-6 my-4")} />
 
-        {state === "error" && (
-          <PendingDepositsTableError />
-        )}
+        {state === "error" && <PendingDepositsTableError />}
 
-        {state === "loading" && (
-          <PendingDepositsTableLoading />
-        )}
+        {state === "loading" && <PendingDepositsTableLoading />}
 
-        {state === "empty" && (
-          <PendingDepositsTableEmpty />
-        )}
+        {state === "empty" && <PendingDepositsTableEmpty />}
 
         {state === "data" && (
           <>
-            {pendingDeposits.length ===
-            0 ? (
+            {pendingDeposits.length === 0 ? (
               <PendingDepositsTableEmpty />
             ) : (
-              <div
-                className={cn(
-                  "overflow-x-auto",
-                )}
-              >
-                <table
-                  className={cn(
-                    "w-full border-collapse text-left",
-                  )}
-                >
+              <div className={cn("overflow-x-auto")}>
+                <table className={cn("w-full border-collapse text-left")}>
                   <thead>
                     <tr
                       className={cn(
                         "text-foreground/50 text-2.75 tracking-wider uppercase",
                       )}
                     >
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        User
-                      </th>
+                      <th className={cn("py-3 font-medium")}>User</th>
 
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        Amount
-                      </th>
+                      <th className={cn("py-3 font-medium")}>Amount</th>
 
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        Method
-                      </th>
+                      <th className={cn("py-3 font-medium")}>Method</th>
 
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        Proof
-                      </th>
+                      <th className={cn("py-3 font-medium")}>Proof</th>
 
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        Date
-                      </th>
+                      <th className={cn("py-3 font-medium")}>Date</th>
 
-                      <th
-                        className={cn(
-                          "py-3 font-medium",
-                        )}
-                      >
-                        Status
-                      </th>
+                      <th className={cn("py-3 font-medium")}>Status</th>
 
-                      <th
-                        className={cn(
-                          "py-3 text-right font-medium",
-                        )}
-                      >
+                      <th className={cn("py-3 text-right font-medium")}>
                         Actions
                       </th>
                     </tr>
                   </thead>
 
                   <tbody
-                    className={cn(
-                      "divide-foreground/10 divide-y text-sm",
-                    )}
+                    className={cn("divide-foreground/10 divide-y text-sm")}
                   >
-                    {pendingDeposits.map(
-                      (item) => (
-                        <tr
-                          key={item.id}
-                          className={cn(
-                            "group",
-                          )}
-                        >
-                          {/* User */}
+                    {pendingDeposits.map((item) => (
+                      <tr key={item.id} className={cn("group")}>
+                        {/* User */}
 
-                          <td
-                            className={cn(
-                              "py-4 pr-4",
-                            )}
-                          >
+                        <td className={cn("py-4 pr-4")}>
+                          <div className={cn("flex items-center gap-3")}>
                             <div
                               className={cn(
-                                "flex items-center gap-3",
+                                "bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold",
                               )}
                             >
-                              <div
-                                className={cn(
-                                  "bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold",
-                                )}
-                              >
-                                {
-                                  item
-                                    .user
-                                    .initial
-                                }
-                              </div>
-
-                              <div
-                                className={cn(
-                                  "flex flex-col",
-                                )}
-                              >
-                                <span
-                                  className={cn(
-                                    "font-medium",
-                                  )}
-                                >
-                                  {
-                                    item
-                                      .user
-                                      .name
-                                  }
-                                </span>
-
-                                <span
-                                  className={cn(
-                                    "text-foreground/50 text-xs",
-                                  )}
-                                >
-                                  {
-                                    item
-                                      .user
-                                      .email
-                                  }
-                                </span>
-                              </div>
+                              {item.user.initial}
                             </div>
-                          </td>
 
-                          {/* Amount */}
+                            <div className={cn("flex flex-col")}>
+                              <span className={cn("font-medium")}>
+                                {item.user.name}
+                              </span>
 
-                          <td
-                            className={cn(
-                              "py-4 pr-4 font-semibold text-green-500",
-                            )}
-                          >
-                            {
-                              item.amount
-                            }
-                          </td>
-
-                          {/* Method */}
-
-                          <td
-                            className={cn(
-                              "text-foreground/80 py-4 pr-4",
-                            )}
-                          >
-                            {
-                              item.method
-                            }
-                          </td>
-
-                          {/* Proof */}
-
-                          <td
-                            className={cn(
-                              "py-4 pr-4",
-                            )}
-                          >
-                            <Dialog>
-                              <DialogTrigger
-                                asChild
+                              <span
+                                className={cn("text-foreground/50 text-xs")}
                               >
-                                <button
-                                  type="button"
-                                  className={cn(
-                                    "border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition",
-                                  )}
-                                >
-                                  <ImageIcon
-                                    className={cn(
-                                      "size-3.5",
-                                    )}
-                                  />
+                                {item.user.email}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
 
-                                  View
-                                </button>
-                              </DialogTrigger>
+                        {/* Amount */}
 
-                              <DialogContent
+                        <td
+                          className={cn(
+                            "py-4 pr-4 font-semibold text-green-500",
+                          )}
+                        >
+                          {item.amount}
+                        </td>
+
+                        {/* Method */}
+
+                        <td className={cn("text-foreground/80 py-4 pr-4")}>
+                          {item.method}
+                        </td>
+
+                        {/* Proof */}
+
+                        <td className={cn("py-4 pr-4")}>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                type="button"
                                 className={cn(
-                                  "max-w-3xl border-secondary-500/20 bg-background overflow-hidden rounded-2xl border shadow-2xl",
+                                  "border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition",
                                 )}
                               >
-                                {/* Header */}
+                                <ImageIcon className={cn("size-3.5")} />
+                                View
+                              </button>
+                            </DialogTrigger>
 
-                                <DialogHeader
+                            <DialogContent
+                              className={cn(
+                                "border-secondary-500/20 bg-background max-w-3xl overflow-hidden rounded-2xl border shadow-2xl",
+                              )}
+                            >
+                              {/* Header */}
+
+                              <DialogHeader
+                                className={cn(
+                                  "border-foreground/10 border-b px-6 py-5 pr-14",
+                                )}
+                              >
+                                <DialogTitle
                                   className={cn(
-                                    "border-foreground/10 border-b px-6 py-5 pr-14",
+                                    "font-brand-secondary text-base font-semibold",
                                   )}
                                 >
-                                  <DialogTitle
-                                    className={cn(
-                                      "font-brand-secondary text-base font-semibold",
-                                    )}
-                                  >
-                                    Payment
-                                    Proof
-                                  </DialogTitle>
+                                  Payment Proof
+                                </DialogTitle>
 
-                                  <DialogDescription
+                                <DialogDescription
+                                  className={cn(
+                                    "text-foreground/50 mt-1 text-xs",
+                                  )}
+                                >
+                                  Payment screenshot uploaded by{" "}
+                                  <span
                                     className={cn(
-                                      "text-foreground/50 mt-1 text-xs",
+                                      "text-foreground font-medium",
                                     )}
                                   >
-                                    Payment
-                                    screenshot
-                                    uploaded
-                                    by{" "}
-                                    <span
+                                    {item.user.name}
+                                  </span>
+                                </DialogDescription>
+                              </DialogHeader>
+
+                              {/* Screenshot */}
+
+                              <div className={cn("p-6")}>
+                                <div
+                                  className={cn(
+                                    "border-foreground/10 bg-foreground/5 flex min-h-64 items-center justify-center overflow-hidden rounded-xl border",
+                                  )}
+                                >
+                                  {item.proof ? (
+                                    <img
+                                      src={item.proof}
+                                      alt={`Payment proof uploaded by ${item.user.name}`}
                                       className={cn(
-                                        "text-foreground font-medium",
+                                        "max-h-[65vh] w-full object-contain",
+                                      )}
+                                    />
+                                  ) : (
+                                    <div
+                                      className={cn(
+                                        "text-foreground/40 flex min-h-64 flex-col items-center justify-center",
                                       )}
                                     >
-                                      {
-                                        item
-                                          .user
-                                          .name
-                                      }
-                                    </span>
-                                  </DialogDescription>
-                                </DialogHeader>
+                                      <ImageIcon className={cn("size-10")} />
 
-                                {/* Screenshot */}
+                                      <p className={cn("mt-2 text-xs")}>
+                                        No payment proof available
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Email + Date */}
 
                                 <div
                                   className={cn(
-                                    "p-6",
+                                    "text-foreground/40 mt-3 flex flex-col gap-1 text-xs sm:flex-row sm:items-center sm:justify-between",
                                   )}
                                 >
-                                  <div
-                                    className={cn(
-                                      "border-foreground/10 bg-foreground/5 flex min-h-64 items-center justify-center overflow-hidden rounded-xl border",
-                                    )}
-                                  >
-                                    {item.proof ? (
-                                      <img
-                                        src={
-                                          item.proof
-                                        }
-                                        alt={`Payment proof uploaded by ${item.user.name}`}
-                                        className={cn(
-                                          "max-h-[65vh] w-full object-contain",
-                                        )}
-                                      />
-                                    ) : (
-                                      <div
-                                        className={cn(
-                                          "text-foreground/40 flex min-h-64 flex-col items-center justify-center",
-                                        )}
-                                      >
-                                        <ImageIcon
-                                          className={cn(
-                                            "size-10",
-                                          )}
-                                        />
+                                  <span>{item.user.email}</span>
 
-                                        <p
-                                          className={cn(
-                                            "mt-2 text-xs",
-                                          )}
-                                        >
-                                          No
-                                          payment
-                                          proof
-                                          available
-                                        </p>
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  {/* Email + Date */}
-
-                                  <div
-                                    className={cn(
-                                      "text-foreground/40 mt-3 flex flex-col gap-1 text-xs sm:flex-row sm:items-center sm:justify-between",
-                                    )}
-                                  >
-                                    <span>
-                                      {
-                                        item
-                                          .user
-                                          .email
-                                      }
-                                    </span>
-
-                                    <span>
-                                      {
-                                        item.date
-                                      }
-                                    </span>
-                                  </div>
+                                  <span>{item.date}</span>
                                 </div>
-                              </DialogContent>
-                            </Dialog>
-                          </td>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </td>
 
-                          {/* Date */}
+                        {/* Date */}
 
-                          <td
+                        <td
+                          className={cn("text-foreground/60 py-4 pr-4 text-xs")}
+                        >
+                          {item.date}
+                        </td>
+
+                        {/* Status */}
+
+                        <td className={cn("py-4 pr-4")}>
+                          <span
                             className={cn(
-                              "text-foreground/60 py-4 pr-4 text-xs",
+                              "inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500",
                             )}
                           >
-                            {
-                              item.date
-                            }
-                          </td>
+                            {item.status}
+                          </span>
+                        </td>
 
-                          {/* Status */}
+                        {/* Actions */}
 
-                          <td
+                        <td className={cn("py-4 text-right")}>
+                          <div
                             className={cn(
-                              "py-4 pr-4",
+                              "flex items-center justify-end gap-2",
                             )}
                           >
-                            <span
-                              className={cn(
-                                "inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500",
-                              )}
-                            >
-                              {
-                                item.status
-                              }
-                            </span>
-                          </td>
+                            <Button size="xs" variant="success">
+                              <Check className={cn("size-3.5")} />
+                              Approve
+                            </Button>
 
-                          {/* Actions */}
-
-                          <td
-                            className={cn(
-                              "py-4 text-right",
-                            )}
-                          >
-                            <div
-                              className={cn(
-                                "flex items-center justify-end gap-2",
-                              )}
-                            >
-                              <Button
-                                size="xs"
-                                variant="success"
-                              >
-                                <Check
-                                  className={cn(
-                                    "size-3.5",
-                                  )}
-                                />
-
-                                Approve
-                              </Button>
-
-                              <Button
-                                size="xs"
-                                variant="destructive"
-                              >
-                                <X
-                                  className={cn(
-                                    "size-3.5",
-                                  )}
-                                />
-
-                                Reject
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ),
-                    )}
+                            <Button size="xs" variant="destructive">
+                              <X className={cn("size-3.5")} />
+                              Reject
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -1781,89 +1213,49 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] =
-    useState<
-      "error" | "loading" | "empty" | "data"
-    >("data");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
 
   const pendingWithdrawls = [
     {
       id: "dep-1",
-
       user: {
         name: "Surajit Sarder",
-        email:
-          "surajitsarder2000@gmail.com",
+        email: "surajitsarder2000@gmail.com",
         initial: "S",
       },
-
       amount: "$1,000.00",
-
       method: "Bsc_bep20",
-
       date: "Aug 31, 2026 21:45",
-
       status: "Pending",
     },
   ];
 
   return (
-    <section
-      className={cn(
-        "@container",
-        className,
-      )}
-      {...props}
-    >
+    <section className={cn("@container", className)} {...props}>
       <div
         className={cn(
           "bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4",
         )}
       >
-        <div
-          className={cn(
-            "flex w-full items-center justify-between",
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center gap-2",
-            )}
-          >
-            <ArrowUpRight
-              className={cn(
-                "text-primary-600 size-4",
-              )}
-            />
+        <div className={cn("flex w-full items-center justify-between")}>
+          <div className={cn("flex items-center gap-2")}>
+            <ArrowUpRight className={cn("text-primary-600 size-4")} />
 
-            <h2
-              className={cn(
-                "font-brand-secondary text-sm font-semibold",
-              )}
-            >
+            <h2 className={cn("font-brand-secondary text-sm font-semibold")}>
               Pending Withdrawals
             </h2>
           </div>
         </div>
 
-        <hr
-          className={cn(
-            "border-foreground/20 -mx-6 my-4",
-          )}
-        />
+        <hr className={cn("border-foreground/20 -mx-6 my-4")} />
 
-        {state === "error" && (
-          <PendingWithdrawalsTableError />
-        )}
+        {state === "error" && <PendingWithdrawalsTableError />}
 
-        {state === "loading" && (
-          <PendingWithdrawalsTableLoading />
-        )}
+        {state === "loading" && <PendingWithdrawalsTableLoading />}
 
         {state === "data" && (
           <>
-            {pendingWithdrawls.length ===
-            0 ? (
+            {pendingWithdrawls.length === 0 ? (
               <div
                 className={cn(
                   "flex flex-col items-center justify-center py-12 text-center",
@@ -1874,214 +1266,105 @@ export function PendingWithdrawalsTable({
                     "mb-3 flex size-12 items-center justify-center rounded-full border border-green-500/40 bg-green-500/20 text-green-500",
                   )}
                 >
-                  <Check
-                    className={cn(
-                      "size-6",
-                    )}
-                  />
+                  <Check className={cn("size-6")} />
                 </div>
 
-                <p
-                  className={cn(
-                    "text-foreground/60 text-sm",
-                  )}
-                >
+                <p className={cn("text-foreground/60 text-sm")}>
                   No pending withdrawals
                 </p>
               </div>
             ) : (
-              <div
-                className={cn(
-                  "overflow-x-auto",
-                )}
-              >
-                <table
-                  className={cn(
-                    "w-full border-collapse text-left",
-                  )}
-                >
+              <div className={cn("overflow-x-auto")}>
+                <table className={cn("w-full border-collapse text-left")}>
                   <thead>
                     <tr
                       className={cn(
                         "text-foreground/50 text-2.75 tracking-wider uppercase",
                       )}
                     >
-                      <th className="py-3 font-medium">
-                        User
-                      </th>
-
-                      <th className="py-3 font-medium">
-                        Amount
-                      </th>
-
-                      <th className="py-3 font-medium">
-                        Method
-                      </th>
-
-                      <th className="py-3 font-medium">
-                        Date
-                      </th>
-
-                      <th className="py-3 font-medium">
-                        Status
-                      </th>
-
-                      <th className="py-3 text-right font-medium">
-                        Actions
-                      </th>
+                      <th className="py-3 font-medium">User</th>
+                      <th className="py-3 font-medium">Amount</th>
+                      <th className="py-3 font-medium">Method</th>
+                      <th className="py-3 font-medium">Date</th>
+                      <th className="py-3 font-medium">Status</th>
+                      <th className="py-3 text-right font-medium">Actions</th>
                     </tr>
                   </thead>
 
                   <tbody
-                    className={cn(
-                      "divide-foreground/10 divide-y text-sm",
-                    )}
+                    className={cn("divide-foreground/10 divide-y text-sm")}
                   >
-                    {pendingWithdrawls.map(
-                      (item) => (
-                        <tr
-                          key={item.id}
+                    {pendingWithdrawls.map((item) => (
+                      <tr key={item.id}>
+                        <td className={cn("py-4 pr-4")}>
+                          <div className={cn("flex items-center gap-3")}>
+                            <div
+                              className={cn(
+                                "bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold",
+                              )}
+                            >
+                              {item.user.initial}
+                            </div>
+
+                            <div className={cn("flex flex-col")}>
+                              <span className={cn("font-medium")}>
+                                {item.user.name}
+                              </span>
+
+                              <span
+                                className={cn("text-foreground/50 text-xs")}
+                              >
+                                {item.user.email}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td
+                          className={cn("py-4 pr-4 font-semibold text-red-500")}
                         >
-                          <td
+                          {item.amount}
+                        </td>
+
+                        <td className={cn("text-foreground/80 py-4 pr-4")}>
+                          {item.method}
+                        </td>
+
+                        <td
+                          className={cn("text-foreground/60 py-4 pr-4 text-xs")}
+                        >
+                          {item.date}
+                        </td>
+
+                        <td className={cn("py-4 pr-4")}>
+                          <span
                             className={cn(
-                              "py-4 pr-4",
+                              "inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500",
                             )}
                           >
-                            <div
-                              className={cn(
-                                "flex items-center gap-3",
-                              )}
-                            >
-                              <div
-                                className={cn(
-                                  "bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold",
-                                )}
-                              >
-                                {
-                                  item
-                                    .user
-                                    .initial
-                                }
-                              </div>
+                            {item.status}
+                          </span>
+                        </td>
 
-                              <div
-                                className={cn(
-                                  "flex flex-col",
-                                )}
-                              >
-                                <span
-                                  className={cn(
-                                    "font-medium",
-                                  )}
-                                >
-                                  {
-                                    item
-                                      .user
-                                      .name
-                                  }
-                                </span>
-
-                                <span
-                                  className={cn(
-                                    "text-foreground/50 text-xs",
-                                  )}
-                                >
-                                  {
-                                    item
-                                      .user
-                                      .email
-                                  }
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td
+                        <td className={cn("py-4 text-right")}>
+                          <div
                             className={cn(
-                              "py-4 pr-4 font-semibold text-red-500",
+                              "flex items-center justify-end gap-2",
                             )}
                           >
-                            {
-                              item.amount
-                            }
-                          </td>
+                            <Button size="xs" variant="success">
+                              <Check className={cn("size-3.5")} />
+                              Approve
+                            </Button>
 
-                          <td
-                            className={cn(
-                              "text-foreground/80 py-4 pr-4",
-                            )}
-                          >
-                            {
-                              item.method
-                            }
-                          </td>
-
-                          <td
-                            className={cn(
-                              "text-foreground/60 py-4 pr-4 text-xs",
-                            )}
-                          >
-                            {
-                              item.date
-                            }
-                          </td>
-
-                          <td
-                            className={cn(
-                              "py-4 pr-4",
-                            )}
-                          >
-                            <span
-                              className={cn(
-                                "inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500",
-                              )}
-                            >
-                              {
-                                item.status
-                              }
-                            </span>
-                          </td>
-
-                          <td
-                            className={cn(
-                              "py-4 text-right",
-                            )}
-                          >
-                            <div
-                              className={cn(
-                                "flex items-center justify-end gap-2",
-                              )}
-                            >
-                              <Button
-                                size="xs"
-                                variant="success"
-                              >
-                                <Check
-                                  className={cn(
-                                    "size-3.5",
-                                  )}
-                                />
-
-                                Approve
-                              </Button>
-
-                              <Button
-                                size="xs"
-                                variant="destructive"
-                              >
-                                <X
-                                  className={cn(
-                                    "size-3.5",
-                                  )}
-                                />
-
-                                Reject
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ),
-                    )}
+                            <Button size="xs" variant="destructive">
+                              <X className={cn("size-3.5")} />
+                              Reject
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
