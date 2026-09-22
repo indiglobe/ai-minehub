@@ -191,9 +191,7 @@ function DialogContent({
   return createPortal(
     <div
       className={cn(
-        "fixed inset-0 z-9999",
-        "flex items-center justify-center",
-        "bg-black/70 p-4 backdrop-blur-sm",
+        "fixed inset-0 z-9999 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm",
       )}
       onMouseDown={(event) => {
         /*
@@ -229,12 +227,7 @@ function DialogContent({
             setOpen?.(false);
           }}
           className={cn(
-            "absolute top-4 right-4 z-20",
-            "flex size-8 items-center justify-center",
-            "rounded-md",
-            "text-foreground/50",
-            "transition",
-            "hover:bg-foreground/10 hover:text-foreground",
+            "absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-md text-foreground/50 transition hover:bg-foreground/10 hover:text-foreground",
           )}
         >
           <X className={cn("size-4")} />
