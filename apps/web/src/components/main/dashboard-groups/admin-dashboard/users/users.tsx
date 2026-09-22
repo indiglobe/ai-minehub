@@ -1,15 +1,37 @@
-import { useEffect, useState, type ComponentProps } from "react";
+import {
+  useEffect,
+  useState,
+  type ComponentProps,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+
 import { cn } from "@repo/styles/cn";
-import { ChevronDown, Eye, Search, UserCog, Users, Wallet } from "lucide-react";
+
+import {
+  ChevronDown,
+  Eye,
+  Search,
+  UserCog,
+  Users,
+  Wallet,
+} from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import { Link } from "@tanstack/react-router";
-import { AllUsersError, AllUsersLoading } from "./boundary-comps";
+
+import {
+  AllUsersError,
+  AllUsersLoading,
+} from "./boundary-comps";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
 /* -------------------------------------------------------------------------- */
 
-type UserStatus = "Active" | "Inactive" | "Suspended";
+type UserStatus =
+  | "Active"
+  | "Inactive"
+  | "Suspended";
 
 type UserItem = {
   id: string;
@@ -29,6 +51,12 @@ type UserItem = {
 /* -------------------------------------------------------------------------- */
 /*                                   DATA                                     */
 /* -------------------------------------------------------------------------- */
+
+const statusOptions: UserStatus[] = [
+  "Active",
+  "Inactive",
+  "Suspended",
+];
 
 const initialUsers: UserItem[] = [
   {
@@ -177,8 +205,14 @@ const initialUsers: UserItem[] = [
 /*                                ALL USERS                                   */
 /* -------------------------------------------------------------------------- */
 
-export function AllUsers({ className, ...props }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
+export function AllUsers({
+  className,
+  ...props
+}: ComponentProps<"section">) {
+  const [state] =
+    useState<
+      "error" | "loading" | "data"
+    >("data");
 
   // const [state] =
   //   useState<"error" | "loading" | "data">("loading");
@@ -186,22 +220,62 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
   // const [state] =
   //   useState<"error" | "loading" | "data">("error");
 
-  const [users, setUsers] = useState<UserItem[]>(initialUsers);
+  const [users, setUsers] =
+    useState<UserItem[]>(
+      initialUsers,
+    );
 
-  const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
+  const [
+    selectedUser,
+    setSelectedUser,
+  ] = useState<UserItem | null>(
+    null,
+  );
 
-  const [selectedStatus, setSelectedStatus] = useState<UserStatus>("Active");
+  const [
+    selectedStatus,
+    setSelectedStatus,
+  ] = useState<UserStatus>(
+    "Active",
+  );
 
-  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const [
+    isStatusDropdownOpen,
+    setIsStatusDropdownOpen,
+  ] = useState(false);
+
+  const [
+    activeStatusIndex,
+    setActiveStatusIndex,
+  ] = useState(0);
 
   /* ---------------------------------------------------------------------- */
   /*                           OPEN STATUS DIALOG                           */
   /* ---------------------------------------------------------------------- */
 
-  const openStatusDialog = (user: UserItem) => {
+  const openStatusDialog = (
+    user: UserItem,
+  ) => {
     setSelectedUser(user);
 
-    setSelectedStatus(user.status);
+    setSelectedStatus(
+      user.status,
+    );
+
+    const currentIndex =
+      statusOptions.indexOf(
+        user.status,
+      );
+
+    setActiveStatusIndex(
+      currentIndex >= 0
+        ? currentIndex
+        : 0,
+    );
+
+    setIsStatusDropdownOpen(
+      false,
+    );
   };
 
   /* ---------------------------------------------------------------------- */
@@ -210,6 +284,10 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
   const closeStatusDialog = () => {
     setSelectedUser(null);
+
+    setIsStatusDropdownOpen(
+      false,
+    );
   };
 
   /* ---------------------------------------------------------------------- */
@@ -223,10 +301,12 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
     setUsers((currentUsers) =>
       currentUsers.map((user) =>
-        user.id === selectedUser.id
+        user.id ===
+        selectedUser.id
           ? {
               ...user,
-              status: selectedStatus,
+              status:
+                selectedStatus,
             }
           : user,
       ),
@@ -245,6 +325,206 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
   };
 
   /* ---------------------------------------------------------------------- */
+  /*                         OPEN STATUS DROPDOWN                           */
+  /* ---------------------------------------------------------------------- */
+
+  const openStatusDropdown =
+    () => {
+      const currentIndex =
+        statusOptions.indexOf(
+          selectedStatus,
+        );
+
+      setActiveStatusIndex(
+        currentIndex >= 0
+          ? currentIndex
+          : 0,
+      );
+
+      setIsStatusDropdownOpen(
+        true,
+      );
+    };
+
+  /* ---------------------------------------------------------------------- */
+  /*                        SELECT STATUS OPTION                            */
+  /* ---------------------------------------------------------------------- */
+
+  const selectStatus = (
+    status: UserStatus,
+    index: number,
+  ) => {
+    setSelectedStatus(status);
+
+    setActiveStatusIndex(index);
+
+    setIsStatusDropdownOpen(
+      false,
+    );
+  };
+
+  /* ---------------------------------------------------------------------- */
+  /*                         STATUS KEYBOARD LOGIC                          */
+  /* ---------------------------------------------------------------------- */
+
+  const handleStatusKeyDown = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+  ) => {
+    /* Arrow Down */
+
+    if (
+      event.key === "ArrowDown"
+    ) {
+      event.preventDefault();
+
+      if (
+        !isStatusDropdownOpen
+      ) {
+        openStatusDropdown();
+
+        return;
+      }
+
+      setActiveStatusIndex(
+        (previous) =>
+          previous ===
+          statusOptions.length - 1
+            ? 0
+            : previous + 1,
+      );
+
+      return;
+    }
+
+    /* Arrow Up */
+
+    if (
+      event.key === "ArrowUp"
+    ) {
+      event.preventDefault();
+
+      if (
+        !isStatusDropdownOpen
+      ) {
+        openStatusDropdown();
+
+        return;
+      }
+
+      setActiveStatusIndex(
+        (previous) =>
+          previous === 0
+            ? statusOptions.length -
+              1
+            : previous - 1,
+      );
+
+      return;
+    }
+
+    /* Home */
+
+    if (
+      event.key === "Home" &&
+      isStatusDropdownOpen
+    ) {
+      event.preventDefault();
+
+      setActiveStatusIndex(0);
+
+      return;
+    }
+
+    /* End */
+
+    if (
+      event.key === "End" &&
+      isStatusDropdownOpen
+    ) {
+      event.preventDefault();
+
+      setActiveStatusIndex(
+        statusOptions.length - 1,
+      );
+
+      return;
+    }
+
+    /* Enter */
+
+    if (
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+
+      if (
+        !isStatusDropdownOpen
+      ) {
+        openStatusDropdown();
+
+        return;
+      }
+
+      const status =
+        statusOptions[
+          activeStatusIndex
+        ];
+
+      if (status) {
+        selectStatus(
+          status,
+          activeStatusIndex,
+        );
+      }
+
+      return;
+    }
+
+    /* Space */
+
+    if (event.key === " ") {
+      event.preventDefault();
+
+      if (
+        !isStatusDropdownOpen
+      ) {
+        openStatusDropdown();
+
+        return;
+      }
+
+      const status =
+        statusOptions[
+          activeStatusIndex
+        ];
+
+      if (status) {
+        selectStatus(
+          status,
+          activeStatusIndex,
+        );
+      }
+
+      return;
+    }
+
+    /* Escape */
+
+    if (
+      event.key === "Escape" &&
+      isStatusDropdownOpen
+    ) {
+      event.preventDefault();
+
+      event.stopPropagation();
+
+      setIsStatusDropdownOpen(
+        false,
+      );
+    }
+  };
+
+  /* ---------------------------------------------------------------------- */
   /*                         DIALOG KEYBOARD / SCROLL                       */
   /* ---------------------------------------------------------------------- */
 
@@ -253,29 +533,70 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeStatusDialog();
+    const handleKeyDown = (
+      event: KeyboardEvent,
+    ) => {
+      if (
+        event.key !== "Escape"
+      ) {
+        return;
       }
+
+      /*
+       * If dropdown is open:
+       * close dropdown first.
+       */
+
+      if (
+        isStatusDropdownOpen
+      ) {
+        setIsStatusDropdownOpen(
+          false,
+        );
+
+        return;
+      }
+
+      /*
+       * Otherwise close dialog.
+       */
+
+      closeStatusDialog();
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
 
-    const previousOverflow = document.body.style.overflow;
+    const previousOverflow =
+      document.body.style
+        .overflow;
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow =
+      "hidden";
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
 
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow =
+        previousOverflow;
     };
-  }, [selectedUser]);
+  }, [
+    selectedUser,
+    isStatusDropdownOpen,
+  ]);
 
   return (
     <>
       <section
-        className={cn("default-padding @container py-10", className)}
+        className={cn(
+          "default-padding @container py-10",
+          className,
+        )}
         {...props}
       >
         <div
@@ -292,10 +613,22 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
               "flex w-full flex-col gap-4 @md:flex-row @md:items-center @md:justify-between",
             )}
           >
-            <div className={cn("flex items-center gap-2")}>
-              <Users className={cn("text-secondary-500 size-4")} />
+            <div
+              className={cn(
+                "flex items-center gap-2",
+              )}
+            >
+              <Users
+                className={cn(
+                  "text-secondary-500 size-4",
+                )}
+              />
 
-              <h2 className={cn("font-brand-secondary text-sm font-semibold")}>
+              <h2
+                className={cn(
+                  "font-brand-secondary text-sm font-semibold",
+                )}
+              >
                 All Users
               </h2>
             </div>
@@ -309,7 +642,11 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
             >
               {/* Search Input */}
 
-              <div className={cn("relative")}>
+              <div
+                className={cn(
+                  "relative",
+                )}
+              >
                 <Search
                   className={cn(
                     "text-foreground/40 absolute top-1/2 left-3 size-4 -translate-y-1/2",
@@ -327,7 +664,11 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
               {/* Filter */}
 
-              <div className={cn("relative")}>
+              <div
+                className={cn(
+                  "relative",
+                )}
+              >
                 <select
                   defaultValue="active"
                   className={cn(
@@ -336,21 +677,27 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                 >
                   <option
                     value="active"
-                    className={cn("bg-background text-foreground")}
+                    className={cn(
+                      "bg-background text-foreground",
+                    )}
                   >
                     Active
                   </option>
 
                   <option
                     value="inactive"
-                    className={cn("bg-background text-foreground")}
+                    className={cn(
+                      "bg-background text-foreground",
+                    )}
                   >
                     Inactive
                   </option>
 
                   <option
                     value="suspended"
-                    className={cn("bg-background text-foreground")}
+                    className={cn(
+                      "bg-background text-foreground",
+                    )}
                   >
                     Suspended
                   </option>
@@ -372,232 +719,378 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                   "h-9 gap-1.5 rounded-lg bg-blue-600 px-4 text-xs text-white hover:bg-blue-700",
                 )}
               >
-                <Search className={cn("size-3.5")} />
+                <Search
+                  className={cn(
+                    "size-3.5",
+                  )}
+                />
+
                 Search
               </Button>
             </div>
           </div>
 
-          <hr className={cn("border-foreground/20", "-mx-6 my-4")} />
+          <hr
+            className={cn(
+              "border-foreground/20 -mx-6 my-4",
+            )}
+          />
 
           {/* ---------------------------------------------------------------- */}
           {/*                              STATES                              */}
           {/* ---------------------------------------------------------------- */}
 
-          {state === "error" && <AllUsersError />}
+          {state === "error" && (
+            <AllUsersError />
+          )}
 
-          {state === "loading" && <AllUsersLoading />}
+          {state === "loading" && (
+            <AllUsersLoading />
+          )}
 
           {/* ---------------------------------------------------------------- */}
           {/*                              TABLE                               */}
           {/* ---------------------------------------------------------------- */}
 
           {state === "data" && (
-            <div className={cn("overflow-x-auto")}>
-              <table className={cn("w-full border-collapse text-left")}>
+            <div
+              className={cn(
+                "overflow-x-auto",
+              )}
+            >
+              <table
+                className={cn(
+                  "w-full border-collapse text-left",
+                )}
+              >
                 <thead>
                   <tr
                     className={cn(
                       "text-foreground/50 text-2.75 tracking-wider uppercase",
                     )}
                   >
-                    <th className={cn("py-3 font-medium")}>User</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      User
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Email</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Email
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Referral Code</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Referral Code
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Mining Invested</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Mining Invested
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Mining Profit</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Mining Profit
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Transactions</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Transactions
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Joined</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Joined
+                    </th>
 
-                    <th className={cn("py-3 font-medium")}>Status</th>
+                    <th
+                      className={cn(
+                        "py-3 font-medium",
+                      )}
+                    >
+                      Status
+                    </th>
 
-                    <th className={cn("py-3 text-right font-medium")}>
+                    <th
+                      className={cn(
+                        "py-3 text-right font-medium",
+                      )}
+                    >
                       Actions
                     </th>
                   </tr>
                 </thead>
 
-                <tbody className={cn("divide-foreground/10 divide-y text-sm")}>
-                  {users.map((item) => (
-                    <tr key={item.id} className={cn("group")}>
-                      {/* User */}
+                <tbody
+                  className={cn(
+                    "divide-foreground/10 divide-y text-sm",
+                  )}
+                >
+                  {users.map(
+                    (item) => (
+                      <tr
+                        key={item.id}
+                        className={cn(
+                          "group",
+                        )}
+                      >
+                        {/* User */}
 
-                      <td className={cn("py-4 pr-4")}>
-                        <div className={cn("flex items-center gap-3")}>
+                        <td
+                          className={cn(
+                            "py-4 pr-4",
+                          )}
+                        >
                           <div
                             className={cn(
-                              "flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
-                              item.bg,
+                              "flex items-center gap-3",
                             )}
                           >
-                            {item.initial}
-                          </div>
+                            <div
+                              className={cn(
+                                "flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
+                                item.bg,
+                              )}
+                            >
+                              {
+                                item.initial
+                              }
+                            </div>
 
-                          <div className={cn("flex flex-col")}>
-                            <span className={cn("font-medium")}>
-                              {item.name}
-                            </span>
-
-                            {item.isReferred && (
+                            <div
+                              className={cn(
+                                "flex flex-col",
+                              )}
+                            >
                               <span
                                 className={cn(
-                                  "text-2.5 font-semibold text-green-500",
+                                  "font-medium",
                                 )}
                               >
-                                Referred
+                                {
+                                  item.name
+                                }
                               </span>
-                            )}
+
+                              {item.isReferred && (
+                                <span
+                                  className={cn(
+                                    "text-2.5 font-semibold text-green-500",
+                                  )}
+                                >
+                                  Referred
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Email */}
+                        {/* Email */}
 
-                      <td
-                        className={cn(
-                          "text-foreground/70 py-4 pr-4 text-xs",
-                        )}
-                      >
-                        {item.email}
-                      </td>
-
-                      {/* Referral */}
-
-                      <td className={cn("py-4 pr-4")}>
-                        <span
+                        <td
                           className={cn(
-                            "border-foreground/10 bg-foreground/5 text-foreground/80 rounded-md border px-2 py-1 font-mono text-xs font-semibold",
+                            "text-foreground/70 py-4 pr-4 text-xs",
                           )}
                         >
-                          {item.referralCode}
-                        </span>
-                      </td>
+                          {item.email}
+                        </td>
 
-                      {/* Mining Invested */}
+                        {/* Referral */}
 
-                      <td
-                        className={cn(
-                          "text-primary-500 py-4 pr-4 font-semibold",
-                        )}
-                      >
-                        {item.miningInvested}
-                      </td>
-
-                      {/* Mining Profit */}
-
-                      <td
-                        className={cn(
-                          "py-4 pr-4 font-semibold text-green-500",
-                        )}
-                      >
-                        {item.miningProfit}
-                      </td>
-
-                      {/* Transactions */}
-
-                      <td
-                        className={cn(
-                          "text-foreground/80 py-4 pr-4 font-medium",
-                        )}
-                      >
-                        {item.transactions}
-                      </td>
-
-                      {/* Joined */}
-
-                      <td
-                        className={cn(
-                          "text-foreground/60 py-4 pr-4 text-xs",
-                        )}
-                      >
-                        {item.joined}
-                      </td>
-
-                      {/* Status */}
-
-                      <td className={cn("py-4 pr-4")}>
-                        <span
+                        <td
                           className={cn(
-                            "text-xs font-semibold",
-
-                            item.status === "Active" && "text-green-500",
-
-                            item.status === "Inactive" && "text-foreground/40",
-
-                            item.status === "Suspended" && "text-red-500",
+                            "py-4 pr-4",
                           )}
                         >
-                          {item.status}
-                        </span>
-                      </td>
-
-                      {/* Actions */}
-
-                      <td className={cn("py-4 text-right")}>
-                        <div
-                          className={cn(
-                            "flex items-center justify-end gap-1.5",
-                          )}
-                        >
-                          {/* View */}
-
-                          <Button
-                            size="xs"
-                            variant="info"
-                            asChild
-                            title="View User"
+                          <span
+                            className={cn(
+                              "border-foreground/10 bg-foreground/5 text-foreground/80 rounded-md border px-2 py-1 font-mono text-xs font-semibold",
+                            )}
                           >
-                            <Link
-                              to="/users/$userId"
-                              params={{
-                                userId: item.id,
+                            {
+                              item.referralCode
+                            }
+                          </span>
+                        </td>
+
+                        {/* Mining Invested */}
+
+                        <td
+                          className={cn(
+                            "text-primary-500 py-4 pr-4 font-semibold",
+                          )}
+                        >
+                          {
+                            item.miningInvested
+                          }
+                        </td>
+
+                        {/* Mining Profit */}
+
+                        <td
+                          className={cn(
+                            "py-4 pr-4 font-semibold text-green-500",
+                          )}
+                        >
+                          {
+                            item.miningProfit
+                          }
+                        </td>
+
+                        {/* Transactions */}
+
+                        <td
+                          className={cn(
+                            "text-foreground/80 py-4 pr-4 font-medium",
+                          )}
+                        >
+                          {
+                            item.transactions
+                          }
+                        </td>
+
+                        {/* Joined */}
+
+                        <td
+                          className={cn(
+                            "text-foreground/60 py-4 pr-4 text-xs",
+                          )}
+                        >
+                          {item.joined}
+                        </td>
+
+                        {/* Status */}
+
+                        <td
+                          className={cn(
+                            "py-4 pr-4",
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              "text-xs font-semibold",
+
+                              item.status ===
+                                "Active" &&
+                                "text-green-500",
+
+                              item.status ===
+                                "Inactive" &&
+                                "text-foreground/40",
+
+                              item.status ===
+                                "Suspended" &&
+                                "text-red-500",
+                            )}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+
+                        <td
+                          className={cn(
+                            "py-4 text-right",
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "flex items-center justify-end gap-1.5",
+                            )}
+                          >
+                            {/* View */}
+
+                            <Button
+                              size="xs"
+                              variant="info"
+                              asChild
+                              title="View User"
+                            >
+                              <Link
+                                to="/users/$userId"
+                                params={{
+                                  userId:
+                                    item.id,
+                                }}
+                              >
+                                <Eye
+                                  className={cn(
+                                    "size-3.5",
+                                  )}
+                                />
+                              </Link>
+                            </Button>
+
+                            {/* Wallet */}
+
+                            <Button
+                              asChild
+                              size="xs"
+                              variant="success"
+                              title="Wallet Details"
+                            >
+                              <Link
+                                to="/users/$userId/wallet"
+                                params={{
+                                  userId:
+                                    item.id,
+                                }}
+                              >
+                                <Wallet
+                                  className={cn(
+                                    "size-3.5",
+                                  )}
+                                />
+                              </Link>
+                            </Button>
+
+                            {/* Manage */}
+
+                            <Button
+                              type="button"
+                              size="xs"
+                              variant="warn"
+                              title="Manage User"
+                              onClick={() => {
+                                openStatusDialog(
+                                  item,
+                                );
                               }}
                             >
-                              <Eye className={cn("size-3.5")} />
-                            </Link>
-                          </Button>
-
-                          {/* Wallet */}
-
-                          <Button
-                            asChild
-                            size="xs"
-                            variant="success"
-                            title="Wallet Details"
-                          >
-                            <Link
-                              to="/users/$userId/wallet"
-                              params={{
-                                userId: item.id,
-                              }}
-                            >
-                              <Wallet className={cn("size-3.5")} />
-                            </Link>
-                          </Button>
-
-                          {/* Manage */}
-
-                          <Button
-                            type="button"
-                            size="xs"
-                            variant="warn"
-                            title="Manage User"
-                            onClick={() => {
-                              openStatusDialog(item);
-                            }}
-                          >
-                            <UserCog className={cn("size-3.5")} />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                              <UserCog
+                                className={cn(
+                                  "size-3.5",
+                                )}
+                              />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ),
+                  )}
                 </tbody>
               </table>
             </div>
@@ -612,10 +1105,13 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
       {selectedUser && (
         <div
           className={cn(
-            "fixed inset-0 z-9999 flex items-center justify-center bg-black/75 p-4 backdrop-blur-[2px]",
+            "fixed inset-0 z-'9999' flex items-center justify-center bg-black/75 p-4 backdrop-blur-[2px]",
           )}
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
               closeStatusDialog();
             }
           }}
@@ -626,7 +1122,7 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
             aria-labelledby="change-status-title"
             aria-describedby="change-status-description"
             className={cn(
-              "w-full max-w-md rounded-2xl border border-secondary-500/20 bg-[#1e2a40] p-6 shadow-2xl",
+              "w-full max-w-md max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl border border-secondary-500/20 bg-[#1e2a40] p-6 shadow-2xl",
             )}
             onMouseDown={(event) => {
               event.stopPropagation();
@@ -636,8 +1132,16 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
             {/*                              TITLE                               */}
             {/* ---------------------------------------------------------------- */}
 
-            <div className={cn("flex items-center gap-3")}>
-              <UserCog className={cn("size-6 shrink-0", "text-yellow-500")} />
+            <div
+              className={cn(
+                "flex items-center gap-3",
+              )}
+            >
+              <UserCog
+                className={cn(
+                  "size-6 shrink-0 text-yellow-500",
+                )}
+              />
 
               <h2
                 id="change-status-title"
@@ -655,11 +1159,19 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
             <p
               id="change-status-description"
-              className={cn("mt-5 text-sm", "text-slate-300")}
+              className={cn(
+                "mt-5 text-sm text-slate-300",
+              )}
             >
               Change status for{" "}
-              <span className={cn("font-semibold", "text-white")}>
-                {selectedUser.name}
+              <span
+                className={cn(
+                  "font-semibold text-white",
+                )}
+              >
+                {
+                  selectedUser.name
+                }
               </span>
             </p>
 
@@ -667,8 +1179,13 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
             {/*                              STATUS                              */}
             {/* ---------------------------------------------------------------- */}
 
-            <div className={cn("mt-5")}>
+            <div
+              className={cn(
+                "mt-5",
+              )}
+            >
               <label
+                id="user-status-label"
                 className={cn(
                   "mb-2 block text-sm font-medium text-slate-300",
                 )}
@@ -676,24 +1193,54 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                 Status
               </label>
 
-              <div className={cn("w-full")}>
+              <div
+                className={cn(
+                  "w-full",
+                )}
+              >
                 {/* Dropdown Trigger */}
 
                 <button
                   type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={
+                    isStatusDropdownOpen
+                  }
+                  aria-labelledby="user-status-label"
+                  aria-controls="user-status-listbox"
+                  aria-activedescendant={
+                    isStatusDropdownOpen
+                      ? `status-option-${activeStatusIndex}`
+                      : undefined
+                  }
                   onClick={() => {
-                    setIsStatusDropdownOpen((previous) => !previous);
+                    if (
+                      isStatusDropdownOpen
+                    ) {
+                      setIsStatusDropdownOpen(
+                        false,
+                      );
+                    } else {
+                      openStatusDropdown();
+                    }
                   }}
+                  onKeyDown={
+                    handleStatusKeyDown
+                  }
                   className={cn(
-                    "flex h-12 w-full items-center justify-between rounded-xl border border-slate-600 bg-[#0d1729] px-4 text-sm font-medium text-white transition outline-none hover:border-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20",
+                    "flex h-12 w-full items-center justify-between rounded-xl border border-slate-600 bg-[#0d1729] px-4 text-left text-sm font-medium text-white outline-none transition hover:border-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20",
                   )}
                 >
-                  <span>{selectedStatus}</span>
+                  <span>
+                    {selectedStatus}
+                  </span>
 
                   <ChevronDown
                     className={cn(
-                      "size-4 text-slate-300 transition-transform duration-200",
-                      isStatusDropdownOpen && "rotate-180",
+                      "size-4 shrink-0 text-slate-300 transition-transform duration-200",
+
+                      isStatusDropdownOpen &&
+                        "rotate-180",
                     )}
                   />
                 </button>
@@ -702,75 +1249,79 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
                 {isStatusDropdownOpen && (
                   <div
+                    id="user-status-listbox"
+                    role="listbox"
+                    aria-labelledby="user-status-label"
                     className={cn(
-                      "mt-2 w-full rounded-xl border border-slate-600 bg-[#0d1729] p-1.5",
+                      "mt-2 grid gap-1 rounded-xl border border-slate-600 bg-[#0d1729] p-1.5 shadow-xl",
                     )}
                   >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedStatus("Active");
-                        setIsStatusDropdownOpen(false);
-                      }}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition",
-                        selectedStatus === "Active"
-                          ? "bg-blue-500/15 text-blue-400"
-                          : "text-white hover:bg-white/10",
-                      )}
-                    >
-                      <span>Active</span>
+                    {statusOptions.map(
+                      (
+                        status,
+                        index,
+                      ) => {
+                        const isActive =
+                          index ===
+                          activeStatusIndex;
 
-                      {selectedStatus === "Active" && (
-                        <span
-                          className={cn("size-2 rounded-full bg-blue-400")}
-                        />
-                      )}
-                    </button>
+                        const isSelected =
+                          status ===
+                          selectedStatus;
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedStatus("Inactive");
-                        setIsStatusDropdownOpen(false);
-                      }}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition",
-                        selectedStatus === "Inactive"
-                          ? "bg-blue-500/15 text-blue-400"
-                          : "text-white hover:bg-white/10",
-                      )}
-                    >
-                      <span>Inactive</span>
+                        return (
+                          <button
+                            id={`status-option-${index}`}
+                            key={
+                              status
+                            }
+                            type="button"
+                            role="option"
+                            aria-selected={
+                              isSelected
+                            }
+                            tabIndex={-1}
+                            onMouseEnter={() => {
+                              setActiveStatusIndex(
+                                index,
+                              );
+                            }}
+                            onClick={() => {
+                              selectStatus(
+                                status,
+                                index,
+                              );
+                            }}
+                            className={cn(
+                              "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium outline-none transition",
 
-                      {selectedStatus === "Inactive" && (
-                        <span
-                          className={cn("size-2 rounded-full bg-blue-400")}
-                        />
-                      )}
-                    </button>
+                              isActive &&
+                                "bg-blue-500/20 text-blue-300",
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedStatus("Suspended");
-                        setIsStatusDropdownOpen(false);
-                      }}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition",
-                        selectedStatus === "Suspended"
-                          ? "bg-blue-500/15 text-blue-400"
-                          : "text-white hover:bg-white/10",
-                      )}
-                    >
-                      <span>Suspended</span>
+                              !isActive &&
+                                !isSelected &&
+                                "text-white hover:bg-white/10",
 
-                      {selectedStatus === "Suspended" && (
-                        <span
-                          className={cn("size-2 rounded-full bg-blue-400")}
-                        />
-                      )}
-                    </button>
+                              isSelected &&
+                                !isActive &&
+                                "bg-blue-500/10 text-blue-400",
+                            )}
+                          >
+                            <span>
+                              {status}
+                            </span>
+
+                            {isSelected && (
+                              <span
+                                className={cn(
+                                  "size-2 shrink-0 rounded-full bg-blue-400",
+                                )}
+                              />
+                            )}
+                          </button>
+                        );
+                      },
+                    )}
                   </div>
                 )}
               </div>
@@ -787,7 +1338,9 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
             >
               <Button
                 type="button"
-                onClick={closeStatusDialog}
+                onClick={
+                  closeStatusDialog
+                }
                 className={cn(
                   "bg-slate-600 text-white hover:bg-slate-500",
                 )}
@@ -797,8 +1350,12 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
 
               <Button
                 type="button"
-                onClick={updateUserStatus}
-                className={cn("bg-blue-600", "text-white", "hover:bg-blue-700")}
+                onClick={
+                  updateUserStatus
+                }
+                className={cn(
+                  "bg-blue-600 text-white hover:bg-blue-700",
+                )}
               >
                 Update Status
               </Button>
