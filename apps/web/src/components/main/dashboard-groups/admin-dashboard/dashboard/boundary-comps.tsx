@@ -26,7 +26,7 @@ export function UserGrowthCardLoading() {
 
           {/* DATE */}
           <div
-            className={cn(`h-3 w-12 animate-pulse rounded`, `bg-foreground/10`)}
+            className={cn(`h-3 w-auto animate-pulse rounded`, `bg-foreground/10`)}
           />
         </div>
       ))}
