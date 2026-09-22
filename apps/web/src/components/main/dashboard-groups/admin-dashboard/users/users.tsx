@@ -150,9 +150,9 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
     },
   ];
 
-  //const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-   const [state] = useState<"error" | "loading" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section
@@ -351,7 +351,7 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                         </Button>
                         <Button
                           asChild
-                              size={"xs"}
+                          size={"xs"}
                           variant={"warn"}
                           title="Manage User"
                         >

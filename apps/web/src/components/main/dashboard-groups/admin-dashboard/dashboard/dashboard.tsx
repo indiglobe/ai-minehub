@@ -71,8 +71,8 @@ export function TotalUsersStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -131,8 +131,8 @@ export function TotalDepositsStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -191,8 +191,8 @@ export function PendingDepositsStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -252,8 +252,8 @@ export function PendingWithdrawalsStat({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -336,8 +336,8 @@ export function TotalMiningInvestedCard({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <StatCard
@@ -399,8 +399,8 @@ export function ActiveMiningSessionsCard({
   ...props
 }: ComponentProps<typeof StatCard>) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <>
@@ -462,8 +462,8 @@ export function UserGrowthCard({
   ...props
 }: ComponentProps<"section">) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   const chartDays = [
     { date: "Sep 08", height: "h-2" },
@@ -535,8 +535,8 @@ export function ThisMonthStatsCard({
   ...props
 }: ComponentProps<"section">) {
   // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   const statsList = [
     {
@@ -635,9 +635,9 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "empty" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("error");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
   // const pendingDeposits = [];
@@ -804,12 +804,26 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
+  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "empty" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("error");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
-  const pendingWithdrawls = [] as any[];
+  // const pendingWithdrawls = [];
+  const pendingWithdrawls = [
+    {
+      id: "dep-1",
+      user: {
+        name: "Surajit Sarder",
+        email: "surajitsarder2000@gmail.com",
+        initial: "S",
+      },
+      amount: "$1,000.00",
+      method: "Bsc_bep20",
+      date: "Aug 31, 2026 21:45",
+      status: "Pending",
+    },
+  ];
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -851,7 +865,101 @@ export function PendingWithdrawalsTable({
                 </p>
               </div>
             ) : (
-              <></>
+              <div className={cn(`overflow-x-auto`)}>
+                <table className={cn(`w-full border-collapse text-left`)}>
+                  <thead>
+                    <tr
+                      className={cn(
+                        `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                      )}
+                    >
+                      <th className={cn(`py-3 font-medium`)}>User</th>
+                      <th className={cn(`py-3 font-medium`)}>Amount</th>
+                      <th className={cn(`py-3 font-medium`)}>Method</th>
+                      <th className={cn(`py-3 font-medium`)}>Date</th>
+                      <th className={cn(`py-3 font-medium`)}>Status</th>
+                      <th className={cn(`py-3 text-right font-medium`)}>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    className={cn(`divide-foreground/10 divide-y text-sm`)}
+                  >
+                    {pendingWithdrawls.map((item) => (
+                      <tr key={item.id} className={cn(`group`)}>
+                        <td className={cn(`py-4 pr-4`)}>
+                          <div className={cn(`flex items-center gap-3`)}>
+                            <div
+                              className={cn(
+                                `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                              )}
+                            >
+                              {item.user.initial}
+                            </div>
+                            <div className={cn(`flex flex-col`)}>
+                              <span className={cn(`font-medium`)}>
+                                {item.user.name}
+                              </span>
+                              <span
+                                className={cn(`text-foreground/50 text-xs`)}
+                              >
+                                {item.user.email}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          className={cn(`py-4 pr-4 font-semibold text-red-500`)}
+                        >
+                          {item.amount}
+                        </td>
+                        <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                          {item.method}
+                        </td>
+                        <td
+                          className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
+                        >
+                          {item.date}
+                        </td>
+                        <td className={cn(`py-4 pr-4`)}>
+                          <span
+                            className={cn(
+                              `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
+                            )}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className={cn(`py-4 text-right`)}>
+                          <div
+                            className={cn(
+                              `flex items-center justify-end gap-2`,
+                            )}
+                          >
+                            <Button
+                              size="xs"
+                              variant={"success"}
+                              className={cn(``)}
+                            >
+                              <Check className={cn(`size-3.5`)} />
+                              Approve
+                            </Button>
+                            <Button
+                              size="xs"
+                              variant={"destructive"}
+                              className={cn(``)}
+                            >
+                              <X className={cn(`size-3.5`)} />
+                              Reject
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </>
         )}

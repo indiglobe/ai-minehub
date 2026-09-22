@@ -1,4 +1,4 @@
-import { cn } from "@repo/styles/cn";
+import { cn } from "@repo/styles/cn";import { Button } from "@repo/ui/button";
 
 export function MiningPlansLoading() {
   const rows = [1, 2, 3, 4];
@@ -134,14 +134,9 @@ export function MiningPlansError() {
           Unable to load mining plans
         </p>
 
-        <button
-          type="button"
-          className={cn(
-            `mt-5 rounded-xl px-5 py-2.5 bg-secondary-500 font-brand-primary text-sm font-semibold text-white transition-colors hover:bg-secondary-600`,
-          )}
-        >
-          Try again
-        </button>
+      <Button type="button" size={"sm"} variant={'destructive'} className={cn(`mt-6`)}>
+        Try again
+      </Button>
       </div>
     </div>
   );

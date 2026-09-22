@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import { ArrowDownLeft, Search, ChevronDown, Check, X } from "lucide-react";
+import { ArrowDownLeft, Search, ChevronDown } from "lucide-react";
 import { Button } from "@repo/ui/button";
 import {
   AllDepositsError,
@@ -12,9 +12,9 @@ export function AllDeposits({
   className,
   ...props
 }: ComponentProps<"section">) {
-  //const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   const deposits = [
     {
@@ -137,7 +137,6 @@ export function AllDeposits({
                   <th className={cn(`py-3 font-medium`)}>Description</th>
                   <th className={cn(`py-3 font-medium`)}>Status</th>
                   <th className={cn(`py-3 font-medium`)}>Date</th>
-                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
                 </tr>
               </thead>
 
@@ -213,32 +212,6 @@ export function AllDeposits({
 
                     <td className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}>
                       {item.date}
-                    </td>
-
-                    <td className={cn(`py-4 text-right`)}>
-                      <div
-                        className={cn(`flex items-center justify-end gap-1.5`)}
-                      >
-                        <button
-                          className={cn(
-                            `flex size-7 items-center justify-center rounded-md`,
-                            `bg-green-600 text-white transition-colors hover:bg-green-700`,
-                          )}
-                          title="Approve"
-                        >
-                          <Check className={cn(`size-3.5`)} />
-                        </button>
-
-                        <button
-                          className={cn(
-                            `flex size-7 items-center justify-center rounded-md`,
-                            `bg-red-600 text-white transition-colors hover:bg-red-700`,
-                          )}
-                          title="Reject"
-                        >
-                          <X className={cn(`size-3.5`)} />
-                        </button>
-                      </div>
                     </td>
                   </tr>
                 ))}

@@ -1,4 +1,5 @@
 import { cn } from "@repo/styles/cn";
+import { Button } from "@repo/ui/button";
 
 export function AllDepositsLoading() {
   return (
@@ -167,14 +168,14 @@ export function AllDepositsError() {
           Unable to load deposits
         </p>
 
-        <button
+        <Button
           type="button"
-          className={cn(
-            `bg-secondary-500 font-brand-primary hover:bg-secondary-600 mt-5 rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-colors`,
-          )}
+          size={"sm"}
+          variant={"destructive"}
+          className={cn(`mt-6`)}
         >
           Try again
-        </button>
+        </Button>
       </div>
     </div>
   );

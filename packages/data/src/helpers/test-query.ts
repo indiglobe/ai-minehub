@@ -1,21 +1,29 @@
-import { read__AllUsers, read__OneUser } from "@/querries/user";
+import { eq, getTableColumns, isNotNull, not, sql } from "drizzle-orm";
+import { db } from "..";
+import { MiningOrderTable, UserTable } from "@/schema";
 
 (async () => {
-  const res = await read__OneUser({
-    // identifier: { id: "8a6cc1514a" },
-    // identifier: { id: "46efa423f4" },
-    identifier: { id: "d0969f5985" },
-    // identifier: { id: "22d09744f3" },
-    joiningOptions: {
-      referrer: true,
-      tradingWallet: true,
-      miningWallet: true,
-      rating: true,
-      referrals: true,
-      miningOrders: true,
-      tradingOrders: true,
-    },
-  });
+  const userTableColumn = getTableColumns(UserTable);
+  const miningOrderTableColumn = getTableColumns(MiningOrderTable);
+
+  const res = await db
+    .select
+    //   {
+    //   ...userTableColumn,
+    //   miningOrders: sql`
+    //   JSON_ARRAYAGG(
+    //     JSON_OBJECT(
+    //       'id', ${miningOrderTableColumn.id}
+    //     )
+    //   )
+    //   `,
+    // }
+    ()
+    .from(UserTable)
+    .leftJoin(MiningOrderTable, eq(MiningOrderTable.orderedBy, UserTable.id))
+    .where(isNotNull(MiningOrderTable.id))
+    // .groupBy(UserTable.id)
+    .limit(10);
 
   console.log(res);
 })();

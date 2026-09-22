@@ -4,7 +4,10 @@ import { cn } from "@repo/styles/cn";
 import { Layers, Plus, Edit, X } from "lucide-react";
 import { Button } from "@repo/ui/button";
 import { useFetchAllMiningPlans } from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
-import { MiningPlansError, MiningPlansLoading } from "@/components/main/dashboard-groups/admin-dashboard/mining-plans/boundary-comps";
+import {
+  MiningPlansError,
+  MiningPlansLoading,
+} from "@/components/main/dashboard-groups/admin-dashboard/mining-plans/boundary-comps";
 
 export function MiningPlans({
   className,
@@ -57,10 +60,9 @@ export function MiningPlans({
 
   const { data: plans } = useFetchAllMiningPlans();
 
-  //const [state] = useState<"error" | "loading" | "data">("data");
+  const [state] = useState<"error" | "loading" | "data">("data");
   // const [state] = useState<"error" | "loading" | "data">("loading");
-   const [state] = useState<"error" | "loading" | "data">("error");
-
+  //  const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section

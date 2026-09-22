@@ -1,11 +1,10 @@
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import {  useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Plus,
   Minus,
-  Bell,
   Wallet,
   BarChart3,
   ArrowUpRight,
@@ -29,7 +28,8 @@ export function WalletManagement() {
           <ArrowLeft className={cn(`size-4`)} />
           Back to Users
         </Button>
-        <Button size="sm" variant={"primary"} className={cn(``)}>
+
+        <Button size="sm" variant={"success"} className={cn(``)}>
           <Plus className={cn(`size-4`)} />
           Add Money
         </Button>
@@ -37,11 +37,6 @@ export function WalletManagement() {
         <Button size="sm" variant={"destructive"} className={cn(``)}>
           <Minus className={cn(`size-4`)} />
           Deduct Money
-        </Button>
-
-        <Button size="sm" variant={"warn"} className={cn(``)}>
-          <Bell className={cn(`size-4`)} />
-          Send Notification
         </Button>
       </div>
 

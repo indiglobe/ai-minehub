@@ -1,4 +1,5 @@
 import { cn } from "@repo/styles/cn";
+import { Button } from "@repo/ui/button";
 
 export function AllWithdrawalsLoading() {
   return (
@@ -12,17 +13,33 @@ export function AllWithdrawalsLoading() {
               `grid grid-cols-[2fr_0.8fr_0.7fr_1.5fr_1fr_1.3fr_0.9fr_1fr_0.6fr] items-center gap-6 py-5`,
             )}
           >
-            <div className={cn(`h-4 w-12 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-16 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-14 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-28 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-24 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-24 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-14 animate-pulse rounded bg-foreground/10`)} />
-            <div className={cn(`h-4 w-12 animate-pulse rounded bg-foreground/10`)} />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-12 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-16 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-14 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-28 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-24 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-24 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-14 animate-pulse rounded`)}
+            />
+            <div
+              className={cn(`bg-foreground/10 h-4 w-12 animate-pulse rounded`)}
+            />
             <div
               className={cn(
-                `ml-auto h-4 w-16 animate-pulse rounded bg-foreground/10`,
+                `bg-foreground/10 ml-auto h-4 w-16 animate-pulse rounded`,
               )}
             />
           </div>
@@ -37,20 +54,20 @@ export function AllWithdrawalsLoading() {
             <div className={cn(`flex min-w-0 items-center gap-4`)}>
               <div
                 className={cn(
-                  `size-12 shrink-0 animate-pulse rounded-full bg-secondary-500/20`,
+                  `bg-secondary-500/20 size-12 shrink-0 animate-pulse rounded-full`,
                 )}
               />
 
               <div className={cn(`min-w-0`)}>
                 <div
                   className={cn(
-                    `h-4 w-28 animate-pulse rounded-md bg-foreground/10`,
+                    `bg-foreground/10 h-4 w-28 animate-pulse rounded-md`,
                   )}
                 />
 
                 <div
                   className={cn(
-                    `mt-2 h-3 w-36 animate-pulse rounded-md bg-foreground/10`,
+                    `bg-foreground/10 mt-2 h-3 w-36 animate-pulse rounded-md`,
                   )}
                 />
               </div>
@@ -59,56 +76,56 @@ export function AllWithdrawalsLoading() {
             {/* AMOUNT */}
             <div
               className={cn(
-                `h-5 w-16 animate-pulse rounded-md bg-primary-500/15`,
+                `bg-primary-500/15 h-5 w-16 animate-pulse rounded-md`,
               )}
             />
 
             {/* WALLET */}
             <div
               className={cn(
-                `h-7 w-18 animate-pulse rounded-lg bg-secondary-500/15`,
+                `bg-secondary-500/15 h-7 w-18 animate-pulse rounded-lg`,
               )}
             />
 
             {/* WALLET ADDRESS */}
             <div
               className={cn(
-                `h-4 w-32 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-4 w-32 animate-pulse rounded-md`,
               )}
             />
 
             {/* TRANSACTION ID */}
             <div
               className={cn(
-                `h-4 w-20 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-4 w-20 animate-pulse rounded-md`,
               )}
             />
 
             {/* DESCRIPTION */}
             <div
               className={cn(
-                `h-4 w-28 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-4 w-28 animate-pulse rounded-md`,
               )}
             />
 
             {/* STATUS */}
             <div
               className={cn(
-                `h-7 w-24 animate-pulse rounded-full bg-accent-500/15`,
+                `bg-accent-500/15 h-7 w-24 animate-pulse rounded-full`,
               )}
             />
 
             {/* DATE */}
             <div
               className={cn(
-                `h-4 w-24 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 h-4 w-24 animate-pulse rounded-md`,
               )}
             />
 
             {/* ACTIONS */}
             <div
               className={cn(
-                `ml-auto h-4 w-8 animate-pulse rounded-md bg-foreground/10`,
+                `bg-foreground/10 ml-auto h-4 w-8 animate-pulse rounded-md`,
               )}
             />
           </div>
@@ -127,30 +144,22 @@ export function AllWithdrawalsError() {
           `flex min-h-48 w-full flex-col items-center justify-center px-6 py-10 text-center`,
         )}
       >
-        <p
-          className={cn(
-            `font-brand-primary text-2 font-bold text-red-600`,
-          )}
-        >
+        <p className={cn(`font-brand-primary text-2 font-bold text-red-600`)}>
           Something went wrong !!!
         </p>
 
-        <p
-          className={cn(
-            `mt-2 font-brand-primary text-sm text-foreground/50`,
-          )}
-        >
+        <p className={cn(`font-brand-primary text-foreground/50 mt-2 text-sm`)}>
           Unable to load withdrawals
         </p>
 
-        <button
+        <Button
           type="button"
-          className={cn(
-            `mt-5 rounded-xl px-5 py-2.5 bg-secondary-500 font-brand-primary text-sm font-semibold text-white transition-colors hover:bg-secondary-600`,
-          )}
+          size={"sm"}
+          variant={"destructive"}
+          className={cn(`mt-6`)}
         >
           Try again
-        </button>
+        </Button>
       </div>
     </div>
   );

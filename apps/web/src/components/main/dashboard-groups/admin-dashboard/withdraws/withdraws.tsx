@@ -1,5 +1,5 @@
-import { useState  } from "react";
-import type {ComponentProps} from "react";
+import { useState } from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { ArrowUpRight, Search, ChevronDown } from "lucide-react";
 import { Button } from "@repo/ui/button";
@@ -28,10 +28,9 @@ export function AllWithdrawals({
     },
   ];
 
- // const [state] = useState<"error" | "loading" | "data">("data");
-// const [state] = useState<"error" | "loading" | "data">("loading");
-  const [state] = useState<"error" | "loading" | "data">("error");
-
+  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
     <section
@@ -135,7 +134,6 @@ export function AllWithdrawals({
                   <th className={cn(`py-3 font-medium`)}>Description</th>
                   <th className={cn(`py-3 font-medium`)}>Status</th>
                   <th className={cn(`py-3 font-medium`)}>Date</th>
-                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
                 </tr>
               </thead>
               <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
@@ -201,9 +199,6 @@ export function AllWithdrawals({
                     </td>
                     <td className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}>
                       {item.date}
-                    </td>
-                    <td className={cn(`text-foreground/40 py-4 text-right`)}>
-                      —
                     </td>
                   </tr>
                 ))}

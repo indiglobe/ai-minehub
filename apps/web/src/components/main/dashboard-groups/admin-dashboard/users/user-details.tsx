@@ -1,9 +1,6 @@
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import {
-  Link,
-  useRouter,
-} from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Wallet,
@@ -26,30 +23,24 @@ export function UserDetailsFromDashboard() {
     <div className={cn(`default-padding @container space-y-6 py-10`)}>
       {/* Top Action Buttons */}
       <div className={cn(`flex flex-wrap items-center gap-3`)}>
-        <Button corner='rounded' variant={'ghost'}  onClick={() => router.history.back()}>
+        <Button
+          corner="rounded"
+          variant={"ghost"}
+          size="sm"
+          onClick={() => router.history.back()}
+        >
           <ArrowLeft className={cn(`size-4`)} />
           Back to Users
         </Button>
 
-        <Button
-          asChild
-          size="sm"
-          className={cn(
-            `h-9 gap-2 rounded-lg bg-green-600 px-4 text-xs text-white hover:bg-green-700`,
-          )}
-        >
+        <Button asChild size="sm" variant={"success"}>
           <Link to="/users/$userId/wallet" params={{ userId: "u-1" }}>
             <Wallet className={cn(`size-4`)} />
             Manage Wallet
           </Link>
         </Button>
 
-        <Button
-          size="sm"
-          className={cn(
-            `h-9 gap-2 rounded-lg bg-blue-600 px-4 text-xs text-white hover:bg-blue-700`,
-          )}
-        >
+        <Button size="sm" variant={"info"}>
           <MessageSquare className={cn(`size-4`)} />
           Support chat
         </Button>
