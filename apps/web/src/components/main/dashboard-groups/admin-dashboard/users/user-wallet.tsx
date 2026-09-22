@@ -34,10 +34,8 @@ export function WalletManagement() {
         {/* ADD MONEY DIALOG */}
         <AddMoneyDialog />
 
-        <Button size="sm" variant={"destructive"} className={cn(``)}>
-          <Minus className={cn(`size-4`)} />
-          Deduct Money
-        </Button>
+        {/* DEDUCT MONEY DIALOG */}
+        <DeductMoneyDialog />
       </div>
 
       {/* Grid: Wallet Management & Wallet Statistics */}
@@ -73,7 +71,6 @@ export function AddMoneyDialog() {
     });
 
     setIsOpen(false);
-
     setAmount("");
     setDescription("");
   };
@@ -97,162 +94,344 @@ export function AddMoneyDialog() {
           aria-modal="true"
           aria-labelledby="add-money-title"
           onClick={(event) => {
-            if (event.target === event.currentTarget) setIsOpen(false);
+            if (event.target === event.currentTarget) {
+              setIsOpen(false);
+            }
           }}
           className={cn(
-            `fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4`,
+            `fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm`,
           )}
         >
           <div
             className={cn(
-              `w-full max-w-135 rounded-2xl border border-secondary-200/30 bg-background p-5 sm:p-7`,
+              `w-full max-w-135 rounded-2xl border p-5 border-secondary-200/30 bg-background sm:p-7`,
             )}
           >
-          {/* HEADER */}
-          <div>
-            <h2
-              id="add-money-title"
-              className={cn(
-                `flex items-center gap-3 font-brand-secondary text-lg font-semibold text-foreground`,
-              )}
-            >
-              <span
+            {/* HEADER */}
+            <div>
+              <h2
+                id="add-money-title"
                 className={cn(
-                  `flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-500`,
+                  `flex items-center gap-3 font-brand-secondary text-lg font-semibold text-foreground`,
                 )}
               >
-                <Plus className={cn(`size-4 text-white`)} />
-              </span>
+                <span
+                  className={cn(
+                    `flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-500`,
+                  )}
+                >
+                  <Plus className={cn(`size-4 text-white`)} />
+                </span>
 
-              Add Money to Wallet
-            </h2>
+                Add Money to Wallet
+              </h2>
+            </div>
+
+            {/* FORM */}
+            <div className={cn(`mt-6 space-y-5`)}>
+              {/* WALLET */}
+              <div>
+                <label
+                  htmlFor="wallet"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Wallet
+                </label>
+
+                <select
+                  id="wallet"
+                  value={wallet}
+                  onChange={(e) => setWallet(e.target.value)}
+                  className={cn(
+                    `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                >
+                  <option value="mining">Mining Wallet</option>
+                  <option value="trading">Trading Wallet</option>
+                </select>
+              </div>
+
+              {/* AMOUNT */}
+              <div>
+                <label
+                  htmlFor="amount"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Amount ($)
+                </label>
+
+                <input
+                  id="amount"
+                  type="number"
+                  min="0"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className={cn(
+                    `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                />
+              </div>
+
+              {/* TYPE */}
+              <div>
+                <label
+                  htmlFor="money-type"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Type
+                </label>
+
+                <select
+                  id="money-type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className={cn(
+                    `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                >
+                  <option value="bonus">Bonus</option>
+                  <option value="deposit">Deposit</option>
+                  <option value="adjustment">Adjustment</option>
+                </select>
+              </div>
+
+              {/* DESCRIPTION */}
+              <div>
+                <label
+                  htmlFor="description"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Description
+                </label>
+
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Reason for adding money..."
+                  rows={5}
+                  className={cn(
+                    `w-full resize-none rounded-lg border px-4 py-3 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className={cn(`mt-6 flex flex-row justify-end gap-3`)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  `m-0 rounded-lg border px-5 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-foreground hover:bg-secondary-50/40`,
+                )}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="button"
+                variant={"success"}
+                onClick={handleAddMoney}
+                className={cn(`px-5`)}
+              >
+                Add Money
+              </Button>
+            </div>
           </div>
+        </div>
+      )}
+    </>
+  );
+}
 
-          {/* FORM */}
-          <div className={cn(`mt-6 space-y-5`)}>
-            {/* WALLET */}
-            <div>
-              <label
-                htmlFor="wallet"
-                className={cn(
-                  `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
-                )}
-              >
-                Wallet
-              </label>
+/* =========================================================
+   DEDUCT MONEY DIALOG
+========================================================= */
 
-              <select
-                id="wallet"
-                value={wallet}
-                onChange={(e) => setWallet(e.target.value)}
-                className={cn(
-                  `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground outline-none transition-colors focus:border-secondary-500`,
-                )}
-              >
-                <option value="mining">Mining Wallet</option>
-                <option value="trading">Trading Wallet</option>
-              </select>
-            </div>
+export function DeductMoneyDialog() {
+  const [isOpen, setIsOpen] = useState(false);
 
-            {/* AMOUNT */}
-            <div>
-              <label
-                htmlFor="amount"
-                className={cn(
-                  `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
-                )}
-              >
-                Amount ($)
-              </label>
+  const [wallet, setWallet] = useState("mining");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
 
-              <input
-                id="amount"
-                type="number"
-                min="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Enter amount"
-                className={cn(
-                  `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
-                )}
-              />
-            </div>
+  const handleDeductMoney = () => {
+    console.log({
+      wallet,
+      amount,
+      description,
+    });
 
-            {/* TYPE */}
-            <div>
-              <label
-                htmlFor="money-type"
-                className={cn(
-                  `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
-                )}
-              >
-                Type
-              </label>
+    setIsOpen(false);
+    setAmount("");
+    setDescription("");
+  };
 
-              <select
-                id="money-type"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className={cn(
-                  `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground outline-none transition-colors focus:border-secondary-500`,
-                )}
-              >
-                <option value="bonus">Bonus</option>
-                <option value="deposit">Deposit</option>
-                <option value="adjustment">Adjustment</option>
-              </select>
-            </div>
+  return (
+    <>
+      {/* OPEN BUTTON */}
+      <Button
+        size="sm"
+        variant={"destructive"}
+        onClick={() => setIsOpen(true)}
+      >
+        <Minus className={cn(`size-4`)} />
+        Deduct Money
+      </Button>
 
-            {/* DESCRIPTION */}
-            <div>
-              <label
-                htmlFor="description"
-                className={cn(
-                  `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
-                )}
-              >
-                Description
-              </label>
-
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Reason for adding money..."
-                rows={5}
-                className={cn(
-                  `w-full resize-none rounded-lg border px-4 py-3 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
-                )}
-              />
-            </div>
-          </div>
-
-          {/* FOOTER */}
+      {/* DIALOG */}
+      {isOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="deduct-money-title"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              setIsOpen(false);
+            }
+          }}
+          className={cn(
+            `fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm`,
+          )}
+        >
           <div
             className={cn(
-              `mt-6 flex flex-row justify-end gap-3`,
+              `w-full max-w-135 rounded-2xl border p-5 border-secondary-200/30 bg-background sm:p-7`,
             )}
           >
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                `m-0 rounded-lg border border-secondary-200/30 bg-secondary-50/20 px-5 font-brand-primary text-foreground hover:bg-secondary-50/40`,
-              )}
-            >
-              Cancel
-            </Button>
+            {/* HEADER */}
+            <div>
+              <h2
+                id="deduct-money-title"
+                className={cn(
+                  `flex items-center gap-3 font-brand-secondary text-lg font-semibold text-foreground`,
+                )}
+              >
+                <span
+                  className={cn(
+                    `flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-500`,
+                  )}
+                >
+                  <Minus className={cn(`size-4 text-white`)} />
+                </span>
 
-            <Button
-              type="button"
-              variant={"success"}
-              onClick={handleAddMoney}
-              className={cn(`px-5`)}
-            >
-              Add Money
-            </Button>
-          </div>
+                Deduct Money from Wallet
+              </h2>
+            </div>
+
+            {/* FORM */}
+            <div className={cn(`mt-6 space-y-5`)}>
+              {/* WALLET */}
+              <div>
+                <label
+                  htmlFor="deduct-wallet"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Wallet
+                </label>
+
+                <select
+                  id="deduct-wallet"
+                  value={wallet}
+                  onChange={(e) => setWallet(e.target.value)}
+                  className={cn(
+                    `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                >
+                  <option value="mining">
+                    Mining Wallet (Bal: $0.00)
+                  </option>
+
+                  <option value="trading">
+                    Trading Wallet (Bal: $0.00)
+                  </option>
+                </select>
+              </div>
+
+              {/* AMOUNT */}
+              <div>
+                <label
+                  htmlFor="deduct-amount"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Amount ($)
+                </label>
+
+                <input
+                  id="deduct-amount"
+                  type="number"
+                  min="0"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className={cn(
+                    `h-12 w-full rounded-lg border px-4 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                />
+              </div>
+
+              {/* DESCRIPTION */}
+              <div>
+                <label
+                  htmlFor="deduct-description"
+                  className={cn(
+                    `mb-2 block font-brand-primary text-sm font-medium text-foreground/60`,
+                  )}
+                >
+                  Description (required)
+                </label>
+
+                <textarea
+                  id="deduct-description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Reason for deduction..."
+                  rows={5}
+                  required
+                  className={cn(
+                    `w-full resize-none rounded-lg border px-4 py-3 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-sm text-foreground placeholder:text-foreground/35 outline-none transition-colors focus:border-secondary-500`,
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className={cn(`mt-6 flex flex-row justify-end gap-3`)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  `m-0 rounded-lg border px-5 border-secondary-200/30 bg-secondary-50/20 font-brand-primary text-foreground hover:bg-secondary-50/40`,
+                )}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="button"
+                variant={"destructive"}
+                onClick={handleDeductMoney}
+                className={cn(`px-5`)}
+              >
+                Deduct Money
+              </Button>
+            </div>
           </div>
         </div>
       )}
