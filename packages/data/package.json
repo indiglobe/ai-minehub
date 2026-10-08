@@ -87,16 +87,6 @@
         "types": "./dist/validators/*.d.mts",
         "default": "./dist/validators/*.mjs"
       }
-    },
-    "./utils/*": {
-      "require": {
-        "types": "./dist/exports/*.d.cts",
-        "default": "./dist/exports/*.cjs"
-      },
-      "import": {
-        "types": "./dist/exports/*.d.mts",
-        "default": "./dist/exports/*.mjs"
-      }
     }
   },
   "version": "0.0.0",

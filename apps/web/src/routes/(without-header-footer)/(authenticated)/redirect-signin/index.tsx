@@ -53,41 +53,76 @@ export const Route = createFileRoute(
   },
 
   /**
-   * Validates the incoming search parameters before
-   * the route guard executes.
+   * Validates and parses the query parameters used during the
+   * post-authentication redirect flow.
+   *
+   * Supported parameters include:
+   *
+   * - `referralCode` — preserves a referral code when redirecting
+   *   a newly authenticated user to the onboarding flow.
+   * - `redirectUrl` — specifies the destination after authentication
+   *   and user initialization.
    */
   validateSearch: zodValidator(signinPageSearchParams),
 
   /**
-   * ## Route Guard
+   * Performs the post-authentication routing and user initialization.
    *
-   * This is a redirect-only route and is never intended to render UI.
-   * Its sole responsibility is to determine the user's final destination
-   * based on their authentication and onboarding state.
+   * This route acts as a redirect controller rather than a page.
+   * It determines whether the authenticated user has already had their
+   * application-level profile initialized and redirects them accordingly.
    *
-   * Flow:
-   * 1. No active session -> Redirect to the sign-in page.
-   * 2. Authenticated but onboarding incomplete -> Redirect to /welcome.
-   * 3. Authenticated and onboarding complete -> Allow navigation to continue.
+   * ## Flow
+   *
+   * 1. Read the application user details from the user-details cookie.
+   * 2. If the cookie is missing, retrieve the user's application profile
+   *    using the authenticated session email.
+   * 3. If no application profile exists, redirect the user to `/welcome`
+   *    and preserve the referral code.
+   * 4. If the profile exists, populate the user-details cookie.
+   * 5. Redirect the user to the requested `redirectUrl`, or `/dashboard`
+   *    when no destination was provided.
+   *
+   * The session itself is provided by the route context and represents
+   * the authentication state established by the authentication system.
    */
   beforeLoad: async ({ search: { referralCode, redirectUrl }, context }) => {
-    // Check whether the user has an active session.
+    /**
+     * The authenticated session is supplied by the router context.
+     * The user-details cookie contains the application's cached
+     * user profile information.
+     */
     const session = context.session;
     const userDetailsFromCookie = await fetchUserDetailsCookie();
 
+    /**
+     * The application user profile has not yet been cached locally.
+     * Resolve it from the authenticated user's email and initialize
+     * the user-details cookie.
+     */
     if (!userDetailsFromCookie) {
       const {
         user: { email },
       } = session;
 
-      // Verify that the authenticated user has completed
-      // the application's onboarding/profile creation.
+      /**
+       * Look up the application's user record.
+       *
+       * An authenticated Better Auth user may not necessarily have
+       * a corresponding application-level user/profile record yet.
+       */
       const userDetails = await serverFn__readOneUser({
-        data: { identifier: { email } },
+        data: {
+          identifier: { email },
+        },
       });
 
-      // Authenticated but onboarding is incomplete.
-      // Forward the referral code so onboarding can continue.
+      /**
+       * No application profile exists yet.
+       *
+       * Redirect the authenticated user to onboarding and preserve
+       * the referral code so it can be processed during registration.
+       */
       if (!userDetails) {
         throw redirect({
           to: "/welcome",
@@ -95,6 +130,11 @@ export const Route = createFileRoute(
         });
       }
 
+      /**
+       * Cache the application-level user information in a cookie so
+       * subsequent authenticated navigation does not need to resolve
+       * the user profile again.
+       */
       const { age, avatarUrl, fullName, phoneNumber, role, id } = userDetails;
 
       await setUserDetailsCookie({
@@ -109,6 +149,12 @@ export const Route = createFileRoute(
         },
       });
 
+      /**
+       * Redirect the user to the originally requested destination.
+       *
+       * Falls back to the dashboard when no explicit redirect URL
+       * was supplied.
+       */
       throw redirect({
         href:
           redirectUrl ??

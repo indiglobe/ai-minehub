@@ -1,6 +1,6 @@
 import { db } from "@/index";
 import { Table__Rating, Table__User } from "@/schema";
-import { and, count, eq, getTableColumns, sql, SQL } from "drizzle-orm";
+import { and, count, eq, getTableColumns, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
@@ -17,17 +17,6 @@ type TRead__AllRatings = {
     skip?: number;
     limit?: number;
   };
-
-  joiningOptions?: Partial<{
-    user: true;
-  }>;
-
-  selectedFields?: Partial<
-    Record<keyof typeof Table__Rating.$inferSelect, true>
-  > &
-    Partial<{
-      user: Partial<Record<keyof typeof Table__User.$inferSelect, true>>;
-    }>;
 };
 
 /**
@@ -46,83 +35,24 @@ const read__AllRatings = async (options?: TRead__AllRatings) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
-  const ratingColumns = getTableColumns(Table__Rating);
-  const userColumns = getTableColumns(Table__User);
-
   const conditions: SQL[] = [];
 
   if (options?.identifier?.ratingStar) {
-    conditions.push(eq(Table__Rating.ratingStar, options.identifier.ratingStar));
+    conditions.push(
+      eq(Table__Rating.ratingStar, options.identifier.ratingStar),
+    );
   }
 
-  const filteredRatingFields = options?.selectedFields
-    ? (Object.fromEntries(
-        Object.entries(options.selectedFields)
-          .filter(
-            ([key, value]) =>
-              key in ratingColumns && typeof value === "boolean" && value,
-          )
-          .map(([key]) => [
-            key,
-            ratingColumns[key as keyof typeof ratingColumns],
-          ]),
-      ) as typeof ratingColumns)
-    : ratingColumns;
-
-  const filteredUsersFields =
-    options?.joiningOptions?.user && options.selectedFields?.user
-      ? (Object.fromEntries(
-          Object.entries(options.selectedFields.user)
-            .filter(
-              ([key, value]) =>
-                key in userColumns && typeof value === "boolean" && value,
-            )
-            .map(([key]) => [
-              key,
-              userColumns[key as keyof typeof userColumns],
-            ]),
-        ) as typeof userColumns)
-      : options?.joiningOptions?.user && !options.selectedFields
-        ? userColumns
-        : undefined;
-
-  const selectedQueryFields = {
-    ...filteredRatingFields,
-
-    ...(filteredUsersFields && options?.joiningOptions?.user
-      ? {
-          user: {
-            ...filteredUsersFields,
-          },
-        }
-      : {}),
-  };
-
-  const baseQuery = db
-    .select(selectedQueryFields)
-    .from(Table__Rating)
-    .limit(limit)
-    .offset(skip);
+  const baseQuery = db.select().from(Table__Rating).limit(limit).offset(skip);
 
   if (conditions.length > 0) {
     baseQuery.where(and(...conditions));
-  }
-
-  if (options?.joiningOptions?.user) {
-    baseQuery.leftJoin(Table__User, eq(Table__User.id, Table__Rating.associatedUser));
   }
 
   const dbResponse = await baseQuery;
 
   return dbResponse;
 };
-
-type TRead__RatingStats = Partial<{
-  selectedFields?: Partial<{
-    user: Partial<Record<keyof typeof Table__User.$inferSelect, true>>;
-    rating: Partial<Record<keyof typeof Table__Rating.$inferSelect, true>>;
-  }>;
-}>;
 
 /**
  * Fetch aggregated rating statistics grouped by rating star.
@@ -134,74 +64,14 @@ type TRead__RatingStats = Partial<{
  * @param options.joinOptions.user - Include related user details in response
  * @returns Array of grouped rating statistics with optional JSON details
  */
-const read__RatingStats = async (options?: TRead__RatingStats) => {
+const read__RatingStats = async () => {
   const ratingColumns = getTableColumns(Table__Rating);
   const userColumns = getTableColumns(Table__User);
-
-  const targetUserFields = options?.selectedFields?.user
-    ? Object.entries(options?.selectedFields.user)
-        .filter(
-          ([key, value]) =>
-            key in userColumns && typeof value === "boolean" && value,
-        )
-        .map(([key]) => key)
-    : [];
-
-  const userJsonObjectArgs: SQL[] = [];
-  if (targetUserFields.length > 0) {
-    for (const key of targetUserFields) {
-      const column = userColumns[key as keyof typeof userColumns];
-      userJsonObjectArgs.push(sql`${key}`);
-      userJsonObjectArgs.push(sql`${column}`);
-    }
-  }
-
-  const targetRatingFields = options?.selectedFields?.rating
-    ? Object.entries(options?.selectedFields.rating)
-        .filter(
-          ([key, value]) =>
-            key in ratingColumns && typeof value === "boolean" && value,
-        )
-        .map(([key]) => key)
-    : [];
-
-  const ratingJsonObjectArgs: SQL[] = [];
-  if (targetRatingFields.length > 0) {
-    for (const key of targetRatingFields) {
-      const column = ratingColumns[key as keyof typeof ratingColumns];
-      ratingJsonObjectArgs.push(sql`${key}`);
-      ratingJsonObjectArgs.push(sql`${column}`);
-    }
-  }
-
-  const filteredSelectedFields = {
-    ...(options?.selectedFields?.user
-      ? {
-          users:
-            userJsonObjectArgs.length > 0
-              ? sql<
-                  (typeof userColumns)[]
-                >`COALESCE(JSON_ARRAYAGG(JSON_OBJECT(${sql.join(userJsonObjectArgs, sql`, `)})), JSON_ARRAY())`
-              : sql<(typeof userColumns)[]>`JSON_ARRAY()`,
-        }
-      : {}),
-    ...(options?.selectedFields?.rating
-      ? {
-          ratings:
-            ratingJsonObjectArgs.length > 0
-              ? sql<
-                  (typeof Table__Rating.$inferSelect)[]
-                >`COALESCE(JSON_ARRAYAGG(JSON_OBJECT(${sql.join(ratingJsonObjectArgs, sql`, `)})), JSON_ARRAY())`
-              : sql<(typeof Table__Rating.$inferSelect)[]>`JSON_ARRAY()`,
-        }
-      : {}),
-  };
 
   const dbResponse = await db
     .select({
       ratingStarType: Table__Rating.ratingStar,
       total: count(Table__Rating.id),
-      ...filteredSelectedFields,
     })
     .from(Table__Rating)
     .innerJoin(Table__User, eq(userColumns.id, ratingColumns.associatedUser))
