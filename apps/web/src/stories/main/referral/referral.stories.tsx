@@ -3,13 +3,13 @@ import type {
   TypedStoryOptions,
 } from "@/integrations/storybook/sb.types";
 import type { Meta, StoryObj } from "@storybook/tanstack-react";
-import { Route } from "@/routes/(without-header-footer)/(authenticated)/(existing-user)/referral";
+import { Route } from "@/routes/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral";
 import {
   Referral,
   ReferralStats,
   ReferralCode,
   YourReferrals,
-} from "@/components/main/referral/referral";
+} from "@/components/main/dashboard-groups/user-dashboard/referral/referral";
 import type { fetchUserDetailsCookie } from "@/lib/auth/session";
 import type { DeepPartial } from "@/utils/types/storybook";
 import { mocked } from "storybook/test";

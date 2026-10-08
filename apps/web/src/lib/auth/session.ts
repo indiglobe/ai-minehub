@@ -49,11 +49,11 @@ export const fetchUserDetailsCookie = createServerFn().handler(async () => {
 
   if (!cookie) return null;
 
-  const [err, data] = await tryCatch(verifyJWT(cookie));
+  const [jwtVerificationError, jwtData] = await tryCatch(verifyJWT(cookie));
 
-  if (err) return null;
+  if (jwtVerificationError) return null;
 
-  const { age, avatarUrl, email, fullName, phone, role, userId } = data;
+  const { age, avatarUrl, email, fullName, phone, role, userId } = jwtData;
 
   return { age, avatarUrl, email, fullName, phone, role, userId };
 });

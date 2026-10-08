@@ -1,4 +1,4 @@
-import { read__AllMiningProfiles } from "@repo/data/querries/mining-profile";
+import { read__AllMiningProfiles, } from "@repo/data/querries/mining-profile";
 import { read__AllMiningProfilesSchema } from "@repo/data/validators/mining-profile";
 import { createServerFn } from "@tanstack/react-start";
 

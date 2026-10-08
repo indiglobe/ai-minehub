@@ -10,7 +10,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "lint:staged": "turbo run lint:staged",
-    "ui": "turbo devtools --port 8520",
+    "turbo:ui": "turbo devtools --port 8520",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {

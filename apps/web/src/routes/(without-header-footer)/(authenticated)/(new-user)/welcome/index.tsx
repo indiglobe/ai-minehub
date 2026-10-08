@@ -1,6 +1,7 @@
 import { WelcomeComp } from "@/components/main/welcome/welcome";
 import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { welcomePageSearchParams } from "@/utils/zod-schema/search-params-schema/welcome-page";
+import { env } from "@repo/env/client";
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 
@@ -8,6 +9,46 @@ export const Route = createFileRoute(
   "/(without-header-footer)/(authenticated)/(new-user)/welcome/",
 )({
   component: RouteComponent,
+
+  head: () => {
+    const title = "Welcome | AI Minehub";
+    const description =
+      "Welcome to AI Minehub. Complete your account setup and get started with your AI-powered mining experience.";
+
+    return {
+      meta: [
+        { title },
+        {
+          name: "description",
+          content: description,
+        },
+        {
+          name: "twitter:title",
+          content: title,
+        },
+        {
+          name: "og:title",
+          content: title,
+        },
+        {
+          name: "twitter:description",
+          content: description,
+        },
+        {
+          name: "og:description",
+          content: description,
+        },
+        {
+          name: "twitter:url",
+          content: `${env.VITE_WEB_APP_HOST}/welcome`,
+        },
+        {
+          name: "og:url",
+          content: `${env.VITE_WEB_APP_HOST}/welcome`,
+        },
+      ],
+    };
+  },
 
   /**
    * Search Params Validation

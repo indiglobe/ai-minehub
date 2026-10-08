@@ -8,12 +8,12 @@ export default defineConfig({
       execute: "node dist/server/index.mjs",
       envFile: ".env.production",
     },
-    "build:app": {
+    build: {
       execute: "vite build",
       envFile: ".env.production",
     },
-    "dev:app": {
-      execute: "vite dev",
+    dev: {
+      execute: "vite dev --open",
       envFile:
         env.PLATFORM === "devcontainer"
           ? ".env.devcontainer"

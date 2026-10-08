@@ -7,7 +7,7 @@ export function mocked__serverFn__readAllMiningOrders() {
       id: "00dca7d23c",
       orderedBy: "452291a6cb",
       amountInvested: 207,
-      amountRecived: null,
+      amountReceived: null,
       miningProfileUsed: "e88c4f9025",
       miningStatus: "active",
       createdAt: "2026-08-20 21:25:52.830000",
@@ -25,7 +25,7 @@ export function mocked__serverFn__readAllMiningOrders() {
         updatedAt: "2026-08-20 21:25:52.595000",
         tableIdentifierToken: "MPRO",
       },
-      user: {
+      users: {
         id: "452291a6cb",
         email: "patti-nicolas-51@email.com",
         fullName: "Patti Nicolas",
@@ -44,7 +44,7 @@ export function mocked__serverFn__readAllMiningOrders() {
       id: "05a9f39984",
       orderedBy: "b88c637f66",
       amountInvested: 219,
-      amountRecived: null,
+      amountReceived: null,
       miningProfileUsed: "e88c4f9025",
       miningStatus: "active",
       createdAt: "2026-08-20 21:25:52.830000",
@@ -62,7 +62,7 @@ export function mocked__serverFn__readAllMiningOrders() {
         updatedAt: "2026-08-20 21:25:52.595000",
         tableIdentifierToken: "MPRO",
       },
-      user: {
+      users: {
         id: "b88c637f66",
         email: "josh-ruecker-hartmann-153@email.com",
         fullName: "Josh Ruecker-Hartmann",
@@ -81,7 +81,7 @@ export function mocked__serverFn__readAllMiningOrders() {
       id: "0a9679782a",
       orderedBy: "435fd9ffcc",
       amountInvested: 287,
-      amountRecived: 284,
+      amountReceived: 284,
       miningProfileUsed: "e88c4f9025",
       miningStatus: "completed",
       createdAt: "2026-08-20 21:25:52.830000",
@@ -99,7 +99,7 @@ export function mocked__serverFn__readAllMiningOrders() {
         updatedAt: "2026-08-20 21:25:52.595000",
         tableIdentifierToken: "MPRO",
       },
-      user: {
+      users: {
         id: "435fd9ffcc",
         email: "mr.-jermaine-kozey-50@email.com",
         fullName: "Mr. Jermaine Kozey",
@@ -117,7 +117,7 @@ export function mocked__serverFn__readAllMiningOrders() {
       id: "0b128e2ea8",
       orderedBy: "8985ac7b77",
       amountInvested: 188,
-      amountRecived: null,
+      amountReceived: null,
       miningProfileUsed: "4b90040464",
       miningStatus: "active",
       createdAt: "2026-08-20 21:25:52.830000",
@@ -135,7 +135,7 @@ export function mocked__serverFn__readAllMiningOrders() {
         updatedAt: "2026-08-20 21:25:52.595000",
         tableIdentifierToken: "MPRO",
       },
-      user: {
+      users: {
         id: "8985ac7b77",
         email: "robert-braun-iv-12@email.com",
         fullName: "Robert Braun IV",

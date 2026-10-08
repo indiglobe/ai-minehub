@@ -1,4 +1,5 @@
 import z from "zod";
+import {ROLE} from '@repo/utils/db-enums'
 
 export const userDetailsCookieSchema = z.object({
   userId: z.string(),
@@ -6,7 +7,7 @@ export const userDetailsCookieSchema = z.object({
   fullName: z.string(),
   avatarUrl: z.string(),
   age: z.number(),
-  role: z.enum(["basic", "admin"]),
+  role: z.enum(ROLE),
   phone: z.string(),
 });
 

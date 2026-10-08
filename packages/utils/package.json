@@ -1,9 +1,9 @@
 {
   "name": "@repo/utils",
   "scripts": {
+    "build": "pkgroll",
     "dev": "pkgroll --watch",
     "prebuild": "rimraf ./dist",
-    "build": "pkgroll",
     "lint": "eslint",
     "format": "prettier --write **/* ",
     "lint:staged": "lint-staged",
@@ -78,6 +78,16 @@
       "import": {
         "types": "./dist/date/index.d.mts",
         "default": "./dist/date/index.mjs"
+      }
+    },
+    "./db-enums": {
+      "require": {
+        "types": "./dist/db-enums/index.d.cts",
+        "default": "./dist/db-enums/index.cjs"
+      },
+      "import": {
+        "types": "./dist/db-enums/index.d.mts",
+        "default": "./dist/db-enums/index.mjs"
       }
     },
     "./zod-schema/*": {

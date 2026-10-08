@@ -28,11 +28,23 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         title: "AI Minehub",
       },
+      {
+        name: "twitter:image",
+        content: "/SEO-logo.png",
+      },
+      {
+        name: "og:image",
+        content: "/SEO-logo.png",
+      },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        href: "/favicon.ico",
       },
       {
         rel: "preconnect",
@@ -52,9 +64,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
   shellComponent: RootDocument,
 
-  notFoundComponent: RootNotFound,
+  notFoundComponent: () => <RootNotFound />,
 
-  errorComponent: RootError,
+  errorComponent: ({ error }) => <RootError error={error} />,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {

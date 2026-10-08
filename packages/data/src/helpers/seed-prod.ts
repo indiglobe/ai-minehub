@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { db } from "@/index";
 import {
-  UserTable,
-  MiningWalletTable,
-  TradingWalletTable,
-  RatingTable,
-  NewsTable,
+  Table__User,
+  Table__MiningWallet,
+  Table__TradingWallet,
+  Table__Rating,
+  Table__News,
 } from "@/schema";
 
 /* -------------------------------------------------------- */
@@ -27,24 +27,24 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
-  await db.delete(NewsTable);
-  await db.delete(RatingTable);
-  await db.delete(MiningWalletTable);
-  await db.delete(TradingWalletTable);
-  await db.delete(UserTable);
+  await db.delete(Table__News);
+  await db.delete(Table__Rating);
+  await db.delete(Table__MiningWallet);
+  await db.delete(Table__TradingWallet);
+  await db.delete(Table__User);
 
   console.log("✅ Tables cleared");
 }
 
 /* -------------------------------------------------------- */
-/*                         UserTable                        */
+/*                         Table__User                        */
 /* -------------------------------------------------------- */
 
 async function seedUsers() {
-  console.log("🔃 Seeding UserTable...");
+  console.log("🔃 Seeding Table__User...");
 
   const __dummyUsers = Array.from({ length: 180 }).map<
-    typeof UserTable.$inferInsert
+    typeof Table__User.$inferInsert
   >((_, idx) => {
     const fullName = faker.person.fullName();
 
@@ -57,11 +57,11 @@ async function seedUsers() {
     };
   });
 
-  await db.insert(UserTable).values([...__dummyUsers]);
+  await db.insert(Table__User).values([...__dummyUsers]);
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
-  const updatedUsers = users.map<typeof UserTable.$inferInsert>((u) => {
+  const updatedUsers = users.map<typeof Table__User.$inferInsert>((u) => {
     return {
       ...u,
       referrerId:
@@ -71,91 +71,91 @@ async function seedUsers() {
     };
   });
 
-  await db.delete(UserTable);
+  await db.delete(Table__User);
 
-  await db.insert(UserTable).values([...updatedUsers]);
+  await db.insert(Table__User).values([...updatedUsers]);
 
-  console.log("✅ UserTable seeded");
+  console.log("✅ Table__User seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    TradingWalletTable                    */
+/*                    Table__TradingWallet                    */
 /* -------------------------------------------------------- */
 
 async function seedTradingWallet() {
-  console.log("🔃 Seeding TradingWalletTable...");
+  console.log("🔃 Seeding Table__TradingWallet...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyTradingWallet = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof MiningWalletTable.$inferInsert>((u) => {
+    .map<typeof Table__MiningWallet.$inferInsert>((u) => {
       return {
         balance: Math.random() * 90000,
         associatedUser: u.id,
       };
     });
 
-  await db.insert(TradingWalletTable).values([...__dummyTradingWallet]);
+  await db.insert(Table__TradingWallet).values([...__dummyTradingWallet]);
 
-  console.log("✅ TradingWalletTable seeded");
+  console.log("✅ Table__TradingWallet seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    TradingWalletTable                    */
+/*                    Table__TradingWallet                    */
 /* -------------------------------------------------------- */
 
 async function seedMiningWallet() {
-  console.log("🔃 Seeding TradingWalletTable...");
+  console.log("🔃 Seeding Table__TradingWallet...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyMiningWallet = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof MiningWalletTable.$inferInsert>((u) => {
+    .map<typeof Table__MiningWallet.$inferInsert>((u) => {
       return {
         balance: Math.random() * 90000,
         associatedUser: u.id,
       };
     });
 
-  await db.insert(MiningWalletTable).values([...__dummyMiningWallet]);
+  await db.insert(Table__MiningWallet).values([...__dummyMiningWallet]);
 
-  console.log("✅ TradingWalletTable seeded");
+  console.log("✅ Table__TradingWallet seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    RatingTable                    */
+/*                    Table__Rating                    */
 /* -------------------------------------------------------- */
 
 async function seedRating() {
-  console.log("🔃 Seeding RatingTable...");
+  console.log("🔃 Seeding Table__Rating...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyRating = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof RatingTable.$inferInsert>((u) => {
+    .map<typeof Table__Rating.$inferInsert>((u) => {
       return {
         associatedUser: u.id,
         ratingStar: randomInt(1, 5),
       };
     });
 
-  await db.insert(RatingTable).values([...__dummyRating]);
+  await db.insert(Table__Rating).values([...__dummyRating]);
 
-  console.log("✅ RatingTable seeded");
+  console.log("✅ Table__Rating seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    NewsTable                    */
+/*                    Table__News                    */
 /* -------------------------------------------------------- */
 
 async function seedNews() {
-  console.log("🔃 Seeding NewsTable...");
+  console.log("🔃 Seeding Table__News...");
 
   const __dummyRating = Array.from({ length: 20 }).map<
-    typeof NewsTable.$inferInsert
+    typeof Table__News.$inferInsert
   >(() => {
     return {
       details: faker.lorem
@@ -167,9 +167,9 @@ async function seedNews() {
     };
   });
 
-  await db.insert(NewsTable).values([...__dummyRating]);
+  await db.insert(Table__News).values([...__dummyRating]);
 
-  console.log("✅ NewsTable seeded");
+  console.log("✅ Table__News seeded");
 }
 
 /* -------------------------------------------------------- */

@@ -4,6 +4,11 @@ import os from "node:os";
 export default defineConfig({
   envDir: "../../",
   scripts: {
+    "test:query": {
+      execute: "tsx watch ./src/helpers/test-query.ts",
+      envFile:
+        os.platform() === "linux" ? ".env.devcontainer" : ".env.development",
+    },
     test: {
       execute: "vitest",
     },

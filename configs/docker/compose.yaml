@@ -8,15 +8,13 @@ services:
   web:
     container_name: ai-minehub-web-app
     # pull_policy: "always"
-    image: "nirvikpurkait/ai-minehub/web-app"
+    image: "nirvikpurkait/ai-minehub-web-app"
     build:
       context: ../../
       dockerfile: apps/web/Dockerfile
       args:
         VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
         VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
-        VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
-
         BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
         BETTER_AUTH_URL: ${BETTER_AUTH_URL}
         GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -24,9 +22,10 @@ services:
         DATABASE_URL: ${DATABASE_URL}
         SOCKET_APP_HOST: ${SOCKET_APP_HOST}
         WEB_APP_HOST: ${WEB_APP_HOST}
-        RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
         TOKEN_SECRET: ${TOKEN_SECRET}
-        RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+        TURBO_TOKEN: ${TURBO_TOKEN}
+        TURBO_TEAM: ${TURBO_TEAM}
+
     env_file:
       - ../../.env.production.local
     ports:
@@ -44,8 +43,6 @@ services:
       args:
         VITE_SOCKET_APP_HOST: ${VITE_SOCKET_APP_HOST}
         VITE_WEB_APP_HOST: ${VITE_WEB_APP_HOST}
-        VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
-
         BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
         BETTER_AUTH_URL: ${BETTER_AUTH_URL}
         GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -53,9 +50,9 @@ services:
         DATABASE_URL: ${DATABASE_URL}
         SOCKET_APP_HOST: ${SOCKET_APP_HOST}
         WEB_APP_HOST: ${WEB_APP_HOST}
-        RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
         TOKEN_SECRET: ${TOKEN_SECRET}
-        RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+        TURBO_TOKEN: ${TURBO_TOKEN}
+        TURBO_TEAM: ${TURBO_TEAM}
     env_file:
       - ../../.env.production.local
     ports:

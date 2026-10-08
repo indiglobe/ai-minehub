@@ -1,8 +1,8 @@
 {
   "name": "web",
   "scripts": {
-    "dev": "tf run dev:app --open",
-    "build": "tf run build:app",
+    "dev": "tf dev",
+    "build": "tf build",
     "serve": "tf run serve:app",
     "preview": "vite preview",
     "gen:route": "tsr generate",

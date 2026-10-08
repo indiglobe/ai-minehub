@@ -161,6 +161,7 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
           phoneNumber: phoneNo.toString(),
           referrerId: referralCode.length > 0 ? referralCode : null,
           avatarUrl: avatarImageUrl,
+          role: "BASIC",
         },
       });
 

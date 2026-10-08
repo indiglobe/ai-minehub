@@ -1,14 +1,5 @@
 name: ai-minehub-dev
 
-# the ports are derived from this, for consistent accross projects
-# node -p "
-# const c = require('crypto');
-# const n = process.argv[1];
-# const h = c.createHash('sha256').update(n).digest().readUInt32BE(0);
-# 10000 + (h % 10000);
-# " \
-# container-name
-
 networks:
   ai-minehub-dev:
     driver: bridge
@@ -18,7 +9,6 @@ services:
     container_name: ai-minehub-dev-database
     image: mysql:8.4
     environment:
-      MYSQL_ROOT_USER: admin
       MYSQL_ROOT_PASSWORD: password
     ports:
       - 14015:3306
@@ -26,6 +16,7 @@ services:
       - ai-minehub-dev
     volumes:
       - database:/var/lib/mysql
+    restart: unless-stopped
 
   ai-minehub-dev-phpmyadmin:
     container_name: ai-minehub-dev-phpmyadmin
@@ -41,6 +32,7 @@ services:
       - ai-minehub-dev-database
     networks:
       - ai-minehub-dev
+    restart: unless-stopped
 
   ai-minehub-dev-proxy:
     container_name: ai-minehub-dev-proxy
@@ -55,21 +47,21 @@ services:
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
-  ai-minehub-dev-adguard:
-    container_name: ai-minehub-dev-adguardhome
-    image: adguard/adguardhome:edge
-    restart: unless-stopped
+  ai-minehub-dev-floci:
+    container_name: ai-minehub-dev-floci
+    image: floci/floci:nightly
     ports:
-      - "15042:3000/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "17910:4566"
+    volumes:
+      - floci-data:/var/lib/floci
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - FLOCI_LOG_LEVEL=info
+      - FLOCI_DATA_DIR=/var/lib/floci
     networks:
       - ai-minehub-dev
-    # volumes:
-    #   - adguard-work:/opt/adguardhome/work
-    #   - adguard-conf:/opt/adguardhome/conf
+    restart: unless-stopped
 
 volumes:
   database:
-  # adguard-work:
-  # adguard-conf:
+  floci-data:

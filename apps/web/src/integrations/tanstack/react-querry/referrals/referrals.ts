@@ -12,7 +12,7 @@ export function useFetchReferrals() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/referral/",
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
   });
 
   return useQuery(

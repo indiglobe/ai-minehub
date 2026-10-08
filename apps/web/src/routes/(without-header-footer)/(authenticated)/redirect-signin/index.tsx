@@ -12,6 +12,46 @@ import { zodValidator } from "@tanstack/zod-adapter";
 export const Route = createFileRoute(
   "/(without-header-footer)/(authenticated)/redirect-signin/",
 )({
+  head: () => {
+    const title = "Sign In | AI Minehub";
+    const description =
+      "Sign in to your AI Minehub account to access your dashboard, mining activities, wallet, referrals, and other account features.";
+
+    return {
+      meta: [
+        { title },
+        {
+          name: "description",
+          content: description,
+        },
+        {
+          name: "twitter:title",
+          content: title,
+        },
+        {
+          name: "og:title",
+          content: title,
+        },
+        {
+          name: "twitter:description",
+          content: description,
+        },
+        {
+          name: "og:description",
+          content: description,
+        },
+        {
+          name: "twitter:url",
+          content: `${env.VITE_WEB_APP_HOST}/redirect-signin`,
+        },
+        {
+          name: "og:url",
+          content: `${env.VITE_WEB_APP_HOST}/redirect-signin`,
+        },
+      ],
+    };
+  },
+
   /**
    * Validates the incoming search parameters before
    * the route guard executes.

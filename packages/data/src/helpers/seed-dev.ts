@@ -2,16 +2,22 @@ import { faker } from "@faker-js/faker";
 import { db } from "..";
 
 import {
-  UserTable,
-  MiningWalletTable,
-  TradingWalletTable,
-  RatingTable,
-  NewsTable,
-  MiningOrderTable,
-  MiningProfileTable,
-  TradingOrderTable,
-} from "../schema";
+  Table__User,
+  Table__MiningWallet,
+  Table__TradingWallet,
+  Table__Rating,
+  Table__News,
+  Table__MiningOrder,
+  Table__MiningProfile,
+  Table__TradingOrder,
+  Table__MiningWalletDeposits,
+  Table__MiningWalletWithdraw,
+  Table__TradingWalletDeposits,
+  Table__TradingWalletWithdraw,
+} from "@/schema";
 import { eq } from "drizzle-orm";
+import { id } from "@repo/utils/id";
+import { USER_STATUS } from "@/exports/enum";
 
 /* -------------------------------------------------------- */
 /*                          HELPERS                         */
@@ -32,27 +38,31 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
-  await db.delete(TradingOrderTable);
-  await db.delete(MiningOrderTable);
-  await db.delete(MiningProfileTable);
-  await db.delete(NewsTable);
-  await db.delete(RatingTable);
-  await db.delete(MiningWalletTable);
-  await db.delete(TradingWalletTable);
-  await db.delete(UserTable);
+  await db.delete(Table__MiningWalletDeposits);
+  await db.delete(Table__MiningWalletWithdraw);
+  await db.delete(Table__TradingWalletDeposits);
+  await db.delete(Table__TradingWalletWithdraw);
+  await db.delete(Table__TradingOrder);
+  await db.delete(Table__MiningOrder);
+  await db.delete(Table__MiningProfile);
+  await db.delete(Table__News);
+  await db.delete(Table__Rating);
+  await db.delete(Table__MiningWallet);
+  await db.delete(Table__TradingWallet);
+  await db.delete(Table__User);
 
   console.log("✅ Tables cleared");
 }
 
 /* -------------------------------------------------------- */
-/*                         UserTable                        */
+/*                         Table__User                        */
 /* -------------------------------------------------------- */
 
 async function seedUsers() {
-  console.log("🔃 Seeding UserTable...");
+  console.log("🔃 Seeding Table__User...");
 
   const __dummyUsers = Array.from({ length: 180 }).map<
-    typeof UserTable.$inferInsert
+    typeof Table__User.$inferInsert
   >((_, idx) => {
     const fullName = faker.person.fullName();
 
@@ -62,105 +72,106 @@ async function seedUsers() {
       email: `${fullName.toLowerCase().split(" ").join("-")}-${idx}@email.com`,
       phoneNumber: Math.floor(Math.random() * 10000000000).toString(),
       fullName,
+      userStatus: faker.helpers.arrayElement(USER_STATUS),
     };
   });
 
-  await db.insert(UserTable).values([...__dummyUsers]);
+  await db.insert(Table__User).values([...__dummyUsers]);
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   users.forEach(async (u) => {
     const randomSelectedUser = users[randomInt(0, users.length - 1)];
 
     if (randomSelectedUser && randomSelectedUser.id !== u.id) {
       await db
-        .update(UserTable)
+        .update(Table__User)
         .set({ referrerId: randomSelectedUser.id })
-        .where(eq(UserTable.id, u.id));
+        .where(eq(Table__User.id, u.id));
     }
   });
 
-  console.log("✅ UserTable seeded");
+  console.log("✅ Table__User seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    TradingWalletTable                    */
+/*                    Table__TradingWallet                    */
 /* -------------------------------------------------------- */
 
 async function seedTradingWallet() {
-  console.log("🔃 Seeding TradingWalletTable...");
+  console.log("🔃 Seeding Table__TradingWallet...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyTradingWallet = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof MiningWalletTable.$inferInsert>((u) => {
+    .map<typeof Table__MiningWallet.$inferInsert>((u) => {
       return {
         balance: Math.random() * 90000,
         associatedUser: u.id,
       };
     });
 
-  await db.insert(TradingWalletTable).values([...__dummyTradingWallet]);
+  await db.insert(Table__TradingWallet).values([...__dummyTradingWallet]);
 
-  console.log("✅ TradingWalletTable seeded");
+  console.log("✅ Table__TradingWallet seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    TradingWalletTable                    */
+/*                    Table__TradingWallet                    */
 /* -------------------------------------------------------- */
 
 async function seedMiningWallet() {
-  console.log("🔃 Seeding TradingWalletTable...");
+  console.log("🔃 Seeding Table__TradingWallet...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyMiningWallet = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof MiningWalletTable.$inferInsert>((u) => {
+    .map<typeof Table__MiningWallet.$inferInsert>((u) => {
       return {
         balance: Math.random() * 90000,
         associatedUser: u.id,
       };
     });
 
-  await db.insert(MiningWalletTable).values([...__dummyMiningWallet]);
+  await db.insert(Table__MiningWallet).values([...__dummyMiningWallet]);
 
-  console.log("✅ TradingWalletTable seeded");
+  console.log("✅ Table__TradingWallet seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    RatingTable                    */
+/*                    Table__Rating                    */
 /* -------------------------------------------------------- */
 
 async function seedRating() {
-  console.log("🔃 Seeding RatingTable...");
+  console.log("🔃 Seeding Table__Rating...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyRating = users
     .filter(() => Math.random() > 0.8)
-    .map<typeof RatingTable.$inferInsert>((u) => {
+    .map<typeof Table__Rating.$inferInsert>((u) => {
       return {
         associatedUser: u.id,
         ratingStar: randomInt(1, 5),
       };
     });
 
-  await db.insert(RatingTable).values([...__dummyRating]);
+  await db.insert(Table__Rating).values([...__dummyRating]);
 
-  console.log("✅ RatingTable seeded");
+  console.log("✅ Table__Rating seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    MiningProfileTable                    */
+/*                    Table__MiningProfile                    */
 /* -------------------------------------------------------- */
 
 async function seedMiningProfile() {
-  console.log("🔃 Seeding MiningProfileTable...");
+  console.log("🔃 Seeding Table__MiningProfile...");
 
   const __dummyMiningProfile = Array.from({ length: 4 }).map<
-    typeof MiningProfileTable.$inferInsert
+    typeof Table__MiningProfile.$inferInsert
   >(() => {
     const maximumAllowedAmount = randomInt(2, 5) * 100 - 1;
     return {
@@ -172,24 +183,24 @@ async function seedMiningProfile() {
     };
   });
 
-  await db.insert(MiningProfileTable).values([...__dummyMiningProfile]);
+  await db.insert(Table__MiningProfile).values([...__dummyMiningProfile]);
 
-  console.log("✅ MiningProfileTable seeded");
+  console.log("✅ Table__MiningProfile seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    MiningOrderTable                    */
+/*                    Table__MiningOrder                    */
 /* -------------------------------------------------------- */
 
 async function seedMiningOrder() {
-  console.log("🔃 Seeding MiningOrderTable...");
+  console.log("🔃 Seeding Table__MiningOrder...");
 
-  const miningProfile = await db.select().from(MiningProfileTable);
-  const users = await db.select().from(UserTable);
+  const miningProfile = await db.select().from(Table__MiningProfile);
+  const users = await db.select().from(Table__User);
 
   const __dummyMiningOrder = users
     .filter(() => Math.random() > 0.6)
-    .map<typeof MiningOrderTable.$inferInsert>((user) => {
+    .map<typeof Table__MiningOrder.$inferInsert>((user) => {
       const randomMiningProfile =
         miningProfile[randomInt(0, miningProfile.length - 1)]!;
 
@@ -204,25 +215,25 @@ async function seedMiningOrder() {
         amountInvested: amountInvested,
         miningProfileUsed: randomMiningProfile.id,
         orderedBy: user.id,
-        miningStatus: isCompleted ? "completed" : "active",
-        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+        miningStatus: isCompleted ? "COMPLETED" : "ACTIVE",
+        amountReceived: isCompleted ? amountInvested - randomInt(0, 5) : null,
       };
     });
 
-  await db.insert(MiningOrderTable).values([...__dummyMiningOrder]);
+  await db.insert(Table__MiningOrder).values([...__dummyMiningOrder]);
 
-  console.log("✅ MiningOrderTable seeded");
+  console.log("✅ Table__MiningOrder seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    NewsTable                    */
+/*                    Table__News                    */
 /* -------------------------------------------------------- */
 
 async function seedNews() {
-  console.log("🔃 Seeding NewsTable...");
+  console.log("🔃 Seeding Table__News...");
 
   const __dummyRating = Array.from({ length: 20 }).map<
-    typeof NewsTable.$inferInsert
+    typeof Table__News.$inferInsert
   >(() => {
     return {
       details: faker.lorem.paragraphs({ min: 3, max: 6 }, "\n\n"),
@@ -232,23 +243,23 @@ async function seedNews() {
     };
   });
 
-  await db.insert(NewsTable).values([...__dummyRating]);
+  await db.insert(Table__News).values([...__dummyRating]);
 
-  console.log("✅ NewsTable seeded");
+  console.log("✅ Table__News seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    TradingOrderTable                    */
+/*                    Table__TradingOrder                    */
 /* -------------------------------------------------------- */
 
 async function seedTradingOrder() {
-  console.log("🔃 Seeding TradingOrderTable...");
+  console.log("🔃 Seeding Table__TradingOrder...");
 
-  const users = await db.select().from(UserTable);
+  const users = await db.select().from(Table__User);
 
   const __dummyTradingOrder = users
     .filter(() => Math.random() > 0.6)
-    .map<typeof TradingOrderTable.$inferInsert>((user) => {
+    .map<typeof Table__TradingOrder.$inferInsert>((user) => {
       const isCompleted = Math.random() > 0.6;
 
       const amountInvested = randomInt(1000, 2000);
@@ -257,13 +268,172 @@ async function seedTradingOrder() {
         amountInvested: amountInvested,
         orderedBy: user.id,
         miningStatus: isCompleted ? "completed" : "active",
-        amountRecived: isCompleted ? amountInvested - randomInt(0, 5) : null,
+        amountReceived: isCompleted ? amountInvested - randomInt(0, 5) : null,
       };
     });
 
-  await db.insert(TradingOrderTable).values([...__dummyTradingOrder]);
+  await db.insert(Table__TradingOrder).values([...__dummyTradingOrder]);
 
-  console.log("✅ TradingOrderTable seeded");
+  console.log("✅ Table__TradingOrder seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    Table__TradingWalletDeposits                    */
+/* -------------------------------------------------------- */
+
+async function seedTradingWalletDeposits() {
+  console.log("🔃 Seeding Table__TradingWalletDeposits...");
+
+  const usersWithTradingWallet = await db
+    .select()
+    .from(Table__User)
+    .innerJoin(
+      Table__TradingWallet,
+      eq(Table__TradingWallet.associatedUser, Table__User.id),
+    );
+
+  const __dummyTradingWalletDeposits = usersWithTradingWallet.map<
+    typeof Table__TradingWalletDeposits.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      depositMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+      depositProof: faker.image.personPortrait(),
+      orderedBy: u.user.id,
+      transactionId: id({ length: 20 }),
+      wallet: u.trading_wallet.id,
+    };
+  }) satisfies (typeof Table__TradingWalletDeposits.$inferInsert)[];
+
+  await db
+    .insert(Table__TradingWalletDeposits)
+    .values([...__dummyTradingWalletDeposits]);
+
+  console.log("✅ Table__TradingWalletDeposits seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    Table__TradingWalletWithdraw                    */
+/* -------------------------------------------------------- */
+
+async function seedTradingWalletWithdraw() {
+  console.log("🔃 Seeding Table__TradingWalletWithdraw...");
+
+  const usersWithTradingWallet = await db
+    .select()
+    .from(Table__User)
+    .innerJoin(
+      Table__TradingWallet,
+      eq(Table__TradingWallet.associatedUser, Table__User.id),
+    );
+
+  const __dummyTradingWalletWithdraw = usersWithTradingWallet.map<
+    typeof Table__TradingWalletWithdraw.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      cryptoWaletAddress: id({ length: 20 }),
+      orderedBy: u.user.id,
+      wallet: u.trading_wallet.id,
+      withdrawlMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+    };
+  }) satisfies (typeof Table__TradingWalletWithdraw.$inferInsert)[];
+
+  await db
+    .insert(Table__TradingWalletWithdraw)
+    .values([...__dummyTradingWalletWithdraw]);
+
+  console.log("✅ Table__TradingWalletWithdraw seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    Table__TradingWalletDeposits            */
+/* -------------------------------------------------------- */
+
+async function seedMiningWalletDeposits() {
+  console.log("🔃 Seeding Table__MiningWalletDeposits...");
+
+  const usersWithMiningWallet = await db
+    .select()
+    .from(Table__User)
+    .innerJoin(
+      Table__MiningWallet,
+      eq(Table__MiningWallet.associatedUser, Table__User.id),
+    );
+
+  const __dummyMiningWalletDeposits = usersWithMiningWallet.map<
+    typeof Table__MiningWalletDeposits.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      depositMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+      depositProof: faker.image.personPortrait(),
+      orderedBy: u.user.id,
+      transactionId: id({ length: 20 }),
+      wallet: u.mining_wallet.id,
+    };
+  }) satisfies (typeof Table__MiningWalletDeposits.$inferInsert)[];
+
+  await db
+    .insert(Table__MiningWalletDeposits)
+    .values([...__dummyMiningWalletDeposits]);
+
+  console.log("✅ Table__MiningWalletDeposits seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                    Table__TradingWalletWithdraw                    */
+/* -------------------------------------------------------- */
+
+async function seedMiningWalletWithdraw() {
+  console.log("🔃 Seeding Table__MiningWalletWithdraw...");
+
+  const usersWithMiningWallet = await db
+    .select()
+    .from(Table__User)
+    .innerJoin(
+      Table__MiningWallet,
+      eq(Table__MiningWallet.associatedUser, Table__User.id),
+    );
+
+  const __dummyMiningWalletWithdraw = usersWithMiningWallet.map<
+    typeof Table__MiningWalletWithdraw.$inferInsert
+  >((u) => {
+    return {
+      amount: randomInt(200, 300),
+      cryptoWaletAddress: id({ length: 20 }),
+      orderedBy: u.user.id,
+      wallet: u.mining_wallet.id,
+      withdrawalMethod: faker.helpers.arrayElement([
+        "BSC",
+        "TRX",
+        "ETH",
+        "Bitcoin",
+      ]),
+      cryptoWalletAddress: id({ length: 20 }),
+    };
+  }) satisfies (typeof Table__MiningWalletWithdraw.$inferInsert)[];
+
+  await db
+    .insert(Table__MiningWalletWithdraw)
+    .values([...__dummyMiningWalletWithdraw]);
+
+  console.log("✅ Table__MiningWalletWithdraw seeded");
 }
 
 /* -------------------------------------------------------- */
@@ -284,6 +454,10 @@ export async function seed() {
     await seedMiningProfile();
     await seedMiningOrder();
     await seedTradingOrder();
+    await seedTradingWalletDeposits();
+    await seedTradingWalletWithdraw();
+    await seedMiningWalletDeposits();
+    await seedMiningWalletWithdraw();
 
     console.log("🎉 SEEDING COMPLETED");
 

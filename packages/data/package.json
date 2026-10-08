@@ -1,13 +1,14 @@
 {
   "name": "@repo/data",
   "scripts": {
+    "build": "pkgroll",
     "dev": "pkgroll --watch",
     "prebuild": "rimraf ./dist",
-    "build": "pkgroll",
     "format": "prettier --write **/* ",
     "lint:staged": "lint-staged",
     "lint": "eslint",
     "pretest": "tf run db:test",
+    "test:query": "tf run test:query",
     "test": "tf test",
     "test:watch": "tf run test:watch",
     "test:coverage": "tf run test:run --coverage",
@@ -85,6 +86,16 @@
       "import": {
         "types": "./dist/validators/*.d.mts",
         "default": "./dist/validators/*.mjs"
+      }
+    },
+    "./utils/*": {
+      "require": {
+        "types": "./dist/exports/*.d.cts",
+        "default": "./dist/exports/*.cjs"
+      },
+      "import": {
+        "types": "./dist/exports/*.d.mts",
+        "default": "./dist/exports/*.mjs"
       }
     }
   },

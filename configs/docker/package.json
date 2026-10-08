@@ -1,16 +1,10 @@
 {
   "name": "compose",
   "scripts": {
-    "build-run:web": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d --build web 2>&1 | tee docker-build-run.web.log",
-    "build-run:socket": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d --build socket 2>&1 | tee docker-build-run.socket.log",
-    "run:web": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d web 2>&1 | tee docker-run.web.log",
-    "run:socket": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d socket 2>&1 | tee docker-run.socket.log",
-    "run:web:local": "docker compose --env-file ../../.env.production.local -f ./compose.yaml up -d web 2>&1 | tee docker-run.web.log",
-    "run:socket:local": "docker compose --env-file ../../.env.production.local -f ./compose.yaml up -d socket 2>&1 | tee docker-run.socket.log",
+    "build-run:web": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d --build web 2>&1 | tee docker-build.web.log",
+    "build:web:nocache": "docker compose --env-file ../../.env.production -f ./compose.yaml build --no-cache web 2>&1 | tee docker-build.web.log",
     "build:web": "docker compose --env-file ../../.env.production -f ./compose.yaml build web 2>&1 | tee docker-build.web.log",
-    "build:socket": "docker compose --env-file ../../.env.production -f ./compose.yaml build socket 2>&1 | tee docker-build.socket.log",
-    "build:web:local": "docker compose --env-file ../../.env.production.local -f ./compose.yaml build web 2>&1 | tee docker-build.web.log",
-    "build:socket:local": "docker compose --env-file ../../.env.production.local -f ./compose.yaml build socket 2>&1 | tee docker-build.socket.log"
+    "run:web": "docker compose --env-file ../../.env.production -f ./compose.yaml up -d web"
   },
   "version": "0.0.0",
   "description": "",
