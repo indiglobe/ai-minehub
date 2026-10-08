@@ -1212,7 +1212,7 @@ export function PassiveIncomeSection({
             >
               {(allMiningOrders) => {
                 const activeMiners = allMiningOrders.filter(
-                  (miningOrder) => miningOrder.miningStatus === "active",
+                  (miningOrder) => miningOrder.miningStatus === "ACTIVE",
                 );
 
                 return (

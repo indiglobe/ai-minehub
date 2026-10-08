@@ -1,0 +1,1211 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "9fc67f8d-95a7-4a60-841a-c031cf7f9551",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "mining_order": {
+      "name": "mining_order",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount_invested": {
+          "name": "amount_invested",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount_received": {
+          "name": "amount_received",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mining_profile_used": {
+          "name": "mining_profile_used",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "investment_status": {
+          "name": "investment_status",
+          "type": "enum('ACTIVE','COMPLETED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'MORD'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mining_order_ordered_by_user_id_fk": {
+          "name": "mining_order_ordered_by_user_id_fk",
+          "tableFrom": "mining_order",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "mining_order_mining_profile_used_mining_profile_id_fk": {
+          "name": "mining_order_mining_profile_used_mining_profile_id_fk",
+          "tableFrom": "mining_order",
+          "tableTo": "mining_profile",
+          "columnsFrom": [
+            "mining_profile_used"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "mining_order_id": {
+          "name": "mining_order_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "mining_profile": {
+      "name": "mining_profile",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "maximum_allowed_amount": {
+          "name": "maximum_allowed_amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "minimum_allowed_amount": {
+          "name": "minimum_allowed_amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lockin_period": {
+          "name": "lockin_period",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "daily_return": {
+          "name": "daily_return",
+          "type": "float(2)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_popular": {
+          "name": "is_popular",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'MPRO'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "mining_profile_id": {
+          "name": "mining_profile_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "mining_wallet": {
+      "name": "mining_wallet",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "float(2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "associated_user": {
+          "name": "associated_user",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'MWAL'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mining_wallet_associated_user_user_id_fk": {
+          "name": "mining_wallet_associated_user_user_id_fk",
+          "tableFrom": "mining_wallet",
+          "tableTo": "user",
+          "columnsFrom": [
+            "associated_user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "mining_wallet_id": {
+          "name": "mining_wallet_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "mining_wallet_associated_user_unique": {
+          "name": "mining_wallet_associated_user_unique",
+          "columns": [
+            "associated_user"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "mining_wallet_deposits": {
+      "name": "mining_wallet_deposits",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deposit_status": {
+          "name": "deposit_status",
+          "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deposit_method": {
+          "name": "deposit_method",
+          "type": "enum('BSC','TRX','ETH','Bitcoin')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "varchar(127)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deposit_proof": {
+          "name": "deposit_proof",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'MWDP'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mining_wallet_deposits_ordered_by_user_id_fk": {
+          "name": "mining_wallet_deposits_ordered_by_user_id_fk",
+          "tableFrom": "mining_wallet_deposits",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "mining_wallet_deposits_wallet_mining_wallet_id_fk": {
+          "name": "mining_wallet_deposits_wallet_mining_wallet_id_fk",
+          "tableFrom": "mining_wallet_deposits",
+          "tableTo": "mining_wallet",
+          "columnsFrom": [
+            "wallet"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "mining_wallet_deposits_id": {
+          "name": "mining_wallet_deposits_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "mining_wallet_withdraw": {
+      "name": "mining_wallet_withdraw",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "crypto_wallet_address": {
+          "name": "crypto_wallet_address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "withdrawl_status": {
+          "name": "withdrawl_status",
+          "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "withdrawal_method": {
+          "name": "withdrawal_method",
+          "type": "enum('BSC','TRX','ETH','Bitcoin')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'MWWD'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mining_wallet_withdraw_ordered_by_user_id_fk": {
+          "name": "mining_wallet_withdraw_ordered_by_user_id_fk",
+          "tableFrom": "mining_wallet_withdraw",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "mining_wallet_withdraw_wallet_mining_wallet_id_fk": {
+          "name": "mining_wallet_withdraw_wallet_mining_wallet_id_fk",
+          "tableFrom": "mining_wallet_withdraw",
+          "tableTo": "mining_wallet",
+          "columnsFrom": [
+            "wallet"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "mining_wallet_withdraw_id": {
+          "name": "mining_wallet_withdraw_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "news": {
+      "name": "news",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "effective_date": {
+          "name": "effective_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "heading": {
+          "name": "heading",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "details": {
+          "name": "details",
+          "type": "varchar(1023)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'NEWS'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "news_id": {
+          "name": "news_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "rating": {
+      "name": "rating",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "associated_user": {
+          "name": "associated_user",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating_star_count": {
+          "name": "rating_star_count",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'RTNG'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "rating_associated_user_user_id_fk": {
+          "name": "rating_associated_user_user_id_fk",
+          "tableFrom": "rating",
+          "tableTo": "user",
+          "columnsFrom": [
+            "associated_user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "rating_id": {
+          "name": "rating_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "rating_associated_user_unique": {
+          "name": "rating_associated_user_unique",
+          "columns": [
+            "associated_user"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "trading_order": {
+      "name": "trading_order",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount_invested": {
+          "name": "amount_invested",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount_received": {
+          "name": "amount_received",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "investment_status": {
+          "name": "investment_status",
+          "type": "enum('ACTIVE','COMPLETED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'TORD'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "trading_order_ordered_by_user_id_fk": {
+          "name": "trading_order_ordered_by_user_id_fk",
+          "tableFrom": "trading_order",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "trading_order_id": {
+          "name": "trading_order_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "trading_wallet": {
+      "name": "trading_wallet",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "float(2)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "associated_user": {
+          "name": "associated_user",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'TWAL'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "trading_wallet_associated_user_user_id_fk": {
+          "name": "trading_wallet_associated_user_user_id_fk",
+          "tableFrom": "trading_wallet",
+          "tableTo": "user",
+          "columnsFrom": [
+            "associated_user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "trading_wallet_id": {
+          "name": "trading_wallet_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "trading_wallet_associated_user_unique": {
+          "name": "trading_wallet_associated_user_unique",
+          "columns": [
+            "associated_user"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "trading_wallet_deposits": {
+      "name": "trading_wallet_deposits",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deposit_status": {
+          "name": "deposit_status",
+          "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deposit_method": {
+          "name": "deposit_method",
+          "type": "enum('BSC','TRX','ETH','Bitcoin')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "varchar(127)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deposit_proof": {
+          "name": "deposit_proof",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'TWDP'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "trading_wallet_deposits_ordered_by_user_id_fk": {
+          "name": "trading_wallet_deposits_ordered_by_user_id_fk",
+          "tableFrom": "trading_wallet_deposits",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "trading_wallet_deposits_wallet_trading_wallet_id_fk": {
+          "name": "trading_wallet_deposits_wallet_trading_wallet_id_fk",
+          "tableFrom": "trading_wallet_deposits",
+          "tableTo": "trading_wallet",
+          "columnsFrom": [
+            "wallet"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "trading_wallet_deposits_id": {
+          "name": "trading_wallet_deposits_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "trading_wallet_withdraw": {
+      "name": "trading_wallet_withdraw",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ordered_by": {
+          "name": "ordered_by",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "crypto_walet_address": {
+          "name": "crypto_walet_address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "withdrawl_status": {
+          "name": "withdrawl_status",
+          "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "withdrawl_method": {
+          "name": "withdrawl_method",
+          "type": "enum('BSC','TRX','ETH','Bitcoin')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'TWWD'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "trading_wallet_withdraw_ordered_by_user_id_fk": {
+          "name": "trading_wallet_withdraw_ordered_by_user_id_fk",
+          "tableFrom": "trading_wallet_withdraw",
+          "tableTo": "user",
+          "columnsFrom": [
+            "ordered_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "trading_wallet_withdraw_wallet_trading_wallet_id_fk": {
+          "name": "trading_wallet_withdraw_wallet_trading_wallet_id_fk",
+          "tableFrom": "trading_wallet_withdraw",
+          "tableTo": "trading_wallet",
+          "columnsFrom": [
+            "wallet"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "trading_wallet_withdraw_id": {
+          "name": "trading_wallet_withdraw_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "user": {
+      "name": "user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "age": {
+          "name": "age",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "enum('ADMIN','BASIC')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "referrer_id": {
+          "name": "referrer_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_status": {
+          "name": "user_status",
+          "type": "enum('ACTIVE','INACTIVE','BLOCKED')",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'USER'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_referrer_id_fk": {
+          "name": "users_referrer_id_fk",
+          "tableFrom": "user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "referrer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_id": {
+          "name": "user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}

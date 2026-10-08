@@ -15,9 +15,6 @@ export const env = createEnv({
 
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
-
-    RAZOR_PAY_KEY: z.string(),
-    RAZOR_PAY_SECRET: z.string(),
     
     TOKEN_SECRET: z.string(),
   },

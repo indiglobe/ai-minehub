@@ -1,0 +1,58 @@
+name: Deploy Dockerized Web App (Main) to VPS
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "apps/web/**"
+      - "!apps/web/**/*.stories.*"
+      - "!apps/web/**/*.md"
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Log in to Docker Hub using PAT
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      # 3. Build and push Docker image with build-time environment variables
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-minehub-web:latest
+          file: ./apps/web/Dockerfile
+          build-args: |
+            VITE_SOCKET_APP_HOST=${{ secrets.VITE_SOCKET_APP_HOST }}
+            VITE_WEB_APP_HOST=${{ secrets.VITE_WEB_APP_HOST }}
+            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
+            BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            WEB_APP_HOST=${{ secrets.WEB_APP_HOST }}
+            SOCKET_APP_HOST=${{ secrets.SOCKET_APP_HOST }}
+            TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}
+
+            TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
+            TURBO_TEAM=${{ secrets.TURBO_TEAM }}
+
+      - name: Trigger Dockploy deployment
+        run: |
+          curl --fail-with-body \
+            -X POST \
+            "${{ secrets.DOCKPLOY_WEBHOOK_URL }}"

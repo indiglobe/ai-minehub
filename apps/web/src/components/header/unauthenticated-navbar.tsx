@@ -14,7 +14,6 @@ import {
 } from "@repo/ui/navigation-menu";
 import { useNavbarState } from "@/hooks/use-navstate";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { authClient } from "@/lib/auth/auth-client";
 import { useState } from "react";
 
 type NavItem =
@@ -338,17 +337,10 @@ function MobileNav() {
 }
 
 function MobileNavCTA() {
+  const { session } = useRouteContext({ from: "/(with-header-footer)" });
   const location = useLocation();
-  const { data, isPending } = authClient.useSession();
-  const { toggleNavBar } = useNavbarState();
 
-  if (isPending) {
-    return (
-      <Button variant="primary" corner="circle" className={cn(`mt-3 w-full`)}>
-        Loading...
-      </Button>
-    );
-  }
+  const { toggleNavBar } = useNavbarState();
 
   return (
     <Button
@@ -357,7 +349,7 @@ function MobileNavCTA() {
       corner="circle"
       className={cn(`mt-3 w-full`)}
     >
-      {data ? (
+      {session ? (
         <Link to="/dashboard" onClick={toggleNavBar}>
           Dashboard
         </Link>
