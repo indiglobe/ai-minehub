@@ -57,14 +57,8 @@ function RouteComponent() {
       <AuthenticatedHeader />
       <Main className={cn(`pb-20 md:pb-30 lg:pb-40`)}>
         <GreetSection />
-        {
-          role === 'admin' && 
-        <AdminRouteTabs />
-        }
-        {
-          role === 'basic' && 
-          <UserRouteTabs />
-        }
+        {role === "ADMIN" && <AdminRouteTabs />}
+        {role === "BASIC" && <UserRouteTabs />}
         <Outlet />
       </Main>
     </>

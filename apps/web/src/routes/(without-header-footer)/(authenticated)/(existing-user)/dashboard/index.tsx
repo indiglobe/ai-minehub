@@ -55,8 +55,8 @@ function RouteComponent() {
   } = Route.useRouteContext();
   return (
     <>
-      {role === "basic" && <UserDashboard />}
-      {role === "admin" && <AdminDashboard />}
+      {role === "ADMIN" && <AdminDashboard />}
+      {role === "BASIC" && <UserDashboard />}
     </>
   );
 }
