@@ -299,7 +299,7 @@ export function ActiveMiningSession({
                             `text-secondary-500 text-xl font-semibold`,
                           )}
                         >
-                          ₹ {activeSession.amountInvested}
+                          $ {activeSession.amountInvested}
                         </p>
                         <p className={cn(`text-foreground/50 text-xs`)}>
                           Amount Invested
@@ -311,7 +311,7 @@ export function ActiveMiningSession({
                             `text-secondary-500 text-xl font-semibold`,
                           )}
                         >
-                          ₹ {round(approxReturnTillToday, 2)}
+                          $ {round(approxReturnTillToday, 2)}
                         </p>
                         <p className={cn(`text-foreground/50 text-xs`)}>
                           Approx. Profit
@@ -463,7 +463,7 @@ export function RecentTransaction({
                               })}
                             >
                               {(type === "gain" || type === "receive") && "+"}
-                              {type === "spend" && "-"} ₹ {amount}
+                              {type === "spend" && "-"} $ {amount}
                             </span>
                             <span
                               className={cn(

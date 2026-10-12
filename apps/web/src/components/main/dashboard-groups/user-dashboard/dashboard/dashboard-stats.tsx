@@ -78,7 +78,7 @@ export function MiningWallet() {
       {miningWallet && (
         <>
           <StatCardData className={cn("text-secondary-500")}>
-            ₹ {miningWallet.balance}
+            $ {miningWallet.balance}
           </StatCardData>
 
           <StatCardFooter>Ready to mine</StatCardFooter>
@@ -150,7 +150,7 @@ export function TradingWallet() {
       {tradingwallet && (
         <>
           <StatCardData className={cn("text-accent-500")}>
-            ₹ {tradingwallet.balance}
+            $ {tradingwallet.balance}
           </StatCardData>
 
           <StatCardFooter>Trading fund</StatCardFooter>
@@ -198,7 +198,7 @@ export function InvestedAmount() {
       {investment && (
         <>
           <StatCardData className={cn("text-red-500")}>
-            ₹ {investment.investedAmount}
+            $ {investment.investedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount invested</StatCardFooter>
@@ -242,7 +242,7 @@ export function GainedAmount() {
       {investment && (
         <>
           <StatCardData className={cn("text-green-500")}>
-            ₹ {investment.gainedAmount}
+            $ {investment.gainedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount profit</StatCardFooter>

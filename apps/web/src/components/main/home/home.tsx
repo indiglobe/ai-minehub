@@ -1137,11 +1137,11 @@ export function PassiveIncomeSection({
 
                     <PassiveIncomeDescription>
                       <PassiveIncomeDescriptionItem>
-                        Min: ₹{minimumAllowedAmount}
+                        Min: ${minimumAllowedAmount}
                       </PassiveIncomeDescriptionItem>
 
                       <PassiveIncomeDescriptionItem>
-                        Max: ₹{maximumAllowedAmount}
+                        Max: ${maximumAllowedAmount}
                       </PassiveIncomeDescriptionItem>
 
                       <PassiveIncomeDescriptionItem>
@@ -1189,7 +1189,7 @@ export function PassiveIncomeSection({
 
                 return (
                   <>
-                    <span>₹{totalAmount}+</span>
+                    <span>${totalAmount}+</span>
                     <span>Total Mined</span>
                   </>
                 );
