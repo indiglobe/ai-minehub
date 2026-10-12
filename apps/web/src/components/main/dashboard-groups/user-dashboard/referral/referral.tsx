@@ -49,7 +49,7 @@ export function ReferralStats({
 
             {isError && <span className="text-foreground/50">error!!!</span>}
 
-            {data && <span>{data.referrals.length}</span>}
+            {data && <span>{data.length}</span>}
           </ReferralStatHeading>
 
           <ReferralStatDescription>Total Referrals</ReferralStatDescription>
@@ -65,7 +65,7 @@ export function ReferralStats({
 
             {isError && <span className="text-foreground/50">error!!!</span>}
 
-            {data && <span>${data.referrals.length * 10}</span>}
+            {data && <span>${data.length * 10}</span>}
           </ReferralStatHeading>
 
           <ReferralStatDescription>Referral Earnings</ReferralStatDescription>
@@ -261,12 +261,12 @@ export function HowItWorks({ className, ...props }: ComponentProps<"section">) {
             <div
               key={number}
               className={cn(
-                `flex min-h-97 flex-col items-center rounded-3xl border-secondary-900/80 border bg-[#0d1729] px-7 py-10 text-center transition-transform duration-300 hover:-translate-y-1 sm:min-h-95 xl:min-h-97`,
+                `border-secondary-900/80 flex min-h-97 flex-col items-center rounded-3xl border bg-[#0d1729] px-7 py-10 text-center transition-transform duration-300 hover:-translate-y-1 sm:min-h-95 xl:min-h-97`,
               )}
             >
               <div
                 className={cn(
-                  `flex size-14 shrink-0 items-center justify-center rounded-fulld bg-linear-to-br from-purple-500 to-purple-600d font-brand-primary text-2xl font-bold text-whited shadow-lg shadow-purple-500/10`,
+                  `rounded-fulld to-purple-600d font-brand-primary text-whited flex size-14 shrink-0 items-center justify-center bg-linear-to-br from-purple-500 text-2xl font-bold shadow-lg shadow-purple-500/10`,
                 )}
               >
                 {number}
@@ -293,7 +293,7 @@ export function HowItWorks({ className, ...props }: ComponentProps<"section">) {
 
                 <p
                   className={cn(
-                    `font-brand-primary mx-auto mt-3 max-w-55 text-foreground/50 text-base leading-7 font-medium`,
+                    `font-brand-primary text-foreground/50 mx-auto mt-3 max-w-55 text-base leading-7 font-medium`,
                   )}
                 >
                   {description}
@@ -365,7 +365,7 @@ export function YourReferrals({
 
       {data && (
         <>
-          {data.referrals.length === 0 && (
+          {data.length === 0 && (
             <div
               className={cn(
                 `mt-8 flex min-h-40 flex-col items-center justify-center rounded-xl border border-slate-700 bg-slate-900/30 px-6 text-center`,
@@ -380,7 +380,7 @@ export function YourReferrals({
               </p>
             </div>
           )}
-          {data.referrals.length > 0 && (
+          {data.length > 0 && (
             <div className={cn(`overflow-x-auto`)}>
               <Table
                 className={cn(
@@ -401,7 +401,7 @@ export function YourReferrals({
                 </Thead>
 
                 <Tbody className={cn(`*:even:bg-slate-800/30`)}>
-                  {data.referrals.map(({ avatarUrl, email, fullName, id }) => {
+                  {data.map(({ avatarUrl, email, fullName, id }) => {
                     return (
                       <Tr
                         key={id}
@@ -416,7 +416,7 @@ export function YourReferrals({
                             )}
                           >
                             <Image
-                              src={avatarUrl}
+                              src={`${avatarUrl ?? ""}`}
                               alt={`avatarImage of ${fullName}`}
                               layout="fullWidth"
                               className={cn(`absolute inset-0`)}

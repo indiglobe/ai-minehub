@@ -2,11 +2,13 @@ import {
   read__OneUser,
   read__AllUsers,
   create__User,
+  read__Referrals,
 } from "@repo/data/querries/user";
 import {
   read__OneUserSchema,
   create__UserSchema,
   read__AllUsersSchema,
+  read__ReferralsSchema,
 } from "@repo/data/validators/user";
 import { createServerFn } from "@tanstack/react-start";
 import { tryCatch } from "@repo/utils/try-catch";
@@ -48,6 +50,22 @@ export const serverFn__readAllUsers = createServerFn()
 
     if (serverFnError) {
       console.error(`Error in serverFnError in serverFn__readAllUsers`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
+
+export const serverFn__readReferrals = createServerFn()
+  .validator(read__ReferralsSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__Referrals(data),
+    );
+
+    if (serverFnError) {
+      console.error(`Error in serverFnError in serverFn__readReferrals`);
       console.error(serverFnError);
       throw serverFnError;
     }

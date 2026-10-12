@@ -4,10 +4,8 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { useServerFn } from "@tanstack/react-start";
 import { useRouteContext } from "@tanstack/react-router";
-import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import {
   serverFn__createMiningWallet,
   serverFn__readOneMiningWallet,
@@ -16,6 +14,7 @@ import {
   serverFn__createTradingWallet,
   serverFn__readOneTradingWallet,
 } from "@/integrations/server-function/trading-wallet";
+import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
 
 export type TRrecentTransactionsOptions = { userId: string };
@@ -32,7 +31,7 @@ export const querryKeys = {
 };
 
 export function useFetchActiveMiningSessions() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
 
   const {
     userDetailsFromCookie: { userId },
@@ -45,24 +44,11 @@ export function useFetchActiveMiningSessions() {
       queryKey: querryKeys.activeMinigSessions(),
 
       queryFn: () =>
-        readOneUser({
+        readAllMiningOrders({
           data: {
-            identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              miningOrders: true,
-            },
+            identifier: { userId: userId, miningStatus: "ACTIVE" },
           },
         }),
-
-      select: (data) => {
-        if (!data) return null;
-
-        const { miningOrders } = data;
-
-        return miningOrders.filter((orders) => orders.miningStatus === "");
-      },
     }),
   );
 }
@@ -285,16 +271,18 @@ export function useRecentTransactionsHistory() {
       queryKey: querryKeys.recentTransactions(),
 
       queryFn: async () => {
-        const tradingOrdersResult = await readAllTradingOrders({
-          data: {
-            identifier: { userId: userId },
-          },
-        });
-        const miningOrdersResult = await readAllMiningOrders({
-          data: {
-            identifier: { userId: userId },
-          },
-        });
+        const [miningOrdersResult, tradingOrdersResult] = await Promise.all([
+          readAllTradingOrders({
+            data: {
+              identifier: { userId: userId },
+            },
+          }),
+          readAllMiningOrders({
+            data: {
+              identifier: { userId: userId },
+            },
+          }),
+        ]);
 
         return { miningOrdersResult, tradingOrdersResult };
       },

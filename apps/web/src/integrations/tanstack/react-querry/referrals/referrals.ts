@@ -1,4 +1,4 @@
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readReferrals } from "@/integrations/server-function/user";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -8,9 +8,10 @@ export const querryKeys = {
 };
 
 export function useFetchReferrals() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
+  const readReferrals = useServerFn(serverFn__readReferrals);
+
   const {
-    userDetailsFromCookie: { userId },
+    userDetailsFromCookie: { email },
   } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
   });
@@ -20,14 +21,10 @@ export function useFetchReferrals() {
       queryKey: querryKeys.all(),
 
       queryFn: () =>
-        readOneUser({
+        readReferrals({
           data: {
             identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              referrals: true,
-              referredBy: true,
+              email,
             },
           },
         }),
