@@ -4,10 +4,8 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { useServerFn } from "@tanstack/react-start";
 import { useRouteContext } from "@tanstack/react-router";
-import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import {
   serverFn__createMiningWallet,
   serverFn__readOneMiningWallet,
@@ -16,6 +14,7 @@ import {
   serverFn__createTradingWallet,
   serverFn__readOneTradingWallet,
 } from "@/integrations/server-function/trading-wallet";
+import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
 import { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
 
 export type TRrecentTransactionsOptions = { userId: string };
@@ -32,7 +31,8 @@ export const querryKeys = {
 };
 
 export function useFetchActiveMiningSessions() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
@@ -44,112 +44,76 @@ export function useFetchActiveMiningSessions() {
       queryKey: querryKeys.activeMinigSessions(),
 
       queryFn: () =>
-        readOneUser({
+        readAllMiningOrders({
           data: {
-            identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              miningOrders: true,
-            },
+            identifier: { userId: userId, miningStatus: "ACTIVE" },
           },
         }),
-
-      select: (data) => {
-        if (!data) return null;
-
-        const { miningOrders } = data;
-
-        return miningOrders.filter(
-          (orders) => orders.miningStatus === "active",
-        );
-      },
     }),
   );
 }
 
 export function useInvestmentData() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+  const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
+
   return useQuery(
     queryOptions({
       queryKey: querryKeys.investmentDetails(),
 
       queryFn: async () => {
-        const result = await readOneUser({
-          data: {
-            identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              miningOrders: true,
-              tradingOrders: true,
-            },
-          },
-        });
+        const [allMiningOrders, allTradingOrders] = await Promise.all([
+          readAllMiningOrders({ data: { identifier: { userId } } }),
+          readAllTradingOrders({ data: { identifier: { userId } } }),
+        ]);
 
-        return result;
+        return { allMiningOrders, allTradingOrders };
       },
 
       select: (data) => {
-        type TOutput = {
-          activeInvestmentsCount: number;
-          investedAmount: number;
-          profitAmount: number;
-        };
-
-        let output: TOutput = {
-          activeInvestmentsCount: 0,
+        let output = {
           investedAmount: 0,
-          profitAmount: 0,
+          gainedAmount: 0,
+          activeInvestmentsCount: 0,
         };
 
-        data?.miningOrders.reduce((acc, curr) => {
-          if (curr.miningStatus === "active") {
+        data.allMiningOrders.forEach((miningOrder) => {
+          if (miningOrder.miningStatus === "COMPLETED") {
             output = {
-              ...acc,
-              activeInvestmentsCount: output.activeInvestmentsCount + 1,
+              ...output,
+              investedAmount:
+                output.investedAmount + miningOrder.amountInvested,
+              gainedAmount:
+                output.gainedAmount +
+                (miningOrder.amountReceived
+                  ? miningOrder.amountReceived - miningOrder.amountInvested
+                  : 0),
             };
           }
 
-          output = {
-            ...acc,
-            investedAmount: output.investedAmount + curr.amountInvested,
-            profitAmount:
-              output.profitAmount +
-              (curr.amountReceived === null || curr.amountReceived === 0
-                ? 0
-                : curr.amountReceived - curr.amountInvested),
-          };
-
-          return output;
-        }, output);
-
-        data?.tradingOrders.reduce((acc, curr) => {
-          if (curr.tradingStatus === "active") {
+          if (miningOrder.miningStatus === "ACTIVE") {
             output = {
-              ...acc,
+              ...output,
               activeInvestmentsCount: output.activeInvestmentsCount + 1,
             };
           }
+        });
 
-          output = {
-            ...acc,
-            investedAmount: output.investedAmount + curr.amountInvested,
-            profitAmount:
-              output.profitAmount +
-              (curr.amountReceived === null || curr.amountReceived === 0
-                ? 0
-                : curr.amountReceived - curr.amountInvested),
-          };
-
-          return output;
-        }, output);
+        data.allTradingOrders.forEach((tradingOrder) => {
+          if (tradingOrder.tradingStatus === "COMPLETED") {
+            output = {
+              ...output,
+              investedAmount:
+                output.investedAmount + tradingOrder.amountInvested,
+            };
+          }
+        });
 
         return output;
       },
@@ -172,7 +136,7 @@ export function useMiningOrdersData() {
       queryFn: async () => {
         const result = await readAllMiningOrders({
           data: {
-            identifier: { userId: userId, miningStatus: "active" },
+            identifier: { userId: userId, miningStatus: "ACTIVE" },
           },
         });
 
@@ -198,7 +162,7 @@ export function useFetchMiningWallet() {
         readOneMiningWallet({
           data: {
             identifier: {
-              associatedUser: userId,
+              associatedUserId: userId,
             },
           },
         }),
@@ -236,9 +200,7 @@ export function useFetchTradingWallet() {
       queryFn: () =>
         readOneTradingWallet({
           data: {
-            identifier: {
-              associatedUser: userId,
-            },
+            identifier: { associatedUserId: userId },
           },
         }),
     }),
@@ -309,16 +271,18 @@ export function useRecentTransactionsHistory() {
       queryKey: querryKeys.recentTransactions(),
 
       queryFn: async () => {
-        const tradingOrdersResult = await readAllTradingOrders({
-          data: {
-            identifier: { userId: userId },
-          },
-        });
-        const miningOrdersResult = await readAllMiningOrders({
-          data: {
-            identifier: { userId: userId },
-          },
-        });
+        const [miningOrdersResult, tradingOrdersResult] = await Promise.all([
+          readAllTradingOrders({
+            data: {
+              identifier: { userId: userId },
+            },
+          }),
+          readAllMiningOrders({
+            data: {
+              identifier: { userId: userId },
+            },
+          }),
+        ]);
 
         return { miningOrdersResult, tradingOrdersResult };
       },

@@ -1,6 +1,7 @@
 import { db } from "@/index";
-import { Table__TradingOrder, Table__User } from "@/schema";
-import { and, desc, eq, getTableColumns, SQL } from "drizzle-orm";
+import { Table__TradingOrder } from "@/schema";
+import { tryCatch } from "@repo/utils/try-catch";
+import { and, desc, eq, SQL } from "drizzle-orm";
 
 type TRead__AllTradingOrders = {
   identifier?: Partial<{
@@ -11,77 +12,22 @@ type TRead__AllTradingOrders = {
     skip?: number;
     limit?: number;
   };
-
-  joiningOptions?: Partial<{
-    user: true;
-  }>;
-
-  selectedFields?: Partial<
-    Record<keyof typeof Table__TradingOrder.$inferSelect, true>
-  > &
-    Partial<{
-      user: Partial<Record<keyof typeof Table__User.$inferSelect, true>>;
-    }>;
 };
 
 const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
 
-  const userColumns = getTableColumns(Table__User);
-  const tradingOrderColumns = getTableColumns(Table__TradingOrder);
-
   const conditions: SQL[] = [];
 
   if (options?.identifier?.userId) {
-    conditions.push(eq(Table__TradingOrder.orderedBy, options.identifier.userId));
+    conditions.push(
+      eq(Table__TradingOrder.orderedBy, options.identifier.userId),
+    );
   }
 
-  const filteredTradingTableFields = options?.selectedFields
-    ? (Object.fromEntries(
-        Object.entries(options.selectedFields)
-          .filter(
-            ([key, value]) =>
-              key in tradingOrderColumns && typeof value === "boolean" && value,
-          )
-          .map(([key]) => [
-            key,
-            tradingOrderColumns[key as keyof typeof tradingOrderColumns],
-          ]),
-      ) as typeof tradingOrderColumns)
-    : tradingOrderColumns;
-
-  const filteredUsersFields =
-    options?.joiningOptions?.user && options.selectedFields?.user
-      ? (Object.fromEntries(
-          Object.entries(options.selectedFields.user)
-            .filter(
-              ([key, value]) =>
-                key in userColumns && typeof value === "boolean" && value,
-            )
-            .map(([key]) => [
-              key,
-              userColumns[key as keyof typeof userColumns],
-            ]),
-        ) as typeof userColumns)
-      : options?.joiningOptions?.user && !options.selectedFields
-        ? userColumns
-        : undefined;
-
-  const selectedQueryFields = {
-    ...filteredTradingTableFields,
-
-    ...(filteredUsersFields && options?.joiningOptions?.user
-      ? {
-          users: {
-            ...filteredUsersFields,
-          },
-        }
-      : {}),
-  };
-
   const baseQuery = db
-    .select(selectedQueryFields)
+    .select()
     .from(Table__TradingOrder)
     .limit(limit)
     .offset(skip)
@@ -91,16 +37,17 @@ const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
     baseQuery.where(and(...conditions));
   }
 
-  if (options?.joiningOptions?.user) {
-    baseQuery.leftJoin(
-      Table__User,
-      eq(Table__User.id, Table__TradingOrder.orderedBy),
-    );
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in read__AllTradingOrders`);
+    console.error(queryOperationError);
+    throw queryOperationError;
   }
 
-  const dbResponse = await baseQuery;
+  const allTradingOrders = queryOperationResult;
 
-  return dbResponse;
+  return allTradingOrders;
 };
 
 /**

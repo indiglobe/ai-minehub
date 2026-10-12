@@ -1,8 +1,10 @@
 import z from "zod";
 
 export const create__TradingWalletSchema = z.object({
-  balance: z.number().nullish(),
-  associatedUser: z.string(),
+  dataToInsert: z.object({
+    balance: z.number().nullish(),
+    associatedUser: z.string(),
+  }),
 });
 
 export const read__AllTradingWalletsSchema = z
@@ -27,14 +29,9 @@ export const read__OneTradingWalletSchema = z.object({
       id: z.string(),
     }),
     z.object({
-      associatedUser: z.string(),
+      associatedUserId: z.string(),
     }),
   ]),
-  joinOptions: z
-    .object({
-      user: z.literal(true).optional(),
-    })
-    .optional(),
 });
 
 export const TUpdate__TradingWalletSchema = z.object({

@@ -66,7 +66,7 @@ export function MiningWallet() {
           onClick={() =>
             createMiningWallet({
               data: {
-                associatedUser: userDetailsFromCookie.userId,
+                dataToInsert: { associatedUser: userDetailsFromCookie.userId },
               },
             })
           }
@@ -78,7 +78,7 @@ export function MiningWallet() {
       {miningWallet && (
         <>
           <StatCardData className={cn("text-secondary-500")}>
-            ₹ {miningWallet.balance}
+            $ {miningWallet.balance}
           </StatCardData>
 
           <StatCardFooter>Ready to mine</StatCardFooter>
@@ -93,7 +93,7 @@ export function TradingWallet() {
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
-  const { mutate } = useCreateTradingWallet();
+  const { mutate: createTradingWallet } = useCreateTradingWallet();
   const { data: tradingwallet, isError, isLoading } = useFetchTradingWallet();
 
   return (
@@ -134,9 +134,11 @@ export function TradingWallet() {
           variant="accent"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
           onClick={() =>
-            mutate({
+            createTradingWallet({
               data: {
-                associatedUser: userDetailsFromCookie.userId,
+                dataToInsert: {
+                  associatedUser: userDetailsFromCookie.userId,
+                },
               },
             })
           }
@@ -148,7 +150,7 @@ export function TradingWallet() {
       {tradingwallet && (
         <>
           <StatCardData className={cn("text-accent-500")}>
-            ₹ {tradingwallet.balance}
+            $ {tradingwallet.balance}
           </StatCardData>
 
           <StatCardFooter>Trading fund</StatCardFooter>
@@ -196,7 +198,7 @@ export function InvestedAmount() {
       {investment && (
         <>
           <StatCardData className={cn("text-red-500")}>
-            ₹ {investment.investedAmount}
+            $ {investment.investedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount invested</StatCardFooter>
@@ -240,7 +242,7 @@ export function GainedAmount() {
       {investment && (
         <>
           <StatCardData className={cn("text-green-500")}>
-            ₹ {investment.profitAmount}
+            $ {investment.gainedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount profit</StatCardFooter>

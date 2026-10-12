@@ -163,11 +163,11 @@ export function AvailableMiningOptions({
 
                     <PassiveIncomeDescription>
                       <PassiveIncomeDescriptionItem>
-                        Min: ₹{minimumAllowedAmount}
+                        Min: ${minimumAllowedAmount}
                       </PassiveIncomeDescriptionItem>
 
                       <PassiveIncomeDescriptionItem>
-                        Max: ₹{maximumAllowedAmount}
+                        Max: ${maximumAllowedAmount}
                       </PassiveIncomeDescriptionItem>
 
                       <PassiveIncomeDescriptionItem>

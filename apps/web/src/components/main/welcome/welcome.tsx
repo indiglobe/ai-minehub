@@ -13,6 +13,7 @@ import { welcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welcome-fo
 import type { TWelcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welcome-form";
 import { useServerFn } from "@tanstack/react-start";
 import { formAction__createNewUser } from "@/integrations/form-actions/welcome-form.fa";
+import { tryCatch } from "@repo/utils/try-catch";
 
 export function WelcomeComp({ ...props }: ComponentProps<typeof Main>) {
   return (
@@ -153,19 +154,29 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
       // eslint-disable-next-line no-shadow
       const { age, email, name, phoneNo, referralCode, avatarImageUrl } = value;
 
-      await createNewUser({
-        data: {
-          age,
-          email,
-          fullName: name,
-          phoneNumber: phoneNo.toString(),
-          referrerId: referralCode.length > 0 ? referralCode : null,
-          avatarUrl: avatarImageUrl,
-          role: "BASIC",
-        },
-      });
+      const [fomSubmissionError, fomSubmissionResponse] = await tryCatch(
+        createNewUser({
+          data: {
+            age,
+            email,
+            fullName: name,
+            phoneNumber: phoneNo.toString(),
+            referrerId: referralCode.length > 0 ? referralCode : null,
+            avatarUrl: avatarImageUrl,
+            role: "BASIC",
+          },
+        }),
+      );
 
-      throw navigate({ to: "/dashboard" });
+      if (fomSubmissionError) {
+        console.error(`Error in fomSubmissionError in form submission`);
+        console.error(fomSubmissionError);
+        throw fomSubmissionError;
+      }
+
+      if (fomSubmissionResponse) {
+        throw navigate({ to: "/dashboard" });
+      }
     },
   });
 

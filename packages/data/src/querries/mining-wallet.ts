@@ -1,39 +1,8 @@
-/**
- * ⚠️ WARNING: ENTERING THE FORBIDDEN REALM OF DRIZZLE.
- *
- * This query is significantly more complicated than it has any right to be.
- * If you're reading this, congratulations — you have made it this far.
- *
- * Do not assume that you will understand this query immediately.
- * I certainly didn't.
- * I wrote it.
- * I stared at it for several hours.
- * I questioned several of my life choices.
- * I eventually got it working.
- *
- * At some point, I understood exactly what every join, subquery, condition,
- * and deeply questionable piece of SQL wizardry was doing.
- *
- * That understanding has since left my body.
- *
- * If you're planning to modify this query, please take a moment to ask yourself:
- * "Do I really need to do this?"
- *
- * If the answer is yes, may God have mercy on both of us.
- *
- * Also, future me:
- * If you're reading this and thinking,
- * "What the hell was I thinking when I wrote this?"
- * The answer is: I don't know.
- *
- * Good luck.
- * May your types be inferred, your joins be correct,
- * and your query planner show mercy.
- */
-
 import { db } from "@/index";
-import { Table__MiningWallet, Table__User } from "@/schema";
-import { and, eq, getTableColumns, SQL } from "drizzle-orm";
+import { Table__MiningWallet } from "@/schema";
+import { id } from "@repo/utils/id";
+import { tryCatch } from "@repo/utils/try-catch";
+import { and, eq, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
@@ -41,24 +10,12 @@ import { and, eq, getTableColumns, SQL } from "drizzle-orm";
  * ==========================================
  */
 
-/**
- * ====================
- * MINING WALLET MODULE
- * ====================
- * Provides full CRUD operations for Table__MiningWallet.
- * Supports:
- * - Create mining wallet
- * - Read all mining wallets (pagination + optional joins)
- * - Read single mining wallet (by id or associatedUser)
- * - Update mining wallet
- * - Delete mining wallet
- * ====================
- */
-
-type TCreate__MiningWallet = Omit<
-  typeof Table__MiningWallet.$inferInsert,
-  "tableIdentifierToken" | "createdAt" | "updatedAt"
->;
+type TCreate__MiningWallet = {
+  dataToInsert: Omit<
+    typeof Table__MiningWallet.$inferInsert,
+    "tableIdentifierToken" | "createdAt" | "updatedAt" | "id"
+  >;
+};
 
 /**
  * Create a new mining wallet record in the database.
@@ -69,14 +26,50 @@ type TCreate__MiningWallet = Omit<
  * @param data - Mining wallet data excluding system-generated fields
  * @returns The newly created mining wallet record
  */
-const create__MiningWallet = async (data: TCreate__MiningWallet) => {
-  await db.insert(Table__MiningWallet).values(data);
+const create__MiningWallet = async (options: TCreate__MiningWallet) => {
+  const generatedId = id();
 
-  return (await read__OneMiningWallet({
-    identifier: {
-      associatedUserId: data.associatedUser,
-    },
-  }))!;
+  const baseQuery = db
+    .insert(Table__MiningWallet)
+    .values({ ...options.dataToInsert, id: generatedId });
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in create__MiningWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  const {
+    "0": { affectedRows },
+  } = queryOperationResult;
+
+  if (affectedRows === 1) {
+    const [insertedUserFetchingError, fetchedInsertedUsersList] =
+      await tryCatch(
+        db
+          .select()
+          .from(Table__MiningWallet)
+          .where(eq(Table__MiningWallet.id, generatedId))
+          .limit(1)
+          .offset(0),
+      );
+
+    if (insertedUserFetchingError) {
+      console.error(
+        `Error in insertedUserFetchingError in create__MiningWallet`,
+      );
+      console.error(insertedUserFetchingError);
+      throw insertedUserFetchingError;
+    }
+
+    const [insertedMiningWallet] = fetchedInsertedUsersList;
+
+    return insertedMiningWallet!;
+  }
+
+  throw new Error(`Unexpected block execution in create__MiningWallet`);
 };
 
 /**
@@ -93,35 +86,17 @@ type TRead__OneMiningWallet = {
     | {
         associatedUserId: (typeof Table__MiningWallet.$inferSelect)["associatedUser"];
       };
-
-  joiningOptions?: Partial<{
-    user: true;
-  }>;
-
-  selectedFields?: Partial<
-    Record<keyof typeof Table__MiningWallet.$inferSelect, true>
-  > &
-    Partial<{
-      user: Partial<Record<keyof typeof Table__User.$inferSelect, true>>;
-    }>;
 };
 
 const read__OneMiningWallet = async (options: TRead__OneMiningWallet) => {
   /**
-   * 1. Identifier Extraction
+   * Identifier Extraction
    * Destructure the unique identifier passed into the options parameter.
    */
   const { identifier } = options;
 
   /**
-   * 2. Schema Column Metadata
-   * Retrieve all column definitions for both Table__MiningWallet and Table__User.
-   */
-  const miningWalletColumns = getTableColumns(Table__MiningWallet);
-  const userColumns = getTableColumns(Table__User);
-
-  /**
-   * 3. Condition Filters Builder
+   * Condition Filters Builder
    * Initialize an array to hold dynamic SQL WHERE clauses based on the provided identifier.
    */
   const conditions: SQL[] = [];
@@ -143,94 +118,30 @@ const read__OneMiningWallet = async (options: TRead__OneMiningWallet) => {
   }
 
   /**
-   * 4. Wallet Field Selection Filtering
-   * Filter and map only the requested fields for Table__MiningWallet to omit unnecessary data.
-   */
-  const filteredWalletFields = options?.selectedFields
-    ? (Object.fromEntries(
-        Object.entries(options.selectedFields)
-          .filter(
-            ([key, value]) =>
-              key in miningWalletColumns && typeof value === "boolean" && value,
-          )
-          .map(([key]) => [
-            key,
-            miningWalletColumns[key as keyof typeof miningWalletColumns],
-          ]),
-      ) as typeof miningWalletColumns)
-    : miningWalletColumns;
-
-  /**
-   * 5. User Field Selection Filtering
-   * Identify target fields to retrieve from Table__User if the user relation is requested.
-   */
-  const filteredUsersFields =
-    options?.joiningOptions?.user && options.selectedFields?.user
-      ? (Object.fromEntries(
-          Object.entries(options.selectedFields.user)
-            .filter(
-              ([key, value]) =>
-                key in userColumns && typeof value === "boolean" && value,
-            )
-            .map(([key]) => [
-              key,
-              userColumns[key as keyof typeof userColumns],
-            ]),
-        ) as typeof userColumns)
-      : options?.joiningOptions?.user
-        ? userColumns
-        : undefined;
-
-  /**
-   * 7. Final Query Selection Fields Construction
-   * Combine wallet fields and JSON-aggregated user fields into the final selection object.
-   */
-  const selectedQueryFields = {
-    ...filteredWalletFields,
-
-    ...(filteredUsersFields && options?.joiningOptions?.user
-      ? {
-          user: {
-            ...filteredUsersFields,
-          },
-        }
-      : {}),
-  };
-
-  /**
-   * 8. Base Query Initialization
+   * Base Query Initialization
    * Setup the core `db.select()` statement limited to the single record.
    */
-  const baseQuery = db
-    .select(selectedQueryFields)
-    .from(Table__MiningWallet)
-    .limit(1);
+  const baseQuery = db.select().from(Table__MiningWallet).limit(1).offset(0);
 
   /**
-   * 9. Apply WHERE Conditions
+   * Apply WHERE Conditions
    * Append the identification conditions to the query.
    */
   if (conditions.length > 0) {
     baseQuery.where(and(...conditions));
   }
 
-  /**
-   * 10. Apply Joins and Grouping
-   * If the user relation is requested, execute a LEFT JOIN and group by wallet ID to satisfy FULL_GROUP_BY rules.
-   */
-  if (options?.joiningOptions?.user) {
-    baseQuery
-      .leftJoin(Table__User, eq(Table__User.id, Table__MiningWallet.associatedUser))
-      .groupBy(Table__MiningWallet.id);
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in read__OneMiningWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
   }
 
-  /**
-   * 11. Query Execution & Return
-   * Execute the query and return the first matched record or null if not found.
-   */
-  const [queryResult] = await baseQuery;
+  const [miningWallet] = queryOperationResult;
 
-  return queryResult ? queryResult : null;
+  return miningWallet ? miningWallet : null;
 };
 
 /**
