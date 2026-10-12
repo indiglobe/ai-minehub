@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { db } from "..";
+import { db } from "@/index";
 
 import {
   Table__User,
@@ -17,7 +17,7 @@ import {
 } from "@/schema";
 import { eq } from "drizzle-orm";
 import { id } from "@repo/utils/id";
-import { USER_STATUS } from "@/exports/enum";
+import { USER_STATUS } from "@repo/utils/db-enums";
 
 /* -------------------------------------------------------- */
 /*                          HELPERS                         */

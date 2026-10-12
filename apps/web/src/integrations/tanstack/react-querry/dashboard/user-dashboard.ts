@@ -172,7 +172,7 @@ export function useMiningOrdersData() {
       queryFn: async () => {
         const result = await readAllMiningOrders({
           data: {
-            identifier: { userId: userId, miningStatus: "active" },
+            identifier: { userId: userId, miningStatus: "ACTIVE" },
           },
         });
 
@@ -198,7 +198,7 @@ export function useFetchMiningWallet() {
         readOneMiningWallet({
           data: {
             identifier: {
-              associatedUser: userId,
+              associatedUserId: userId,
             },
           },
         }),
