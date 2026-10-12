@@ -1,5 +1,7 @@
 import { db } from "@/index";
 import { Table__TradingWallet, Table__User } from "@/schema";
+import { id } from "@repo/utils/id";
+import { tryCatch } from "@repo/utils/try-catch";
 import { and, eq, getTableColumns, SQL } from "drizzle-orm";
 
 /**
@@ -12,23 +14,55 @@ import { and, eq, getTableColumns, SQL } from "drizzle-orm";
 /**
  * Type used for creating a trading wallet.
  */
-type TCreate__TradingWallet = Omit<
-  typeof Table__TradingWallet.$inferInsert,
-  "tableIdentifierToken" | "id" | "createdAt" | "updatedAt"
->;
+type TCreate__TradingWallet = {
+  dataToInsert: Omit<
+    typeof Table__TradingWallet.$inferInsert,
+    "tableIdentifierToken" | "id" | "createdAt" | "updatedAt"
+  >;
+};
 
 /**
  * Insert a new trading wallet into the database.
  * Returns the created wallet by re-fetching it using associatedUser.
  */
-const create__TradingWallet = async (data: TCreate__TradingWallet) => {
-  await db.insert(Table__TradingWallet).values(data);
+const create__TradingWallet = async (options: TCreate__TradingWallet) => {
+  const generatedId = id();
 
-  return (await read__OneTradingWallet({
-    identifier: {
-      associatedUserId: data.associatedUser,
-    },
-  }))!;
+  const baseQuery = db
+    .insert(Table__TradingWallet)
+    .values({ ...options.dataToInsert, id: generatedId });
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in create__MiningWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [insertedTradingwalletFetchingError, fetchedInsertedUsersList] =
+      await tryCatch(
+        db
+          .select()
+          .from(Table__TradingWallet)
+          .where(eq(Table__TradingWallet.id, generatedId))
+          .limit(1)
+          .offset(0),
+      );
+
+    if (insertedTradingwalletFetchingError) {
+      console.error(
+        `Error in insertedTradingwalletFetchingError in create__TradingWallet`,
+      );
+      console.error(insertedTradingwalletFetchingError);
+      throw insertedTradingwalletFetchingError;
+    }
+
+    const [insertedTradingWallet] = fetchedInsertedUsersList;
+
+    return insertedTradingWallet!;
+  }
 };
 
 /**
@@ -45,146 +79,40 @@ type TRead__OneTradingWallet = {
     | {
         associatedUserId: (typeof Table__TradingWallet.$inferSelect)["associatedUser"];
       };
-
-  joiningOptions?: Partial<{
-    user: true;
-  }>;
-
-  selectedFields?: Partial<
-    Record<keyof typeof Table__TradingWallet.$inferSelect, true>
-  > &
-    Partial<{
-      user: Partial<Record<keyof typeof Table__User.$inferSelect, true>>;
-    }>;
 };
 
 const read__OneTradingWallet = async (options: TRead__OneTradingWallet) => {
-  /**
-   * 1. Identifier Extraction
-   * Destructure the unique identifier passed into the options parameter.
-   */
   const { identifier } = options;
 
-  /**
-   * 2. Schema Column Metadata
-   * Retrieve all column definitions for both Table__TradingWallet and Table__User.
-   */
-  const tradingWalletColumns = getTableColumns(Table__TradingWallet);
-  const userColumns = getTableColumns(Table__User);
-
-  /**
-   * 3. Condition Filters Builder
-   * Initialize an array to hold dynamic SQL WHERE clauses based on the provided identifier.
-   */
   const conditions: SQL[] = [];
 
-  /**
-   * Filter condition by trading wallet ID if specified.
-   */
   if ("id" in identifier) {
     conditions.push(eq(Table__TradingWallet.id, identifier.id));
   }
 
-  /**
-   * Filter condition by associated user ID if specified.
-   */
   if ("associatedUserId" in identifier) {
     conditions.push(
       eq(Table__TradingWallet.associatedUser, identifier.associatedUserId),
     );
   }
 
-  /**
-   * 4. Wallet Field Selection Filtering
-   * Filter and map only the requested fields for Table__TradingWallet to omit unnecessary data.
-   */
-  const filteredWalletFields = options?.selectedFields
-    ? (Object.fromEntries(
-        Object.entries(options.selectedFields)
-          .filter(
-            ([key, value]) =>
-              key in tradingWalletColumns &&
-              typeof value === "boolean" &&
-              value,
-          )
-          .map(([key]) => [
-            key,
-            tradingWalletColumns[key as keyof typeof tradingWalletColumns],
-          ]),
-      ) as typeof tradingWalletColumns)
-    : tradingWalletColumns;
+  const baseQuery = db.select().from(Table__TradingWallet).limit(1).offset(0);
 
-  /**
-   * 5. User Field Selection Filtering
-   * Identify target fields to retrieve from Table__User if the user relation is requested.
-   */
-  const filteredUsersFields =
-    options?.joiningOptions?.user && options.selectedFields?.user
-      ? (Object.fromEntries(
-          Object.entries(options.selectedFields.user)
-            .filter(
-              ([key, value]) =>
-                key in userColumns && typeof value === "boolean" && value,
-            )
-            .map(([key]) => [
-              key,
-              userColumns[key as keyof typeof userColumns],
-            ]),
-        ) as typeof userColumns)
-      : options?.joiningOptions?.user
-        ? userColumns
-        : undefined;
-
-  /**
-   * 7. Final Query Selection Fields Construction
-   * Combine wallet fields and JSON-aggregated user fields into the final selection object.
-   */
-  const selectedQueryFields = {
-    ...filteredWalletFields,
-
-    ...(filteredUsersFields && options?.joiningOptions?.user
-      ? {
-          user: {
-            ...filteredUsersFields,
-          },
-        }
-      : {}),
-  };
-
-  /**
-   * 8. Base Query Initialization
-   * Setup the core `db.select()` statement limited to the single record.
-   */
-  const baseQuery = db
-    .select(selectedQueryFields)
-    .from(Table__TradingWallet)
-    .limit(1);
-
-  /**
-   * 9. Apply WHERE Conditions
-   * Append the identification conditions to the query.
-   */
   if (conditions.length > 0) {
     baseQuery.where(and(...conditions));
   }
 
-  /**
-   * 10. Apply Joins and Grouping
-   * If the user relation is requested, execute a LEFT JOIN and group by wallet ID to satisfy FULL_GROUP_BY rules.
-   */
-  if (options?.joiningOptions?.user) {
-    baseQuery
-      .leftJoin(Table__User, eq(Table__User.id, Table__TradingWallet.associatedUser))
-      .groupBy(Table__TradingWallet.id);
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in read__OneTradingWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
   }
 
-  /**
-   * 11. Query Execution & Return
-   * Execute the query and return the first matched record or null if not found.
-   */
-  const [queryResult] = await baseQuery;
+  const [tradingWallet] = queryOperationResult;
 
-  return queryResult ? queryResult : null;
+  return tradingWallet ? tradingWallet : null;
 };
 
 /**

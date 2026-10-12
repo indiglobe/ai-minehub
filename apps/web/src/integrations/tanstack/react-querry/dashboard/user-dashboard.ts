@@ -236,9 +236,7 @@ export function useFetchTradingWallet() {
       queryFn: () =>
         readOneTradingWallet({
           data: {
-            identifier: {
-              associatedUser: userId,
-            },
+            identifier: { associatedUserId: userId },
           },
         }),
     }),

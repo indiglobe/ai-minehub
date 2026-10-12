@@ -10,10 +10,12 @@ import { and, eq, SQL } from "drizzle-orm";
  * ==========================================
  */
 
-type TCreate__MiningWallet = Omit<
-  typeof Table__MiningWallet.$inferInsert,
-  "tableIdentifierToken" | "createdAt" | "updatedAt" | "id"
->;
+type TCreate__MiningWallet = {
+  dataToInsert: Omit<
+    typeof Table__MiningWallet.$inferInsert,
+    "tableIdentifierToken" | "createdAt" | "updatedAt" | "id"
+  >;
+};
 
 /**
  * Create a new mining wallet record in the database.
@@ -24,12 +26,12 @@ type TCreate__MiningWallet = Omit<
  * @param data - Mining wallet data excluding system-generated fields
  * @returns The newly created mining wallet record
  */
-const create__MiningWallet = async (data: TCreate__MiningWallet) => {
+const create__MiningWallet = async (options: TCreate__MiningWallet) => {
   const generatedId = id();
 
   const baseQuery = db
     .insert(Table__MiningWallet)
-    .values({ ...data, id: generatedId });
+    .values({ ...options.dataToInsert, id: generatedId });
 
   const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
 
@@ -119,7 +121,7 @@ const read__OneMiningWallet = async (options: TRead__OneMiningWallet) => {
    * Base Query Initialization
    * Setup the core `db.select()` statement limited to the single record.
    */
-  const baseQuery = db.select().from(Table__MiningWallet).limit(1);
+  const baseQuery = db.select().from(Table__MiningWallet).limit(1).offset(0);
 
   /**
    * Apply WHERE Conditions

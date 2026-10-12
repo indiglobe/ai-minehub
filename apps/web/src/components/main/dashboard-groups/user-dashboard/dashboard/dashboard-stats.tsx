@@ -66,7 +66,7 @@ export function MiningWallet() {
           onClick={() =>
             createMiningWallet({
               data: {
-                associatedUser: userDetailsFromCookie.userId,
+                dataToInsert: { associatedUser: userDetailsFromCookie.userId },
               },
             })
           }
@@ -93,7 +93,7 @@ export function TradingWallet() {
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
-  const { mutate } = useCreateTradingWallet();
+  const { mutate: createTradingWallet } = useCreateTradingWallet();
   const { data: tradingwallet, isError, isLoading } = useFetchTradingWallet();
 
   return (
@@ -134,9 +134,11 @@ export function TradingWallet() {
           variant="accent"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
           onClick={() =>
-            mutate({
+            createTradingWallet({
               data: {
-                associatedUser: userDetailsFromCookie.userId,
+                dataToInsert: {
+                  associatedUser: userDetailsFromCookie.userId,
+                },
               },
             })
           }
