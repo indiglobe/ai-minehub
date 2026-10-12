@@ -46,3 +46,14 @@ export const read__OneUserSchema = z.object({
     }),
   ]),
 });
+
+export const read__ReferralsSchema = z.object({
+  identifier: z.union([
+    z.object({
+      id: z.string(),
+    }),
+    z.object({
+      email: z.string(),
+    }),
+  ]),
+});

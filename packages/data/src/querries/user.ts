@@ -1,7 +1,8 @@
 import { db } from "@/index";
 import { Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, eq, SQL } from "drizzle-orm";
+import { and, eq, getTableColumns, SQL } from "drizzle-orm";
+import { alias } from "drizzle-orm/mysql-core";
 
 /**
  * ----------------------------------------
@@ -204,10 +205,69 @@ const read__OneUser = async (options: TRead__OneUser) => {
   return userDetails ? userDetails : null;
 };
 
+/**
+ * ----------------------------------------
+ * READ REFERRALS (ONE)
+ * ----------------------------------------
+ */
+
+type TRead__OneReferrals = {
+  identifier:
+    | {
+        id: (typeof Table__User.$inferSelect)["id"];
+      }
+    | {
+        email: (typeof Table__User.$inferSelect)["email"];
+      };
+};
+
+const read__Referrals = async (options: TRead__OneReferrals) => {
+  const skip = 0;
+  const limit = Number.MAX_SAFE_INTEGER;
+
+  const conditions: SQL[] = [];
+
+  if ("email" in options.identifier) {
+    conditions.push(eq(Table__User.email, options.identifier.email));
+  }
+
+  if ("id" in options.identifier) {
+    conditions.push(eq(Table__User.id, options.identifier.id));
+  }
+
+  const Table__ReferredUsers = alias(Table__User, "referredUsers");
+
+  const referredUsersColumns = getTableColumns(Table__ReferredUsers);
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(
+    db
+      .select({
+        ...referredUsersColumns,
+      })
+      .from(Table__User)
+      .leftJoin(
+        Table__ReferredUsers,
+        eq(Table__User.id, Table__ReferredUsers.referrerId),
+      )
+      .where(and(...conditions))
+      .limit(limit)
+      .offset(skip),
+  );
+
+  if (queryOperationError) {
+    console.error("Error in queryOperationError in read__OneReferrals:");
+    throw queryOperationError;
+  }
+
+  const referredUsersList = queryOperationResult;
+
+  return referredUsersList;
+};
 
 export {
   create__User,
   read__AllUsers,
   read__OneUser,
   read__UserCount,
+  read__Referrals,
 };
