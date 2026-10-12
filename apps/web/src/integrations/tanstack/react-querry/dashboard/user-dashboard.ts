@@ -33,6 +33,7 @@ export const querryKeys = {
 
 export function useFetchActiveMiningSessions() {
   const readOneUser = useServerFn(serverFn__readOneUser);
+
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
@@ -60,96 +61,73 @@ export function useFetchActiveMiningSessions() {
 
         const { miningOrders } = data;
 
-        return miningOrders.filter(
-          (orders) => orders.miningStatus === "active",
-        );
+        return miningOrders.filter((orders) => orders.miningStatus === "");
       },
     }),
   );
 }
 
 export function useInvestmentData() {
-  const readOneUser = useServerFn(serverFn__readOneUser);
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+  const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
+
   return useQuery(
     queryOptions({
       queryKey: querryKeys.investmentDetails(),
 
       queryFn: async () => {
-        const result = await readOneUser({
-          data: {
-            identifier: {
-              id: userId,
-            },
-            joinOptions: {
-              miningOrders: true,
-              tradingOrders: true,
-            },
-          },
-        });
+        const [allMiningOrders, allTradingOrders] = await Promise.all([
+          readAllMiningOrders({ data: { identifier: { userId } } }),
+          readAllTradingOrders({ data: { identifier: { userId } } }),
+        ]);
 
-        return result;
+        return { allMiningOrders, allTradingOrders };
       },
 
       select: (data) => {
-        type TOutput = {
-          activeInvestmentsCount: number;
-          investedAmount: number;
-          profitAmount: number;
-        };
-
-        let output: TOutput = {
-          activeInvestmentsCount: 0,
+        let output = {
           investedAmount: 0,
-          profitAmount: 0,
+          gainedAmount: 0,
+          activeInvestmentsCount: 0,
         };
 
-        data?.miningOrders.reduce((acc, curr) => {
-          if (curr.miningStatus === "active") {
+        data.allMiningOrders.forEach((miningOrder) => {
+          if (miningOrder.miningStatus === "COMPLETED") {
             output = {
-              ...acc,
-              activeInvestmentsCount: output.activeInvestmentsCount + 1,
+              ...output,
+              investedAmount:
+                output.investedAmount + miningOrder.amountInvested,
+              gainedAmount:
+                output.gainedAmount +
+                (miningOrder.amountReceived
+                  ? miningOrder.amountReceived - miningOrder.amountInvested
+                  : 0),
             };
           }
 
-          output = {
-            ...acc,
-            investedAmount: output.investedAmount + curr.amountInvested,
-            profitAmount:
-              output.profitAmount +
-              (curr.amountReceived === null || curr.amountReceived === 0
-                ? 0
-                : curr.amountReceived - curr.amountInvested),
-          };
-
-          return output;
-        }, output);
-
-        data?.tradingOrders.reduce((acc, curr) => {
-          if (curr.tradingStatus === "active") {
+          if (miningOrder.miningStatus === "ACTIVE") {
             output = {
-              ...acc,
+              ...output,
               activeInvestmentsCount: output.activeInvestmentsCount + 1,
             };
           }
+        });
 
-          output = {
-            ...acc,
-            investedAmount: output.investedAmount + curr.amountInvested,
-            profitAmount:
-              output.profitAmount +
-              (curr.amountReceived === null || curr.amountReceived === 0
-                ? 0
-                : curr.amountReceived - curr.amountInvested),
-          };
-
-          return output;
-        }, output);
+        data.allTradingOrders.forEach((tradingOrder) => {
+          if (tradingOrder.tradingStatus === "COMPLETED") {
+            output = {
+              ...output,
+              investedAmount:
+                output.investedAmount + tradingOrder.amountInvested,
+            };
+          }
+        });
 
         return output;
       },

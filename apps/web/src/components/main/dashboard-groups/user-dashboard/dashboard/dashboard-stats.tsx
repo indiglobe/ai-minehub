@@ -242,7 +242,7 @@ export function GainedAmount() {
       {investment && (
         <>
           <StatCardData className={cn("text-green-500")}>
-            ₹ {investment.profitAmount}
+            ₹ {investment.gainedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount profit</StatCardFooter>

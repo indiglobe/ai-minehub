@@ -14,18 +14,14 @@ export const read__AllTradingOrdersSchema = z
   .object({
     identifier: z
       .object({
-        userId: z.string().optional(),
+        userId: z.string(),
       })
+      .partial()
       .optional(),
     queryOptions: z
       .object({
         skip: z.number().optional(),
         limit: z.number().optional(),
-      })
-      .optional(),
-    joinOptions: z
-      .object({
-        user: z.literal(true).optional(),
       })
       .optional(),
   })
