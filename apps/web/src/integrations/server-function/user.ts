@@ -3,15 +3,33 @@ import {
   read__AllUsers,
   create__User,
   read__Referrals,
+  read__UserCount,
 } from "@repo/data/querries/user";
 import {
   read__OneUserSchema,
   create__UserSchema,
   read__AllUsersSchema,
   read__ReferralsSchema,
+  read__UserCountSchema,
 } from "@repo/data/validators/user";
 import { createServerFn } from "@tanstack/react-start";
 import { tryCatch } from "@repo/utils/try-catch";
+
+export const serverFn__readUserCount = createServerFn()
+  .validator(read__UserCountSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__UserCount(data),
+    );
+
+    if (serverFnError) {
+      console.error(`Error in serverFnError in serverFn__readUserCount`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
 
 export const serverFn__readOneUser = createServerFn()
   .validator(read__OneUserSchema)

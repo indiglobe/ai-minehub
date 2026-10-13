@@ -14,6 +14,16 @@ export const create__UserSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
+export const read__UserCountSchema = z
+  .object({
+    identifier: z
+      .object({
+        role: z.enum(["ADMIN", "BASIC"]),
+      })
+      .optional(),
+  })
+  .optional();
+
 export const read__AllUsersSchema = z
   .object({
     identifier: z

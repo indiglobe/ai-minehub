@@ -7,9 +7,27 @@ export const create__MiningWalletDepositeSchema = z.object({
     orderedBy: z.string(),
     wallet: z.string(),
     amount: z.number(),
-    status: z.enum(DEPOSIT_STATUS).nullish(),
+    status: z.enum(DEPOSIT_STATUS).optional(),
     depositMethod: z.enum(TRANSACTION_METHOD),
     transactionId: z.string(),
     depositProof: z.string(),
   }),
 });
+
+export const read__AllMiningWalletDepositeSchema = z
+  .object({
+    identifier: z
+      .object({
+        orderedBy: z.string().optional(),
+        wallet: z.string().optional(),
+        status: z.enum(DEPOSIT_STATUS).optional(),
+      })
+      .optional(),
+    queryOptions: z
+      .object({
+        skip: z.number().optional(),
+        limit: z.number().optional(),
+      })
+      .optional(),
+  })
+  .optional();

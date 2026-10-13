@@ -11,7 +11,7 @@ import {
 } from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard-stats";
 import { extractMonthName } from "@repo/utils/date";
 import {
-  useMiningOrdersData,
+  useFetchActiveMiningSessions,
   useRecentTransactionsHistory,
 } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { round } from "es-toolkit/math";
@@ -87,7 +87,7 @@ export function ActiveMiningSession({
     data: activeMiningSessions,
     isPending,
     error,
-  } = useMiningOrdersData();
+  } = useFetchActiveMiningSessions();
 
   return (
     <section className={cn(``, className)} {...props}>
@@ -470,9 +470,9 @@ export function RecentTransaction({
                                 `fs-2.5 rounded-full border px-2 py-0.5 font-bold`,
                                 {
                                   "border-green-500/20 bg-green-500/10 text-green-500":
-                                    status === "completed",
+                                    status === "COMPLETED",
                                   "border-red-500/20 bg-red-500/10 text-red-500":
-                                    status === "pending",
+                                    status === "ACTIVE",
                                 },
                               )}
                             >

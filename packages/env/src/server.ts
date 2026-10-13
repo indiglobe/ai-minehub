@@ -15,8 +15,13 @@ export const env = createEnv({
 
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
-    
+
     TOKEN_SECRET: z.string(),
+
+    FTP_HOST: z.string(),
+    FTP_PORT: z.coerce.number().default(21),
+    FTP_USER: z.string(),
+    FTP_PASSWORD: z.string(),
   },
 
   /**
