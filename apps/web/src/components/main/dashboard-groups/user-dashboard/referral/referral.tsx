@@ -9,9 +9,10 @@ import {
   ReferralStatHeading,
   ReferralStatIcon,
 } from "./page-ui";
-import { useFetchReferrals } from "@/integrations/tanstack/react-querry/referrals/referrals";
+import { useReadReferrals } from "@/integrations/tanstack/react-querry/referrals/referrals";
 import { Image } from "@unpic/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@repo/ui/table";
+import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 
 export function Referral() {
   return (
@@ -28,49 +29,77 @@ export function ReferralStats({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data, isLoading, isError } = useFetchReferrals();
+  const {
+    data: allReferalEarning,
+    isPending: isPendingAllReferalEarning,
+    isError: isErrorAllReferalEarning,
+  } = useReadAllReferalEarning();
+
+  // Calculate total referrals
+  const totalReferrals =
+    allReferalEarning?.filter((r) => r.earningWay === "REFERING").length ?? 0;
+
+  // Calculate total referral earnings
+  const totalEarnings =
+    allReferalEarning?.reduce(
+      (total, item) => total + Number(item.amount || 0),
+      0,
+    ) ?? 0;
+
+  // Reusable loading/error/success rendering
+  const renderStatValue = (value: React.ReactNode) => {
+    if (isPendingAllReferalEarning) {
+      return <span className="text-foreground/50">Loading...</span>;
+    }
+
+    if (isErrorAllReferalEarning) {
+      return <span className="text-foreground/50">Error loading data</span>;
+    }
+
+    return value;
+  };
 
   return (
     <section
-      className={cn(`default-padding w-full`, `@container pb-20`, className)}
+      className={cn("default-padding w-full", "@container pb-20", className)}
       {...props}
     >
       <div
         className={cn(
-          `flex w-full flex-col items-center justify-center gap-4 @lg:flex-row`,
+          "flex w-full flex-col items-center justify-center gap-4 @lg:flex-row",
         )}
       >
+        {/* Total Referrals */}
         <ReferralStatCard>
           <ReferralStatIcon>👥</ReferralStatIcon>
+
           <ReferralStatHeading>
-            {isLoading && (
-              <span className="text-foreground/50">loading...</span>
-            )}
-
-            {isError && <span className="text-foreground/50">error!!!</span>}
-
-            {data && <span>{data.length}</span>}
+            {renderStatValue(<span>{totalReferrals}</span>)}
           </ReferralStatHeading>
 
           <ReferralStatDescription>Total Referrals</ReferralStatDescription>
         </ReferralStatCard>
 
+        {/* Referral Earnings */}
         <ReferralStatCard>
           <ReferralStatIcon>💰</ReferralStatIcon>
 
           <ReferralStatHeading>
-            {isLoading && (
-              <span className="text-foreground/50">loading...</span>
+            {renderStatValue(
+              <span>
+                $
+                {totalEarnings.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>,
             )}
-
-            {isError && <span className="text-foreground/50">error!!!</span>}
-
-            {data && <span>${data.length * 10}</span>}
           </ReferralStatHeading>
 
           <ReferralStatDescription>Referral Earnings</ReferralStatDescription>
         </ReferralStatCard>
 
+        {/* Commission Rate */}
         <ReferralStatCard>
           <ReferralStatIcon>🎁</ReferralStatIcon>
 
@@ -311,9 +340,7 @@ export function YourReferrals({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data, isLoading, isError, error } = useFetchReferrals();
-
-  console.log(error);
+  const { data, isLoading, isError } = useReadReferrals();
 
   return (
     <section className={cn(`default-padding pb-20`, className)} {...props}>

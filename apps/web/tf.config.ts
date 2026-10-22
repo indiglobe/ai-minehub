@@ -20,6 +20,7 @@ export default defineConfig({
           : ".env.development",
       envValues: {
         PORT: 15445,
+        NODE_ENV: "development",
       },
     },
     "sb:dev": {

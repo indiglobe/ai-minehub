@@ -7,7 +7,7 @@ export const querryKeys = {
   all: () => ["referrals"],
 };
 
-export function useFetchReferrals() {
+export function useReadReferrals() {
   const readReferrals = useServerFn(serverFn__readReferrals);
 
   const {

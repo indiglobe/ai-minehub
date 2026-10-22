@@ -14,6 +14,7 @@ import type { TWelcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welc
 import { useServerFn } from "@tanstack/react-start";
 import { formAction__createNewUser } from "@/integrations/form-actions/welcome-form.fa";
 import { tryCatch } from "@repo/utils/try-catch";
+import { serverFn__createReferalEarning } from "@/integrations/server-function/referal-earning";
 
 export function WelcomeComp({ ...props }: ComponentProps<typeof Main>) {
   return (
@@ -136,6 +137,7 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
     from: "/(without-header-footer)/(authenticated)/(new-user)/welcome/",
   });
   const createNewUser = useServerFn(formAction__createNewUser);
+  const createReferalEarning = useServerFn(serverFn__createReferalEarning);
   const navigate = useNavigate();
 
   const form = useForm({
@@ -172,6 +174,27 @@ export function WelcomeForm({ className, ...props }: ComponentProps<"form">) {
         console.error(`Error in fomSubmissionError in form submission`);
         console.error(fomSubmissionError);
         throw fomSubmissionError;
+      }
+
+      if (referralCode !== "") {
+        const [createReferalEarningError] = await tryCatch(
+          createReferalEarning({
+            data: {
+              amount: 10,
+              earnerId: referralCode,
+              earningWay: "REFERING",
+              sourceUserId: fomSubmissionResponse.id,
+            },
+          }),
+        );
+
+        if (createReferalEarningError) {
+          console.error(
+            `Error in createReferalEarningError in form submission`,
+          );
+          console.error(createReferalEarningError);
+          throw createReferalEarningError;
+        }
       }
 
       if (fomSubmissionResponse) {

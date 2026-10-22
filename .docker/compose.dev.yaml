@@ -46,22 +46,23 @@ services:
       - ../nginx.secure.dev.conf:/etc/nginx/nginx.conf:ro
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
-
-  ai-minehub-dev-floci:
-    container_name: ai-minehub-dev-floci
-    image: floci/floci:nightly
-    ports:
-      - "17910:4566"
-    volumes:
-      - floci-data:/var/lib/floci
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - FLOCI_LOG_LEVEL=info
-      - FLOCI_DATA_DIR=/var/lib/floci
-    networks:
-      - ai-minehub-dev
     restart: unless-stopped
+
+  # ai-minehub-dev-floci:
+  #   container_name: ai-minehub-dev-floci
+  #   image: floci/floci:nightly
+  #   ports:
+  #     - "17910:4566"
+  #   volumes:
+  #     - floci-data:/var/lib/floci
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   environment:
+  #     - FLOCI_LOG_LEVEL=info
+  #     - FLOCI_DATA_DIR=/var/lib/floci
+  #   networks:
+  #     - ai-minehub-dev
+  #   restart: unless-stopped
 
 volumes:
   database:
-  floci-data:
+  # floci-data:

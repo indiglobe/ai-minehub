@@ -1,8 +1,8 @@
 import {
   useCreateTradingWallet,
-  useFetchTradingWallet,
+  useReadTradingWallet,
   useCreateMiningWallet,
-  useFetchMiningWallet,
+  useReadMiningWallet,
   useInvestmentData,
 } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { cn } from "@repo/styles/cn";
@@ -24,7 +24,7 @@ export function MiningWallet() {
   });
 
   const { mutate: createMiningWallet } = useCreateMiningWallet();
-  const { data: miningWallet, isError, isLoading } = useFetchMiningWallet();
+  const { data: miningWallet, isError, isLoading } = useReadMiningWallet();
 
   return (
     <StatCard>
@@ -94,7 +94,7 @@ export function TradingWallet() {
   });
 
   const { mutate: createTradingWallet } = useCreateTradingWallet();
-  const { data: tradingwallet, isError, isLoading } = useFetchTradingWallet();
+  const { data: tradingwallet, isError, isLoading } = useReadTradingWallet();
 
   return (
     <StatCard>

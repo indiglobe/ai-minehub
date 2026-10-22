@@ -7,7 +7,7 @@ export const querryKeys = {
   all: () => ["mining"],
 };
 
-export function useFetchOneMiningWallet() {
+export function useReadOneMiningWallet() {
   const readOneMiningWallet = useServerFn(serverFn__readOneMiningWallet);
   const {
     userDetailsFromCookie: { userId },

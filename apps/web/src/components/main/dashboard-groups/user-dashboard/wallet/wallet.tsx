@@ -4,9 +4,9 @@ import { useState } from "react";
 import { DepositForm } from "./deposit-form";
 import { WithdrawForm } from "./withdraw-form";
 import {
-  useFetchMiningWallet,
-  useFetchTradingWallet,
-} from "../../../../../integrations/tanstack/react-querry/dashboard/user-dashboard";
+  useReadMiningWallet,
+  useReadTradingWallet,
+} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
@@ -116,12 +116,12 @@ export function WalletBalance({
     data: miningWalletData,
     isLoading: isMiningWalletLoading,
     isError: isMiningWalletError,
-  } = useFetchMiningWallet();
+  } = useReadMiningWallet();
   const {
     data: tradingWalletData,
     isLoading: isTradingWalletLoading,
     isError: isTradingWalletError,
-  } = useFetchTradingWallet();
+  } = useReadTradingWallet();
 
   return (
     <section

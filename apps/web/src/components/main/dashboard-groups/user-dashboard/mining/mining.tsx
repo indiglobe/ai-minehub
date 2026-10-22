@@ -1,4 +1,4 @@
-import { useFetchMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+import { useReadMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
 import { ActiveMiningSession } from "../dashboard/dashboard";
@@ -65,7 +65,7 @@ export function MiningBalance({
     data: miningWalletData,
     isError: isMiningWalletError,
     isLoading: isMiningWalletLoading,
-  } = useFetchMiningWallet();
+  } = useReadMiningWallet();
 
   return (
     <section className={cn(`default-padding`, className)} {...props}>

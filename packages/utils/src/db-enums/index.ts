@@ -19,3 +19,9 @@ export const WITHDRAWL_STATUS = [
   "VALIDATING",
   "REJECTED",
 ] as const;
+
+export const REFERRER_EARNING_CAUSE = [
+  "REFERING",
+  "REFERRER_DEPOSIT",
+  "REFERRER_PROFIT",
+] as const;

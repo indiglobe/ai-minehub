@@ -1,7 +1,7 @@
 import { db } from "@/index";
 import { Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, eq, getTableColumns, SQL } from "drizzle-orm";
+import { and, eq, getTableColumns, sql, SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 /**
@@ -64,8 +64,17 @@ const create__User = async (data: TCreate__User) => {
  * ----------------------------------------
  */
 
-const read__UserCount = async () => {
-  const baseQuery = db.$count(Table__User);
+type TRead__UserCount = Partial<{
+  identifier: Pick<typeof Table__User.$inferSelect, "role">;
+}>;
+
+const read__UserCount = async (options?: TRead__UserCount) => {
+  const baseQuery = options?.identifier?.role
+    ? db
+        .select({ count: sql<number>`count(*)` })
+        .from(Table__User)
+        .where(eq(Table__User.role, options.identifier.role))
+    : db.select({ count: sql<number>`count(*)` }).from(Table__User);
 
   const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
 
@@ -75,7 +84,8 @@ const read__UserCount = async () => {
     throw queryOperationError;
   }
 
-  return queryOperationResult;
+  const  [userCount] = queryOperationResult
+  return userCount;
 };
 
 /**

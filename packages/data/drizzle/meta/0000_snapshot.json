@@ -1,9 +1,76 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "9fc67f8d-95a7-4a60-841a-c031cf7f9551",
+  "id": "4421550c-7dbf-4614-8a62-6e885ca4d1e7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "chat": {
+      "name": "chat",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar(1023)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sent_by_id": {
+          "name": "sent_by_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sent_to_id": {
+          "name": "sent_to_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'CHAT'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "chat_id": {
+          "name": "chat_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "mining_order": {
       "name": "mining_order",
       "columns": {
@@ -47,7 +114,7 @@
           "name": "investment_status",
           "type": "enum('ACTIVE','COMPLETED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -66,7 +133,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -181,7 +248,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -215,7 +282,7 @@
           "name": "balance",
           "type": "float(2)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "associated_user": {
@@ -241,7 +308,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -317,7 +384,7 @@
           "name": "deposit_status",
           "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "deposit_method": {
@@ -357,7 +424,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -446,7 +513,7 @@
           "name": "withdrawl_status",
           "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "withdrawal_method": {
@@ -472,7 +539,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -566,7 +633,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -626,7 +693,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -667,6 +734,80 @@
       },
       "checkConstraint": {}
     },
+    "referal_earning": {
+      "name": "referal_earning",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "earinig_way": {
+          "name": "earinig_way",
+          "type": "enum('REFERING','REFERRER_DEPOSIT','REFERRER_PROFIT')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "earner_id": {
+          "name": "earner_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "source_user_id": {
+          "name": "source_user_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "float(2)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'RERN'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "referal_earning_id": {
+          "name": "referal_earning_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "trading_order": {
       "name": "trading_order",
       "columns": {
@@ -703,7 +844,7 @@
           "name": "investment_status",
           "type": "enum('ACTIVE','COMPLETED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -722,7 +863,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -770,7 +911,7 @@
           "name": "balance",
           "type": "float(2)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "associated_user": {
@@ -796,7 +937,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -872,7 +1013,7 @@
           "name": "deposit_status",
           "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "deposit_method": {
@@ -912,7 +1053,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -1001,7 +1142,7 @@
           "name": "withdrawl_status",
           "type": "enum('PENDING','PROCESSED','VALIDATING','REJECTED')",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "withdrawl_method": {
@@ -1027,7 +1168,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -1156,7 +1297,7 @@
         },
         "table_identifier_token": {
           "name": "table_identifier_token",
-          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','MWWD')",
+          "type": "enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,

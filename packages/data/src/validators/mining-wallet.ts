@@ -2,7 +2,7 @@ import z from "zod";
 
 export const create__MiningWalletSchema = z.object({
   dataToInsert: z.object({
-    balance: z.number().nullish(),
+    balance: z.number().optional(),
     associatedUser: z.string(),
   }),
 });

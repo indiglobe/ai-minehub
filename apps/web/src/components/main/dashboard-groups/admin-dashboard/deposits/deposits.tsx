@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { ArrowDownLeft, Search, ChevronDown } from "lucide-react";
@@ -7,33 +6,21 @@ import {
   AllDepositsError,
   AllDepositsLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/deposits/boundary-comps";
+import {
+  useReadAllPendingMiningWalletDeposite,
+  useReadAllusers,
+} from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
 
 export function AllDeposits({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
-
-  const deposits = [
-    {
-      id: "dep-1",
-      user: {
-        name: "Surajit Sarder",
-        email: "surajitsardar2000@gmail.com",
-        initial: "S",
-        bg: "bg-accent-500",
-      },
-      amount: "$1,000.00",
-      wallet: "Mining",
-      method: "Bsc_bep20",
-      transactionId: "0x498B3e02EBdF93A263bD2731",
-      description: "Deposit to Mining ...",
-      status: "Pending",
-      date: "Aug 31, 2026 21:...",
-    },
-  ];
+  const {
+    data: pendingMiningWalletDeposites,
+    isError: isErrorPendingMiningWalletDeposites,
+    isLoading: isLoadingPendingMiningWalletDeposites,
+  } = useReadAllPendingMiningWalletDeposite();
+  const { data: allUsers } = useReadAllusers();
 
   return (
     <section
@@ -118,107 +105,111 @@ export function AllDeposits({
           </div>
         </div>
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
-        {state === "error" && <AllDepositsError></AllDepositsError>}
-        {state === "loading" && <AllDepositsLoading></AllDepositsLoading>}{" "}
-        {state === "data" && (
-          <div className={cn(`overflow-x-auto`)}>
-            <table className={cn(`w-full border-collapse text-left`)}>
-              <thead>
-                <tr
-                  className={cn(
-                    `text-foreground/50 text-2.75 tracking-wider uppercase`,
-                  )}
-                >
-                  <th className={cn(`py-3 font-medium`)}>User</th>
-                  <th className={cn(`py-3 font-medium`)}>Amount</th>
-                  <th className={cn(`py-3 font-medium`)}>Wallet</th>
-                  <th className={cn(`py-3 font-medium`)}>Method</th>
-                  <th className={cn(`py-3 font-medium`)}>Transaction ID</th>
-                  <th className={cn(`py-3 font-medium`)}>Description</th>
-                  <th className={cn(`py-3 font-medium`)}>Status</th>
-                  <th className={cn(`py-3 font-medium`)}>Date</th>
-                </tr>
-              </thead>
+        {isErrorPendingMiningWalletDeposites && <AllDepositsError />}
+        {isLoadingPendingMiningWalletDeposites && <AllDepositsLoading />}
+        {pendingMiningWalletDeposites &&
+          pendingMiningWalletDeposites.length > 1 && (
+            <div className={cn(`overflow-x-auto`)}>
+              <table className={cn(`w-full border-collapse text-left`)}>
+                <thead>
+                  <tr
+                    className={cn(
+                      `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                    )}
+                  >
+                    <th className={cn(`py-3 font-medium`)}>User</th>
+                    <th className={cn(`py-3 font-medium`)}>Amount</th>
+                    <th className={cn(`py-3 font-medium`)}>Wallet</th>
+                    <th className={cn(`py-3 font-medium`)}>Method</th>
+                    <th className={cn(`py-3 font-medium`)}>Transaction ID</th>
+                    <th className={cn(`py-3 font-medium`)}>Description</th>
+                    <th className={cn(`py-3 font-medium`)}>Status</th>
+                    {/* <th className={cn(`py-3 font-medium`)}>Date</th> */}
+                  </tr>
+                </thead>
 
-              <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
-                {deposits.map((item) => (
-                  <tr key={item.id} className={cn(`group`)}>
-                    <td className={cn(`py-4 pr-4`)}>
-                      <div className={cn(`flex items-center gap-3`)}>
-                        <div
+                <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
+                  {pendingMiningWalletDeposites.map((item) => (
+                    <tr key={item.id} className={cn(`group`)}>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <div className={cn(`flex items-center gap-3`)}>
+                          <div
+                            className={cn(
+                              `flex size-10 shrink-0 items-center justify-center rounded-full`,
+                              `text-xs font-semibold text-white`,
+                            )}
+                          ></div>
+
+                          <div className={cn(`flex flex-col`)}>
+                            <span className={cn(`font-medium`)}>
+                              {allUsers!.find((u) => item.orderedBy === u.id)
+                                ?.fullName ?? "Jhon Doe"}
+                            </span>
+                            <span className={cn(`text-foreground/50 text-xs`)}>
+                              {allUsers!.find((u) => item.orderedBy === u.id)
+                                ?.email ?? "jhon-doe@email.com"}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td
+                        className={cn(`py-4 pr-4 font-semibold text-green-500`)}
+                      >
+                        {item.amount}
+                      </td>
+
+                      <td className={cn(`py-4 pr-4`)}>
+                        <span
                           className={cn(
-                            `flex size-10 shrink-0 items-center justify-center rounded-full`,
-                            `text-xs font-semibold text-white`,
-                            item.user.bg,
+                            `border-secondary-500/20 bg-secondary-500/20 rounded-md border`,
+                            `text-secondary-300 px-2 py-0.5 text-xs font-semibold`,
                           )}
                         >
-                          {item.user.initial}
-                        </div>
+                          {item.wallet}
+                        </span>
+                      </td>
 
-                        <div className={cn(`flex flex-col`)}>
-                          <span className={cn(`font-medium`)}>
-                            {item.user.name}
-                          </span>
-                          <span className={cn(`text-foreground/50 text-xs`)}>
-                            {item.user.email}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
+                      <td
+                        className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}
+                      >
+                        {item.depositMethod}
+                      </td>
 
-                    <td
-                      className={cn(`py-4 pr-4 font-semibold text-green-500`)}
-                    >
-                      {item.amount}
-                    </td>
-
-                    <td className={cn(`py-4 pr-4`)}>
-                      <span
+                      <td
                         className={cn(
-                          `border-secondary-500/20 bg-secondary-500/20 rounded-md border`,
-                          `text-secondary-300 px-2 py-0.5 text-xs font-semibold`,
+                          `text-foreground/60 py-4 pr-4 font-mono text-xs`,
                         )}
                       >
-                        {item.wallet}
-                      </span>
-                    </td>
+                        {item.transactionId}
+                      </td>
 
-                    <td className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}>
-                      {item.method}
-                    </td>
+                      <td
+                        className={cn(`text-foreground/70 py-4 pr-4 text-xs`)}
+                      ></td>
 
-                    <td
-                      className={cn(
-                        `text-foreground/60 py-4 pr-4 font-mono text-xs`,
-                      )}
-                    >
-                      {item.transactionId}
-                    </td>
+                      <td className={cn(`py-4 pr-4`)}>
+                        <span
+                          className={cn(
+                            `inline-flex items-center rounded-full border border-yellow-500/30`,
+                            `bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
+                          )}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
 
-                    <td className={cn(`text-foreground/70 py-4 pr-4 text-xs`)}>
-                      {item.description}
-                    </td>
-
-                    <td className={cn(`py-4 pr-4`)}>
-                      <span
-                        className={cn(
-                          `inline-flex items-center rounded-full border border-yellow-500/30`,
-                          `bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
-                        )}
+                      {/* <td
+                        className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
                       >
-                        {item.status}
-                      </span>
-                    </td>
-
-                    <td className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}>
-                      {item.date}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                        {new (item.createdAt)}
+                      </td> */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
       </div>
     </section>
   );

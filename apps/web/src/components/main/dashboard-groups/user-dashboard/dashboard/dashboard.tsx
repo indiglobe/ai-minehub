@@ -11,7 +11,7 @@ import {
 } from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard-stats";
 import { extractMonthName } from "@repo/utils/date";
 import {
-  useMiningOrdersData,
+  useReadActiveMiningSessions,
   useRecentTransactionsHistory,
 } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { round } from "es-toolkit/math";
@@ -87,7 +87,7 @@ export function ActiveMiningSession({
     data: activeMiningSessions,
     isPending,
     error,
-  } = useMiningOrdersData();
+  } = useReadActiveMiningSessions();
 
   return (
     <section className={cn(``, className)} {...props}>
@@ -470,9 +470,9 @@ export function RecentTransaction({
                                 `fs-2.5 rounded-full border px-2 py-0.5 font-bold`,
                                 {
                                   "border-green-500/20 bg-green-500/10 text-green-500":
-                                    status === "completed",
+                                    status === "COMPLETED",
                                   "border-red-500/20 bg-red-500/10 text-red-500":
-                                    status === "pending",
+                                    status === "ACTIVE",
                                 },
                               )}
                             >
@@ -518,7 +518,7 @@ export function QuickActions({
 
         <div className={cn(`grid grid-cols-2 gap-4`)}>
           <Link
-            to="/"
+            to="/mining"
             className={cn(
               `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
             )}
@@ -534,7 +534,7 @@ export function QuickActions({
           </Link>
 
           <Link
-            to="/"
+            to="/wallet"
             className={cn(
               `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
             )}
@@ -550,7 +550,7 @@ export function QuickActions({
           </Link>
 
           <Link
-            to="/"
+            to="/referral"
             className={cn(
               `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
             )}
@@ -566,7 +566,7 @@ export function QuickActions({
           </Link>
 
           <Link
-            to="/"
+            to="/dashboard"
             className={cn(
               `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
             )}
@@ -582,7 +582,7 @@ export function QuickActions({
           </Link>
 
           <Link
-            to="/"
+            to="/support-chat"
             className={cn(
               `bg-secondary-500/5 border-secondary-500/10 flex flex-col items-center justify-center rounded-lg border p-4`,
             )}

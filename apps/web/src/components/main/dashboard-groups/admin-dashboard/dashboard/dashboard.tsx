@@ -36,6 +36,7 @@ import {
   UserGrowthCardError,
   UserGrowthCardLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/dashboard/boundary-comps";
+import { useReadUserCount } from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
 
 export default function AdminDashboard() {
   return (
@@ -66,12 +67,14 @@ export function AdminStatsSection({
     </section>
   );
 }
+
 export function TotalUsersStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
+  const { data, isLoading, isError } = useReadUserCount();
   // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
   // const [state] = useState<"error" | "loading" | "data">("error");
 
   return (
@@ -89,14 +92,18 @@ export function TotalUsersStat({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {state === "data" && (
+      {/* {state === "data" && ( */}
+      {data && (
         <>
-          <StatCardData className={cn(`text-foreground`)}>11</StatCardData>
+          <StatCardData className={cn(`text-foreground`)}>
+            {data.count}
+          </StatCardData>
           <StatCardFooter>Total registered users</StatCardFooter>
         </>
       )}
 
-      {state === "error" && (
+      {/* {state === "error" && ( */}
+      {isError && (
         <>
           <p
             className={cn(
@@ -117,7 +124,8 @@ export function TotalUsersStat({
         </>
       )}
 
-      {state === "loading" && (
+      {/* {state === "loading" && ( */}
+      {isLoading && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -186,6 +194,7 @@ export function TotalDepositsStat({
     </StatCard>
   );
 }
+
 export function PendingDepositsStat({
   className,
   ...props
@@ -967,5 +976,3 @@ export function PendingWithdrawalsTable({
     </section>
   );
 }
-
-

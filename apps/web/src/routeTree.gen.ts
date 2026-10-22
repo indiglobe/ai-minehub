@@ -21,6 +21,7 @@ import { Route as withHeaderFooterTradingIndexRouteImport } from './routes/(with
 import { Route as withoutHeaderFooterauthenticatedexistingUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(existing-user)/route'
 import { Route as withoutHeaderFooterauthenticatednewUserRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/(new-user)/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiUploadIndexRouteImport } from './routes/api/upload/index'
 import { Route as withHeaderFooterCompanyAboutIndexRouteImport } from './routes/(with-header-footer)/company/about/index'
 import { Route as withHeaderFooterCompanyAwardsIndexRouteImport } from './routes/(with-header-footer)/company/awards/index'
 import { Route as withHeaderFooterCompanyNewsIndexRouteImport } from './routes/(with-header-footer)/company/news/index'
@@ -113,6 +114,11 @@ const withoutHeaderFooterauthenticatednewUserRouteRoute =
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadIndexRoute = ApiUploadIndexRouteImport.update({
+  id: '/api/upload/',
+  path: '/api/upload/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const withHeaderFooterCompanyAboutIndexRoute =
@@ -340,6 +346,7 @@ export interface FileRoutesByFullPath {
   '/partnership/': typeof withHeaderFooterPartnershipIndexRoute
   '/tools/': typeof withHeaderFooterToolsIndexRoute
   '/trading/': typeof withHeaderFooterTradingIndexRoute
+  '/api/upload/': typeof ApiUploadIndexRoute
   '/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards/': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news/': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -376,6 +383,7 @@ export interface FileRoutesByTo {
   '/partnership': typeof withHeaderFooterPartnershipIndexRoute
   '/tools': typeof withHeaderFooterToolsIndexRoute
   '/trading': typeof withHeaderFooterTradingIndexRoute
+  '/api/upload': typeof ApiUploadIndexRoute
   '/company/about': typeof withHeaderFooterCompanyAboutIndexRoute
   '/company/awards': typeof withHeaderFooterCompanyAwardsIndexRoute
   '/company/news': typeof withHeaderFooterCompanyNewsIndexRoute
@@ -419,6 +427,7 @@ export interface FileRoutesById {
   '/(with-header-footer)/partnership/': typeof withHeaderFooterPartnershipIndexRoute
   '/(with-header-footer)/tools/': typeof withHeaderFooterToolsIndexRoute
   '/(with-header-footer)/trading/': typeof withHeaderFooterTradingIndexRoute
+  '/api/upload/': typeof ApiUploadIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)/(admin)': typeof withoutHeaderFooterauthenticatedexistingUseradminRouteRouteWithChildren
   '/(without-header-footer)/(authenticated)/(existing-user)/(basic)': typeof withoutHeaderFooterauthenticatedexistingUserbasicRouteRouteWithChildren
   '/(with-header-footer)/company/about/': typeof withHeaderFooterCompanyAboutIndexRoute
@@ -459,6 +468,7 @@ export interface FileRouteTypes {
     | '/partnership/'
     | '/tools/'
     | '/trading/'
+    | '/api/upload/'
     | '/company/about/'
     | '/company/awards/'
     | '/company/news/'
@@ -495,6 +505,7 @@ export interface FileRouteTypes {
     | '/partnership'
     | '/tools'
     | '/trading'
+    | '/api/upload'
     | '/company/about'
     | '/company/awards'
     | '/company/news'
@@ -537,6 +548,7 @@ export interface FileRouteTypes {
     | '/(with-header-footer)/partnership/'
     | '/(with-header-footer)/tools/'
     | '/(with-header-footer)/trading/'
+    | '/api/upload/'
     | '/(without-header-footer)/(authenticated)/(existing-user)/(admin)'
     | '/(without-header-footer)/(authenticated)/(existing-user)/(basic)'
     | '/(with-header-footer)/company/about/'
@@ -575,6 +587,7 @@ export interface RootRouteChildren {
   withoutHeaderFooterguestRouteRoute: typeof withoutHeaderFooterguestRouteRouteWithChildren
   withoutHeaderFooterleagalPagesRouteRoute: typeof withoutHeaderFooterleagalPagesRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiUploadIndexRoute: typeof ApiUploadIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -661,6 +674,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload/': {
+      id: '/api/upload/'
+      path: '/api/upload'
+      fullPath: '/api/upload/'
+      preLoaderRoute: typeof ApiUploadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/company/about/': {
@@ -1085,6 +1105,7 @@ const rootRouteChildren: RootRouteChildren = {
   withoutHeaderFooterleagalPagesRouteRoute:
     withoutHeaderFooterleagalPagesRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiUploadIndexRoute: ApiUploadIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

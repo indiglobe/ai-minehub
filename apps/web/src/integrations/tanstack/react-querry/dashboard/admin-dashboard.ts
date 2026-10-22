@@ -1,34 +1,78 @@
-import { serverFn__readAllUsers } from "@/integrations/server-function/user";
+import {
+  serverFn__readAllUsers,
+  serverFn__readUserCount,
+} from "@/integrations/server-function/user";
 import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { serverFn__readAllMiningWalletDeposite } from "@/integrations/server-function/mining-wallet-deposits";
 
-export const querryKeys = {
-  all: () => ["dashboard", "admin"],
-  allUsers: () => [...querryKeys.all(), "all-users"],
-  allMiningProfiles: () => [...querryKeys.all(), "all-mining-profiles"],
+// Hierarchical query keys factory scoped for admin operations
+export const queryKeys = {
+  all: ["admin"] as const,
+  
+  users: {
+    all: () => [...queryKeys.all, "users"] as const,
+    count: (role?: string) => [...queryKeys.users.all(), "count", { role }] as const,
+    list: () => [...queryKeys.users.all(), "list"] as const,
+  },
+
+  mining: {
+    all: () => [...queryKeys.all, "mining"] as const,
+    profiles: () => [...queryKeys.mining.all(), "profiles"] as const,
+    deposits: (status?: string) => [...queryKeys.mining.all(), "deposits", { status }] as const,
+  },
 };
 
-export function useFetchAllusers() {
+export function useReadUserCount() {
+  const readUserCount = useServerFn(serverFn__readUserCount);
+
+  return useQuery(
+    queryOptions({
+      queryKey: queryKeys.users.count("BASIC"),
+
+      queryFn: () => readUserCount({ data: { identifier: { role: "BASIC" } } }),
+    }),
+  );
+}
+
+export function useReadAllusers() {
   const readAllUsers = useServerFn(serverFn__readAllUsers);
 
   return useQuery(
     queryOptions({
-      queryKey: querryKeys.allUsers(),
+      queryKey: queryKeys.users.list(),
 
       queryFn: () => readAllUsers(),
     }),
   );
 }
 
-export function useFetchAllMiningPlans() {
+export function useReadAllMiningPlans() {
   const readAllMiningProfiles = useServerFn(serverFn__readAllMiningProfiles);
 
   return useQuery(
     queryOptions({
-      queryKey: querryKeys.allMiningProfiles(),
+      queryKey: queryKeys.mining.profiles(),
 
       queryFn: () => readAllMiningProfiles(),
+    }),
+  );
+}
+
+export function useReadAllPendingMiningWalletDeposite() {
+  const readAllMiningWalletDeposite = useServerFn(
+    serverFn__readAllMiningWalletDeposite,
+  );
+
+  return useQuery(
+    queryOptions({
+      queryKey: queryKeys.mining.deposits("PENDING"),
+
+      queryFn: () =>
+        readAllMiningWalletDeposite({
+          data: { identifier: { status: "PENDING" } },
+        }),
     }),
   );
 }
