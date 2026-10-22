@@ -47,6 +47,10 @@ jobs:
             WEB_APP_HOST=${{ secrets.WEB_APP_HOST }}
             SOCKET_APP_HOST=${{ secrets.SOCKET_APP_HOST }}
             TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}
+            FTP_HOST=${{ secrets.FTP_HOST }}
+            FTP_PORT=${{ secrets.FTP_PORT }}
+            FTP_USER=${{ secrets.FTP_USER }}
+            FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}
 
             TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}
             TURBO_TEAM=${{ secrets.TURBO_TEAM }}
