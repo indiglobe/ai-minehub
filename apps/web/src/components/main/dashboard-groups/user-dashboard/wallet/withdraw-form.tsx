@@ -1,4 +1,6 @@
 import {
+  useCreateMiningWalletWithdraws,
+  useCreateTradingWalletWithdraw,
   useReadMiningWallet,
   useReadTradingWallet,
 } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
@@ -7,6 +9,15 @@ import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import type { ComponentProps } from "react";
 import { QR_CODE } from "@repo/utils/const/qr";
+import { tryCatch } from "@repo/utils/try-catch";
+import { useRouteContext } from "@tanstack/react-router";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
 
 const quickAmounts = [50, 100, 500, 1000];
 
@@ -37,6 +48,14 @@ export function WithdrawForm({
 }: ComponentProps<"section">) {
   const { data: miningWallet } = useReadMiningWallet();
   const { data: tradingWallet } = useReadTradingWallet();
+  const { mutateAsync: createMiningWalletWithdraws } =
+    useCreateMiningWalletWithdraws();
+  const { mutateAsync: createTradingWalletWithdraw } =
+    useCreateTradingWalletWithdraw();
+
+  const { userDetailsFromCookie } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/",
+  });
 
   const form = useForm({
     defaultValues,
@@ -76,21 +95,55 @@ export function WithdrawForm({
         throw new Error(`${sourceWallet} is not available.`);
       }
 
-      // TODO: Call your withdrawal mutation/API here.
-      // Available values:
-      // selectedWallet.id
-      // sourceWallet
-      // network
-      // withdrawalAddress
-      // amount
+      const { userId } = userDetailsFromCookie;
 
-      console.log("Withdrawal request:", {
-        wallet: selectedWallet.id,
-        sourceWallet,
-        network,
-        withdrawalAddress,
-        amount,
-      });
+      if (value.sourceWallet === "Mining Wallet") {
+        const [miningWalletWithdrawsError] = await tryCatch(
+          createMiningWalletWithdraws({
+            data: {
+              dataToInsert: {
+                amount: amount,
+                cryptoWalletAddress: withdrawalAddress,
+                orderedBy: userId,
+                status: "PENDING",
+                wallet: miningWallet!.id,
+                withdrawalMethod: network,
+              },
+            },
+          }),
+        );
+
+        if (miningWalletWithdrawsError) {
+          console.error(
+            "Error in miningWalletWithdrawsError in from-submission",
+          );
+          throw miningWalletWithdrawsError;
+        }
+      }
+
+      if (value.sourceWallet === "Trading Wallet") {
+        const [tradingWalletWithdrawError] = await tryCatch(
+          createTradingWalletWithdraw({
+            data: {
+              dataToInsert: {
+                amount: amount,
+                cryptoWaletAddress: withdrawalAddress,
+                orderedBy: userId,
+                status: "PENDING",
+                wallet: tradingWallet!.id,
+                withdrawlMethod: network,
+              },
+            },
+          }),
+        );
+
+        if (tradingWalletWithdrawError) {
+          console.error(
+            "Error in tradingWalletWithdrawError in from-submission",
+          );
+          throw tradingWalletWithdrawError;
+        }
+      }
     },
   });
 
@@ -130,7 +183,6 @@ export function WithdrawForm({
         className="mt-7 space-y-6"
       >
         {/* Source Wallet */}
-
         <form.Field name="sourceWallet">
           {(field) => (
             <div className="space-y-2">
@@ -138,22 +190,29 @@ export function WithdrawForm({
                 Select Source Wallet *
               </label>
 
-              <select
-                id="withdraw-wallet"
-                name={field.name}
-                required
+              <Select
                 value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(event) =>
+                onValueChange={(value) =>
                   field.handleChange(
-                    event.target.value as WithdrawFormValues["sourceWallet"],
+                    value as WithdrawFormValues["sourceWallet"],
                   )
                 }
-                className={fieldClass}
+                required
               >
-                <option value="Mining Wallet">Mining Wallet</option>
-                <option value="Trading Wallet">Trading Wallet</option>
-              </select>
+                <SelectTrigger
+                  id="withdraw-wallet"
+                  className={fieldClass}
+                  onBlur={field.handleBlur}
+                >
+                  <SelectValue placeholder="Select a source wallet" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="Mining Wallet">Mining Wallet</SelectItem>
+
+                  <SelectItem value="Trading Wallet">Trading Wallet</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           )}
         </form.Field>

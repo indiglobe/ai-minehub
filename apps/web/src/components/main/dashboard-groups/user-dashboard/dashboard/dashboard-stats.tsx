@@ -23,8 +23,12 @@ export function MiningWallet() {
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
-  const { mutate: createMiningWallet } = useCreateMiningWallet();
-  const { data: miningWallet, isError, isLoading } = useReadMiningWallet();
+  const { mutateAsync: createMiningWallet } = useCreateMiningWallet();
+  const {
+    data: miningWallet,
+    isError: isMiningWalletError,
+    isLoading: isMiningWalletLoading,
+  } = useReadMiningWallet();
 
   return (
     <StatCard>
@@ -35,7 +39,7 @@ export function MiningWallet() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isError && (
+      {isMiningWalletError && (
         <div className="flex items-center justify-center">
           <div className="text-center">
             <p className="text-destructive font-medium">
@@ -48,7 +52,7 @@ export function MiningWallet() {
         </div>
       )}
 
-      {isLoading && (
+      {isMiningWalletLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="border-secondary-200 border-t-secondary-500 h-8 w-8 animate-spin rounded-full border-4" />
@@ -59,14 +63,16 @@ export function MiningWallet() {
         </div>
       )}
 
-      {!isError && !isLoading && !miningWallet && (
+      {!isMiningWalletError && !isMiningWalletLoading && !miningWallet && (
         <Button
           variant="secondary"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
-          onClick={() =>
-            createMiningWallet({
+          onClick={async () =>
+            await createMiningWallet({
               data: {
-                dataToInsert: { associatedUser: userDetailsFromCookie.userId },
+                dataToInsert: {
+                  associatedUser: userDetailsFromCookie.userId,
+                },
               },
             })
           }
@@ -94,7 +100,11 @@ export function TradingWallet() {
   });
 
   const { mutate: createTradingWallet } = useCreateTradingWallet();
-  const { data: tradingwallet, isError, isLoading } = useReadTradingWallet();
+  const {
+    data: tradingwallet,
+    isError: isTradingWalletError,
+    isLoading: isTradingWalletLoading,
+  } = useReadTradingWallet();
 
   return (
     <StatCard>
@@ -105,7 +115,7 @@ export function TradingWallet() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isError && (
+      {isTradingWalletError && (
         <div className="flex items-center justify-center">
           <div className="text-center">
             <p className="text-destructive font-medium">
@@ -118,7 +128,7 @@ export function TradingWallet() {
         </div>
       )}
 
-      {isLoading && (
+      {isTradingWalletLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="border-accent-200 border-t-accent-500 h-8 w-8 animate-spin rounded-full border-4" />
@@ -129,7 +139,7 @@ export function TradingWallet() {
         </div>
       )}
 
-      {!isError && !isLoading && !tradingwallet && (
+      {!isTradingWalletError && !isTradingWalletLoading && !tradingwallet && (
         <Button
           variant="accent"
           className={cn("mx-auto mt-10 flex w-full max-w-max rounded-md")}
@@ -161,7 +171,11 @@ export function TradingWallet() {
 }
 
 export function InvestedAmount() {
-  const { data: investment, isError, isLoading } = useInvestmentData();
+  const {
+    data: investment,
+    isError: isInvestmentError,
+    isLoading: isInvestmentLoading,
+  } = useInvestmentData();
 
   return (
     <StatCard>
@@ -172,7 +186,7 @@ export function InvestedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isError && (
+      {isInvestmentError && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">
             Unable to load investment
@@ -184,7 +198,7 @@ export function InvestedAmount() {
         </div>
       )}
 
-      {isLoading && (
+      {isInvestmentLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-200 border-t-red-500" />
@@ -209,7 +223,11 @@ export function InvestedAmount() {
 }
 
 export function GainedAmount() {
-  const { data: investment, error, isLoading } = useInvestmentData();
+  const {
+    data: investment,
+    isError: isInvestmentError,
+    isLoading: isInvestmentLoading,
+  } = useInvestmentData();
 
   return (
     <StatCard>
@@ -220,7 +238,7 @@ export function GainedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && (
+      {isInvestmentError && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">Unable to load profit</p>
 
@@ -230,7 +248,7 @@ export function GainedAmount() {
         </div>
       )}
 
-      {isLoading && (
+      {isInvestmentLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />
@@ -253,7 +271,11 @@ export function GainedAmount() {
 }
 
 export function ActiveInvestment() {
-  const { data: investment, error, isLoading } = useInvestmentData();
+  const {
+    data: investment,
+    isError: isInvestmentError,
+    isLoading: isInvestmentLoading,
+  } = useInvestmentData();
 
   return (
     <StatCard>
@@ -264,7 +286,7 @@ export function ActiveInvestment() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {error && (
+      {isInvestmentError && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">
             Unable to load investment
@@ -276,7 +298,7 @@ export function ActiveInvestment() {
         </div>
       )}
 
-      {isLoading && (
+      {isInvestmentLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />

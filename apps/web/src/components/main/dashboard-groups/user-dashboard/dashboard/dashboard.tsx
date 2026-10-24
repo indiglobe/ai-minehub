@@ -100,9 +100,9 @@ export function ActiveMiningSession({
           <h2 className={cn(`font-brand-secondary`)}>
             ⛏️ Active Mining Sessions
           </h2>
-          <Link to="/" className={cn(`text-sm text-purple-500`)}>
+          {/* <Link to="/" className={cn(`text-sm text-purple-500`)}>
             View all →
-          </Link>
+          </Link> */}
         </div>
 
         <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />

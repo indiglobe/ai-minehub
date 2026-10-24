@@ -9,7 +9,13 @@ import {
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
 
-export const serverFn__createMiningWalletDeposite = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__createMiningWalletDeposite = createServerFn({
+  method: "POST",
+})
   .validator(create__MiningWalletDepositeSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
@@ -27,7 +33,13 @@ export const serverFn__createMiningWalletDeposite = createServerFn()
     return serverFnResult;
   });
 
-export const serverFn__readAllMiningWalletDeposite = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readAllMiningWalletDeposite = createServerFn({
+  method: "GET",
+})
   .validator(read__AllMiningWalletDepositeSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(

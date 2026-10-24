@@ -3,7 +3,15 @@ import { create__TradingWalletDepositeSchema } from "@repo/data/validators/tradi
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
 
-export const serverFn__createTradingWalletDeposite = createServerFn()
+
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__createTradingWalletDeposite = createServerFn({
+  method: "POST",
+})
   .validator(create__TradingWalletDepositeSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(

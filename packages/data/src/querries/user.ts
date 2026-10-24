@@ -1,7 +1,7 @@
 import { db } from "@/index";
 import { Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, eq, getTableColumns, sql, SQL } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray, sql, SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 /**
@@ -84,7 +84,7 @@ const read__UserCount = async (options?: TRead__UserCount) => {
     throw queryOperationError;
   }
 
-  const  [userCount] = queryOperationResult
+  const [userCount] = queryOperationResult;
   return userCount;
 };
 
@@ -100,7 +100,9 @@ type TRead__AllUsers = {
         referrerId: (typeof Table__User.$inferSelect)["referrerId"];
       }
     | {
-        role: (typeof Table__User.$inferSelect)["role"];
+        role:
+          | (typeof Table__User.$inferSelect)["role"]
+          | (typeof Table__User.$inferSelect)["role"][];
       };
 
   queryOptions?: {
@@ -128,14 +130,16 @@ const read__AllUsers = async (options?: TRead__AllUsers) => {
   const conditions: SQL[] = [];
 
   if (options?.identifier) {
-    if ("role" in options.identifier) {
-      conditions.push(eq(Table__User.role, options.identifier.role));
-    }
-
-    if ("referrerId" in options.identifier && options.identifier.referrerId) {
-      conditions.push(
-        eq(Table__User.referrerId, options.identifier.referrerId),
-      );
+    if ("role" in options.identifier && options.identifier.role !== undefined) {
+      if (Array.isArray(options.identifier.role)) {
+        if (options.identifier.role.length > 0) {
+          conditions.push(inArray(Table__User.role, options.identifier.role));
+        } else {
+          return [];
+        }
+      } else {
+        conditions.push(eq(Table__User.role, options.identifier.role));
+      }
     }
   }
 

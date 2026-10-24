@@ -4,8 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import { tryCatch } from "@repo/utils/try-catch";
 import { env } from "@repo/env/server";
-
-const STATIC_FILE_UPLOAD_DIR = "/public_html/storage/uploads";
+import { STATIC_FILE_UPLOAD_DIR } from "@repo/utils/const/static-file-upload-path";
 
 export async function uploadFile(file: File): Promise<string> {
   // ==============================================================
@@ -73,5 +72,5 @@ export async function uploadFile(file: File): Promise<string> {
     throw unlinkError;
   }
 
-  return `${env.WEB_APP_HOST}${STATIC_FILE_UPLOAD_DIR.split("/public_html")[1]}${fileName}`;
+  return `${env.WEB_APP_HOST}${STATIC_FILE_UPLOAD_DIR.split("/public_html/storage")[1]}${fileName}`;
 }

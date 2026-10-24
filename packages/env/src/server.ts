@@ -12,6 +12,7 @@ export const env = createEnv({
 
     SOCKET_APP_HOST: z.string(),
     WEB_APP_HOST: z.string(),
+    STORAGE_APP_HOST: z.string(),
 
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),

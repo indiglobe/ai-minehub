@@ -3,7 +3,11 @@ import { read__AllMiningProfilesSchema } from "@repo/data/validators/mining-prof
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
 
-export const serverFn__readAllMiningProfiles = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readAllMiningProfiles = createServerFn({ method: "GET" })
   .validator(read__AllMiningProfilesSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResponse] = await tryCatch(

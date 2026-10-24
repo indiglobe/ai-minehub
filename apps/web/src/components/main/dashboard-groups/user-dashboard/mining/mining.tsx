@@ -12,7 +12,14 @@ import {
   PassiveIncomeTitle,
 } from "./page-ui";
 import { ErrorBoundary } from "react-error-boundary";
-import { Await, useLoaderData } from "@tanstack/react-router";
+import {
+  Await,
+  Link,
+  useLoaderData,
+  useRouteContext,
+} from "@tanstack/react-router";
+import { Button } from "@repo/ui/button";
+import { AlertCircle, LoaderCircle, RefreshCw } from "lucide-react";
 
 export function Mining() {
   return (
@@ -69,8 +76,61 @@ export function MiningBalance({
 
   return (
     <section className={cn(`default-padding`, className)} {...props}>
-      {isMiningWalletError && <>isMiningWalletError</>}
-      {isMiningWalletLoading && <>isMiningWalletLoading</>}
+      {isMiningWalletError && (
+        <div className="flex min-h-38 w-full items-center justify-between gap-4 rounded-2xl border border-red-500/20 bg-[#111118] px-6 py-7 md:px-8">
+          <div className="flex items-center gap-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
+              <AlertCircle className="size-6 text-red-400" />
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="font-semibold text-white">Balance unavailable</h3>
+              <p className="text-foreground/60 text-sm">
+                We couldn't load your mining balance.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            className="shrink-0 rounded-xl border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+            onClick={() => window.location.reload()}
+          >
+            <RefreshCw className="mr-2 size-4" />
+            Retry
+          </Button>
+        </div>
+      )}
+
+      {isMiningWalletLoading && (
+        <div className="relative flex min-h-38 w-full items-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-6 py-7 md:px-8">
+          <div className="absolute inset-y-0 left-0 w-1 bg-linear-to-b from-[#626ee7] to-[#7849b7]" />
+
+          <div className="relative flex size-12 shrink-0 items-center justify-center">
+            <div className="absolute inset-0 animate-ping rounded-xl bg-[#6268ff]/10" />
+            <div className="relative flex size-12 items-center justify-center rounded-xl border border-[#6268ff]/20 bg-[#6268ff]/10">
+              <LoaderCircle className="size-6 animate-spin text-[#8187ff]" />
+            </div>
+          </div>
+
+          <div className="flex-1 space-y-3">
+            <p className="text-foreground/70 text-sm font-medium">
+              Mining Balance
+            </p>
+
+            <div className="h-8 w-36 animate-pulse rounded-lg bg-white/10" />
+
+            <p className="text-foreground/40 text-xs">
+              Syncing your wallet balance...
+            </p>
+          </div>
+
+          <div className="hidden rounded-xl border border-white/5 bg-white/3 px-4 py-3 sm:block">
+            <div className="mb-2 h-2 w-16 animate-pulse rounded bg-white/10" />
+            <div className="h-2 w-10 animate-pulse rounded bg-white/6" />
+          </div>
+        </div>
+      )}
 
       {!isMiningWalletError && !isMiningWalletLoading && (
         <div
@@ -96,16 +156,18 @@ export function MiningBalance({
             </h2>
           </div>
 
-          <button
-            type="button"
+          <Button
+            asChild
             className={cn(
               `flex items-center justify-center gap-3 rounded-xl bg-linear-to-r from-[#626ee7] to-[#7849b7] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:brightness-110 active:scale-95 md:px-7 md:text-base`,
             )}
           >
-            <span className={cn(`text-2xl leading-none font-light`)}>+</span>
+            <Link to="/wallet">
+              <span className={cn(`text-2xl leading-none font-light`)}>+</span>
 
-            <span>Deposit</span>
-          </button>
+              <span>Deposit</span>
+            </Link>
+          </Button>
         </div>
       )}
     </section>
@@ -120,8 +182,14 @@ export function AvailableMiningOptions({
     from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/",
   });
 
+  const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/",
+  });
+
   return (
-    <section className={cn(`default-padding py-20`, className)} {...props}>
+    <section className={cn(`py-20`, className)} {...props}>
       <ErrorBoundary fallback={<div>Error...</div>}>
         <Await promise={allMiningProfilesProm} fallback={<div>Loading...</div>}>
           {(allMiningProfiles) => (
@@ -156,7 +224,7 @@ export function AvailableMiningOptions({
                     <PassiveIncomeReturn>
                       +
                       {new Intl.NumberFormat("en-IN", {
-                        minimumFractionDigits: 2,
+                        minimumFractionDigits: 0,
                       }).format(lockinPeriod * dailyReturn)}
                       %
                     </PassiveIncomeReturn>
@@ -179,7 +247,7 @@ export function AvailableMiningOptions({
                       </PassiveIncomeDescriptionItem>
                     </PassiveIncomeDescription>
 
-                    <PassiveIncomeCTA />
+                    <PassiveIncomeCTA miningProfilesUsed={id} userId={userId} />
                   </PassiveIncome>
                 ),
               )}

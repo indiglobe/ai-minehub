@@ -1,6 +1,21 @@
 import { TRANSACTION_METHOD } from "@/db-enums";
 
-export const QR_CODE = [
+/**
+ * Collection of supported cryptocurrency wallet details used to display
+ * wallet addresses, QR code images, network types, names, and icons
+ * for transaction deposits.
+ *
+ * The `satisfies` constraint ensures that each wallet's transaction method
+ * is valid and that all required wallet properties are provided.
+ */
+
+export const QR_CODE: {
+  walletImageSource: string;
+  walletId: string;
+  walletType: (typeof TRANSACTION_METHOD)[number];
+  name: string;
+  icon: string;
+}[] = [
   {
     walletId: "0x498B3e02EBdF93A263bD2731dA2c8A6C263d86ED",
     walletImageSource: "/wallet/qr-code/bep20.jpeg",
@@ -29,10 +44,4 @@ export const QR_CODE = [
     name: "TRON (TRC20)",
     icon: "🔴",
   },
-] as const satisfies {
-  walletImageSource: string;
-  walletId: string;
-  walletType: (typeof TRANSACTION_METHOD)[number];
-  name: string;
-  icon: string;
-}[];
+] as const;

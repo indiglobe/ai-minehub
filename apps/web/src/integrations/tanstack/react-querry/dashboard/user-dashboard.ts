@@ -9,22 +9,33 @@ import { useRouteContext } from "@tanstack/react-router";
 import {
   serverFn__createMiningWallet,
   serverFn__readOneMiningWallet,
+  serverFn__updateOneMiningWallet,
 } from "@/integrations/server-function/mining-wallet";
 import {
   serverFn__createTradingWallet,
   serverFn__readOneTradingWallet,
 } from "@/integrations/server-function/trading-wallet";
-import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import {
+  serverFn__createMiningOrder,
+  serverFn__readAllMiningOrders,
+} from "@/integrations/server-function/mining-order";
 import { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
 import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
 import type { INVESTMENT_STATUS } from "@repo/utils/db-enums";
 import { serverFn__createMiningWalletDeposite } from "@/integrations/server-function/mining-wallet-deposits";
 import { serverFn__createTradingWalletDeposite } from "@/integrations/server-function/trading-wallet-deposits";
 import { serverFn__readAllReferalEarning } from "@/integrations/server-function/referal-earning";
+import { serverFn__createTradingWalletWithdraw } from "@/integrations/server-function/trading-wallet-withdraw";
+import { serverFn__createMiningWalletWithdraw } from "@/integrations/server-function/mining-wallet-withdraw";
 
-export type TRrecentTransactionsOptions = { userId: string };
+export type TRrecentTransactionsOptions = {
+  userId: string;
+};
 
-// Hierarchical query keys factory scoped by user and resource type
+// -----------------------------------------------------------------------------
+// Query keys
+// -----------------------------------------------------------------------------
+
 export const queryKeys = {
   all: ["user"] as const,
 
@@ -32,17 +43,25 @@ export const queryKeys = {
 
   mining: {
     all: (userId: string) => [...queryKeys.user(userId), "mining"] as const,
+
     orders: (userId: string, filters?: Record<string, any>) =>
       [...queryKeys.mining.all(userId), "orders", filters] as const,
+
+    activeSessions: (userId: string) =>
+      [...queryKeys.mining.all(userId), "active-sessions"] as const,
+
     wallet: (userId: string) =>
       [...queryKeys.mining.all(userId), "wallet"] as const,
+
     profiles: () => ["mining-profiles"] as const,
   },
 
   trading: {
     all: (userId: string) => [...queryKeys.user(userId), "trading"] as const,
+
     orders: (userId: string, filters?: Record<string, any>) =>
       [...queryKeys.trading.all(userId), "orders", filters] as const,
+
     wallet: (userId: string) =>
       [...queryKeys.trading.all(userId), "wallet"] as const,
   },
@@ -53,38 +72,62 @@ export const queryKeys = {
 
   dashboard: {
     all: (userId: string) => [...queryKeys.user(userId), "dashboard"] as const,
+
     investmentData: (userId: string) =>
       [...queryKeys.dashboard.all(userId), "investment"] as const,
+
     recentTransactions: (userId: string) =>
       [...queryKeys.dashboard.all(userId), "transactions"] as const,
   },
 };
 
-export function useReadActiveMiningSessions() {
-  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
-  const readAllMiningProfiles = useServerFn(serverFn__readAllMiningProfiles);
+// -----------------------------------------------------------------------------
+// Shared route context
+// -----------------------------------------------------------------------------
 
+function useAuthenticatedUserId() {
   const {
     userDetailsFromCookie: { userId },
   } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)",
   });
 
+  return userId;
+}
+
+// -----------------------------------------------------------------------------
+// Mining queries
+// -----------------------------------------------------------------------------
+
+export function useReadActiveMiningSessions() {
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+
+  const readAllMiningProfiles = useServerFn(serverFn__readAllMiningProfiles);
+
+  const userId = useAuthenticatedUserId();
+
   return useQuery(
     queryOptions({
-      queryKey: queryKeys.mining.orders(userId, { miningStatus: "ACTIVE" }),
+      queryKey: queryKeys.mining.activeSessions(userId),
 
       queryFn: async () => {
         const [allActiveMiningOrders, allMiningProfiles] = await Promise.all([
           readAllMiningOrders({
             data: {
-              identifier: { userId: userId, miningStatus: "ACTIVE" },
+              identifier: {
+                userId,
+                miningStatus: "ACTIVE",
+              },
             },
           }),
+
           readAllMiningProfiles(),
         ]);
 
-        return { allActiveMiningOrders, allMiningProfiles };
+        return {
+          allActiveMiningOrders,
+          allMiningProfiles,
+        };
       },
 
       select: (data) => {
@@ -92,24 +135,84 @@ export function useReadActiveMiningSessions() {
 
         return allActiveMiningOrders.map(({ miningProfileUsed, ...rest }) => {
           const miningProfile = allMiningProfiles.find(
-            (p) => p.id === miningProfileUsed,
-          )!;
+            (profile) => profile.id === miningProfileUsed,
+          );
 
-          return { ...rest, miningProfileUsed, miningProfile };
+          return {
+            ...rest,
+            miningProfileUsed,
+            miningProfile,
+          };
         });
       },
     }),
   );
 }
 
-export function useInvestmentData() {
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+export function useMiningOrdersData() {
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+
+  const userId = useAuthenticatedUserId();
+
+  return useQuery(
+    queryOptions({
+      queryKey: queryKeys.mining.orders(userId, {
+        miningStatus: "ACTIVE",
+      }),
+
+      queryFn: () =>
+        readAllMiningOrders({
+          data: {
+            identifier: {
+              userId,
+              miningStatus: "ACTIVE",
+            },
+          },
+        }),
+    }),
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Create mining order mutation
+// -----------------------------------------------------------------------------
+
+export function useCreateMiningOrder() {
+  const createMiningOrder = useServerFn(serverFn__createMiningOrder);
+
+  const queryClient = useQueryClient();
+  const userId = useAuthenticatedUserId();
+
+  return useMutation({
+    mutationFn: createMiningOrder,
+
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.mining.all(userId),
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.dashboard.investmentData(userId),
+        }),
+
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.dashboard.recentTransactions(userId),
+        }),
+      ]);
+    },
   });
+}
+
+// -----------------------------------------------------------------------------
+// Dashboard investment data
+// -----------------------------------------------------------------------------
+
+export function useInvestmentData() {
+  const userId = useAuthenticatedUserId();
 
   const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+
   const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
 
   return useQuery(
@@ -118,11 +221,23 @@ export function useInvestmentData() {
 
       queryFn: async () => {
         const [allMiningOrders, allTradingOrders] = await Promise.all([
-          readAllMiningOrders({ data: { identifier: { userId } } }),
-          readAllTradingOrders({ data: { identifier: { userId } } }),
+          readAllMiningOrders({
+            data: {
+              identifier: { userId },
+            },
+          }),
+
+          readAllTradingOrders({
+            data: {
+              identifier: { userId },
+            },
+          }),
         ]);
 
-        return { allMiningOrders, allTradingOrders };
+        return {
+          allMiningOrders,
+          allTradingOrders,
+        };
       },
 
       select: (data) => {
@@ -135,25 +250,25 @@ export function useInvestmentData() {
         data.allMiningOrders.forEach((miningOrder) => {
           output = {
             ...output,
+
             investedAmount: output.investedAmount + miningOrder.amountInvested,
+
             gainedAmount:
               output.gainedAmount +
               (miningOrder.amountReceived
                 ? miningOrder.amountReceived - miningOrder.amountInvested
                 : 0),
-          };
 
-          if (miningOrder.miningStatus === "ACTIVE") {
-            output = {
-              ...output,
-              activeInvestmentsCount: output.activeInvestmentsCount + 1,
-            };
-          }
+            activeInvestmentsCount:
+              output.activeInvestmentsCount +
+              (miningOrder.miningStatus === "ACTIVE" ? 1 : 0),
+          };
         });
 
         data.allTradingOrders.forEach((tradingOrder) => {
           output = {
             ...output,
+
             investedAmount: output.investedAmount + tradingOrder.amountInvested,
           };
         });
@@ -164,40 +279,14 @@ export function useInvestmentData() {
   );
 }
 
-export function useMiningOrdersData() {
-  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
-
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
-
-  return useQuery(
-    queryOptions({
-      queryKey: queryKeys.mining.orders(userId, { miningStatus: "ACTIVE" }),
-
-      queryFn: async () => {
-        const result = await readAllMiningOrders({
-          data: {
-            identifier: { userId: userId, miningStatus: "ACTIVE" },
-          },
-        });
-
-        return result;
-      },
-    }),
-  );
-}
+// -----------------------------------------------------------------------------
+// Mining wallet queries and mutations
+// -----------------------------------------------------------------------------
 
 export function useReadMiningWallet() {
   const readOneMiningWallet = useServerFn(serverFn__readOneMiningWallet);
 
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+  const userId = useAuthenticatedUserId();
 
   return useQuery(
     queryOptions({
@@ -217,21 +306,17 @@ export function useReadMiningWallet() {
 
 export function useCreateMiningWallet() {
   const createMiningWallet = useServerFn(serverFn__createMiningWallet);
+
   const queryClient = useQueryClient();
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+  const userId = useAuthenticatedUserId();
 
   return useMutation({
     mutationFn: createMiningWallet,
 
-    onSuccess: () => {
+    onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: queryKeys.mining.wallet(userId),
-      });
-    },
+      }),
   });
 }
 
@@ -239,31 +324,46 @@ export function useCreateMiningWalletDeposits() {
   const createMiningWalletDeposite = useServerFn(
     serverFn__createMiningWalletDeposite,
   );
+
   const queryClient = useQueryClient();
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+  const userId = useAuthenticatedUserId();
 
   return useMutation({
     mutationFn: createMiningWalletDeposite,
 
-    onSuccess: () => {
+    onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: queryKeys.mining.wallet(userId),
-      });
-    },
+      }),
   });
 }
 
+export function useCreateMiningWalletWithdraws() {
+  const createMiningWalletWithdraw = useServerFn(
+    serverFn__createMiningWalletWithdraw,
+  );
+
+  const queryClient = useQueryClient();
+  const userId = useAuthenticatedUserId();
+
+  return useMutation({
+    mutationFn: createMiningWalletWithdraw,
+
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.mining.wallet(userId),
+      }),
+  });
+}
+
+// -----------------------------------------------------------------------------
+// Trading wallet queries and mutations
+// -----------------------------------------------------------------------------
+
 export function useReadTradingWallet() {
   const readOneTradingWallet = useServerFn(serverFn__readOneTradingWallet);
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+
+  const userId = useAuthenticatedUserId();
 
   return useQuery(
     queryOptions({
@@ -272,29 +372,9 @@ export function useReadTradingWallet() {
       queryFn: () =>
         readOneTradingWallet({
           data: {
-            identifier: { associatedUserId: userId },
-          },
-        }),
-    }),
-  );
-}
-
-export function useReadAllReferalEarning() {
-  const readAllReferalEarning = useServerFn(serverFn__readAllReferalEarning);
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
-
-  return useQuery(
-    queryOptions({
-      queryKey: queryKeys.referrals.all(userId),
-
-      queryFn: () =>
-        readAllReferalEarning({
-          data: {
-            identifier: { userId: userId },
+            identifier: {
+              associatedUserId: userId,
+            },
           },
         }),
     }),
@@ -303,21 +383,56 @@ export function useReadAllReferalEarning() {
 
 export function useCreateTradingWallet() {
   const createTradingWallet = useServerFn(serverFn__createTradingWallet);
+
   const queryClient = useQueryClient();
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+  const userId = useAuthenticatedUserId();
 
   return useMutation({
     mutationFn: createTradingWallet,
 
-    onSuccess: () => {
+    onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: queryKeys.trading.wallet(userId),
+      }),
+  });
+}
+
+export function useUpdateOneMiningWallet() {
+  const updateOneMiningWallet = useServerFn(serverFn__updateOneMiningWallet);
+
+  const queryClient = useQueryClient();
+  const userId = useAuthenticatedUserId();
+
+  return useMutation({
+    mutationFn: updateOneMiningWallet,
+
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.mining.wallet(userId),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.dashboard.investmentData(userId),
       });
     },
+  });
+}
+
+export function useCreateTradingWalletWithdraw() {
+  const createTradingWalletWithdraw = useServerFn(
+    serverFn__createTradingWalletWithdraw,
+  );
+
+  const queryClient = useQueryClient();
+  const userId = useAuthenticatedUserId();
+
+  return useMutation({
+    mutationFn: createTradingWalletWithdraw,
+
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.trading.wallet(userId),
+      }),
   });
 }
 
@@ -325,60 +440,80 @@ export function useCreateTradingWalletDeposits() {
   const createTradingWalletDeposite = useServerFn(
     serverFn__createTradingWalletDeposite,
   );
+
   const queryClient = useQueryClient();
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+  const userId = useAuthenticatedUserId();
 
   return useMutation({
     mutationFn: createTradingWalletDeposite,
 
-    onSuccess: () => {
+    onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: queryKeys.trading.wallet(userId),
-      });
-    },
+      }),
   });
 }
 
+// -----------------------------------------------------------------------------
+// Trading orders query
+// -----------------------------------------------------------------------------
+
 export function useTradingOrdersData() {
   const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+
+  const userId = useAuthenticatedUserId();
 
   return useQuery(
     queryOptions({
       queryKey: queryKeys.trading.orders(userId),
 
-      queryFn: async () => {
-        const result = await readAllTradingOrders({
+      queryFn: () =>
+        readAllTradingOrders({
           data: {
-            identifier: { userId: userId },
+            identifier: { userId },
           },
-        });
-
-        return result;
-      },
+        }),
     }),
   );
 }
 
-export function 
-useRecentTransactionsHistory() {
-  const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
-  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
-  const {
-    userDetailsFromCookie: { userId },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)",
-  });
+// -----------------------------------------------------------------------------
+// Referral earnings query
+// -----------------------------------------------------------------------------
 
-  type TRespose = {
+export function useReadAllReferalEarning() {
+  const readAllReferalEarning = useServerFn(serverFn__readAllReferalEarning);
+
+  const userId = useAuthenticatedUserId();
+
+  return useQuery(
+    queryOptions({
+      queryKey: queryKeys.referrals.all(userId),
+
+      queryFn: () =>
+        readAllReferalEarning({
+          data: {
+            identifier: { userId },
+          },
+        }),
+    }),
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Recent transaction history
+// -----------------------------------------------------------------------------
+
+export function useRecentTransactionsHistory() {
+  const readAllTradingOrders = useServerFn(serverFn__readAllTradingOrders);
+
+  const readAllMiningOrders = useServerFn(serverFn__readAllMiningOrders);
+
+  const readAllReferalEarning = useServerFn(serverFn__readAllReferalEarning);
+
+  const userId = useAuthenticatedUserId();
+
+  type TResponse = {
     id: string;
     status: (typeof INVESTMENT_STATUS)[number];
     category: string;
@@ -393,29 +528,42 @@ useRecentTransactionsHistory() {
       queryKey: queryKeys.dashboard.recentTransactions(userId),
 
       queryFn: async () => {
-        const [tradingOrdersResult, miningOrdersResult] = await Promise.all([
-          readAllTradingOrders({
-            data: {
-              identifier: { userId: userId },
-            },
-          }),
-          readAllMiningOrders({
-            data: {
-              identifier: { userId: userId },
-            },
-          }),
-        ]);
+        const [tradingOrdersResult, miningOrdersResult, allReferalEarning] =
+          await Promise.all([
+            readAllTradingOrders({
+              data: {
+                identifier: { userId },
+              },
+            }),
 
-        return { miningOrdersResult, tradingOrdersResult };
+            readAllMiningOrders({
+              data: {
+                identifier: { userId },
+              },
+            }),
+
+            readAllReferalEarning({
+              data: {
+                identifier: { userId },
+              },
+            }),
+          ]);
+
+        return {
+          miningOrdersResult,
+          tradingOrdersResult,
+          allReferalEarning,
+        };
       },
 
-      select: (data) => {
-        const { miningOrdersResult, tradingOrdersResult } = data;
+      select: (data): TResponse[] => {
+        const { miningOrdersResult, tradingOrdersResult, allReferalEarning } =
+          data;
 
-        const response: TRespose[] = [];
+        const response: TResponse[] = [];
 
         tradingOrdersResult.forEach((order) => {
-          const filteredFields: TRespose = {
+          response.push({
             amount: order.amountInvested,
             category: "Trading order",
             type: "spend",
@@ -423,13 +571,11 @@ useRecentTransactionsHistory() {
             updatedAt: order.updatedAt,
             id: order.id,
             status: order.tradingStatus,
-          };
-
-          response.push(filteredFields);
+          });
         });
 
         miningOrdersResult.forEach((order) => {
-          const filteredFields: TRespose = {
+          response.push({
             amount: order.amountInvested,
             category: "Mining order",
             type: "spend",
@@ -437,9 +583,19 @@ useRecentTransactionsHistory() {
             updatedAt: order.updatedAt,
             id: order.id,
             status: order.miningStatus,
-          };
+          });
+        });
 
-          response.push(filteredFields);
+        allReferalEarning.forEach((order) => {
+          response.push({
+            amount: order.amount,
+            category: "Referrals",
+            type: "gain",
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt,
+            id: order.id,
+            status: "COMPLETED",
+          });
         });
 
         return response

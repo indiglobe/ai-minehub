@@ -3,6 +3,48 @@ import { Table__MiningOrder } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
 import { and, desc, eq, SQL } from "drizzle-orm";
 import { INVESTMENT_STATUS } from "@repo/utils/db-enums";
+import { id } from "@repo/utils/id";
+
+/**
+ * ==========================================
+ * CREATE
+ * ==========================================
+ */
+
+type TCreate__MiningOrder = {
+  dataToInsert: Omit<
+    typeof Table__MiningOrder.$inferInsert,
+    "updatedAt" | "tableIdentifierToken" | "createdAt" | "id"
+  >;
+};
+
+const create__MiningOrder = async (options: TCreate__MiningOrder) => {
+  const genereatedId = id();
+
+  const baseQuery = db
+    .insert(Table__MiningOrder)
+    .values({ ...options.dataToInsert, id: genereatedId });
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in create__MiningOrder`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [insertedMiningOrder] = await db
+      .select()
+      .from(Table__MiningOrder)
+      .where(eq(Table__MiningOrder.id, genereatedId))
+      .limit(1)
+      .offset(0);
+    return insertedMiningOrder!;
+  }
+
+  throw Error("Unexpected block in create__MiningOrder");
+};
 
 /**
  * ==========================================
@@ -73,4 +115,4 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
   return miningOrders;
 };
 
-export { read__AllMiningOrders };
+export { read__AllMiningOrders, create__MiningOrder };

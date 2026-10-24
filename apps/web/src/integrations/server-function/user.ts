@@ -15,7 +15,13 @@ import {
 import { createServerFn } from "@tanstack/react-start";
 import { tryCatch } from "@repo/utils/try-catch";
 
-export const serverFn__readUserCount = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readUserCount = createServerFn({
+  method: "GET",
+})
   .validator(read__UserCountSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
@@ -31,7 +37,13 @@ export const serverFn__readUserCount = createServerFn()
     return serverFnResult;
   });
 
-export const serverFn__readOneUser = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readOneUser = createServerFn({
+  method: "GET",
+})
   .validator(read__OneUserSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(read__OneUser(data));
@@ -45,7 +57,13 @@ export const serverFn__readOneUser = createServerFn()
     return serverFnResult;
   });
 
-export const serverFn__createUser = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__createUser = createServerFn({
+  method: "POST",
+})
   .validator(create__UserSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(create__User(data));
@@ -59,7 +77,13 @@ export const serverFn__createUser = createServerFn()
     return serverFnResult;
   });
 
-export const serverFn__readAllUsers = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readAllUsers = createServerFn({
+  method: "GET",
+})
   .validator(read__AllUsersSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
@@ -75,7 +99,13 @@ export const serverFn__readAllUsers = createServerFn()
     return serverFnResult;
   });
 
-export const serverFn__readReferrals = createServerFn()
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readReferrals = createServerFn({
+  method: "GET",
+})
   .validator(read__ReferralsSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(

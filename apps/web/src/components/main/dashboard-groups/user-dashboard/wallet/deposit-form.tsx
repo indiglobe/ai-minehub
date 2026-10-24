@@ -13,6 +13,7 @@ import {
   useReadTradingWallet,
 } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
 import { useRouteContext } from "@tanstack/react-router";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@repo/ui/select'
 
 const quickAmounts = [50, 100, 500, 1000];
 
@@ -66,8 +67,6 @@ export function DepositForm({
     },
 
     onSubmit: async ({ value }) => {
-      console.log("Here");
-
       if (!file) {
         throw new Error(`File is needed`);
       }
@@ -198,23 +197,30 @@ export function DepositForm({
                 Select Destination Wallet *
               </label>
 
-              <select
-                id="destination-wallet"
-                name={field.name}
-                required
+              <Select
                 value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(event) =>
+                onValueChange={(value) =>
                   field.handleChange(
-                    event.target
-                      .value as DepositFormValues["destinationWallet"],
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                    value as DepositFormValues["destinationWallet"],
                   )
                 }
-                className={fieldClass}
+                required
               >
-                <option value="Mining Wallet">Mining Wallet</option>
-                <option value="Trading Wallet">Trading Wallet</option>
-              </select>
+                <SelectTrigger
+                  id="destination-wallet"
+                  className={fieldClass}
+                  onBlur={field.handleBlur}
+                >
+                  <SelectValue placeholder="Select a destination wallet" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="Mining Wallet">Mining Wallet</SelectItem>
+
+                  <SelectItem value="Trading Wallet">Trading Wallet</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           )}
         </form.Field>

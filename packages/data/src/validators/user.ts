@@ -18,7 +18,7 @@ export const read__UserCountSchema = z
   .object({
     identifier: z
       .object({
-        role: z.enum(["ADMIN", "BASIC"]),
+        role: z.enum(ROLE),
       })
       .optional(),
   })
@@ -32,7 +32,7 @@ export const read__AllUsersSchema = z
           referrerId: z.string().nullable(),
         }),
         z.object({
-          role: z.enum(ROLE),
+          role: z.union([z.enum(ROLE), z.array(z.enum(ROLE))]),
         }),
       ])
       .optional(),

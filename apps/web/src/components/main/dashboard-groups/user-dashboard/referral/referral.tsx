@@ -281,52 +281,80 @@ export function HowItWorks({ className, ...props }: ComponentProps<"section">) {
           </span>
         </h2>
 
-        <div
-          className={cn(
-            `grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6`,
-          )}
-        >
-          {steps.map(({ number, icon, title, description }) => (
+        <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6">
+          {steps.map(({ number, icon, title, description }, index) => (
             <div
               key={number}
               className={cn(
-                `border-secondary-900/80 flex min-h-97 flex-col items-center rounded-3xl border bg-[#0d1729] px-7 py-10 text-center transition-transform duration-300 hover:-translate-y-1 sm:min-h-95 xl:min-h-97`,
+                `group relative isolate flex min-h-85 flex-col overflow-hidden rounded-3xl border border-white/8 bg-[#0b1020] p-7 transition-all duration-500`,
+                `hover:-translate-y-2 hover:border-purple-400/30 hover:shadow-[0_20px_60px_-20px_rgba(124,58,237,0.25)]`,
               )}
             >
+              {/* Ambient background glow */}
               <div
                 className={cn(
-                  `rounded-fulld to-purple-600d font-brand-primary text-whited flex size-14 shrink-0 items-center justify-center bg-linear-to-br from-purple-500 text-2xl font-bold shadow-lg shadow-purple-500/10`,
+                  `pointer-events-none absolute -top-16 -right-16 -z-10 size-48 rounded-full bg-purple-600/10 blur-3xl transition-all duration-500`,
+                  `group-hover:scale-125 group-hover:bg-purple-500/20`,
                 )}
-              >
-                {number}
+              />
+
+              <div className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-br from-white/[0.035] via-transparent to-purple-500/4 opacity-80" />
+
+              {/* Step number and progress indicator */}
+              <div className="flex items-center justify-between">
+                <span className="font-brand-primary text-xs font-bold tracking-[0.22em] text-purple-300/70">
+                  STEP {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/3 px-3 py-1.5">
+                  <span className="size-1.5 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(167,139,250,0.8)] transition-colors group-hover:bg-cyan-300" />
+                  <span className="text-2.5 font-semibold tracking-widest text-white/40">
+                    {index === 0
+                      ? "START"
+                      : index === steps.length - 1
+                        ? "FINISH"
+                        : "NEXT"}
+                  </span>
+                </div>
               </div>
 
-              <div
-                className={cn(
-                  `mt-11 flex min-h-17 items-center justify-center`,
-                )}
-              >
-                <span className={cn(`text-5xl leading-none`, `sm:text-13.5`)}>
-                  {icon}
+              {/* Icon container */}
+              <div className="mt-9 flex items-center justify-between">
+                <div
+                  className={cn(
+                    `relative flex size-20 items-center justify-center rounded-2xl border border-purple-400/20 bg-linear-to-br from-purple-500/15 via-[#17152e] to-blue-500/10`,
+                    `shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500`,
+                    `group-hover:scale-110 group-hover:border-purple-400/40 group-hover:shadow-[0_0_35px_rgba(139,92,246,0.16)]`,
+                  )}
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-purple-400/8 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                  <span className="relative text-4xl leading-none transition-transform duration-500 group-hover:rotate-6">
+                    {icon}
+                  </span>
+                </div>
+
+                <span className="font-brand-primary text-5xl font-bold tracking-tighter text-white/6 transition-colors duration-500 group-hover:text-purple-300/20">
+                  {String(number).padStart(2, "0")}
                 </span>
               </div>
 
-              <div className={cn(`mt-8`)}>
-                <h3
-                  className={cn(
-                    `font-brand-primary text-foreground text-xl font-bold tracking-tight`,
-                  )}
-                >
+              {/* Card content */}
+              <div className="mt-8">
+                <h3 className="font-brand-primary text-xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-purple-200">
                   {title}
                 </h3>
 
-                <p
-                  className={cn(
-                    `font-brand-primary text-foreground/50 mx-auto mt-3 max-w-55 text-base leading-7 font-medium`,
-                  )}
-                >
+                <p className="font-brand-primary mt-3 text-sm leading-7 font-medium text-slate-400 transition-colors duration-300 group-hover:text-slate-300">
                   {description}
                 </p>
+              </div>
+
+              {/* Bottom accent */}
+              <div className="mt-auto pt-8">
+                <div className="h-px w-full overflow-hidden bg-white/6">
+                  <div className="h-full w-0 bg-linear-to-r from-purple-500 via-violet-400 to-cyan-400 transition-all duration-700 ease-out group-hover:w-full" />
+                </div>
               </div>
             </div>
           ))}

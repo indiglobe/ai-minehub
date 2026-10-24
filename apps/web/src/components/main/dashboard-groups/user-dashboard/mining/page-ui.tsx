@@ -1,9 +1,28 @@
 import { cn } from "@repo/styles/cn";
+import { useState } from "react";
 import type { ComponentProps } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Check } from "lucide-react";
 import { Button } from "@repo/ui/button";
+import { useForm } from "@tanstack/react-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@repo/ui/dialog";
+import { Input } from "@repo/ui/input";
+import z from "zod";
+import {
+  useCreateMiningOrder,
+  useReadMiningWallet,
+  useUpdateOneMiningWallet,
+} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+import { tryCatch } from "@repo/utils/try-catch";
 
 export function PassiveIncome({
   className,
@@ -134,25 +153,226 @@ export function PassiveIncomeDescriptionItem({
   );
 }
 
+// Investment validation schema
+const createInvestmentSchema = (miningWalletBalance: number) =>
+  z.object({
+    amount: z
+      .string()
+      .trim()
+      .min(1, "Please enter an investment amount.")
+      .refine((value) => {
+        const amount = Number(value);
+        return Number.isFinite(amount) && amount > 0;
+      }, "Amount must be greater than zero.")
+      .refine((value) => {
+        const amount = Number(value);
+        return Number.isSafeInteger(amount * 100);
+      }, "Enter a valid amount.")
+      .refine((value) => {
+        return Number(value) <= miningWalletBalance;
+      }, "Amount exceeds your wallet balance."),
+  });
+
 export function PassiveIncomeCTA({
+  miningProfilesUsed,
+  userId,
   className,
   ...props
-}: ComponentProps<typeof Button>) {
-  return (
-    <Button
-      className={cn(
-        `group/btn border-accent-500 group-data-[popular=true]:hover:shadow-accent-500/30 relative h-12 w-full overflow-hidden rounded-xl border bg-transparent transition-shadow hover:bg-transparent group-data-[popular=true]:hover:shadow-xl md:h-16`,
-        className,
-      )}
-      {...props}
-    >
-      <span
-        className={cn(
-          `from-secondary-500 to-accent-500 absolute inset-0 bg-linear-to-r opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100 group-data-[popular=true]:opacity-100`,
-        )}
-      />
+}: {
+  miningProfilesUsed: string;
+  userId: string;
+} & ComponentProps<typeof Button>) {
+  const [open, setOpen] = useState(false);
+  const { data: miningWallet } = useReadMiningWallet();
+  const miningWalletBalance = miningWallet?.balance ?? 0;
 
-      <span className={cn(`relative z-10`)}>Start Mining</span>
-    </Button>
+  const investmentSchema = createInvestmentSchema(miningWalletBalance);
+  const { mutateAsync: createMiningOrder } = useCreateMiningOrder();
+  const { mutateAsync: updateOneMiningWallet } = useUpdateOneMiningWallet();
+
+  const form = useForm({
+    defaultValues: {
+      amount: "",
+    },
+    validators: {
+      onChange: investmentSchema,
+      onSubmit: investmentSchema,
+    },
+    onSubmit: async ({ value }) => {
+      const amount = Number(value.amount);
+
+      const [createMiningOrderError] = await tryCatch(
+        createMiningOrder({
+          data: {
+            dataToInsert: {
+              amountInvested: amount,
+              miningProfileUsed: miningProfilesUsed,
+              orderedBy: userId,
+            },
+          },
+        }),
+      );
+
+      if (createMiningOrderError) {
+        console.error(`Error in createMiningOrderError in PassiveIncomeCTA`);
+        console.error(createMiningOrderError);
+        throw createMiningOrderError;
+      }
+
+      const [updateOneMiningWalletError] = await tryCatch(
+        updateOneMiningWallet({
+          data: {
+            dataToUpdate: { balance: miningWalletBalance - amount },
+            identifier: { associatedUserId: userId },
+          },
+        }),
+      );
+
+      if (updateOneMiningWalletError) {
+        console.error(
+          `Error in updateOneMiningWalletError in PassiveIncomeCTA`,
+        );
+        console.error(updateOneMiningWalletError);
+        throw updateOneMiningWalletError;
+      }
+
+      setOpen(false);
+      form.reset();
+    },
+  });
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+
+        if (!nextOpen) {
+          form.reset();
+        }
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button
+          className={cn(
+            "group/btn border-accent-500 relative h-12 w-full overflow-hidden rounded-xl border bg-transparent transition-shadow hover:bg-transparent md:h-16",
+            className,
+          )}
+          {...props}
+        >
+          <span className="from-secondary-500 to-accent-500 absolute inset-0 bg-linear-to-r opacity-0 transition-opacity group-hover/btn:opacity-100" />
+          <span className="relative z-10">Start Mining</span>
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="max-w-md gap-5">
+        <DialogHeader>
+          <DialogTitle>Start Mining</DialogTitle>
+          <DialogDescription>
+            Enter the amount you want to invest.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Wallet Balance */}
+        <div className="space-y-3 text-sm">
+          <div className="border-accent-500/20 from-accent-500/10 via-background to-secondary-500/10 relative overflow-hidden rounded-xl border bg-linear-to-br p-5">
+            <div className="bg-accent-500/10 absolute -top-8 -right-8 size-28 rounded-full blur-2xl" />
+
+            <div className="relative space-y-2">
+              <span className="text-muted-foreground text-sm font-medium">
+                Available Wallet Balance
+              </span>
+
+              <div className="flex flex-wrap items-baseline gap-1.5">
+                <span className="text-accent-500 text-2xl font-semibold">
+                  $
+                </span>
+
+                <span className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl">
+                  {miningWalletBalance.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+
+              <p className="text-muted-foreground text-xs">
+                Maximum amount available to invest
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Investment Form */}
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            void form.handleSubmit();
+          }}
+          className="space-y-2"
+        >
+          <form.Field name="amount">
+            {(field) => {
+              const errors = field.state.meta.errors;
+
+              return (
+                <div className="space-y-2">
+                  <label
+                    htmlFor="mining-amount"
+                    className="text-sm font-medium"
+                  >
+                    Investment Amount ($)
+                  </label>
+
+                  <Input
+                    id="mining-amount"
+                    name={field.name}
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="Enter amount"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={errors.length > 0}
+                  />
+
+                  {errors.length > 0 && (
+                    <p className="text-destructive text-xs" role="alert">
+                      {errors
+                        .map((error) =>
+                          typeof error === "string" ? error : error?.message,
+                        )
+                        .filter(Boolean)
+                        .join(", ")}
+                    </p>
+                  )}
+
+                  <p className="text-muted-foreground text-xs">
+                    Available balance: $
+                    {miningWalletBalance.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
+                </div>
+              );
+            }}
+          </form.Field>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+
+            <Button type="submit">Confirm &amp; Start Mining</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -39,12 +39,14 @@ jobs:
           build-args: |
             VITE_SOCKET_APP_HOST=${{ secrets.VITE_SOCKET_APP_HOST }}
             VITE_WEB_APP_HOST=${{ secrets.VITE_WEB_APP_HOST }}
+            VITE_STORAGE_APP_HOST=${{ secrets.VITE_STORAGE_APP_HOST }}
             BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
             BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             WEB_APP_HOST=${{ secrets.WEB_APP_HOST }}
+            STORAGE_APP_HOST=${{ secrets.STORAGE_APP_HOST }}
             SOCKET_APP_HOST=${{ secrets.SOCKET_APP_HOST }}
             TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}
             FTP_HOST=${{ secrets.FTP_HOST }}
