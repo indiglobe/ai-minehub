@@ -222,7 +222,7 @@ export function ActiveTraders({
     };
 
     const intervalId = setInterval(() => {
-      Math.random() > 0.7
+      Math.random() > 0.5
         ? activeTradersSocket.emit("join-trading")
         : activeTradersSocket.emit("leave-trading");
     }, 1000);

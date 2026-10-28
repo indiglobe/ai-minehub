@@ -16,7 +16,12 @@ export const read__AllMiningOrdersSchema = z
     identifier: z
       .object({
         miningProfileUsed: z.string().optional(),
-        miningStatus: z.enum(INVESTMENT_STATUS).optional(),
+        miningStatus: z
+          .union([
+            z.enum(INVESTMENT_STATUS),
+            z.array(z.enum(INVESTMENT_STATUS)),
+          ])
+          .optional(),
         userId: z.string().optional(),
       })
       .optional(),

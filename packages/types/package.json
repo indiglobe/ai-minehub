@@ -28,7 +28,10 @@
     "format": "prettier --write **/* ",
     "lint:staged": "lint-staged"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@repo/utils": "workspace:*",
+    "zod": "^4.6.7"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",

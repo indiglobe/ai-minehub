@@ -1,4 +1,4 @@
-import { useReadMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+import { useReadMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
 import { ActiveMiningSession } from "../dashboard/dashboard";

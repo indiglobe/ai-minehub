@@ -9,7 +9,7 @@ import {
 import {
   useReadAllPendingMiningWalletDeposite,
   useReadAllusers,
-} from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
 
 export function AllDeposits({
   className,

@@ -20,13 +20,28 @@ export const read__AllMiningWalletDepositeSchema = z
       .object({
         orderedBy: z.string().optional(),
         wallet: z.string().optional(),
-        status: z.enum(DEPOSIT_STATUS).optional(),
+        status: z
+          .union([z.enum(DEPOSIT_STATUS), z.array(z.enum(DEPOSIT_STATUS))])
+          .optional(),
       })
       .optional(),
     queryOptions: z
       .object({
         skip: z.number().optional(),
         limit: z.number().optional(),
+      })
+      .optional(),
+  })
+  .optional();
+
+export const read__MiningWalletDepositStatsSchema = z
+  .object({
+    identifier: z
+      .object({
+        status: z.union([
+          z.enum(DEPOSIT_STATUS),
+          z.array(z.enum(DEPOSIT_STATUS)),
+        ]),
       })
       .optional(),
   })

@@ -12,7 +12,7 @@ import {
 import { useReadReferrals } from "@/integrations/tanstack/react-querry/referrals/referrals";
 import { Image } from "@unpic/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@repo/ui/table";
-import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 
 export function Referral() {
   return (

@@ -11,3 +11,16 @@ export const create__TradingWalletWithdrawSchema = z.object({
     withdrawlMethod: z.enum(TRANSACTION_METHOD),
   }),
 });
+
+export const read__TradingWalletWithdrawStatsSchema = z
+  .object({
+    identifier: z
+      .object({
+        status: z.union([
+          z.enum(DEPOSIT_STATUS),
+          z.array(z.enum(DEPOSIT_STATUS)),
+        ]),
+      })
+      .optional(),
+  })
+  .optional();

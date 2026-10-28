@@ -3,6 +3,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import registerChat from "@/namespace/chat";
 import registerActiveTraders from "@/namespace/active-traders";
+import registerLiveMarkets from "./namespace/live-market";
 
 const PORT = process.env.PORT ?? 3000;
 
@@ -15,6 +16,7 @@ const io = new Server(httpServer, {
 
 registerChat(io);
 registerActiveTraders(io);
+registerLiveMarkets(io);
 
 httpServer.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);

@@ -4,7 +4,7 @@ import {
   useCreateMiningWallet,
   useReadMiningWallet,
   useInvestmentData,
-} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { useRouteContext } from "@tanstack/react-router";

@@ -11,7 +11,7 @@ import {
   useCreateTradingWalletDeposits,
   useReadMiningWallet,
   useReadTradingWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { useRouteContext } from "@tanstack/react-router";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@repo/ui/select'
 

@@ -36,7 +36,18 @@ import {
   UserGrowthCardError,
   UserGrowthCardLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/dashboard/boundary-comps";
-import { useReadUserCount } from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
+import {
+  useReadActiveMiningSession,
+  useReadAllPendingMiningWalletDeposite,
+  useReadAllPendingMiningWalletWithdraw,
+  useReadMiningWalletPendingDepositStats,
+  useReadMiningWalletPendingWithdrawlStats,
+  useReadMiningWalletProcessedDepositStats,
+  useReadTradingWalletPendingDepositStats,
+  useReadTradingWalletPendingWithdrawlStats,
+  useReadTradingWalletProcessedDepositStats,
+  useReadUserCount,
+} from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
 
 export default function AdminDashboard() {
   return (
@@ -72,10 +83,11 @@ export function TotalUsersStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  const { data, isLoading, isError } = useReadUserCount();
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: userCountData,
+    isLoading: userCountLoading,
+    isError: userCountError,
+  } = useReadUserCount();
 
   return (
     <StatCard
@@ -92,18 +104,16 @@ export function TotalUsersStat({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {/* {state === "data" && ( */}
-      {data && (
+      {userCountData && (
         <>
           <StatCardData className={cn(`text-foreground`)}>
-            {data.count}
+            {userCountData.count}
           </StatCardData>
           <StatCardFooter>Total registered users</StatCardFooter>
         </>
       )}
 
-      {/* {state === "error" && ( */}
-      {isError && (
+      {userCountError && (
         <>
           <p
             className={cn(
@@ -124,8 +134,7 @@ export function TotalUsersStat({
         </>
       )}
 
-      {/* {state === "loading" && ( */}
-      {isLoading && (
+      {userCountLoading && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -134,13 +143,21 @@ export function TotalUsersStat({
     </StatCard>
   );
 }
+
 export function TotalDepositsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: processedTradingDepositStat,
+    isLoading: processedTradingDepositStatLoading,
+    isError: processedTradingDepositStatError,
+  } = useReadTradingWalletProcessedDepositStats();
+  const {
+    data: processedMiningDepositStat,
+    isLoading: processedMiningDepositStatLoading,
+    isError: processedMiningDepositStatError,
+  } = useReadMiningWalletProcessedDepositStats();
 
   return (
     <StatCard
@@ -157,14 +174,18 @@ export function TotalDepositsStat({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {state === "data" && (
+      {processedMiningDepositStat && processedTradingDepositStat && (
         <>
-          <StatCardData className={cn(`text-foreground`)}>$0.00</StatCardData>
+          <StatCardData className={cn(`text-foreground`)}>
+            {processedTradingDepositStat.count +
+              processedMiningDepositStat.count}
+          </StatCardData>
           <StatCardFooter>Cumulative deposits</StatCardFooter>
         </>
       )}
 
-      {state === "error" && (
+      {(processedTradingDepositStatError ||
+        processedMiningDepositStatError) && (
         <>
           <p
             className={cn(
@@ -185,7 +206,8 @@ export function TotalDepositsStat({
         </>
       )}
 
-      {state === "loading" && (
+      {(processedTradingDepositStatLoading ||
+        processedMiningDepositStatLoading) && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -199,9 +221,16 @@ export function PendingDepositsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: pendingTradingDepositStat,
+    isLoading: pendingTradingDepositStatLoading,
+    isError: pendingTradingDepositStatError,
+  } = useReadTradingWalletPendingDepositStats();
+  const {
+    data: pendingMiningDepositStat,
+    isLoading: pendingMiningDepositStatLoading,
+    isError: pendingMiningDepositStatError,
+  } = useReadMiningWalletPendingDepositStats();
 
   return (
     <StatCard
@@ -218,15 +247,17 @@ export function PendingDepositsStat({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {state === "data" && (
+      {pendingTradingDepositStat && pendingMiningDepositStat && (
         <>
-          <StatCardData className={cn(`text-foreground`)}>1</StatCardData>
+          <StatCardData className={cn(`text-foreground`)}>
+            {pendingMiningDepositStat.count + pendingTradingDepositStat.count}
+          </StatCardData>
 
           <StatCardFooter>Awaiting confirmation</StatCardFooter>
         </>
       )}
 
-      {state === "error" && (
+      {(pendingTradingDepositStatError || pendingMiningDepositStatError) && (
         <>
           <p
             className={cn(
@@ -247,7 +278,8 @@ export function PendingDepositsStat({
         </>
       )}
 
-      {state === "loading" && (
+      {(pendingTradingDepositStatLoading ||
+        pendingMiningDepositStatLoading) && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -256,13 +288,21 @@ export function PendingDepositsStat({
     </StatCard>
   );
 }
+
 export function PendingWithdrawalsStat({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: pendingTradingWithdrawlStat,
+    isLoading: pendingTradingWithdrawlStatLoading,
+    isError: pendingTradingWithdrawlStatError,
+  } = useReadTradingWalletPendingWithdrawlStats();
+  const {
+    data: pendingMiningWithdrawlStat,
+    isLoading: pendingMiningWithdrawlStatLoading,
+    isError: pendingMiningWithdrawlStatError,
+  } = useReadMiningWalletPendingWithdrawlStats();
 
   return (
     <StatCard
@@ -279,15 +319,19 @@ export function PendingWithdrawalsStat({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {state === "data" && (
+      {pendingTradingWithdrawlStat && pendingMiningWithdrawlStat && (
         <>
-          <StatCardData className={cn(`text-foreground`)}>0</StatCardData>
+          <StatCardData className={cn(`text-foreground`)}>
+            {pendingMiningWithdrawlStat.count +
+              pendingTradingWithdrawlStat.count}
+          </StatCardData>
 
           <StatCardFooter>Awaiting processing</StatCardFooter>
         </>
       )}
 
-      {state === "error" && (
+      {(pendingTradingWithdrawlStatError ||
+        pendingMiningWithdrawlStatError) && (
         <>
           <p
             className={cn(
@@ -308,7 +352,8 @@ export function PendingWithdrawalsStat({
         </>
       )}
 
-      {state === "loading" && (
+      {(pendingTradingWithdrawlStatLoading ||
+        pendingMiningWithdrawlStatLoading) && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -344,9 +389,11 @@ export function TotalMiningInvestedCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: activeMiningSessionStat,
+    isLoading: isActiveMiningSessionStatLoading,
+    isError: isActiveMiningSessionStatError,
+  } = useReadActiveMiningSession();
 
   return (
     <StatCard
@@ -363,16 +410,16 @@ export function TotalMiningInvestedCard({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {state === "data" && (
+      {activeMiningSessionStat && (
         <>
           <StatCardData className={cn(`text-foreground`)}>
-            $5,910.00
+            ${activeMiningSessionStat.invested}
           </StatCardData>
           <StatCardFooter>Total mining active pool</StatCardFooter>
         </>
       )}
 
-      {state === "error" && (
+      {isActiveMiningSessionStatError && (
         <>
           <p
             className={cn(
@@ -393,7 +440,7 @@ export function TotalMiningInvestedCard({
         </>
       )}
 
-      {state === "loading" && (
+      {isActiveMiningSessionStatLoading && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -407,9 +454,11 @@ export function ActiveMiningSessionsCard({
   className,
   ...props
 }: ComponentProps<typeof StatCard>) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
+  const {
+    data: activeMiningSessionStat,
+    isLoading: isActiveMiningSessionStatLoading,
+    isError: isActiveMiningSessionStatError,
+  } = useReadActiveMiningSession();
 
   return (
     <>
@@ -427,14 +476,16 @@ export function ActiveMiningSessionsCard({
           </StatCardHeadingIcon>
         </StatCardHeader>
 
-        {state === "data" && (
+        {activeMiningSessionStat && (
           <>
-            <StatCardData className={cn(`text-foreground`)}>10</StatCardData>
+            <StatCardData className={cn(`text-foreground`)}>
+              {activeMiningSessionStat.count}
+            </StatCardData>
             <StatCardFooter>Live mining instances</StatCardFooter>
           </>
         )}
 
-        {state === "error" && (
+        {isActiveMiningSessionStatError && (
           <>
             <p
               className={cn(
@@ -455,7 +506,7 @@ export function ActiveMiningSessionsCard({
           </>
         )}
 
-        {state === "loading" && (
+        {isActiveMiningSessionStatLoading && (
           <div className={cn(`animate-pulse space-y-4`)}>
             <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
             <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -470,8 +521,8 @@ export function UserGrowthCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
   // const [state] = useState<"error" | "loading" | "data">("error");
 
   const chartDays = [
@@ -543,8 +594,8 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  // const [state] = useState<"error" | "loading" | "data">("data");
-  const [state] = useState<"error" | "loading" | "data">("loading");
+  const [state] = useState<"error" | "loading" | "data">("data");
+  // const [state] = useState<"error" | "loading" | "data">("loading");
   // const [state] = useState<"error" | "loading" | "data">("error");
 
   const statsList = [
@@ -644,27 +695,11 @@ export function PendingDepositsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("error");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
-
-  // const pendingDeposits = [];
-  const pendingDeposits = [
-    {
-      id: "dep-1",
-      user: {
-        name: "Surajit Sarder",
-        email: "surajitsarder2000@gmail.com",
-        initial: "S",
-      },
-      amount: "$1,000.00",
-      method: "Bsc_bep20",
-      proof: "#",
-      date: "Aug 31, 2026 21:45",
-      status: "Pending",
-    },
-  ];
+  const {
+    data: pendingMiningWalletDepositeData,
+    isError: isPendingMiningWalletDepositeError,
+    isLoading: isPendingMiningWalletDepositeLoading,
+  } = useReadAllPendingMiningWalletDeposite();
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -684,12 +719,13 @@ export function PendingDepositsTable({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        {state === "error" && <PendingDepositsTableError />}
-        {state === "loading" && <PendingDepositsTableLoading />}
-        {state === "empty" && <PendingDepositsTableEmpty />}
-        {state === "data" && (
+        {isPendingMiningWalletDepositeError && <PendingDepositsTableError />}
+        {isPendingMiningWalletDepositeLoading && (
+          <PendingDepositsTableLoading />
+        )}
+        {pendingMiningWalletDepositeData && (
           <>
-            {pendingDeposits.length === 0 ? (
+            {pendingMiningWalletDepositeData.length === 0 ? (
               <PendingDepositsTableEmpty />
             ) : (
               <div className={cn(`overflow-x-auto`)}>
@@ -714,7 +750,7 @@ export function PendingDepositsTable({
                   <tbody
                     className={cn(`divide-foreground/10 divide-y text-sm`)}
                   >
-                    {pendingDeposits.map((item) => (
+                    {pendingMiningWalletDepositeData.map((item) => (
                       <tr key={item.id} className={cn(`group`)}>
                         <td className={cn(`py-4 pr-4`)}>
                           <div className={cn(`flex items-center gap-3`)}>
@@ -723,16 +759,16 @@ export function PendingDepositsTable({
                                 `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
                               )}
                             >
-                              {item.user.initial}
+                              {item.associatedUserDetail.fullName[0]}
                             </div>
                             <div className={cn(`flex flex-col`)}>
                               <span className={cn(`font-medium`)}>
-                                {item.user.name}
+                                {item.associatedUserDetail.fullName}
                               </span>
                               <span
                                 className={cn(`text-foreground/50 text-xs`)}
                               >
-                                {item.user.email}
+                                {item.associatedUserDetail.email}
                               </span>
                             </div>
                           </div>
@@ -745,11 +781,11 @@ export function PendingDepositsTable({
                           {item.amount}
                         </td>
                         <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                          {item.method}
+                          {item.depositMethod}
                         </td>
                         <td className={cn(`py-4 pr-4`)}>
                           <a
-                            href={item.proof}
+                            href={item.depositProof}
                             className={cn(
                               `border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium`,
                             )}
@@ -761,7 +797,14 @@ export function PendingDepositsTable({
                         <td
                           className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
                         >
-                          {item.date}
+                          {new Intl.DateTimeFormat("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          }).format(new Date(item.createdAt))}
                         </td>
                         <td className={cn(`py-4 pr-4`)}>
                           <span
@@ -813,26 +856,31 @@ export function PendingWithdrawalsTable({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "empty" | "data">("data");
+  const {
+    data: pendingMiningWalletWithdrawlsData,
+    isError: isPendingMiningWalletWithdrawlsError,
+    isLoading: isPendingMiningWalletWithdrawlsLoading,
+  } = useReadAllPendingMiningWalletWithdraw();
+  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("error");
   // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
 
   // const pendingWithdrawls = [];
-  const pendingWithdrawls = [
-    {
-      id: "dep-1",
-      user: {
-        name: "Surajit Sarder",
-        email: "surajitsarder2000@gmail.com",
-        initial: "S",
-      },
-      amount: "$1,000.00",
-      method: "Bsc_bep20",
-      date: "Aug 31, 2026 21:45",
-      status: "Pending",
-    },
-  ];
+  // const pendingWithdrawls = [
+  //   {
+  //     id: "dep-1",
+  //     user: {
+  //       name: "Surajit Sarder",
+  //       email: "surajitsarder2000@gmail.com",
+  //       initial: "S",
+  //     },
+  //     amount: "$1,000.00",
+  //     method: "Bsc_bep20",
+  //     date: "Aug 31, 2026 21:45",
+  //     status: "Pending",
+  //   },
+  // ];
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -852,11 +900,15 @@ export function PendingWithdrawalsTable({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        {state === "error" && <PendingWithdrawalsTableError />}
-        {state === "loading" && <PendingWithdrawalsTableLoading />}
-        {state === "data" && (
+        {isPendingMiningWalletWithdrawlsError && (
+          <PendingWithdrawalsTableError />
+        )}
+        {isPendingMiningWalletWithdrawlsLoading && (
+          <PendingWithdrawalsTableLoading />
+        )}
+        {pendingMiningWalletWithdrawlsData && (
           <>
-            {pendingWithdrawls.length === 0 ? (
+            {pendingMiningWalletWithdrawlsData.length === 0 ? (
               <div
                 className={cn(
                   `flex flex-col items-center justify-center py-12 text-center`,
@@ -895,7 +947,7 @@ export function PendingWithdrawalsTable({
                   <tbody
                     className={cn(`divide-foreground/10 divide-y text-sm`)}
                   >
-                    {pendingWithdrawls.map((item) => (
+                    {pendingMiningWalletWithdrawlsData.map((item) => (
                       <tr key={item.id} className={cn(`group`)}>
                         <td className={cn(`py-4 pr-4`)}>
                           <div className={cn(`flex items-center gap-3`)}>
@@ -904,16 +956,16 @@ export function PendingWithdrawalsTable({
                                 `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
                               )}
                             >
-                              {item.user.initial}
+                              {item.associatedUserDetail.fullName[0]}
                             </div>
                             <div className={cn(`flex flex-col`)}>
                               <span className={cn(`font-medium`)}>
-                                {item.user.name}
+                                {item.associatedUserDetail.fullName}
                               </span>
                               <span
                                 className={cn(`text-foreground/50 text-xs`)}
                               >
-                                {item.user.email}
+                                {item.associatedUserDetail.email}
                               </span>
                             </div>
                           </div>
@@ -924,12 +976,19 @@ export function PendingWithdrawalsTable({
                           {item.amount}
                         </td>
                         <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                          {item.method}
+                          {item.withdrawalMethod}
                         </td>
                         <td
                           className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
                         >
-                          {item.date}
+                          {new Intl.DateTimeFormat("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          }).format(new Date(item.createdAt))}
                         </td>
                         <td className={cn(`py-4 pr-4`)}>
                           <span

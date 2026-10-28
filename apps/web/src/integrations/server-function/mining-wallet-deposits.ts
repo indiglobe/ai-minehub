@@ -1,10 +1,12 @@
 import {
   create__MiningWalletDeposite,
   read__AllMiningWalletDeposite,
+  read__MiningWalletDepositStats,
 } from "@repo/data/querries/mining-wallet-deposits";
 import {
   create__MiningWalletDepositeSchema,
   read__AllMiningWalletDepositeSchema,
+  read__MiningWalletDepositStatsSchema,
 } from "@repo/data/validators/mining-wallet-deposits";
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
@@ -49,6 +51,30 @@ export const serverFn__readAllMiningWalletDeposite = createServerFn({
     if (serverFnError) {
       console.error(
         `Error in serverFnError in serverFn__readAllMiningWalletDeposite`,
+      );
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readMiningWalletDepositStats = createServerFn({
+  method: "GET",
+})
+  .validator(read__MiningWalletDepositStatsSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__MiningWalletDepositStats(data),
+    );
+
+    if (serverFnError) {
+      console.error(
+        `Error in serverFnError in serverFn__readMiningWalletDepositStats`,
       );
       console.error(serverFnError);
       throw serverFnError;

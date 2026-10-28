@@ -13,3 +13,16 @@ export const create__TradingWalletDepositeSchema = z.object({
     depositProof: z.string(),
   }),
 });
+
+export const read__TradingWalletDepositStatsSchema = z
+  .object({
+    identifier: z
+      .object({
+        status: z.union([
+          z.enum(DEPOSIT_STATUS),
+          z.array(z.enum(DEPOSIT_STATUS)),
+        ]),
+      })
+      .optional(),
+  })
+  .optional();

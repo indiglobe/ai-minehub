@@ -1,7 +1,7 @@
 import { db } from "@/index";
 import { Table__MiningOrder } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, desc, eq, SQL } from "drizzle-orm";
+import { and, desc, eq, inArray, SQL } from "drizzle-orm";
 import { INVESTMENT_STATUS } from "@repo/utils/db-enums";
 import { id } from "@repo/utils/id";
 
@@ -55,7 +55,9 @@ const create__MiningOrder = async (options: TCreate__MiningOrder) => {
 type TRead__AllMiningOrders = {
   identifier?: Partial<{
     miningProfileUsed: string;
-    miningStatus: (typeof INVESTMENT_STATUS)[number];
+    miningStatus:
+      | (typeof INVESTMENT_STATUS)[number]
+      | (typeof INVESTMENT_STATUS)[number][];
     userId: string;
   }>;
   queryOptions?: {
@@ -83,6 +85,23 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
         options.identifier.miningProfileUsed,
       ),
     );
+  }
+
+  if (options?.identifier?.miningStatus) {
+    if (Array.isArray(options.identifier.miningStatus)) {
+      conditions.push(
+        inArray(
+          Table__MiningOrder.miningStatus,
+          options.identifier.miningStatus,
+        ),
+      );
+    }
+
+    if (!Array.isArray(options.identifier.miningStatus)) {
+      conditions.push(
+        eq(Table__MiningOrder.miningStatus, options.identifier.miningStatus),
+      );
+    }
   }
 
   if (options?.identifier?.userId) {

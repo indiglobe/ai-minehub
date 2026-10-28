@@ -1,12 +1,19 @@
 import { db } from "@/index";
 import { Table__MiningWalletDeposits, Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, desc, eq, getTableColumns, SQL } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, inArray, sql, SQL } from "drizzle-orm";
 import { id } from "@repo/utils/id";
+import { DEPOSIT_STATUS } from "@repo/utils/db-enums";
 
 /**
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * CREATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  */
 
@@ -51,7 +58,13 @@ const create__MiningWalletDeposite = async (
 
 /**
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (ALL)
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  */
 
@@ -59,8 +72,12 @@ type TRead__AllMiningWalletDeposite = {
   identifier?: Partial<
     Pick<
       typeof Table__MiningWalletDeposits.$inferSelect,
-      "status" | "wallet" | "orderedBy"
-    >
+      "wallet" | "orderedBy"
+    > & {
+      status:
+        | (typeof DEPOSIT_STATUS)[number]
+        | (typeof DEPOSIT_STATUS)[number][];
+    }
   >;
   queryOptions?: {
     skip?: number;
@@ -82,9 +99,17 @@ const read__AllMiningWalletDeposite = async (
   const conditions: SQL[] = [];
 
   if (options?.identifier?.status) {
-    conditions.push(
-      eq(Table__MiningWalletDeposits.status, options.identifier.status),
-    );
+    if (Array.isArray(options.identifier.status)) {
+      conditions.push(
+        inArray(Table__MiningWalletDeposits.status, options.identifier.status),
+      );
+    }
+
+    if (!Array.isArray(options.identifier.status)) {
+      conditions.push(
+        eq(Table__MiningWalletDeposits.status, options.identifier.status),
+      );
+    }
   }
 
   if (options?.identifier?.orderedBy) {
@@ -132,4 +157,94 @@ const read__AllMiningWalletDeposite = async (
   return miningWalletDeposites;
 };
 
-export { create__MiningWalletDeposite, read__AllMiningWalletDeposite };
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * READ (STATS)
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TRead__MiningWalletDepositStats = Partial<{
+  identifier: {
+    status:
+      | (typeof Table__MiningWalletDeposits.$inferSelect)["status"]
+      | (typeof Table__MiningWalletDeposits.$inferSelect)["status"][];
+  };
+}>;
+
+const read__MiningWalletDepositStats = async (
+  options?: TRead__MiningWalletDepositStats,
+) => {
+  const conditions: SQL[] = [];
+
+  if (options?.identifier) {
+    if (Array.isArray(options.identifier.status)) {
+      conditions.push(
+        inArray(Table__MiningWalletDeposits.status, options.identifier.status),
+      );
+    }
+
+    if (!Array.isArray(options.identifier.status)) {
+      conditions.push(
+        eq(Table__MiningWalletDeposits.status, options.identifier.status),
+      );
+    }
+  }
+
+  const baseQuery = db
+    .select({
+      count: sql<number>`count(*)`.mapWith(Number),
+
+      totalAmount:
+        sql<number>`coalesce(sum(${Table__MiningWalletDeposits.amount}), 0)`.mapWith(
+          Number,
+        ),
+
+      averageAmount:
+        sql<number>`coalesce(avg(${Table__MiningWalletDeposits.amount}), 0)`.mapWith(
+          Number,
+        ),
+
+      minAmount:
+        sql<number>`coalesce(min(${Table__MiningWalletDeposits.amount}), 0)`.mapWith(
+          Number,
+        ),
+
+      maxAmount:
+        sql<number>`coalesce(max(${Table__MiningWalletDeposits.amount}), 0)`.mapWith(
+          Number,
+        ),
+    })
+    .from(Table__MiningWalletDeposits)
+    .$dynamic();
+
+  if (conditions.length > 0) {
+    baseQuery.where(and(...conditions));
+  }
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(
+      "Error in read__MiningWalletDepositStats",
+      queryOperationError,
+    );
+
+    throw queryOperationError;
+  }
+
+  const [stats] = queryOperationResult;
+
+  return stats!;
+};
+
+export {
+  create__MiningWalletDeposite,
+  read__AllMiningWalletDeposite,
+  read__MiningWalletDepositStats,
+};

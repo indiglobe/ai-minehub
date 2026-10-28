@@ -12,8 +12,11 @@
     "lint:staged": "turbo run lint:staged",
     "turbo:ui": "turbo devtools --port 8520",
     "check-types": "turbo run check-types",
-    "build:dev:apps:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
-    "build:dev:apps:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket"
+    "START OF MAIN SCRIPTS":"==============================",
+    "build:packages:dev:apps": "turbo run build --filter=@repo/* && turbo run dev --filter=!@repo/*",
+    "build:packages:dev:app:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
+    "build:packages:dev:app:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket",
+    "END OF MAIN SCRIPTS":"=============================="
   },
   "devDependencies": {
     "husky": "^9.1.7",

@@ -65,16 +65,30 @@ const create__User = async (data: TCreate__User) => {
  */
 
 type TRead__UserCount = Partial<{
-  identifier: Pick<typeof Table__User.$inferSelect, "role">;
+  identifier:
+    | { role: Pick<typeof Table__User.$inferSelect, "role">["role"] }
+    | { roles: Pick<typeof Table__User.$inferSelect, "role">["role"][] };
 }>;
 
 const read__UserCount = async (options?: TRead__UserCount) => {
-  const baseQuery = options?.identifier?.role
-    ? db
-        .select({ count: sql<number>`count(*)` })
-        .from(Table__User)
-        .where(eq(Table__User.role, options.identifier.role))
-    : db.select({ count: sql<number>`count(*)` }).from(Table__User);
+  const conditions: SQL[] = [];
+
+  const baseQuery = db
+    .select({ count: sql<number>`count(*)` })
+    .from(Table__User);
+
+  if (options?.identifier) {
+    if ("role" in options.identifier) {
+      conditions.push(eq(Table__User.role, options.identifier.role));
+    }
+    if ("roles" in options.identifier) {
+      conditions.push(inArray(Table__User.role, options.identifier.roles));
+    }
+  }
+
+  if (conditions.length > 0) {
+    baseQuery.where(and(...conditions));
+  }
 
   const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
 
@@ -85,7 +99,7 @@ const read__UserCount = async (options?: TRead__UserCount) => {
   }
 
   const [userCount] = queryOperationResult;
-  return userCount;
+  return userCount!;
 };
 
 /**

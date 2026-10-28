@@ -3,7 +3,7 @@ import {
   useCreateTradingWalletWithdraw,
   useReadMiningWallet,
   useReadTradingWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";

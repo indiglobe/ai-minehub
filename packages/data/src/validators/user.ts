@@ -18,7 +18,7 @@ export const read__UserCountSchema = z
   .object({
     identifier: z
       .object({
-        role: z.enum(ROLE),
+        role: z.union([z.enum(ROLE), z.array(z.enum(ROLE))]),
       })
       .optional(),
   })

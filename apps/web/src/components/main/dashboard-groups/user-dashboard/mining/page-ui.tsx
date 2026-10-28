@@ -21,7 +21,7 @@ import {
   useCreateMiningOrder,
   useReadMiningWallet,
   useUpdateOneMiningWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { tryCatch } from "@repo/utils/try-catch";
 
 export function PassiveIncome({

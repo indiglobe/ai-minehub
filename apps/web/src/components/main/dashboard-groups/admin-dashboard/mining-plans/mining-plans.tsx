@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { Layers, Plus, Edit, X } from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { useReadAllMiningPlans } from "@/integrations/tanstack/react-querry/dashboard/admin-dashboard";
+import { useReadAllMiningPlans } from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
 import {
   MiningPlansError,
   MiningPlansLoading,

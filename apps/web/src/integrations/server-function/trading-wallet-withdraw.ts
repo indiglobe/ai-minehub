@@ -1,5 +1,11 @@
-import { create__TradingWalletWithdraw } from "@repo/data/querries/trading-wallet-withdraw";
-import { create__TradingWalletWithdrawSchema } from "@repo/data/validators/trading-wallet-withdraw";
+import {
+  create__TradingWalletWithdraw,
+  read__TradingWalletWithdrawStats,
+} from "@repo/data/querries/trading-wallet-withdraw";
+import {
+  create__TradingWalletWithdrawSchema,
+  read__TradingWalletWithdrawStatsSchema,
+} from "@repo/data/validators/trading-wallet-withdraw";
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -25,4 +31,28 @@ export const serverFn__createTradingWalletWithdraw = createServerFn({
     }
 
     return serverFnResponse;
+  });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__readTradingWalletWithdrawStats = createServerFn({
+  method: "GET",
+})
+  .validator(read__TradingWalletWithdrawStatsSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__TradingWalletWithdrawStats(data),
+    );
+
+    if (serverFnError) {
+      console.error(
+        `Error in serverFnError in serverFn__readTradingWalletWithdrawStats`,
+      );
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
   });

@@ -13,7 +13,7 @@ import { extractMonthName } from "@repo/utils/date";
 import {
   useReadActiveMiningSessions,
   useRecentTransactionsHistory,
-} from "@/integrations/tanstack/react-querry/dashboard/user-dashboard";
+} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { round } from "es-toolkit/math";
 import {
   ActiveDenoteBadge,
@@ -232,7 +232,8 @@ export function ActiveMiningSession({
                 const now = Date.now();
                 const createdAt = new Date(activeSession.createdAt).getTime();
                 const durationMs =
-                  ONE_DAY * activeSession.miningProfile.lockinPeriod;
+                  // ONE_DAY * activeSession.miningProfile?.lockinPeriod;
+                  ONE_DAY * activeSession.miningProfile!.lockinPeriod;
                 const elapsedMs = now - createdAt;
                 let progress = (elapsedMs / durationMs) * 100;
 
@@ -240,7 +241,7 @@ export function ActiveMiningSession({
                 const remainingMs = Math.max(0, durationMs - elapsedMs);
                 const remainingDays = Math.ceil(remainingMs / ONE_DAY);
                 const approxReturnTillToday =
-                  activeSession.miningProfile.dailyReturn *
+                  activeSession.miningProfile!.dailyReturn *
                   (elapsedMs / ONE_DAY);
 
                 return (
@@ -269,7 +270,7 @@ export function ActiveMiningSession({
 
                         <div>
                           <h2 className={cn(`font-semibold`)}>
-                            {activeSession.miningProfile.category}
+                            {activeSession.miningProfile!.category}
                           </h2>
 
                           <p className={cn(`text-foreground/50 text-xs`)}>
