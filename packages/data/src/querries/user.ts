@@ -65,9 +65,11 @@ const create__User = async (data: TCreate__User) => {
  */
 
 type TRead__UserCount = Partial<{
-  identifier:
-    | { role: Pick<typeof Table__User.$inferSelect, "role">["role"] }
-    | { roles: Pick<typeof Table__User.$inferSelect, "role">["role"][] };
+  identifier: {
+    role:
+      | Pick<typeof Table__User.$inferSelect, "role">["role"]
+      | Pick<typeof Table__User.$inferSelect, "role">["role"][];
+  };
 }>;
 
 const read__UserCount = async (options?: TRead__UserCount) => {
@@ -78,11 +80,11 @@ const read__UserCount = async (options?: TRead__UserCount) => {
     .from(Table__User);
 
   if (options?.identifier) {
-    if ("role" in options.identifier) {
-      conditions.push(eq(Table__User.role, options.identifier.role));
+    if (Array.isArray(options.identifier.role)) {
+      conditions.push(inArray(Table__User.role, options.identifier.role));
     }
-    if ("roles" in options.identifier) {
-      conditions.push(inArray(Table__User.role, options.identifier.roles));
+    if (!Array.isArray(options.identifier.role)) {
+      conditions.push(eq(Table__User.role, options.identifier.role));
     }
   }
 

@@ -1,14 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
-import { serverFn__createUser } from "@/integrations/server-function/user";
 import { create__UserSchema } from "@repo/data/validators/user";
 import { setUserDetailsCookie } from "@/lib/auth/session";
 import { tryCatch } from "@repo/utils/try-catch";
+import { create__User } from "@repo/data/querries/user";
 
 export const formAction__createNewUser = createServerFn()
   .validator(create__UserSchema)
   .handler(async ({ data }) => {
     const [formActionError, formActionResult] = await tryCatch(
-      serverFn__createUser({ data }),
+      create__User({ ...data }),
     );
 
     if (formActionError) {
