@@ -243,8 +243,84 @@ const read__MiningWalletDepositStats = async (
   return stats!;
 };
 
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * UPDATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TUpdate__MiningWalletDeposite = {
+  identifier:
+    | {
+        walletId: (typeof Table__MiningWalletDeposits.$inferSelect)["id"];
+      }
+    | {
+        userId: (typeof Table__MiningWalletDeposits.$inferSelect)["orderedBy"];
+      };
+
+  dataToInsert: Partial<
+    Omit<
+      typeof Table__MiningWalletDeposits.$inferInsert,
+      "updatedAt" | "tableIdentifierToken" | "createdAt" | "id"
+    >
+  >;
+};
+
+const update__MiningWalletDeposite = async (
+  options: TUpdate__MiningWalletDeposite,
+) => {
+  const conditions: SQL[] = [];
+
+  if ("walletId" in options.identifier) {
+    conditions.push(
+      eq(Table__MiningWalletDeposits.id, options.identifier.walletId),
+    );
+  }
+
+  if ("userId" in options.identifier) {
+    conditions.push(
+      eq(Table__MiningWalletDeposits.orderedBy, options.identifier.userId),
+    );
+  }
+
+  const baseQuery = db
+    .update(Table__MiningWalletDeposits)
+    .set({ ...options.dataToInsert })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(
+      `Error in queryOperationError in update__MiningWalletDeposite`,
+    );
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [updatedMiningDeposit] = await db
+      .select()
+      .from(Table__MiningWalletDeposits)
+      .where(and(...conditions))
+      .limit(1)
+      .offset(0);
+
+    return updatedMiningDeposit!;
+  }
+
+  throw Error("Unexpected block in update__MiningWalletDeposite");
+};
+
 export {
   create__MiningWalletDeposite,
   read__AllMiningWalletDeposite,
+  update__MiningWalletDeposite,
   read__MiningWalletDepositStats,
 };

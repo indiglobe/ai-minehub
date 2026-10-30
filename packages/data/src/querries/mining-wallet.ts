@@ -255,4 +255,226 @@ const update__OneMiningWallet = async (options: TUpdate__OneMiningWallet) => {
   throw new Error(`Unexpected block execution in update__OneMiningWallet`);
 };
 
-export { create__MiningWallet, read__OneMiningWallet, update__OneMiningWallet };
+/**
+ * ==========================================
+ * UPDATE
+ * ==========================================
+ */
+
+type TUpdate__Balance = {
+  identifier:
+    | {
+        id: (typeof Table__MiningWallet.$inferSelect)["id"];
+      }
+    | {
+        associatedUserId: (typeof Table__MiningWallet.$inferSelect)["associatedUser"];
+      };
+
+  dataToUpdate: Required<
+    Partial<Pick<typeof Table__MiningWallet.$inferSelect, "balance">>
+  >;
+};
+
+const update__AddBalance = async (options: TUpdate__Balance) => {
+  /**
+   * Identifier Extraction
+   * Destructure the identifier and update data passed into the options parameter.
+   */
+  const { identifier, dataToUpdate } = options;
+
+  /**
+   * Condition Filters Builder
+   * Initialize an array to hold dynamic SQL WHERE clauses based on the provided identifier.
+   */
+  const conditions: SQL[] = [];
+
+  /**
+   * Filter condition by mining wallet ID if specified.
+   */
+  if ("id" in identifier) {
+    conditions.push(eq(Table__MiningWallet.id, identifier.id));
+  }
+
+  /**
+   * Filter condition by associated user ID if specified.
+   */
+  if ("associatedUserId" in identifier) {
+    conditions.push(
+      eq(Table__MiningWallet.associatedUser, identifier.associatedUserId),
+    );
+  }
+
+  const [wallet] = await db
+    .select()
+    .from(Table__MiningWallet)
+    .where(and(...conditions));
+
+  /**
+   * Base Query Initialization
+   * Setup the core `db.update()` statement with the provided update data.
+   */
+  const baseQuery = db
+    .update(Table__MiningWallet)
+    .set({ ...dataToUpdate, balance: wallet!.balance + dataToUpdate.balance })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in update__OneMiningWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  /**
+   * Update Result Validation
+   * Check whether exactly one record was updated.
+   */
+  const {
+    "0": { affectedRows },
+  } = queryOperationResult;
+
+  if (affectedRows === 1) {
+    /**
+     * Updated Record Fetching
+     * Fetch the updated mining wallet using the provided identifier.
+     */
+    const [updatedMiningWalletFetchingError, fetchedUpdatedMiningWalletsList] =
+      await tryCatch(
+        db
+          .select()
+          .from(Table__MiningWallet)
+          .where(and(...conditions))
+          .limit(1)
+          .offset(0),
+      );
+
+    if (updatedMiningWalletFetchingError) {
+      console.error(
+        `Error in updatedMiningWalletFetchingError in update__OneMiningWallet`,
+      );
+      console.error(updatedMiningWalletFetchingError);
+      throw updatedMiningWalletFetchingError;
+    }
+
+    const [updatedMiningWallet] = fetchedUpdatedMiningWalletsList;
+
+    return updatedMiningWallet ?? null;
+  }
+
+  /**
+   * No Record Updated
+   * Return null if no mining wallet matched the provided identifier.
+   */
+  if (affectedRows === 0) {
+    return null;
+  }
+
+  throw new Error(`Unexpected block execution in update__OneMiningWallet`);
+};
+
+const update__DeductBalance = async (options: TUpdate__Balance) => {
+  /**
+   * Identifier Extraction
+   * Destructure the identifier and update data passed into the options parameter.
+   */
+  const { identifier, dataToUpdate } = options;
+
+  /**
+   * Condition Filters Builder
+   * Initialize an array to hold dynamic SQL WHERE clauses based on the provided identifier.
+   */
+  const conditions: SQL[] = [];
+
+  /**
+   * Filter condition by mining wallet ID if specified.
+   */
+  if ("id" in identifier) {
+    conditions.push(eq(Table__MiningWallet.id, identifier.id));
+  }
+
+  /**
+   * Filter condition by associated user ID if specified.
+   */
+  if ("associatedUserId" in identifier) {
+    conditions.push(
+      eq(Table__MiningWallet.associatedUser, identifier.associatedUserId),
+    );
+  }
+
+  const [wallet] = await db
+    .select()
+    .from(Table__MiningWallet)
+    .where(and(...conditions));
+
+  /**
+   * Base Query Initialization
+   * Setup the core `db.update()` statement with the provided update data.
+   */
+  const baseQuery = db
+    .update(Table__MiningWallet)
+    .set({ ...dataToUpdate, balance: wallet!.balance - dataToUpdate.balance })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in update__OneMiningWallet`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  /**
+   * Update Result Validation
+   * Check whether exactly one record was updated.
+   */
+  const {
+    "0": { affectedRows },
+  } = queryOperationResult;
+
+  if (affectedRows === 1) {
+    /**
+     * Updated Record Fetching
+     * Fetch the updated mining wallet using the provided identifier.
+     */
+    const [updatedMiningWalletFetchingError, fetchedUpdatedMiningWalletsList] =
+      await tryCatch(
+        db
+          .select()
+          .from(Table__MiningWallet)
+          .where(and(...conditions))
+          .limit(1)
+          .offset(0),
+      );
+
+    if (updatedMiningWalletFetchingError) {
+      console.error(
+        `Error in updatedMiningWalletFetchingError in update__OneMiningWallet`,
+      );
+      console.error(updatedMiningWalletFetchingError);
+      throw updatedMiningWalletFetchingError;
+    }
+
+    const [updatedMiningWallet] = fetchedUpdatedMiningWalletsList;
+
+    return updatedMiningWallet ?? null;
+  }
+
+  /**
+   * No Record Updated
+   * Return null if no mining wallet matched the provided identifier.
+   */
+  if (affectedRows === 0) {
+    return null;
+  }
+
+  throw new Error(`Unexpected block execution in update__OneMiningWallet`);
+};
+
+export {
+  create__MiningWallet,
+  read__OneMiningWallet,
+  update__OneMiningWallet,
+  update__AddBalance,
+  update__DeductBalance,
+};

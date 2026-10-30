@@ -46,3 +46,23 @@ export const read__MiningWalletDepositStatsSchema = z
       .optional(),
   })
   .optional();
+
+export const update__MiningWalletDepositeSchema = z.object({
+  identifier: z.union([
+    z.object({
+      walletId: z.string(),
+    }),
+    z.object({
+      userId: z.string(),
+    }),
+  ]),
+  dataToInsert: z.object({
+    orderedBy: z.string().optional(),
+    wallet: z.string().optional(),
+    amount: z.number().optional(),
+    status: z.enum(DEPOSIT_STATUS).optional(),
+    depositMethod: z.enum(TRANSACTION_METHOD).optional(),
+    transactionId: z.string().optional(),
+    depositProof: z.string().optional(),
+  }),
+});

@@ -14,7 +14,7 @@
     "check-types": "turbo run check-types",
     "START OF MAIN SCRIPTS":"==============================",
     "build:packages:dev:apps": "turbo run build --filter=@repo/* && turbo run dev --filter=!@repo/*",
-    "build:packages:dev:app:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
+    "build:packages:pp:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
     "build:packages:dev:app:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket",
     "END OF MAIN SCRIPTS":"=============================="
   },

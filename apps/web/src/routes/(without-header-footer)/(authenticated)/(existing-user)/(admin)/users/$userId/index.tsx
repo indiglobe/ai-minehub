@@ -1,4 +1,5 @@
 import { UserDetailsFromDashboard } from "@/components/main/dashboard-groups/admin-dashboard/users/user-details";
+import { serverFn__readOneUser } from "@/integrations/server-function/user";
 import { env } from "@repo/env/client";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -7,9 +8,16 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
 
-  head: ({params}) => {
+  loader: async ({ params: { userId } }) => {
+    const userDetails = await serverFn__readOneUser({
+      data: { identifier: { id: userId } },
+    });
 
-    const {userId} = params
+    return { userDetails: userDetails! };
+  },
+
+  head: ({ params }) => {
+    const { userId } = params;
 
     const title = "User Details | AI Minehub Admin";
     const description =

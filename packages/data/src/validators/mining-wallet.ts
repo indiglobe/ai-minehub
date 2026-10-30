@@ -27,3 +27,17 @@ export const update__OneMiningWalletSchema = z.object({
     balance: z.number().optional(),
   }),
 });
+
+export const update__BalanceSchema = z.object({
+  identifier: z.union([
+    z.object({
+      id: z.string(),
+    }),
+    z.object({
+      associatedUserId: z.string(),
+    }),
+  ]),
+  dataToUpdate: z.object({
+    balance: z.number(),
+  }),
+});

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useLoaderData, useRouter } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Wallet,
@@ -18,6 +18,9 @@ import { Button } from "@repo/ui/button";
 
 export function UserDetailsFromDashboard() {
   const router = useRouter();
+  const { userDetails } = useLoaderData({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/",
+  });
 
   return (
     <div className={cn(`default-padding @container space-y-6 py-10`)}>
@@ -34,7 +37,7 @@ export function UserDetailsFromDashboard() {
         </Button>
 
         <Button asChild size="sm" variant={"success"}>
-          <Link to="/users/$userId/wallet" params={{ userId: "u-1" }}>
+          <Link to="/users/$userId/wallet" params={{ userId: userDetails.id }}>
             <Wallet className={cn(`size-4`)} />
             Manage Wallet
           </Link>
@@ -65,6 +68,10 @@ export function UserInformationCard({
   className,
   ...props
 }: ComponentProps<"div">) {
+  const { userDetails } = useLoaderData({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(admin)/users/$userId/",
+  });
+
   return (
     <div
       className={cn(
@@ -89,13 +96,13 @@ export function UserInformationCard({
             `bg-secondary-500 mb-3 flex size-16 items-center justify-center rounded-full text-xl font-bold text-white`,
           )}
         >
-          D
+          {userDetails.fullName[0]}
         </div>
         <h3 className={cn(`font-brand-secondary text-lg font-semibold`)}>
-          dsfsd dsfsf
+          {userDetails.fullName}
         </h3>
         <p className={cn(`text-foreground/50 mt-0.5 text-xs`)}>
-          birthday@yzcalo.com
+          {userDetails.email}
         </p>
       </div>
 
@@ -108,18 +115,22 @@ export function UserInformationCard({
             Referral Code
           </span>
           <span className={cn(`font-mono text-xs font-semibold`)}>
-            QFL6D2HG
+            {userDetails.id}
           </span>
         </div>
 
         <div className={cn(`flex flex-col gap-1`)}>
           <span className={cn(`text-foreground/50 text-xs`)}>Referred By</span>
-          <span className={cn(`text-foreground/80 font-medium`)}>N/A</span>
+          <span className={cn(`text-foreground/80 font-medium`)}>
+            {userDetails.referrerId ? userDetails.referrerId : "N/A"}
+          </span>
         </div>
 
         <div className={cn(`flex flex-col gap-1`)}>
           <span className={cn(`text-foreground/50 text-xs`)}>Phone</span>
-          <span className={cn(`text-foreground/80 font-medium`)}>N/A</span>
+          <span className={cn(`text-foreground/80 font-medium`)}>
+            {userDetails.phoneNumber}
+          </span>
         </div>
 
         <div className={cn(`flex flex-col gap-1`)}>
@@ -130,7 +141,7 @@ export function UserInformationCard({
                 `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
               )}
             >
-              Inactive
+              {userDetails.userStatus}
             </span>
           </div>
         </div>
@@ -138,7 +149,7 @@ export function UserInformationCard({
         <div className={cn(`flex flex-col gap-1`)}>
           <span className={cn(`text-foreground/50 text-xs`)}>Joined</span>
           <span className={cn(`text-foreground/80 text-xs font-medium`)}>
-            Sep 07, 2026 05:35
+            {}
           </span>
         </div>
 

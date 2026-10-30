@@ -1,4 +1,9 @@
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   serverFn__readAllUsers,
@@ -8,6 +13,7 @@ import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/
 import {
   serverFn__readAllMiningWalletDeposite,
   serverFn__readMiningWalletDepositStats,
+  serverFn__updateMiningWalletDeposit,
 } from "@/integrations/server-function/mining-wallet-deposits";
 import { serverFn__readTradingWalletDepositStats } from "@/integrations/server-function/trading-wallet-deposits";
 import { serverFn__readTradingWalletWithdrawStats } from "@/integrations/server-function/trading-wallet-withdraw";
@@ -285,6 +291,32 @@ export function useReadMiningWalletPendingDepositStats() {
         }),
     }),
   );
+}
+
+export function useUpdateMiningWalletDeposit() {
+  const queryClient = useQueryClient();
+
+  const updateMiningWalletDeposit = useServerFn(
+    serverFn__updateMiningWalletDeposit,
+  );
+
+  return useMutation({
+    mutationFn: updateMiningWalletDeposit,
+
+    onSuccess: async () => {
+      await Promise.all([
+        // Invalidate deposit stats
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.mining.deposits.stats.all(),
+        }),
+
+        // Invalidate deposit lists
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.mining.deposits.list.all(),
+        }),
+      ]);
+    },
+  });
 }
 
 // -----------------------------------------------------------------------------

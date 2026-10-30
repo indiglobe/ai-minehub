@@ -2,11 +2,14 @@ import {
   read__OneMiningWallet,
   update__OneMiningWallet,
   create__MiningWallet,
+  update__AddBalance,
+  update__DeductBalance,
 } from "@repo/data/querries/mining-wallet";
 import {
   read__OneMiningWalletSchema,
   update__OneMiningWalletSchema,
   create__MiningWalletSchema,
+  update__BalanceSchema,
 } from "@repo/data/validators/mining-wallet";
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
@@ -70,6 +73,50 @@ export const serverFn__updateOneMiningWallet = createServerFn({
 
     if (serverFnError) {
       console.log(`Error in serverFnError in serverFn__updateOneMiningWallet`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResponse;
+  });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__updateAddBalance = createServerFn({
+  method: "POST",
+})
+  .validator(update__BalanceSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResponse] = await tryCatch(
+      update__AddBalance(data),
+    );
+
+    if (serverFnError) {
+      console.log(`Error in serverFnError in serverFn__updateAddBalance`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResponse;
+  });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+export const serverFn__updateDeductBalance = createServerFn({
+  method: "POST",
+})
+  .validator(update__BalanceSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResponse] = await tryCatch(
+      update__DeductBalance(data),
+    );
+
+    if (serverFnError) {
+      console.log(`Error in serverFnError in serverFn__updateDeductBalance`);
       console.error(serverFnError);
       throw serverFnError;
     }

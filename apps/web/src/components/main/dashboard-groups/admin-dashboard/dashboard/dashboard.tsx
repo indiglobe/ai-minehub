@@ -47,7 +47,10 @@ import {
   useReadTradingWalletPendingWithdrawlStats,
   useReadTradingWalletProcessedDepositStats,
   useReadUserCount,
+  useUpdateMiningWalletDeposit,
 } from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
+import { useServerFn } from "@tanstack/react-start";
+import { serverFn__updateAddBalance } from "@/integrations/server-function/mining-wallet";
 
 export default function AdminDashboard() {
   return (
@@ -701,6 +704,11 @@ export function PendingDepositsTable({
     isLoading: isPendingMiningWalletDepositeLoading,
   } = useReadAllPendingMiningWalletDeposite();
 
+  const { mutateAsync: updateMiningWalletDeposit } =
+    useUpdateMiningWalletDeposit();
+
+  const addBalance = useServerFn(serverFn__updateAddBalance);
+
   return (
     <section className={cn(`@container`, className)} {...props}>
       <div
@@ -825,6 +833,22 @@ export function PendingDepositsTable({
                               size="xs"
                               variant={"success"}
                               className={cn(``)}
+                              onClick={async () => {
+                                await updateMiningWalletDeposit({
+                                  data: {
+                                    dataToInsert: { status: "PROCESSED" },
+                                    identifier: { walletId: item.id },
+                                  },
+                                });
+                                await addBalance({
+                                  data: {
+                                    dataToUpdate: { balance: item.amount },
+                                    identifier: {
+                                      associatedUserId: item.orderedBy,
+                                    },
+                                  },
+                                });
+                              }}
                             >
                               <Check className={cn(`size-3.5`)} />
                               Approve
@@ -833,6 +857,14 @@ export function PendingDepositsTable({
                               size="xs"
                               variant={"destructive"}
                               className={cn(``)}
+                              onClick={async () => {
+                                await updateMiningWalletDeposit({
+                                  data: {
+                                    dataToInsert: { status: "REJECTED" },
+                                    identifier: { walletId: item.id },
+                                  },
+                                });
+                              }}
                             >
                               <X className={cn(`size-3.5`)} />
                               Reject
