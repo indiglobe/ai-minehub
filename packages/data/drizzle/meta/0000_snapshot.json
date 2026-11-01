@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4421550c-7dbf-4614-8a62-6e885ca4d1e7",
+  "id": "4a9bdc62-f58f-4f1e-ad84-57b9258ca184",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "chat": {
@@ -516,8 +516,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "withdrawal_method": {
-          "name": "withdrawal_method",
+        "withdrawl_method": {
+          "name": "withdrawl_method",
           "type": "enum('BSC','TRX','ETH','Bitcoin')",
           "primaryKey": false,
           "notNull": true,

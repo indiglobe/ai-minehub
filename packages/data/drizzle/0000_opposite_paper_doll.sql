@@ -69,7 +69,7 @@ CREATE TABLE `mining_wallet_withdraw` (
 	`amount` int NOT NULL,
 	`crypto_wallet_address` varchar(255) NOT NULL,
 	`withdrawl_status` enum('PENDING','PROCESSED','VALIDATING','REJECTED') NOT NULL,
-	`withdrawal_method` enum('BSC','TRX','ETH','Bitcoin') NOT NULL,
+	`withdrawl_method` enum('BSC','TRX','ETH','Bitcoin') NOT NULL,
 	`created_at` timestamp(6) NOT NULL,
 	`updated_at` timestamp(6) NOT NULL,
 	`table_identifier_token` enum('USER','TWAL','MWAL','RTNG','MORD','NEWS','MPRO','TORD','TWDP','TWWD','MWDP','RERN','MWWD','CHAT') NOT NULL DEFAULT 'MWWD',

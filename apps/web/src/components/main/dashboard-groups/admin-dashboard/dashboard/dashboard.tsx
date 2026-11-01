@@ -696,13 +696,11 @@ export function ThisMonthStatsCard({
                     <span className={cn(`text-foreground/50 text-xs`)}>
                       Monthly Deposits
                     </span>
-                    <span
-                      className={cn(`text-lg font-semibold text-green-500`)}
-                    >
-                      ${" "}
+                    <span className="text-lg font-semibold text-green-500">
+                      $
                       {(
-                        miningWalletMonthlyDepositStats[0].totalAmount +
-                        tradingWalletMonthlyDepositStats[0].totalAmount
+                        (miningWalletMonthlyDepositStats[0]?.totalAmount ?? 0) +
+                        (tradingWalletMonthlyDepositStats[0]?.totalAmount ?? 0)
                       ).toLocaleString("en-IN")}
                     </span>
                   </div>
@@ -726,8 +724,9 @@ export function ThisMonthStatsCard({
                     <span className={cn(`text-lg font-semibold text-red-500`)}>
                       ${" "}
                       {(
-                        miningWalletMonthlyWithdrawStats[0].totalAmount +
-                        tradingWalletMonthlyWithdrawStats[0].totalAmount
+                        (miningWalletMonthlyWithdrawStats[0]?.totalAmount ??
+                          0) +
+                        (tradingWalletMonthlyWithdrawStats[0]?.totalAmount ?? 0)
                       ).toLocaleString("en-IN")}
                     </span>
                   </div>
@@ -1084,10 +1083,12 @@ export function PendingWithdrawalsTable({
           isPendingTradingWalletWithdrawlsError) && (
           <PendingWithdrawalsTableError />
         )}
+
         {(isPendingMiningWalletWithdrawlsLoading ||
           isPendingTradingWalletWithdrawlsLoading) && (
           <PendingWithdrawalsTableLoading />
         )}
+        
         {pendingMiningWalletWithdraw && pendingTradingWalletWithdraw && (
           <>
             {[...pendingMiningWalletWithdraw, ...pendingTradingWalletWithdraw]
