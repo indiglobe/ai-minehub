@@ -1,13 +1,23 @@
 import { db } from "@/index";
-import { Table__MiningOrder } from "@/schema";
+import {
+  Table__MiningOrder,
+  Table__MiningProfile,
+  Table__User,
+} from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, desc, eq, inArray, SQL } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, inArray, SQL } from "drizzle-orm";
 import { INVESTMENT_STATUS } from "@repo/utils/db-enums";
 import { id } from "@repo/utils/id";
 
 /**
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * CREATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  */
 
@@ -48,7 +58,13 @@ const create__MiningOrder = async (options: TCreate__MiningOrder) => {
 
 /**
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (ALL)
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  */
 
@@ -69,6 +85,19 @@ type TRead__AllMiningOrders = {
 const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const {
+    tableIdentifierToken: miningOrderTableIdentifierToken,
+    ...miningOrder
+  } = getTableColumns(Table__MiningOrder);
+  const {
+    tableIdentifierToken: miningProfileTableIdentifierToken,
+    ...miningProfile
+  } = getTableColumns(Table__MiningProfile);
+  const { tableIdentifierToken: userTableIdentifierToken, ...user } =
+    getTableColumns(Table__User);
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   const conditions: SQL[] = [];
 
@@ -111,11 +140,20 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
   }
 
   const baseQuery = db
-    .select()
+    .select({
+      ...miningOrder,
+      miningProfile: { ...miningProfile },
+      user: { ...user },
+    })
     .from(Table__MiningOrder)
     .limit(limit)
     .offset(skip)
-    .orderBy(desc(Table__MiningOrder.createdAt));
+    .orderBy(desc(Table__MiningOrder.createdAt))
+    .innerJoin(
+      Table__MiningProfile,
+      eq(Table__MiningProfile.id, Table__MiningOrder.miningProfileUsed),
+    )
+    .innerJoin(Table__User, eq(Table__User.id, Table__MiningOrder.orderedBy));
 
   if (conditions.length > 0) {
     baseQuery.where(and(...conditions));
@@ -134,4 +172,61 @@ const read__AllMiningOrders = async (options?: TRead__AllMiningOrders) => {
   return miningOrders;
 };
 
-export { read__AllMiningOrders, create__MiningOrder };
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * UPDATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TUpdate__MiningOrder = {
+  identifier: {
+    id: (typeof Table__MiningOrder.$inferSelect)["id"];
+  };
+
+  dataToUpdate: Partial<
+    Omit<
+      typeof Table__MiningOrder.$inferInsert,
+      "tableIdentifierToken" | "createdAt" | "updatedAt" | "id"
+    >
+  >;
+};
+
+const update__MiningOrder = async (options: TUpdate__MiningOrder) => {
+  const conditions: SQL[] = [];
+
+  conditions.push(eq(Table__MiningOrder.id, options.identifier.id));
+
+  const baseQuery = db
+    .update(Table__MiningOrder)
+    .set({ ...options.dataToUpdate })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in update__MiningOrder`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [updatedMiningOrder] = await db
+      .select()
+      .from(Table__MiningOrder)
+      .where(and(...conditions))
+      .limit(1)
+      .offset(0);
+
+    return updatedMiningOrder!;
+  }
+
+  throw Error("Unexpected block in update__MiningOrder");
+};
+
+export { read__AllMiningOrders, create__MiningOrder, update__MiningOrder };

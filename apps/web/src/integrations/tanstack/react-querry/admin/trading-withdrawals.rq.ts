@@ -2,7 +2,7 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 
-import { serverFn__readTradingWalletWithdrawStats } from "@/integrations/server-function/trading-wallet-withdraw";
+import { serverFn__readTradingWalletWithdrawStats } from "@/integrations/tanstack/server-function/trading-wallet-withdraw.sfn";
 
 // Query keys
 export const adminTradingWithdrawalQueryKeys = {

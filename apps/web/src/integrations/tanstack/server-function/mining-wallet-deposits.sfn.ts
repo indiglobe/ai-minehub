@@ -1,14 +1,16 @@
 import {
-  create__MiningWalletDeposite,
-  read__AllMiningWalletDeposite,
+  create__MiningWalletDeposit,
+  read__AllMiningWalletDeposit,
   read__MiningWalletDepositStats,
-  update__MiningWalletDeposite,
+  update__MiningWalletDeposit,
+  read__MiningWalletMonthlyDepositStats,
 } from "@repo/data/querries/mining-wallet-deposits";
 import {
-  create__MiningWalletDepositeSchema,
-  read__AllMiningWalletDepositeSchema,
+  create__MiningWalletDepositSchema,
+  read__AllMiningWalletDepositSchema,
   read__MiningWalletDepositStatsSchema,
-  update__MiningWalletDepositeSchema,
+  update__MiningWalletDepositSchema,
+  read__MiningWalletMonthlyDepositStatsSchema,
 } from "@repo/data/validators/mining-wallet-deposits";
 import { tryCatch } from "@repo/utils/try-catch";
 import { createServerFn } from "@tanstack/react-start";
@@ -17,18 +19,18 @@ import { createServerFn } from "@tanstack/react-start";
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__createMiningWalletDeposite = createServerFn({
+const serverFn__createMiningWalletDeposit = createServerFn({
   method: "POST",
 })
-  .validator(create__MiningWalletDepositeSchema)
+  .validator(create__MiningWalletDepositSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
-      create__MiningWalletDeposite(data),
+      create__MiningWalletDeposit(data),
     );
 
     if (serverFnError) {
       console.error(
-        `Error in serverFnError in serverFn__createMiningWalletDeposite`,
+        `Error in serverFnError in serverFn__createMiningWalletDeposit`,
       );
       console.error(serverFnError);
       throw serverFnError;
@@ -41,18 +43,18 @@ export const serverFn__createMiningWalletDeposite = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readAllMiningWalletDeposite = createServerFn({
+const serverFn__readAllMiningWalletDeposit = createServerFn({
   method: "GET",
 })
-  .validator(read__AllMiningWalletDepositeSchema)
+  .validator(read__AllMiningWalletDepositSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
-      read__AllMiningWalletDeposite(data),
+      read__AllMiningWalletDeposit(data),
     );
 
     if (serverFnError) {
       console.error(
-        `Error in serverFnError in serverFn__readAllMiningWalletDeposite`,
+        `Error in serverFnError in serverFn__readAllMiningWalletDeposit`,
       );
       console.error(serverFnError);
       throw serverFnError;
@@ -65,7 +67,7 @@ export const serverFn__readAllMiningWalletDeposite = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readMiningWalletDepositStats = createServerFn({
+const serverFn__readMiningWalletDepositStats = createServerFn({
   method: "GET",
 })
   .validator(read__MiningWalletDepositStatsSchema)
@@ -89,13 +91,13 @@ export const serverFn__readMiningWalletDepositStats = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__updateMiningWalletDeposit = createServerFn({
+const serverFn__updateMiningWalletDeposit = createServerFn({
   method: "POST",
 })
-  .validator(update__MiningWalletDepositeSchema)
+  .validator(update__MiningWalletDepositSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResult] = await tryCatch(
-      update__MiningWalletDeposite(data),
+      update__MiningWalletDeposit(data),
     );
 
     if (serverFnError) {
@@ -108,3 +110,35 @@ export const serverFn__updateMiningWalletDeposit = createServerFn({
 
     return serverFnResult;
   });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+const serverFn__readMiningWalletMonthlyDepositStats = createServerFn({
+  method: "GET",
+})
+  .validator(read__MiningWalletMonthlyDepositStatsSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__MiningWalletMonthlyDepositStats(data),
+    );
+
+    if (serverFnError) {
+      console.error(
+        `Error in serverFnError in serverFn__readMiningWalletMonthlyDepositStats`,
+      );
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
+
+export {
+  serverFn__createMiningWalletDeposit,
+  serverFn__readAllMiningWalletDeposit,
+  serverFn__readMiningWalletDepositStats,
+  serverFn__updateMiningWalletDeposit,
+  serverFn__readMiningWalletMonthlyDepositStats,
+};

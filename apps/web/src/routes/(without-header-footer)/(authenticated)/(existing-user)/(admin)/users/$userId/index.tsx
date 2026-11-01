@@ -1,5 +1,9 @@
 import { UserDetailsFromDashboard } from "@/components/main/dashboard-groups/admin-dashboard/users/user-details";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readOneMiningWallet } from "@/integrations/tanstack/server-function/mining-wallet.sfn";
+import { serverFn__readAllMiningWalletDeposit } from "@/integrations/tanstack/server-function/mining-wallet-deposits.sfn";
+import { serverFn__readOneTradingWallet } from "@/integrations/tanstack/server-function/trading-wallet.sfn";
+import { serverFn__readAllTradingWalletDeposit } from "@/integrations/tanstack/server-function/trading-wallet-deposits.sfn";
+import { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 import { env } from "@repo/env/client";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -13,7 +17,33 @@ export const Route = createFileRoute(
       data: { identifier: { id: userId } },
     });
 
-    return { userDetails: userDetails! };
+    const miningWallet = await serverFn__readOneMiningWallet({
+      data: { identifier: { associatedUserId: userId } },
+    });
+
+    const tradingWallet = await serverFn__readOneTradingWallet({
+      data: { identifier: { associatedUserId: userId } },
+    });
+
+    const processedMiningWalletDeposits =
+      await serverFn__readAllMiningWalletDeposit({
+        data: { identifier: { orderedBy: userId, status: "PROCESSED" } },
+      });
+
+    const processedTradingWalletDeposits =
+      await serverFn__readAllTradingWalletDeposit({
+        data: { identifier: { orderedBy: userId, status: "PROCESSED" } },
+      });
+
+    return {
+      userDetails: userDetails!,
+      miningWallet,
+      tradingWallet,
+      processedDeposits: [
+        ...processedMiningWalletDeposits,
+        ...processedTradingWalletDeposits,
+      ],
+    };
   },
 
   head: ({ params }) => {

@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import {
   serverFn__readAllUsers,
   serverFn__readUserCount,
-} from "@/integrations/server-function/user";
+} from "@/integrations/tanstack/server-function/user.sfn";
 import type { ROLE } from "@repo/utils/db-enums";
 
 type TROLE = (typeof ROLE)[number];

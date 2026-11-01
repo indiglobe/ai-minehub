@@ -1,7 +1,7 @@
 import Home from "@/components/main/home/home";
-import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
-import { serverFn__readAllRatings } from "@/integrations/server-function/rating";
-import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
+import { serverFn__readAllRatings } from "@/integrations/tanstack/server-function/rating.sfn";
+import { serverFn__readAllMiningOrders } from "@/integrations/tanstack/server-function/mining-order.sfn";
 import { createFileRoute } from "@tanstack/react-router";
 import { env } from "@repo/env/client";
 

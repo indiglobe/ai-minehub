@@ -1,18 +1,32 @@
 import { WITHDRAWL_STATUS, TRANSACTION_METHOD } from "@repo/utils/db-enums";
 import z from "zod";
 
-export const create__MiningWalletWithdrawSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__MiningWalletWithdrawSchema = z.object({
   dataToInsert: z.object({
     orderedBy: z.string(),
     wallet: z.string(),
     amount: z.number(),
     status: z.enum(WITHDRAWL_STATUS),
     cryptoWalletAddress: z.string(),
-    withdrawalMethod: z.enum(TRANSACTION_METHOD),
+    withdrawlMethod: z.enum(TRANSACTION_METHOD),
   }),
 });
 
-export const read__MiningWalletWithdrawStatsSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__MiningWalletWithdrawStatsSchema = z
   .object({
     identifier: z
       .object({
@@ -25,7 +39,14 @@ export const read__MiningWalletWithdrawStatsSchema = z
   })
   .optional();
 
-export const read__AllMiningWalletWithdrawSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllMiningWalletWithdrawSchema = z
   .object({
     identifier: z
       .object({
@@ -44,3 +65,50 @@ export const read__AllMiningWalletWithdrawSchema = z
       .optional(),
   })
   .optional();
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__MiningWalletMonthlyWithdrawStatsSchema = z
+  .object({
+    year: z.number().int().min(2000).max(9999).optional(),
+  })
+  .optional();
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__MiningWalletWithdrawSchema = z.object({
+  identifier: z.union([
+    z.object({
+      walletId: z.string(),
+    }),
+    z.object({
+      userId: z.string(),
+    }),
+  ]),
+  dataToInsert: z.object({
+    orderedBy: z.string().optional(),
+    wallet: z.string().optional(),
+    amount: z.number().optional(),
+    cryptoWalletAddress: z.string().optional(),
+    status: z.enum(WITHDRAWL_STATUS).optional(),
+    withdrawlMethod: z.enum(TRANSACTION_METHOD).optional(),
+  }),
+});
+
+export {
+  create__MiningWalletWithdrawSchema,
+  read__MiningWalletWithdrawStatsSchema,
+  read__AllMiningWalletWithdrawSchema,
+  read__MiningWalletMonthlyWithdrawStatsSchema,
+  update__MiningWalletWithdrawSchema,
+};

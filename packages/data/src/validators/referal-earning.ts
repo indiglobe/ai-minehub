@@ -1,14 +1,28 @@
 import { REFERRER_EARNING_CAUSE } from "@repo/utils/db-enums";
 import z from "zod";
 
-export const create__ReferalEarningSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__ReferalEarningSchema = z.object({
   earningWay: z.enum(REFERRER_EARNING_CAUSE),
   earnerId: z.string(),
   sourceUserId: z.string(),
   amount: z.number(),
 });
 
-export const read__AllReferalEarningSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllReferalEarningSchema = z
   .object({
     identifier: z
       .object({
@@ -23,3 +37,5 @@ export const read__AllReferalEarningSchema = z
       .optional(),
   })
   .optional();
+
+export { create__ReferalEarningSchema, read__AllReferalEarningSchema };

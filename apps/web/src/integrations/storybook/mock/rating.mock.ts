@@ -1,4 +1,4 @@
-import type { serverFn__readAllRatings } from "@/integrations/server-function/rating";
+import type { serverFn__readAllRatings } from "@/integrations/tanstack/server-function/rating.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readAllRatings() {

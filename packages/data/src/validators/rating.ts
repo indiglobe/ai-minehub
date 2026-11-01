@@ -1,12 +1,13 @@
 import z from "zod";
 
-// export const create__RatingSchema = z.object({
-//   id: z.string().optional(),
-//   associatedUser: z.string(),
-//   ratingStar: z.number().optional(),
-// });
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
 
-export const read__AllRatingsSchema = z
+const read__AllRatingsSchema = z
   .object({
     identifier: z
       .object({
@@ -16,7 +17,14 @@ export const read__AllRatingsSchema = z
   })
   .optional();
 
-export const read__OneRatingSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__OneRatingSchema = z.object({
   identifier: z.union([
     z.object({
       associatedUser: z.string(),
@@ -32,30 +40,4 @@ export const read__OneRatingSchema = z.object({
     .optional(),
 });
 
-
-// export const update__RatingSchema = z.object({
-//   identifier: z.union([
-//     z.object({
-//       associatedUser: z.string(),
-//     }),
-//     z.object({
-//       id: z.string(),
-//     }),
-//   ]),
-//   dataToUpdate: z.object({
-//     ratingStar: z.number().optional(),
-//     createdAt: z.date().optional(),
-//     updatedAt: z.date().optional(),
-//   }),
-// });
-
-// export const delete__RatingSchema = z.object({
-//   identifier: z.union([
-//     z.object({
-//       associatedUser: z.string(),
-//     }),
-//     z.object({
-//       id: z.string(),
-//     }),
-//   ]),
-// });
+export { read__AllRatingsSchema, read__OneRatingSchema };

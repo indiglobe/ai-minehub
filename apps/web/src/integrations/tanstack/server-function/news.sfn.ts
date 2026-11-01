@@ -1,5 +1,5 @@
-import { read__AllRatingsSchema } from "@repo/data/validators/rating";
-import { read__AllRatings } from "@repo/data/querries/rating";
+import { read__AllNewsSchema } from "@repo/data/validators/news";
+import { read__AllNews } from "@repo/data/querries/news";
 import { createServerFn } from "@tanstack/react-start";
 import { tryCatch } from "@repo/utils/try-catch";
 
@@ -7,20 +7,22 @@ import { tryCatch } from "@repo/utils/try-catch";
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readAllRatings = createServerFn({
+const serverFn__readAllNewsSchema = createServerFn({
   method: "GET",
 })
-  .validator(read__AllRatingsSchema)
+  .validator(read__AllNewsSchema)
   .handler(async ({ data }) => {
     const [serverFnError, serverFnResponse] = await tryCatch(
-      read__AllRatings(data),
+      read__AllNews(data),
     );
 
     if (serverFnError) {
-      console.log(`Error in serverFnError in serverFn__readAllRatings`);
+      console.log(`Error in serverFnError in serverFn__readAllNewsSchema`);
       console.error(serverFnError);
       throw serverFnError;
     }
 
     return serverFnResponse;
   });
+
+export { serverFn__readAllNewsSchema };

@@ -1,4 +1,4 @@
-import type { serverFn__readOneUser } from "@/integrations/server-function/user";
+import type { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readOneUser({

@@ -10,23 +10,23 @@ import {
   serverFn__createMiningWallet,
   serverFn__readOneMiningWallet,
   serverFn__updateOneMiningWallet,
-} from "@/integrations/server-function/mining-wallet";
+} from "@/integrations/tanstack/server-function/mining-wallet.sfn";
 import {
   serverFn__createTradingWallet,
   serverFn__readOneTradingWallet,
-} from "@/integrations/server-function/trading-wallet";
+} from "@/integrations/tanstack/server-function/trading-wallet.sfn";
 import {
   serverFn__createMiningOrder,
   serverFn__readAllMiningOrders,
-} from "@/integrations/server-function/mining-order";
-import { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
-import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
+} from "@/integrations/tanstack/server-function/mining-order.sfn";
+import { serverFn__readAllTradingOrders } from "@/integrations/tanstack/server-function/trading-order.sfn";
+import { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
 import type { INVESTMENT_STATUS } from "@repo/utils/db-enums";
-import { serverFn__createMiningWalletDeposite } from "@/integrations/server-function/mining-wallet-deposits";
-import { serverFn__createTradingWalletDeposite } from "@/integrations/server-function/trading-wallet-deposits";
-import { serverFn__readAllReferalEarning } from "@/integrations/server-function/referal-earning";
-import { serverFn__createTradingWalletWithdraw } from "@/integrations/server-function/trading-wallet-withdraw";
-import { serverFn__createMiningWalletWithdraw } from "@/integrations/server-function/mining-wallet-withdraw";
+import { serverFn__createMiningWalletDeposit } from "@/integrations/tanstack/server-function/mining-wallet-deposits.sfn";
+import { serverFn__createTradingWalletDeposit } from "@/integrations/tanstack/server-function/trading-wallet-deposits.sfn";
+import { serverFn__readAllReferalEarning } from "@/integrations/tanstack/server-function/referal-earning.sfn";
+import { serverFn__createTradingWalletWithdraw } from "@/integrations/tanstack/server-function/trading-wallet-withdraw.sfn";
+import { serverFn__createMiningWalletWithdraw } from "@/integrations/tanstack/server-function/mining-wallet-withdraw.sfn";
 
 export type TRrecentTransactionsOptions = {
   userId: string;
@@ -321,15 +321,15 @@ export function useCreateMiningWallet() {
 }
 
 export function useCreateMiningWalletDeposits() {
-  const createMiningWalletDeposite = useServerFn(
-    serverFn__createMiningWalletDeposite,
+  const createMiningWalletDeposit = useServerFn(
+    serverFn__createMiningWalletDeposit,
   );
 
   const queryClient = useQueryClient();
   const userId = useAuthenticatedUserId();
 
   return useMutation({
-    mutationFn: createMiningWalletDeposite,
+    mutationFn: createMiningWalletDeposit,
 
     onSuccess: () =>
       queryClient.invalidateQueries({
@@ -437,15 +437,15 @@ export function useCreateTradingWalletWithdraw() {
 }
 
 export function useCreateTradingWalletDeposits() {
-  const createTradingWalletDeposite = useServerFn(
-    serverFn__createTradingWalletDeposite,
+  const createTradingWalletDeposit = useServerFn(
+    serverFn__createTradingWalletDeposit,
   );
 
   const queryClient = useQueryClient();
   const userId = useAuthenticatedUserId();
 
   return useMutation({
-    mutationFn: createTradingWalletDeposite,
+    mutationFn: createTradingWalletDeposit,
 
     onSuccess: () =>
       queryClient.invalidateQueries({

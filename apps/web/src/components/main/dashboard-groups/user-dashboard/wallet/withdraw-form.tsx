@@ -107,7 +107,7 @@ export function WithdrawForm({
                 orderedBy: userId,
                 status: "PENDING",
                 wallet: miningWallet!.id,
-                withdrawalMethod: network,
+                withdrawlMethod: network,
               },
             },
           }),

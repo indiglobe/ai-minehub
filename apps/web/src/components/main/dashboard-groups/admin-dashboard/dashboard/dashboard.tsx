@@ -36,21 +36,49 @@ import {
   UserGrowthCardError,
   UserGrowthCardLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/dashboard/boundary-comps";
+import {} from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
 import {
-  useReadActiveMiningSession,
-  useReadAllPendingMiningWalletDeposite,
-  useReadAllPendingMiningWalletWithdraw,
-  useReadMiningWalletPendingDepositStats,
-  useReadMiningWalletPendingWithdrawlStats,
-  useReadMiningWalletProcessedDepositStats,
-  useReadTradingWalletPendingDepositStats,
-  useReadTradingWalletPendingWithdrawlStats,
-  useReadTradingWalletProcessedDepositStats,
   useReadUserCount,
+  useReadUserMonthlyStats,
+} from "@/integrations/tanstack/react-querry/user/admin.rq";
+import {
+  useReadPendingTradingWalletDeposit,
+  useReadPendingTradingWalletDepositStats,
+  useReadProcessedTradingWalletDepositStats,
+  useReadTradingWalletMonthlyDepositStats,
+  useUpdateTradingWalletDeposit,
+} from "@/integrations/tanstack/react-querry/trading-wallet-deposits/admin.rq";
+import {
+  useReadMiningWalletMonthlyDepositStats,
+  useReadPendingMiningWalletDeposit,
+  useReadPendingMiningWalletDepositStats,
+  useReadProcessedMiningWalletDepositStats,
   useUpdateMiningWalletDeposit,
-} from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
-import { useServerFn } from "@tanstack/react-start";
-import { serverFn__updateAddBalance } from "@/integrations/server-function/mining-wallet";
+} from "@/integrations/tanstack/react-querry/mining-wallet-deposits/admin.rq";
+import {
+  useReadPendingTradingWalletWithdrawlsStats,
+  useReadTradingWalletMonthlyWithdrawStats,
+  useReadPendingTradingWalletWithdraw,
+  useUpdateTradingWalletWithdraw,
+} from "@/integrations/tanstack/react-querry/trading-wallet-withdraw/admin.rq";
+import {
+  useReadMiningWalletMonthlyWithdrawStats,
+  useReadPendingMiningWalletWithdrawlsStats,
+  useReadPendingMiningWalletWithdraw,
+  useUpdateMiningWalletWithdraw,
+} from "@/integrations/tanstack/react-querry/mining-wallet-withdraw/admin.rq";
+import {
+  useReadActiveMiningOrders,
+  useReadAllMiningOrders,
+} from "@/integrations/tanstack/react-querry/mining-order/admin.rq";
+import {
+  useAddMiningWalletBalance,
+  useDeductMiningWalletBalance,
+} from "@/integrations/tanstack/react-querry/mining-wallet/admin.rq";
+import {
+  useAddTradingWalletBalance,
+  useDeductTradingWalletBalance,
+} from "@/integrations/tanstack/react-querry/trading-wallet/admin.rq";
 
 export default function AdminDashboard() {
   return (
@@ -155,12 +183,12 @@ export function TotalDepositsStat({
     data: processedTradingDepositStat,
     isLoading: processedTradingDepositStatLoading,
     isError: processedTradingDepositStatError,
-  } = useReadTradingWalletProcessedDepositStats();
+  } = useReadProcessedTradingWalletDepositStats();
   const {
     data: processedMiningDepositStat,
     isLoading: processedMiningDepositStatLoading,
     isError: processedMiningDepositStatError,
-  } = useReadMiningWalletProcessedDepositStats();
+  } = useReadProcessedMiningWalletDepositStats();
 
   return (
     <StatCard
@@ -228,12 +256,12 @@ export function PendingDepositsStat({
     data: pendingTradingDepositStat,
     isLoading: pendingTradingDepositStatLoading,
     isError: pendingTradingDepositStatError,
-  } = useReadTradingWalletPendingDepositStats();
+  } = useReadPendingTradingWalletDepositStats();
   const {
     data: pendingMiningDepositStat,
     isLoading: pendingMiningDepositStatLoading,
     isError: pendingMiningDepositStatError,
-  } = useReadMiningWalletPendingDepositStats();
+  } = useReadPendingMiningWalletDepositStats();
 
   return (
     <StatCard
@@ -300,12 +328,12 @@ export function PendingWithdrawalsStat({
     data: pendingTradingWithdrawlStat,
     isLoading: pendingTradingWithdrawlStatLoading,
     isError: pendingTradingWithdrawlStatError,
-  } = useReadTradingWalletPendingWithdrawlStats();
+  } = useReadPendingTradingWalletWithdrawlsStats();
   const {
     data: pendingMiningWithdrawlStat,
     isLoading: pendingMiningWithdrawlStatLoading,
     isError: pendingMiningWithdrawlStatError,
-  } = useReadMiningWalletPendingWithdrawlStats();
+  } = useReadPendingMiningWalletWithdrawlsStats();
 
   return (
     <StatCard
@@ -393,10 +421,10 @@ export function TotalMiningInvestedCard({
   ...props
 }: ComponentProps<typeof StatCard>) {
   const {
-    data: activeMiningSessionStat,
-    isLoading: isActiveMiningSessionStatLoading,
-    isError: isActiveMiningSessionStatError,
-  } = useReadActiveMiningSession();
+    data: allMiningOrder,
+    isLoading: isAllMiningOrderLoading,
+    isError: isAllMiningOrderError,
+  } = useReadAllMiningOrders();
 
   return (
     <StatCard
@@ -413,16 +441,19 @@ export function TotalMiningInvestedCard({
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {activeMiningSessionStat && (
+      {allMiningOrder && (
         <>
           <StatCardData className={cn(`text-foreground`)}>
-            ${activeMiningSessionStat.invested}
+            ${" "}
+            {allMiningOrder
+              .reduce((p, n) => p + n.amountInvested, 0)
+              .toLocaleString("en-IN")}
           </StatCardData>
           <StatCardFooter>Total mining active pool</StatCardFooter>
         </>
       )}
 
-      {isActiveMiningSessionStatError && (
+      {isAllMiningOrderError && (
         <>
           <p
             className={cn(
@@ -443,7 +474,7 @@ export function TotalMiningInvestedCard({
         </>
       )}
 
-      {isActiveMiningSessionStatLoading && (
+      {isAllMiningOrderLoading && (
         <div className={cn(`animate-pulse space-y-4`)}>
           <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
           <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -458,10 +489,10 @@ export function ActiveMiningSessionsCard({
   ...props
 }: ComponentProps<typeof StatCard>) {
   const {
-    data: activeMiningSessionStat,
-    isLoading: isActiveMiningSessionStatLoading,
-    isError: isActiveMiningSessionStatError,
-  } = useReadActiveMiningSession();
+    data: activeMiningSession,
+    isLoading: isActiveMiningSessionLoading,
+    isError: isActiveMiningSessionError,
+  } = useReadActiveMiningOrders();
 
   return (
     <>
@@ -479,16 +510,16 @@ export function ActiveMiningSessionsCard({
           </StatCardHeadingIcon>
         </StatCardHeader>
 
-        {activeMiningSessionStat && (
+        {activeMiningSession && (
           <>
             <StatCardData className={cn(`text-foreground`)}>
-              {activeMiningSessionStat.count}
+              {activeMiningSession.length}
             </StatCardData>
             <StatCardFooter>Live mining instances</StatCardFooter>
           </>
         )}
 
-        {isActiveMiningSessionStatError && (
+        {isActiveMiningSessionError && (
           <>
             <p
               className={cn(
@@ -509,7 +540,7 @@ export function ActiveMiningSessionsCard({
           </>
         )}
 
-        {isActiveMiningSessionStatLoading && (
+        {isActiveMiningSessionLoading && (
           <div className={cn(`animate-pulse space-y-4`)}>
             <div className={cn(`bg-foreground/10 mt-5 h-8 w-36 rounded-md`)} />
             <div className={cn(`bg-foreground/10 mt-2 h-4 w-32 rounded-md`)} />
@@ -597,40 +628,31 @@ export function ThisMonthStatsCard({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "data">("error");
-
-  const statsList = [
-    {
-      id: "monthly-deposits",
-      label: "Monthly Deposits",
-      value: "$0.00",
-      color: "text-green-500",
-      icon: <ArrowDownRight className={cn(`size-5 text-green-500`)} />,
-    },
-    {
-      id: "monthly-withdrawals",
-      label: "Monthly Withdrawals",
-      value: "$0.00",
-      color: "text-red-500",
-      icon: <ArrowUpRight className={cn(`size-5 text-red-500`)} />,
-    },
-    {
-      id: "new-users",
-      label: "New Users",
-      value: "1",
-      color: "text-secondary-500",
-      icon: <UserPlus className={cn(`text-secondary-500 size-5`)} />,
-    },
-    {
-      id: "mining-invested",
-      label: "Mining Invested",
-      value: "$0.00",
-      color: "text-primary-500",
-      icon: <Layers className={cn(`text-primary-500 size-5`)} />,
-    },
-  ];
+  const {
+    data: miningWalletMonthlyDepositStats,
+    isError: isMiningWalletMonthlyDepositStatsError,
+    isLoading: isMiningWalletMonthlyDepositStatsLoading,
+  } = useReadMiningWalletMonthlyDepositStats();
+  const {
+    data: tradingWalletMonthlyDepositStats,
+    isError: isTradingWalletMonthlyDepositStatsError,
+    isLoading: isTradingWalletMonthlyDepositStatsLoading,
+  } = useReadTradingWalletMonthlyDepositStats();
+  const {
+    data: miningWalletMonthlyWithdrawStats,
+    isError: isMiningWalletMonthlyWithdrawStatsError,
+    isLoading: isMiningWalletMonthlyWithdrawStatsLoading,
+  } = useReadMiningWalletMonthlyWithdrawStats();
+  const {
+    data: tradingWalletMonthlyWithdrawStats,
+    isError: isTradingWalletMonthlyWithdrawStatsError,
+    isLoading: isTradingWalletMonthlyWithdrawStatsLoading,
+  } = useReadTradingWalletMonthlyWithdrawStats();
+  const {
+    data: userMonthlyStats,
+    isError: isUserMonthlyStatsError,
+    isLoading: isUserMonthlyStatsLoading,
+  } = useReadUserMonthlyStats();
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -650,19 +672,38 @@ export function ThisMonthStatsCard({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
 
-        {state === "error" && <ThisMonthStatsCardError />}
-        {state === "loading" && <ThisMonthStatsCardLoading />}
-        {state === "data" && (
-          <div className={cn(`space-y-4`)}>
-            {statsList.map((stat, index) => (
-              <Fragment key={stat.id}>
+        {(isMiningWalletMonthlyDepositStatsError ||
+          isTradingWalletMonthlyDepositStatsError ||
+          isMiningWalletMonthlyWithdrawStatsError ||
+          isTradingWalletMonthlyWithdrawStatsError ||
+          isUserMonthlyStatsError) && <ThisMonthStatsCardError />}
+
+        {(isMiningWalletMonthlyDepositStatsLoading ||
+          isTradingWalletMonthlyDepositStatsLoading ||
+          isMiningWalletMonthlyWithdrawStatsLoading ||
+          isTradingWalletMonthlyWithdrawStatsLoading ||
+          isUserMonthlyStatsLoading) && <ThisMonthStatsCardLoading />}
+
+        {miningWalletMonthlyDepositStats &&
+          tradingWalletMonthlyDepositStats &&
+          miningWalletMonthlyWithdrawStats &&
+          tradingWalletMonthlyWithdrawStats &&
+          userMonthlyStats && (
+            <div className={cn(`space-y-4`)}>
+              <Fragment>
                 <div className={cn(`flex w-full items-center justify-between`)}>
                   <div className={cn(`flex flex-col gap-y-1`)}>
                     <span className={cn(`text-foreground/50 text-xs`)}>
-                      {stat.label}
+                      Monthly Deposits
                     </span>
-                    <span className={cn(`text-lg font-semibold`, stat.color)}>
-                      {stat.value}
+                    <span
+                      className={cn(`text-lg font-semibold text-green-500`)}
+                    >
+                      ${" "}
+                      {(
+                        miningWalletMonthlyDepositStats[0].totalAmount +
+                        tradingWalletMonthlyDepositStats[0].totalAmount
+                      ).toLocaleString("en-IN")}
                     </span>
                   </div>
                   <div
@@ -670,16 +711,60 @@ export function ThisMonthStatsCard({
                       `bg-foreground/5 border-foreground/10 flex size-10 items-center justify-center rounded-lg border`,
                     )}
                   >
-                    {stat.icon}
+                    <ArrowDownRight className={cn(`size-5 text-green-500`)} />
                   </div>
                 </div>
-                {index < statsList.length - 1 && (
-                  <hr className={cn(`border-foreground/10 -mx-6 my-4`)} />
-                )}
+                <hr className={cn(`border-foreground/10 -mx-6 my-4`)} />
               </Fragment>
-            ))}
-          </div>
-        )}
+
+              <Fragment>
+                <div className={cn(`flex w-full items-center justify-between`)}>
+                  <div className={cn(`flex flex-col gap-y-1`)}>
+                    <span className={cn(`text-foreground/50 text-xs`)}>
+                      Monthly Withdrawls
+                    </span>
+                    <span className={cn(`text-lg font-semibold text-red-500`)}>
+                      ${" "}
+                      {(
+                        miningWalletMonthlyWithdrawStats[0].totalAmount +
+                        tradingWalletMonthlyWithdrawStats[0].totalAmount
+                      ).toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                  <div
+                    className={cn(
+                      `bg-foreground/5 border-foreground/10 flex size-10 items-center justify-center rounded-lg border`,
+                    )}
+                  >
+                    <ArrowUpRight className={cn(`size-5 text-red-500`)} />
+                  </div>
+                </div>
+                <hr className={cn(`border-foreground/10 -mx-6 my-4`)} />
+              </Fragment>
+
+              <Fragment>
+                <div className={cn(`flex w-full items-center justify-between`)}>
+                  <div className={cn(`flex flex-col gap-y-1`)}>
+                    <span className={cn(`text-foreground/50 text-xs`)}>
+                      Monthly Users
+                    </span>
+                    <span
+                      className={cn(`text-secondary-500 text-lg font-semibold`)}
+                    >
+                      {userMonthlyStats[0].totalUsers.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                  <div
+                    className={cn(
+                      `bg-foreground/5 border-foreground/10 flex size-10 items-center justify-center rounded-lg border`,
+                    )}
+                  >
+                    <UserPlus className={cn(`text-secondary-500 size-5`)} />
+                  </div>
+                </div>
+              </Fragment>
+            </div>
+          )}
       </div>
     </section>
   );
@@ -699,15 +784,23 @@ export function PendingDepositsTable({
   ...props
 }: ComponentProps<"section">) {
   const {
-    data: pendingMiningWalletDepositeData,
-    isError: isPendingMiningWalletDepositeError,
-    isLoading: isPendingMiningWalletDepositeLoading,
-  } = useReadAllPendingMiningWalletDeposite();
+    data: pendingMiningWalletDeposit,
+    isError: isPendingMiningWalletDepositrror,
+    isLoading: isPendingMiningWalletDepositLoading,
+  } = useReadPendingMiningWalletDeposit();
+  const {
+    data: pendingTradingWalletDeposit,
+    isError: isPendingTradingWalletDepositrror,
+    isLoading: isPendingTradingWalletDepositLoading,
+  } = useReadPendingTradingWalletDeposit();
 
   const { mutateAsync: updateMiningWalletDeposit } =
     useUpdateMiningWalletDeposit();
+  const { mutateAsync: updateTradingWalletDeposit } =
+    useUpdateTradingWalletDeposit();
 
-  const addBalance = useServerFn(serverFn__updateAddBalance);
+  const { mutateAsync: addMiningWalletBalance } = useAddMiningWalletBalance();
+  const { mutateAsync: addTradingWalletBalance } = useAddTradingWalletBalance();
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -727,156 +820,216 @@ export function PendingDepositsTable({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        {isPendingMiningWalletDepositeError && <PendingDepositsTableError />}
-        {isPendingMiningWalletDepositeLoading && (
+        {(isPendingMiningWalletDepositrror ||
+          isPendingTradingWalletDepositrror) && <PendingDepositsTableError />}
+
+        {(isPendingMiningWalletDepositLoading ||
+          isPendingTradingWalletDepositLoading) && (
           <PendingDepositsTableLoading />
         )}
-        {pendingMiningWalletDepositeData && (
+
+        {pendingMiningWalletDeposit && pendingTradingWalletDeposit && (
           <>
-            {pendingMiningWalletDepositeData.length === 0 ? (
-              <PendingDepositsTableEmpty />
-            ) : (
-              <div className={cn(`overflow-x-auto`)}>
-                <table className={cn(`w-full border-collapse text-left`)}>
-                  <thead>
-                    <tr
-                      className={cn(
-                        `text-foreground/50 text-2.75 tracking-wider uppercase`,
-                      )}
+            <>
+              {[...pendingMiningWalletDeposit, ...pendingTradingWalletDeposit]
+                .length === 0 ? (
+                <PendingDepositsTableEmpty />
+              ) : (
+                <div className={cn(`overflow-x-auto`)}>
+                  <table className={cn(`w-full border-collapse text-left`)}>
+                    <thead>
+                      <tr
+                        className={cn(
+                          `text-foreground/50 text-2.75 tracking-wider uppercase`,
+                        )}
+                      >
+                        <th className={cn(`py-3 font-medium`)}>User</th>
+                        <th className={cn(`py-3 font-medium`)}>Amount</th>
+                        <th className={cn(`py-3 font-medium`)}>Method</th>
+                        <th className={cn(`py-3 font-medium`)}>Proof</th>
+                        <th className={cn(`py-3 font-medium`)}>Date</th>
+                        <th className={cn(`py-3 font-medium`)}>Wallet Type </th>
+                        <th className={cn(`py-3 text-right font-medium`)}>
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      className={cn(`divide-foreground/10 divide-y text-sm`)}
                     >
-                      <th className={cn(`py-3 font-medium`)}>User</th>
-                      <th className={cn(`py-3 font-medium`)}>Amount</th>
-                      <th className={cn(`py-3 font-medium`)}>Method</th>
-                      <th className={cn(`py-3 font-medium`)}>Proof</th>
-                      <th className={cn(`py-3 font-medium`)}>Date</th>
-                      <th className={cn(`py-3 font-medium`)}>Status</th>
-                      <th className={cn(`py-3 text-right font-medium`)}>
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    className={cn(`divide-foreground/10 divide-y text-sm`)}
-                  >
-                    {pendingMiningWalletDepositeData.map((item) => (
-                      <tr key={item.id} className={cn(`group`)}>
-                        <td className={cn(`py-4 pr-4`)}>
-                          <div className={cn(`flex items-center gap-3`)}>
-                            <div
+                      {[
+                        ...pendingMiningWalletDeposit.map((e) => ({
+                          ...e,
+                          type: "mining-wallet" as const,
+                        })),
+                        ...pendingTradingWalletDeposit.map((e) => ({
+                          ...e,
+                          type: "trading-wallet" as const,
+                        })),
+                      ]
+                        .sort(
+                          (a, b) =>
+                            new Date(b.createdAt).getTime() -
+                            new Date(a.createdAt).getTime(),
+                        )
+                        .map((item) => (
+                          <tr
+                            key={item.id}
+                            className={cn(`group`)}
+                            data-db-record-id={item.id}
+                          >
+                            <td className={cn(`py-4 pr-4`)}>
+                              <div className={cn(`flex items-center gap-3`)}>
+                                <div
+                                  className={cn(
+                                    `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                                  )}
+                                >
+                                  {item.associatedUserDetail.fullName[0]}
+                                </div>
+                                <div className={cn(`flex flex-col`)}>
+                                  <span className={cn(`font-medium`)}>
+                                    {item.associatedUserDetail.fullName}
+                                  </span>
+                                  <span
+                                    className={cn(`text-foreground/50 text-xs`)}
+                                  >
+                                    {item.associatedUserDetail.email}
+                                  </span>
+                                </div>
+                              </div>
+                            </td>
+                            <td
                               className={cn(
-                                `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                                `py-4 pr-4 font-semibold text-green-500`,
                               )}
                             >
-                              {item.associatedUserDetail.fullName[0]}
-                            </div>
-                            <div className={cn(`flex flex-col`)}>
-                              <span className={cn(`font-medium`)}>
-                                {item.associatedUserDetail.fullName}
-                              </span>
-                              <span
-                                className={cn(`text-foreground/50 text-xs`)}
+                              {item.amount}
+                            </td>
+                            <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                              {item.depositMethod}
+                            </td>
+                            <td className={cn(`py-4 pr-4`)}>
+                              <a
+                                href={item.depositProof}
+                                className={cn(
+                                  `border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium`,
+                                )}
                               >
-                                {item.associatedUserDetail.email}
+                                <ImageIcon className={cn(`size-3.5`)} />
+                                View
+                              </a>
+                            </td>
+                            <td
+                              className={cn(
+                                `text-foreground/60 py-4 pr-4 text-xs`,
+                              )}
+                            >
+                              {new Intl.DateTimeFormat("en-US", {
+                                month: "short",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }).format(new Date(item.createdAt))}
+                            </td>
+                            <td className={cn(`py-4 pr-4`)}>
+                              <span
+                                className={cn(
+                                  `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
+                                )}
+                              >
+                                {item.type.replace("-", " ").toUpperCase()}
                               </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className={cn(
-                            `py-4 pr-4 font-semibold text-green-500`,
-                          )}
-                        >
-                          {item.amount}
-                        </td>
-                        <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                          {item.depositMethod}
-                        </td>
-                        <td className={cn(`py-4 pr-4`)}>
-                          <a
-                            href={item.depositProof}
-                            className={cn(
-                              `border-foreground/20 bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium`,
-                            )}
-                          >
-                            <ImageIcon className={cn(`size-3.5`)} />
-                            View
-                          </a>
-                        </td>
-                        <td
-                          className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
-                        >
-                          {new Intl.DateTimeFormat("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          }).format(new Date(item.createdAt))}
-                        </td>
-                        <td className={cn(`py-4 pr-4`)}>
-                          <span
-                            className={cn(
-                              `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
-                            )}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td className={cn(`py-4 text-right`)}>
-                          <div
-                            className={cn(
-                              `flex items-center justify-end gap-2`,
-                            )}
-                          >
-                            <Button
-                              size="xs"
-                              variant={"success"}
-                              className={cn(``)}
-                              onClick={async () => {
-                                await updateMiningWalletDeposit({
-                                  data: {
-                                    dataToInsert: { status: "PROCESSED" },
-                                    identifier: { walletId: item.id },
-                                  },
-                                });
-                                await addBalance({
-                                  data: {
-                                    dataToUpdate: { balance: item.amount },
-                                    identifier: {
-                                      associatedUserId: item.orderedBy,
-                                    },
-                                  },
-                                });
-                              }}
-                            >
-                              <Check className={cn(`size-3.5`)} />
-                              Approve
-                            </Button>
-                            <Button
-                              size="xs"
-                              variant={"destructive"}
-                              className={cn(``)}
-                              onClick={async () => {
-                                await updateMiningWalletDeposit({
-                                  data: {
-                                    dataToInsert: { status: "REJECTED" },
-                                    identifier: { walletId: item.id },
-                                  },
-                                });
-                              }}
-                            >
-                              <X className={cn(`size-3.5`)} />
-                              Reject
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                            </td>
+                            <td className={cn(`py-4 text-right`)}>
+                              <div
+                                className={cn(
+                                  `flex items-center justify-end gap-2`,
+                                )}
+                              >
+                                <Button
+                                  size="xs"
+                                  variant={"success"}
+                                  className={cn(`rounded-sm`)}
+                                  onClick={async () => {
+                                    if (item.type === "mining-wallet") {
+                                      await updateMiningWalletDeposit({
+                                        data: {
+                                          dataToInsert: { status: "PROCESSED" },
+                                          identifier: { walletId: item.id },
+                                        },
+                                      });
+                                      await addMiningWalletBalance({
+                                        data: {
+                                          dataToUpdate: {
+                                            balance: item.amount,
+                                          },
+                                          identifier: {
+                                            associatedUserId: item.orderedBy,
+                                          },
+                                        },
+                                      });
+                                    }
+                                    if (item.type === "trading-wallet") {
+                                      await updateTradingWalletDeposit({
+                                        data: {
+                                          dataToInsert: { status: "PROCESSED" },
+                                          identifier: { walletId: item.id },
+                                        },
+                                      });
+                                      await addTradingWalletBalance({
+                                        data: {
+                                          dataToUpdate: {
+                                            balance: item.amount,
+                                          },
+                                          identifier: {
+                                            associatedUserId: item.orderedBy,
+                                          },
+                                        },
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <Check className={cn(`size-3.5`)} />
+                                  Approve
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant={"destructive"}
+                                  className={cn(`rounded-sm`)}
+                                  onClick={async () => {
+                                    if (item.type === "mining-wallet") {
+                                      await updateMiningWalletDeposit({
+                                        data: {
+                                          dataToInsert: { status: "REJECTED" },
+                                          identifier: { walletId: item.id },
+                                        },
+                                      });
+                                    }
+                                    if (item.type === "trading-wallet") {
+                                      await updateTradingWalletDeposit({
+                                        data: {
+                                          dataToInsert: { status: "REJECTED" },
+                                          identifier: { walletId: item.id },
+                                        },
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <X className={cn(`size-3.5`)} />
+                                  Reject
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
           </>
         )}
       </div>
@@ -889,30 +1042,25 @@ export function PendingWithdrawalsTable({
   ...props
 }: ComponentProps<"section">) {
   const {
-    data: pendingMiningWalletWithdrawlsData,
+    data: pendingMiningWalletWithdraw,
     isError: isPendingMiningWalletWithdrawlsError,
     isLoading: isPendingMiningWalletWithdrawlsLoading,
-  } = useReadAllPendingMiningWalletWithdraw();
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("loading");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("error");
-  // const [state] = useState<"error" | "loading" | "empty" | "data">("empty");
+  } = useReadPendingMiningWalletWithdraw();
+  const {
+    data: pendingTradingWalletWithdraw,
+    isError: isPendingTradingWalletWithdrawlsError,
+    isLoading: isPendingTradingWalletWithdrawlsLoading,
+  } = useReadPendingTradingWalletWithdraw();
 
-  // const pendingWithdrawls = [];
-  // const pendingWithdrawls = [
-  //   {
-  //     id: "dep-1",
-  //     user: {
-  //       name: "Surajit Sarder",
-  //       email: "surajitsarder2000@gmail.com",
-  //       initial: "S",
-  //     },
-  //     amount: "$1,000.00",
-  //     method: "Bsc_bep20",
-  //     date: "Aug 31, 2026 21:45",
-  //     status: "Pending",
-  //   },
-  // ];
+  const { mutateAsync: deductMiningWalletBalance } =
+    useDeductMiningWalletBalance();
+  const { mutateAsync: deductTradingWalletBalance } =
+    useDeductTradingWalletBalance();
+
+  const { mutateAsync: updateMiningWalletWithdraw } =
+    useUpdateMiningWalletWithdraw();
+  const { mutateAsync: updateTradingWalletWithdraw } =
+    useUpdateTradingWalletWithdraw();
 
   return (
     <section className={cn(`@container`, className)} {...props}>
@@ -932,15 +1080,18 @@ export function PendingWithdrawalsTable({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
 
-        {isPendingMiningWalletWithdrawlsError && (
+        {(isPendingMiningWalletWithdrawlsError ||
+          isPendingTradingWalletWithdrawlsError) && (
           <PendingWithdrawalsTableError />
         )}
-        {isPendingMiningWalletWithdrawlsLoading && (
+        {(isPendingMiningWalletWithdrawlsLoading ||
+          isPendingTradingWalletWithdrawlsLoading) && (
           <PendingWithdrawalsTableLoading />
         )}
-        {pendingMiningWalletWithdrawlsData && (
+        {pendingMiningWalletWithdraw && pendingTradingWalletWithdraw && (
           <>
-            {pendingMiningWalletWithdrawlsData.length === 0 ? (
+            {[...pendingMiningWalletWithdraw, ...pendingTradingWalletWithdraw]
+              .length === 0 ? (
               <div
                 className={cn(
                   `flex flex-col items-center justify-center py-12 text-center`,
@@ -970,7 +1121,7 @@ export function PendingWithdrawalsTable({
                       <th className={cn(`py-3 font-medium`)}>Amount</th>
                       <th className={cn(`py-3 font-medium`)}>Method</th>
                       <th className={cn(`py-3 font-medium`)}>Date</th>
-                      <th className={cn(`py-3 font-medium`)}>Status</th>
+                      <th className={cn(`py-3 font-medium`)}>Wallet Type</th>
                       <th className={cn(`py-3 text-right font-medium`)}>
                         Actions
                       </th>
@@ -979,84 +1130,159 @@ export function PendingWithdrawalsTable({
                   <tbody
                     className={cn(`divide-foreground/10 divide-y text-sm`)}
                   >
-                    {pendingMiningWalletWithdrawlsData.map((item) => (
-                      <tr key={item.id} className={cn(`group`)}>
-                        <td className={cn(`py-4 pr-4`)}>
-                          <div className={cn(`flex items-center gap-3`)}>
-                            <div
+                    {[
+                      ...pendingMiningWalletWithdraw.map((e) => ({
+                        ...e,
+                        type: "mining-wallet" as const,
+                      })),
+                      ...pendingTradingWalletWithdraw.map((e) => ({
+                        ...e,
+                        type: "trading-wallet" as const,
+                      })),
+                    ]
+                      .sort(
+                        (a, b) =>
+                          new Date(b.createdAt).getTime() -
+                          new Date(a.createdAt).getTime(),
+                      )
+                      .map((item) => (
+                        <tr key={item.id} className={cn(`group`)}>
+                          <td className={cn(`py-4 pr-4`)}>
+                            <div className={cn(`flex items-center gap-3`)}>
+                              <div
+                                className={cn(
+                                  `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                                )}
+                              >
+                                {item.associatedUserDetail.fullName[0]}
+                              </div>
+                              <div className={cn(`flex flex-col`)}>
+                                <span className={cn(`font-medium`)}>
+                                  {item.associatedUserDetail.fullName}
+                                </span>
+                                <span
+                                  className={cn(`text-foreground/50 text-xs`)}
+                                >
+                                  {item.associatedUserDetail.email}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td
+                            className={cn(
+                              `py-4 pr-4 font-semibold text-red-500`,
+                            )}
+                          >
+                            {item.amount}
+                          </td>
+                          <td className={cn(`text-foreground/80 py-4 pr-4`)}>
+                            {item.withdrawlMethod}
+                          </td>
+                          <td
+                            className={cn(
+                              `text-foreground/60 py-4 pr-4 text-xs`,
+                            )}
+                          >
+                            {new Intl.DateTimeFormat("en-US", {
+                              month: "short",
+                              day: "2-digit",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }).format(new Date(item.createdAt))}
+                          </td>
+                          <td className={cn(`py-4 pr-4`)}>
+                            <span
                               className={cn(
-                                `bg-secondary-500 text-secondary-50 flex size-10 shrink-0 items-center justify-center rounded-full font-semibold`,
+                                `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
                               )}
                             >
-                              {item.associatedUserDetail.fullName[0]}
-                            </div>
-                            <div className={cn(`flex flex-col`)}>
-                              <span className={cn(`font-medium`)}>
-                                {item.associatedUserDetail.fullName}
-                              </span>
-                              <span
-                                className={cn(`text-foreground/50 text-xs`)}
+                              {item.type.replace("-", " ").toUpperCase()}
+                            </span>
+                          </td>
+                          <td className={cn(`py-4 text-right`)}>
+                            <div
+                              className={cn(
+                                `flex items-center justify-end gap-2`,
+                              )}
+                            >
+                              <Button
+                                size="xs"
+                                variant={"success"}
+                                className={cn(`rounded-sm`)}
+                                onClick={async () => {
+                                  if (item.type === "mining-wallet") {
+                                    await updateMiningWalletWithdraw({
+                                      data: {
+                                        dataToInsert: { status: "PROCESSED" },
+                                        identifier: { walletId: item.id },
+                                      },
+                                    });
+                                    await deductMiningWalletBalance({
+                                      data: {
+                                        dataToUpdate: {
+                                          balance: item.amount,
+                                        },
+                                        identifier: {
+                                          associatedUserId: item.orderedBy,
+                                        },
+                                      },
+                                    });
+                                  }
+                                  if (item.type === "trading-wallet") {
+                                    await updateTradingWalletWithdraw({
+                                      data: {
+                                        dataToInsert: { status: "PROCESSED" },
+                                        identifier: { walletId: item.id },
+                                      },
+                                    });
+                                    await deductTradingWalletBalance({
+                                      data: {
+                                        dataToUpdate: {
+                                          balance: item.amount,
+                                        },
+                                        identifier: {
+                                          associatedUserId: item.orderedBy,
+                                        },
+                                      },
+                                    });
+                                  }
+                                }}
                               >
-                                {item.associatedUserDetail.email}
-                              </span>
+                                <Check className={cn(`size-3.5`)} />
+                                Approve
+                              </Button>
+                              <Button
+                                size="xs"
+                                variant={"destructive"}
+                                className={cn(`rounded-sm`)}
+                                onClick={async () => {
+                                  if (item.type === "mining-wallet") {
+                                    await updateMiningWalletWithdraw({
+                                      data: {
+                                        dataToInsert: { status: "REJECTED" },
+                                        identifier: { walletId: item.id },
+                                      },
+                                    });
+                                  }
+                                  if (item.type === "trading-wallet") {
+                                    await updateTradingWalletWithdraw({
+                                      data: {
+                                        dataToInsert: { status: "REJECTED" },
+                                        identifier: { walletId: item.id },
+                                      },
+                                    });
+                                  }
+                                }}
+                              >
+                                <X className={cn(`size-3.5`)} />
+                                Reject
+                              </Button>
                             </div>
-                          </div>
-                        </td>
-                        <td
-                          className={cn(`py-4 pr-4 font-semibold text-red-500`)}
-                        >
-                          {item.amount}
-                        </td>
-                        <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                          {item.withdrawalMethod}
-                        </td>
-                        <td
-                          className={cn(`text-foreground/60 py-4 pr-4 text-xs`)}
-                        >
-                          {new Intl.DateTimeFormat("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          }).format(new Date(item.createdAt))}
-                        </td>
-                        <td className={cn(`py-4 pr-4`)}>
-                          <span
-                            className={cn(
-                              `inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-0.5 text-xs font-semibold text-yellow-500`,
-                            )}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td className={cn(`py-4 text-right`)}>
-                          <div
-                            className={cn(
-                              `flex items-center justify-end gap-2`,
-                            )}
-                          >
-                            <Button
-                              size="xs"
-                              variant={"success"}
-                              className={cn(``)}
-                            >
-                              <Check className={cn(`size-3.5`)} />
-                              Approve
-                            </Button>
-                            <Button
-                              size="xs"
-                              variant={"destructive"}
-                              className={cn(``)}
-                            >
-                              <X className={cn(`size-3.5`)} />
-                              Reject
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>

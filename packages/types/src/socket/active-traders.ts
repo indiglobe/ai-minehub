@@ -1,17 +1,40 @@
-export interface ServerToClientEvents {
-  "trader-joined": () => void;
-  "trader-left": () => void;
-}
+import z from "zod";
 
-export interface ClientToServerEvents {
-  "join-trading": () => void;
-  "leave-trading": () => void;
-}
+const serverToClientEvents = z.object({
+  "trader-joined": z.function({
+    input: [],
+    output: z.void(),
+  }),
+  "trader-left": z.function({
+    input: [],
+    output: z.void(),
+  }),
+});
 
-export interface InterServerEvents {
-  ping: () => void;
-}
+export type ServerToClientEvents = z.infer<typeof serverToClientEvents>;
 
-export interface SocketData {}
+const clientToServerEvents = z.object({
+  "join-trading": z.function({
+    input: [],
+    output: z.void(),
+  }),
+  "leave-trading": z.function({
+    input: [],
+    output: z.void(),
+  }),
+});
 
+export type ClientToServerEvents = z.infer<typeof clientToServerEvents>;
 
+const interServerEvents = z.object({
+  ping: z.function({
+    input: [],
+    output: z.void(),
+  }),
+});
+
+export type InterServerEvents = z.infer<typeof interServerEvents>;
+
+export const socketData = z.object({});
+
+export type SocketData = z.infer<typeof socketData>;

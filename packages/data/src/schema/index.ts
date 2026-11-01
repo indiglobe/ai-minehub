@@ -278,7 +278,7 @@ export const Table__MiningWalletWithdraw = mysqlTable(
       length: 255,
     }).notNull(),
     status: withdrawlStatusEnums().notNull(),
-    withdrawalMethod: transactionMethodEnums("withdrawal_method").notNull(),
+    withdrawlMethod: transactionMethodEnums("withdrawl_method").notNull(),
 
     ...metadata("MWWD"),
   },

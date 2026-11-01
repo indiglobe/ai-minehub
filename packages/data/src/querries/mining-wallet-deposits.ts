@@ -1,7 +1,17 @@
 import { db } from "@/index";
 import { Table__MiningWalletDeposits, Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, desc, eq, getTableColumns, inArray, sql, SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  inArray,
+  sql,
+  SQL,
+  sum,
+} from "drizzle-orm";
 import { id } from "@repo/utils/id";
 import { DEPOSIT_STATUS } from "@repo/utils/db-enums";
 
@@ -17,15 +27,15 @@ import { DEPOSIT_STATUS } from "@repo/utils/db-enums";
  * ==========================================
  */
 
-type TCreate__MiningWalletDeposite = {
+type TCreate__MiningWalletDeposit = {
   dataToInsert: Omit<
     typeof Table__MiningWalletDeposits.$inferInsert,
     "updatedAt" | "tableIdentifierToken" | "createdAt" | "id"
   >;
 };
 
-const create__MiningWalletDeposite = async (
-  options: TCreate__MiningWalletDeposite,
+const create__MiningWalletDeposit = async (
+  options: TCreate__MiningWalletDeposit,
 ) => {
   const genereatedId = id();
 
@@ -37,7 +47,7 @@ const create__MiningWalletDeposite = async (
 
   if (queryOperationError) {
     console.error(
-      `Error in queryOperationError in create__MiningWalletDeposite`,
+      `Error in queryOperationError in create__MiningWalletDeposit`,
     );
     console.error(queryOperationError);
     throw queryOperationError;
@@ -53,7 +63,7 @@ const create__MiningWalletDeposite = async (
     return insertedMiningDeposit!;
   }
 
-  throw Error("Unexpected block in create__MiningWalletDeposite");
+  throw Error("Unexpected block in create__MiningWalletDeposit");
 };
 
 /**
@@ -68,7 +78,7 @@ const create__MiningWalletDeposite = async (
  * ==========================================
  */
 
-type TRead__AllMiningWalletDeposite = {
+type TRead__AllMiningWalletDeposit = {
   identifier?: Partial<
     Pick<
       typeof Table__MiningWalletDeposits.$inferSelect,
@@ -85,8 +95,8 @@ type TRead__AllMiningWalletDeposite = {
   };
 };
 
-const read__AllMiningWalletDeposite = async (
-  options?: TRead__AllMiningWalletDeposite,
+const read__AllMiningWalletDeposit = async (
+  options?: TRead__AllMiningWalletDeposit,
 ) => {
   const skip = options?.queryOptions?.skip ?? 0;
   const limit = options?.queryOptions?.limit ?? Number.MAX_SAFE_INTEGER;
@@ -146,15 +156,15 @@ const read__AllMiningWalletDeposite = async (
 
   if (queryOperationError) {
     console.error(
-      `Error in queryOperationError in read__AllMiningWalletDeposite`,
+      `Error in queryOperationError in read__AllMiningWalletDeposit`,
     );
     console.error(queryOperationError);
     throw queryOperationError;
   }
 
-  const miningWalletDeposites = queryOperationResult;
+  const miningWalletDeposits = queryOperationResult;
 
-  return miningWalletDeposites;
+  return miningWalletDeposits;
 };
 
 /**
@@ -255,7 +265,7 @@ const read__MiningWalletDepositStats = async (
  * ==========================================
  */
 
-type TUpdate__MiningWalletDeposite = {
+type TUpdate__MiningWalletDeposit = {
   identifier:
     | {
         walletId: (typeof Table__MiningWalletDeposits.$inferSelect)["id"];
@@ -272,8 +282,8 @@ type TUpdate__MiningWalletDeposite = {
   >;
 };
 
-const update__MiningWalletDeposite = async (
-  options: TUpdate__MiningWalletDeposite,
+const update__MiningWalletDeposit = async (
+  options: TUpdate__MiningWalletDeposit,
 ) => {
   const conditions: SQL[] = [];
 
@@ -298,7 +308,7 @@ const update__MiningWalletDeposite = async (
 
   if (queryOperationError) {
     console.error(
-      `Error in queryOperationError in update__MiningWalletDeposite`,
+      `Error in queryOperationError in update__MiningWalletDeposit`,
     );
     console.error(queryOperationError);
     throw queryOperationError;
@@ -315,12 +325,66 @@ const update__MiningWalletDeposite = async (
     return updatedMiningDeposit!;
   }
 
-  throw Error("Unexpected block in update__MiningWalletDeposite");
+  throw Error("Unexpected block in update__MiningWalletDeposit");
+};
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * MINING WALLET - MONTHLY DEPOSIT STATISTICS
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TRead__MiningWalletMonthlyDepositStats = {
+  year?: number;
+};
+
+const read__MiningWalletMonthlyDepositStats = async (
+  options?: TRead__MiningWalletMonthlyDepositStats,
+) => {
+  const year = options?.year ?? new Date().getFullYear();
+
+  const month = sql<string>`
+    DATE_FORMAT(${Table__MiningWalletDeposits.createdAt}, '%Y-%m')
+  `;
+
+  const baseQuery = db
+    .select({
+      month,
+      totalDeposits: count(Table__MiningWalletDeposits.id),
+      totalAmount: sum(Table__MiningWalletDeposits.amount),
+    })
+    .from(Table__MiningWalletDeposits)
+    .where(sql`YEAR(${Table__MiningWalletDeposits.createdAt}) = ${year}`)
+    .groupBy(month)
+    .orderBy(month);
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(
+      `Error in queryOperationError in read__MiningWalletMonthlyDepositStats`,
+    );
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  return queryOperationResult.map((item) => ({
+    month: item.month,
+    totalDeposits: item.totalDeposits,
+    totalAmount: Number(item.totalAmount ?? 0),
+  }));
 };
 
 export {
-  create__MiningWalletDeposite,
-  read__AllMiningWalletDeposite,
-  update__MiningWalletDeposite,
+  create__MiningWalletDeposit,
+  read__AllMiningWalletDeposit,
+  update__MiningWalletDeposit,
   read__MiningWalletDepositStats,
+  read__MiningWalletMonthlyDepositStats,
 };

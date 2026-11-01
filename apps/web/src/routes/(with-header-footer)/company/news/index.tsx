@@ -1,5 +1,5 @@
 import News from "@/components/main/company/news/news";
-import { serverFn__readAllNewsSchema } from "@/integrations/server-function/news";
+import { serverFn__readAllNewsSchema } from "@/integrations/tanstack/server-function/news.sfn";
 import { env } from "@repo/env/client";
 import { createFileRoute } from "@tanstack/react-router";
 

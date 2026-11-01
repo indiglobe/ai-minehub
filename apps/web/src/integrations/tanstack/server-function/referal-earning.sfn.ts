@@ -13,7 +13,7 @@ import { tryCatch } from "@repo/utils/try-catch";
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__createReferalEarning = createServerFn({
+const serverFn__createReferalEarning = createServerFn({
   method: "POST",
 })
   .validator(create__ReferalEarningSchema)
@@ -35,7 +35,7 @@ export const serverFn__createReferalEarning = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readAllReferalEarning = createServerFn({
+const serverFn__readAllReferalEarning = createServerFn({
   method: "GET",
 })
   .validator(read__AllReferalEarningSchema)
@@ -52,3 +52,5 @@ export const serverFn__readAllReferalEarning = createServerFn({
 
     return serverFnResponse;
   });
+
+export { serverFn__createReferalEarning, serverFn__readAllReferalEarning };

@@ -1,4 +1,4 @@
-import type { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import type { serverFn__readAllMiningOrders } from "@/integrations/tanstack/server-function/mining-order.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readAllMiningOrders() {

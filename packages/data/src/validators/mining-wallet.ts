@@ -1,20 +1,41 @@
 import z from "zod";
 
-export const create__MiningWalletSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__MiningWalletSchema = z.object({
   dataToInsert: z.object({
     balance: z.number().optional(),
     associatedUser: z.string(),
   }),
 });
 
-export const read__OneMiningWalletSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__OneMiningWalletSchema = z.object({
   identifier: z.union([
     z.object({ id: z.string() }),
     z.object({ associatedUserId: z.string() }),
   ]),
 });
 
-export const update__OneMiningWalletSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__OneMiningWalletSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -28,7 +49,14 @@ export const update__OneMiningWalletSchema = z.object({
   }),
 });
 
-export const update__BalanceSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__BalanceSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -41,3 +69,10 @@ export const update__BalanceSchema = z.object({
     balance: z.number(),
   }),
 });
+
+export {
+  create__MiningWalletSchema,
+  read__OneMiningWalletSchema,
+  update__OneMiningWalletSchema,
+  update__BalanceSchema,
+};

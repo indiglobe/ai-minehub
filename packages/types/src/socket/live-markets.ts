@@ -13,9 +13,14 @@ const clientToServerEvents = z.object({
 export type ClientToServerEvents = z.infer<typeof clientToServerEvents>;
 
 const interServerEvents = z.object({
-  ping: z.function(),
+  ping: z.function({
+    input: [],
+    output: z.void(),
+  }),
 });
 
 export type InterServerEvents = z.infer<typeof interServerEvents>;
 
-export interface SocketData {}
+export const socketData = z.object({});
+
+export type SocketData = z.infer<typeof socketData>;

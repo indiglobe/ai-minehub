@@ -18,7 +18,7 @@ import { createServerFn } from "@tanstack/react-start";
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__createMiningWallet = createServerFn({
+const serverFn__createMiningWallet = createServerFn({
   method: "POST",
 })
   .validator(create__MiningWalletSchema)
@@ -40,7 +40,7 @@ export const serverFn__createMiningWallet = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readOneMiningWallet = createServerFn({
+const serverFn__readOneMiningWallet = createServerFn({
   method: "GET",
 })
   .validator(read__OneMiningWalletSchema)
@@ -62,7 +62,7 @@ export const serverFn__readOneMiningWallet = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__updateOneMiningWallet = createServerFn({
+const serverFn__updateOneMiningWallet = createServerFn({
   method: "POST",
 })
   .validator(update__OneMiningWalletSchema)
@@ -84,7 +84,7 @@ export const serverFn__updateOneMiningWallet = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__updateAddBalance = createServerFn({
+const serverFn__updateAddBalance = createServerFn({
   method: "POST",
 })
   .validator(update__BalanceSchema)
@@ -106,7 +106,7 @@ export const serverFn__updateAddBalance = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__updateDeductBalance = createServerFn({
+const serverFn__updateDeductBalance = createServerFn({
   method: "POST",
 })
   .validator(update__BalanceSchema)
@@ -123,3 +123,11 @@ export const serverFn__updateDeductBalance = createServerFn({
 
     return serverFnResponse;
   });
+
+export {
+  serverFn__createMiningWallet,
+  serverFn__readOneMiningWallet,
+  serverFn__updateOneMiningWallet,
+  serverFn__updateAddBalance,
+  serverFn__updateDeductBalance,
+};

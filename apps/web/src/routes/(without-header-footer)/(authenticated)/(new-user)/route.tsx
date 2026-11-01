@@ -1,4 +1,4 @@
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(

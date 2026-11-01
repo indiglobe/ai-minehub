@@ -1,6 +1,13 @@
 import { z } from "zod";
 
-export const create__TradingOrderSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__TradingOrderSchema = z.object({
   id: z.string().optional(),
   orderedBy: z.string(),
   amountInvested: z.number(),
@@ -10,7 +17,14 @@ export const create__TradingOrderSchema = z.object({
     .nullish(),
 });
 
-export const read__AllTradingOrdersSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllTradingOrdersSchema = z
   .object({
     identifier: z
       .object({
@@ -27,7 +41,14 @@ export const read__AllTradingOrdersSchema = z
   })
   .optional();
 
-export const read__OneTradingOrderSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__OneTradingOrderSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
@@ -38,7 +59,14 @@ export const read__OneTradingOrderSchema = z.object({
     .optional(),
 });
 
-export const update__TradingOrderSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__TradingOrderSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
@@ -54,8 +82,23 @@ export const update__TradingOrderSchema = z.object({
   }),
 });
 
-export const delete__TradingOrderSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const delete__TradingOrderSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
 });
+
+export {
+  create__TradingOrderSchema,
+  read__AllTradingOrdersSchema,
+  read__OneTradingOrderSchema,
+  update__TradingOrderSchema,
+  delete__TradingOrderSchema,
+};

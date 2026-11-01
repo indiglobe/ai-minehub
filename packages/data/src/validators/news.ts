@@ -1,13 +1,27 @@
 import z from "zod";
 
-export const create__NewsSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__NewsSchema = z.object({
   id: z.string().optional(),
   effectiveDate: z.date(),
   heading: z.string(),
   details: z.string(),
 });
 
-export const read__AllNewsSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllNewsSchema = z
   .object({
     identifier: z
       .object({
@@ -24,13 +38,27 @@ export const read__AllNewsSchema = z
   })
   .optional();
 
-export const read__OneNewsSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__OneNewsSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
 });
 
-export const update__NewsSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__NewsSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
@@ -43,8 +71,23 @@ export const update__NewsSchema = z.object({
   }),
 });
 
-export const delete__NewsSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const delete__NewsSchema = z.object({
   identifier: z.object({
     id: z.string(),
   }),
 });
+
+export {
+  create__NewsSchema,
+  read__AllNewsSchema,
+  read__OneNewsSchema,
+  update__NewsSchema,
+  delete__NewsSchema,
+};

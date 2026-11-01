@@ -1,10 +1,33 @@
+import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
 import { Users, Eye, Wallet, UserCog, Search, ChevronDown } from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { AllUsersError, AllUsersLoading } from "./boundary-comps";
-import { useReadAllUsers } from "@/integrations/tanstack/react-querry/admin/users.rq";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@repo/ui/dialog";
+import { USER_STATUS } from "@repo/utils/db-enums";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
+import {
+  useReadAllUsers,
+  useUpdateUser,
+} from "@/integrations/tanstack/react-querry/user/admin.rq";
+import { useForm } from "@tanstack/react-form";
+import z from "zod";
 
 export function AllUsers({ className, ...props }: ComponentProps<"section">) {
   const {
@@ -217,16 +240,11 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                             <Wallet className={cn(`size-3.5`)} />
                           </Link>
                         </Button>
-                        <Button
-                          asChild
-                          size={"xs"}
-                          variant={"warn"}
-                          title="Manage User"
-                        >
-                          <Link to="/users/$userId" params={{ userId: "" }}>
-                            <UserCog className={cn(`size-3.5`)} />
-                          </Link>
-                        </Button>
+
+                        <ManageUserDialog
+                          currentState={item.userStatus!}
+                          userId={item.id}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -237,5 +255,143 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
         )}
       </div>
     </section>
+  );
+}
+
+const manageUserSchema = z.object({
+  status: z.enum(USER_STATUS),
+});
+
+function ManageUserDialog({
+  currentState,
+  userId,
+}: {
+  currentState: (typeof USER_STATUS)[number];
+  userId: string;
+}) {
+  const router = useRouter();
+
+  const { mutateAsync: updateUser, isPending } = useUpdateUser();
+
+  const [open, setOpen] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      status: currentState,
+    },
+
+    validators: {
+      onSubmit: manageUserSchema,
+    },
+
+    onSubmit: async ({ value }) => {
+      try {
+        await updateUser({
+          dataToUpdate: {
+            userStatus: value.status,
+          },
+          identifier: {
+            id: userId,
+          },
+        });
+
+        await router.invalidate();
+
+        setOpen(false);
+      } catch (err) {
+        console.error("Failed to update user status:", err);
+      }
+    },
+  });
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    if (nextOpen) {
+      form.reset({
+        status: currentState,
+      });
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button size="xs" variant="warn" title="Manage User">
+          <UserCog className={cn("size-3.5")} />
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Manage User</DialogTitle>
+
+          <DialogDescription>
+            Update the user's account status.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form
+          id="manage-user-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="flex flex-col gap-4"
+        >
+          <form.Field name="status">
+            {(field) => (
+              <div className="flex flex-col gap-2">
+                <label className="text-foreground text-sm font-medium">
+                  User Status
+                </label>
+
+                <Select
+                  value={field.state.value}
+                  onValueChange={(value) =>
+                    field.handleChange(value as (typeof USER_STATUS)[number])
+                  }
+                  disabled={isPending}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select user status" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {USER_STATUS.map((item) => (
+                      <SelectItem value={item} key={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </form.Field>
+
+          {form.state.errors.length > 0 && (
+            <p className="text-destructive text-sm" role="alert">
+              {String(form.state.errors[0])}
+            </p>
+          )}
+        </form>
+
+        <DialogFooter showCloseButton>
+          <form.Subscribe selector={(state) => state.values.status}>
+            {(status) => (
+              <Button
+                type="submit"
+                form="manage-user-form"
+                variant="default"
+                disabled={isPending || status === currentState}
+              >
+                {isPending ? "Saving..." : "Save Changes"}
+              </Button>
+            )}
+          </form.Subscribe>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

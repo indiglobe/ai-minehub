@@ -1,4 +1,4 @@
-import type { serverFn__readAllNewsSchema } from "@/integrations/server-function/news";
+import type { serverFn__readAllNewsSchema } from "@/integrations/tanstack/server-function/news.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readAllNewsSchema() {

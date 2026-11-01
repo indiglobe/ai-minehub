@@ -1,5 +1,5 @@
 import { WelcomeComp } from "@/components/main/welcome/welcome";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 import { welcomePageSearchParams } from "@/utils/zod-schema/search-params-schema/welcome-page";
 import { env } from "@repo/env/client";
 import { createFileRoute } from "@tanstack/react-router";

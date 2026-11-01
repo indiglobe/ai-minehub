@@ -14,7 +14,7 @@ import type { TWelcomeFormSchema } from "@repo/utils/zod-schema/form-schema/welc
 import { useServerFn } from "@tanstack/react-start";
 import { formAction__createNewUser } from "@/integrations/form-actions/welcome-form.fa";
 import { tryCatch } from "@repo/utils/try-catch";
-import { serverFn__createReferalEarning } from "@/integrations/server-function/referal-earning";
+import { serverFn__createReferalEarning } from "@/integrations/tanstack/server-function/referal-earning.sfn";
 
 export function WelcomeComp({ ...props }: ComponentProps<typeof Main>) {
   return (

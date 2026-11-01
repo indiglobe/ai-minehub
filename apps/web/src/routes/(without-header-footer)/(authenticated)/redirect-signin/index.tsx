@@ -1,5 +1,5 @@
 import { RedirectOnlyPage } from "@/components/main/redirect-signin";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 import {
   fetchUserDetailsCookie,
   setUserDetailsCookie,

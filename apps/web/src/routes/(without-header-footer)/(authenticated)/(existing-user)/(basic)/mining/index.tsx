@@ -1,6 +1,6 @@
 import Main from "@/components/main/main";
 import { Mining } from "@/components/main/dashboard-groups/user-dashboard/mining/mining";
-import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
+import { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
 import { createFileRoute } from "@tanstack/react-router";
 import { env } from "@repo/env/client";
 

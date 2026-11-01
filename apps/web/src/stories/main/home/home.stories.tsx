@@ -6,9 +6,9 @@ import type { Meta, StoryObj } from "@storybook/tanstack-react";
 import type { Route } from "@/routes/(with-header-footer)/index";
 import HomePage, { PassiveIncomeSection } from "@/components/main/home/home";
 import type { DeepPartial } from "@/utils/types/storybook";
-import type { serverFn__readAllRatings } from "@/integrations/server-function/rating";
-import type { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
-import type { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import type { serverFn__readAllRatings } from "@/integrations/tanstack/server-function/rating.sfn";
+import type { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
+import type { serverFn__readAllMiningOrders } from "@/integrations/tanstack/server-function/mining-order.sfn";
 import { mocked__serverFn__readAllRatings } from "@/integrations/storybook/mock/rating.mock";
 import { mocked__serverFn__readAllMiningProfiles } from "@/integrations/storybook/mock/mining-profile.mock";
 

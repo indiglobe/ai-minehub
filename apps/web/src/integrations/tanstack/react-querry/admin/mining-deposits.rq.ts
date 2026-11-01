@@ -3,9 +3,9 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 
 import {
-  serverFn__readAllMiningWalletDeposite,
+  serverFn__readAllMiningWalletDeposit,
   serverFn__readMiningWalletDepositStats,
-} from "@/integrations/server-function/mining-wallet-deposits";
+} from "@/integrations/tanstack/server-function/mining-wallet-deposits.sfn";
 
 // Query keys
 export const adminMiningDepositQueryKeys = {
@@ -24,8 +24,8 @@ export const adminMiningDepositQueryKeys = {
 
 // Pending mining deposits list
 export function useReadAllPendingMiningWalletDeposits() {
-  const readAllMiningWalletDeposite = useServerFn(
-    serverFn__readAllMiningWalletDeposite,
+  const readAllMiningWalletDeposit = useServerFn(
+    serverFn__readAllMiningWalletDeposit,
   );
 
   return useQuery(
@@ -33,7 +33,7 @@ export function useReadAllPendingMiningWalletDeposits() {
       queryKey: adminMiningDepositQueryKeys.listByStatus("PENDING"),
 
       queryFn: () =>
-        readAllMiningWalletDeposite({
+        readAllMiningWalletDeposit({
           data: {
             identifier: { status: "PENDING" },
           },

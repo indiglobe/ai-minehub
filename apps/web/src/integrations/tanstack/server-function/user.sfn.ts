@@ -4,6 +4,8 @@ import {
   create__User,
   read__Referrals,
   read__UserCount,
+  update__User,
+  read__UserMonthlyStats,
 } from "@repo/data/querries/user";
 import {
   read__OneUserSchema,
@@ -11,6 +13,8 @@ import {
   read__AllUsersSchema,
   read__ReferralsSchema,
   read__UserCountSchema,
+  update__UserSchema,
+  read__UserMonthlyStatsSchema,
 } from "@repo/data/validators/user";
 import { createServerFn } from "@tanstack/react-start";
 import { tryCatch } from "@repo/utils/try-catch";
@@ -19,7 +23,7 @@ import { tryCatch } from "@repo/utils/try-catch";
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readUserCount = createServerFn({
+const serverFn__readUserCount = createServerFn({
   method: "GET",
 })
   .validator(read__UserCountSchema)
@@ -41,7 +45,7 @@ export const serverFn__readUserCount = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readOneUser = createServerFn({
+const serverFn__readOneUser = createServerFn({
   method: "GET",
 })
   .validator(read__OneUserSchema)
@@ -61,7 +65,7 @@ export const serverFn__readOneUser = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__createUser = createServerFn({
+const serverFn__createUser = createServerFn({
   method: "POST",
 })
   .validator(create__UserSchema)
@@ -81,7 +85,7 @@ export const serverFn__createUser = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readAllUsers = createServerFn({
+const serverFn__readAllUsers = createServerFn({
   method: "GET",
 })
   .validator(read__AllUsersSchema)
@@ -103,7 +107,7 @@ export const serverFn__readAllUsers = createServerFn({
 // ===========================================
 // +++++++++++++++++++++++++++++++++++++++++++
 
-export const serverFn__readReferrals = createServerFn({
+const serverFn__readReferrals = createServerFn({
   method: "GET",
 })
   .validator(read__ReferralsSchema)
@@ -120,3 +124,55 @@ export const serverFn__readReferrals = createServerFn({
 
     return serverFnResult;
   });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+const serverFn__updateUser = createServerFn({
+  method: "POST",
+})
+  .validator(update__UserSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(update__User(data));
+
+    if (serverFnError) {
+      console.error(`Error in serverFnError in serverFn__updateUser`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
+
+// +++++++++++++++++++++++++++++++++++++++++++
+// ===========================================
+// +++++++++++++++++++++++++++++++++++++++++++
+
+const serverFn__readUserMonthlyStats = createServerFn({
+  method: "GET",
+})
+  .validator(read__UserMonthlyStatsSchema)
+  .handler(async ({ data }) => {
+    const [serverFnError, serverFnResult] = await tryCatch(
+      read__UserMonthlyStats(data),
+    );
+
+    if (serverFnError) {
+      console.error(`Error in serverFnError in serverFn__readUserMonthlyStats`);
+      console.error(serverFnError);
+      throw serverFnError;
+    }
+
+    return serverFnResult;
+  });
+
+export {
+  serverFn__readUserCount,
+  serverFn__readOneUser,
+  serverFn__createUser,
+  serverFn__readAllUsers,
+  serverFn__readReferrals,
+  serverFn__updateUser,
+  serverFn__readUserMonthlyStats,
+};

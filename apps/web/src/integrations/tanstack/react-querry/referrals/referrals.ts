@@ -1,4 +1,4 @@
-import { serverFn__readReferrals } from "@/integrations/server-function/user";
+import { serverFn__readReferrals } from "@/integrations/tanstack/server-function/user.sfn";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -7,7 +7,14 @@ export const querryKeys = {
   all: () => ["referrals"],
 };
 
-export function useReadReferrals() {
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+function useReadReferrals() {
   const readReferrals = useServerFn(serverFn__readReferrals);
 
   const {
@@ -31,3 +38,5 @@ export function useReadReferrals() {
     }),
   );
 }
+
+export { useReadReferrals };

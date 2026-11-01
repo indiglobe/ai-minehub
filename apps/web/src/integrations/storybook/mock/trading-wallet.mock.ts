@@ -1,4 +1,4 @@
-import type { serverFn__readOneTradingWallet } from "@/integrations/server-function/trading-wallet";
+import type { serverFn__readOneTradingWallet } from "@/integrations/tanstack/server-function/trading-wallet.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readOneTradingWallet() {

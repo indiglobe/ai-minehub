@@ -2,8 +2,20 @@ import { Table__MiningWalletWithdraw, Table__User } from "@/schema";
 import { id } from "@repo/utils/id";
 import { db } from "..";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, desc, eq, getTableColumns, inArray, sql, SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  inArray,
+  sql,
+  SQL,
+  sum,
+} from "drizzle-orm";
 import { WITHDRAWL_STATUS } from "@repo/utils/db-enums";
+
+type TWITHDRAWL_STATUS = (typeof WITHDRAWL_STATUS)[number];
 
 /**
  * ==========================================
@@ -160,9 +172,7 @@ type TRead__AllMiningWalletWithdraw = {
       typeof Table__MiningWalletWithdraw.$inferSelect,
       "wallet" | "orderedBy"
     > & {
-      status:
-        | (typeof WITHDRAWL_STATUS)[number]
-        | (typeof WITHDRAWL_STATUS)[number][];
+      status: TWITHDRAWL_STATUS | TWITHDRAWL_STATUS[];
     }
   >;
   queryOptions?: {
@@ -238,13 +248,143 @@ const read__AllMiningWalletWithdraw = async (
     throw queryOperationError;
   }
 
-  const miningWalletDeposites = queryOperationResult;
+  const miningWalletDeposits = queryOperationResult;
 
-  return miningWalletDeposites;
+  return miningWalletDeposits;
+};
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * MINING WALLET - MONTHLY WITHDRAWAL STATISTICS
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TRead__MiningWalletMonthlyWithdrawStats = {
+  year?: number;
+};
+
+const read__MiningWalletMonthlyWithdrawStats = async (
+  options?: TRead__MiningWalletMonthlyWithdrawStats,
+) => {
+  const year = options?.year ?? new Date().getFullYear();
+
+  const month = sql<string>`
+    DATE_FORMAT(${Table__MiningWalletWithdraw.createdAt}, '%Y-%m')
+  `;
+
+  const baseQuery = db
+    .select({
+      month,
+      totalWithdrawals: count(Table__MiningWalletWithdraw.id),
+      totalAmount: sum(Table__MiningWalletWithdraw.amount),
+    })
+    .from(Table__MiningWalletWithdraw)
+    .where(sql`YEAR(${Table__MiningWalletWithdraw.createdAt}) = ${year}`)
+    .groupBy(month)
+    .orderBy(month);
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(
+      `Error in queryOperationError in read__MiningWalletMonthlyWithdrawStats`,
+    );
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  return queryOperationResult.map((item) => ({
+    month: item.month,
+    totalWithdrawals: item.totalWithdrawals,
+    totalAmount: Number(item.totalAmount ?? 0),
+  }));
+};
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * UPDATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TUpdate__MiningWalletWithdraw = {
+  identifier:
+    | {
+        walletId: (typeof Table__MiningWalletWithdraw.$inferSelect)["id"];
+      }
+    | {
+        userId: (typeof Table__MiningWalletWithdraw.$inferSelect)["orderedBy"];
+      };
+
+  dataToInsert: Partial<
+    Omit<
+      typeof Table__MiningWalletWithdraw.$inferInsert,
+      "updatedAt" | "tableIdentifierToken" | "createdAt" | "id"
+    >
+  >;
+};
+
+const update__MiningWalletWithdraw = async (
+  options: TUpdate__MiningWalletWithdraw,
+) => {
+  const conditions: SQL[] = [];
+
+  if ("walletId" in options.identifier) {
+    conditions.push(
+      eq(Table__MiningWalletWithdraw.id, options.identifier.walletId),
+    );
+  }
+
+  if ("userId" in options.identifier) {
+    conditions.push(
+      eq(Table__MiningWalletWithdraw.orderedBy, options.identifier.userId),
+    );
+  }
+
+  const baseQuery = db
+    .update(Table__MiningWalletWithdraw)
+    .set({ ...options.dataToInsert })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(
+      `Error in queryOperationError in update__MiningWalletWithdraw`,
+    );
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [updatedMiningWithdraw] = await db
+      .select()
+      .from(Table__MiningWalletWithdraw)
+      .where(and(...conditions))
+      .limit(1)
+      .offset(0);
+
+    return updatedMiningWithdraw!;
+  }
+
+  throw Error("Unexpected block in update__MiningWalletWithdraw");
 };
 
 export {
   create__MiningWalletWithdraw,
   read__MiningWalletWithdrawStats,
   read__AllMiningWalletWithdraw,
+  read__MiningWalletMonthlyWithdrawStats,
+  update__MiningWalletWithdraw,
 };

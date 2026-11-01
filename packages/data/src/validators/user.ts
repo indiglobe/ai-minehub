@@ -1,7 +1,14 @@
 import { ROLE, USER_STATUS } from "@repo/utils/db-enums";
 import z from "zod";
 
-export const create__UserSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__UserSchema = z.object({
   email: z.email(),
   fullName: z.string(),
   avatarUrl: z.url(),
@@ -14,7 +21,14 @@ export const create__UserSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
-export const read__UserCountSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__UserCountSchema = z
   .object({
     identifier: z
       .object({
@@ -24,7 +38,14 @@ export const read__UserCountSchema = z
   })
   .optional();
 
-export const read__AllUsersSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllUsersSchema = z
   .object({
     identifier: z
       .union([
@@ -46,7 +67,14 @@ export const read__AllUsersSchema = z
   })
   .optional();
 
-export const read__OneUserSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__OneUserSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -57,7 +85,14 @@ export const read__OneUserSchema = z.object({
   ]),
 });
 
-export const read__ReferralsSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__ReferralsSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -67,3 +102,50 @@ export const read__ReferralsSchema = z.object({
     }),
   ]),
 });
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__UserSchema = z.object({
+  identifier: z.object({
+    id: z.string().length(10),
+  }),
+
+  dataToUpdate: z.object({
+    email: z.email().optional(),
+    fullName: z.string().optional(),
+    avatarUrl: z.string().optional(),
+    age: z.number().int().positive().optional(),
+    role: z.enum(ROLE).optional(),
+    phoneNumber: z.string().optional(),
+    referrerId: z.string().nullable().optional(),
+    userStatus: z.enum(USER_STATUS).nullable().optional(),
+  }),
+});
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__UserMonthlyStatsSchema = z
+  .object({
+    year: z.number().int().min(2000).max(9999).optional(),
+  })
+  .optional();
+
+export {
+  create__UserSchema,
+  read__UserCountSchema,
+  read__AllUsersSchema,
+  read__OneUserSchema,
+  read__ReferralsSchema,
+  update__UserSchema,
+  read__UserMonthlyStatsSchema,
+};

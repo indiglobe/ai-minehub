@@ -13,7 +13,7 @@ import {
 import type { fetchUserDetailsCookie } from "@/lib/auth/session";
 import type { DeepPartial } from "@/utils/types/storybook";
 import { mocked } from "storybook/test";
-import { serverFn__readOneUser } from "@/integrations/server-function/user";
+import { serverFn__readOneUser } from "@/integrations/tanstack/server-function/user.sfn";
 
 const meta = {
   beforeEach: () => {

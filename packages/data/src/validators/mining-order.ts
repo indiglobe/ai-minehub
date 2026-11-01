@@ -1,7 +1,14 @@
 import { INVESTMENT_STATUS } from "@repo/utils/db-enums";
 import z from "zod";
 
-export const create__MiningOrderSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__MiningOrderSchema = z.object({
   dataToInsert: z.object({
     orderedBy: z.string(),
     amountInvested: z.number(),
@@ -11,7 +18,14 @@ export const create__MiningOrderSchema = z.object({
   }),
 });
 
-export const read__AllMiningOrdersSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllMiningOrdersSchema = z
   .object({
     identifier: z
       .object({
@@ -33,3 +47,22 @@ export const read__AllMiningOrdersSchema = z
       .optional(),
   })
   .optional();
+
+const update__MiningOrderSchema = z.object({
+  identifier: z.object({
+    id: z.string(),
+  }),
+  dataToUpdate: z.object({
+    orderedBy: z.string().optional(),
+    amountInvested: z.number().optional(),
+    amountReceived: z.number().nullish(),
+    miningProfileUsed: z.string().optional(),
+    miningStatus: z.enum(INVESTMENT_STATUS).optional(),
+  }),
+});
+
+export {
+  create__MiningOrderSchema,
+  read__AllMiningOrdersSchema,
+  update__MiningOrderSchema,
+};

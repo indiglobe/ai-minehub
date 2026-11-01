@@ -419,7 +419,7 @@ async function seedMiningWalletWithdraw() {
       cryptoWaletAddress: id({ length: 20 }),
       orderedBy: u.user.id,
       wallet: u.mining_wallet.id,
-      withdrawalMethod: faker.helpers.arrayElement([
+      withdrawlMethod: faker.helpers.arrayElement([
         "BSC",
         "TRX",
         "ETH",

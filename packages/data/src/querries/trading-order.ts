@@ -3,6 +3,18 @@ import { Table__TradingOrder } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
 import { and, desc, eq, SQL } from "drizzle-orm";
 
+/**
+ * ===========================================
+ * ===========================================
+ * ===========================================
+ * ===========================================
+ * READ (ALL)
+ * ===========================================
+ * ===========================================
+ * ===========================================
+ * ===========================================
+ */
+
 type TRead__AllTradingOrders = {
   identifier?: Partial<{
     userId: string;
@@ -50,7 +62,4 @@ const read__AllTradingOrders = async (options?: TRead__AllTradingOrders) => {
   return allTradingOrders;
 };
 
-
-export {
-  read__AllTradingOrders,
-};
+export { read__AllTradingOrders };

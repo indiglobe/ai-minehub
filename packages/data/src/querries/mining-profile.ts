@@ -1,11 +1,65 @@
 import { db } from "@/index";
 import { Table__MiningProfile } from "@/schema";
+import { id } from "@repo/utils/id";
 import { tryCatch } from "@repo/utils/try-catch";
 import { and, eq, SQL } from "drizzle-orm";
 
 /**
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * CREATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TCreate__MiningProfile = {
+  dataToInsert: Omit<
+    typeof Table__MiningProfile.$inferInsert,
+    "updatedAt" | "tableIdentifierToken" | "createdAt" | "id"
+  >;
+};
+
+const create__MiningProfile = async (options: TCreate__MiningProfile) => {
+  const genereatedId = id();
+
+  const baseQuery = db
+    .insert(Table__MiningProfile)
+    .values({ ...options.dataToInsert, id: genereatedId });
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in create__MiningProfile`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [insertedMiningProfile] = await db
+      .select()
+      .from(Table__MiningProfile)
+      .where(eq(Table__MiningProfile.id, genereatedId))
+      .limit(1)
+      .offset(0);
+    return insertedMiningProfile!;
+  }
+
+  throw Error("Unexpected block in create__MiningProfile");
+};
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (ALL)
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  */
 
@@ -86,171 +140,104 @@ const read__AllMiningProfiles = async (options?: TRead__AllMiningProfiles) => {
  * ==========================================
  * ==========================================
  * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- * ==========================================
- */
-
-/**
- * ==========================================
- * CREATE
- * ==========================================
- */
-
-// type TCreate__MiningProfile = Omit<
-//   typeof Table__MiningProfile.$inferInsert,
-//   "tableIdentifierToken" | "updatedAt" | "createdAt"
-// >;
-
-// const create__MiningProfile = async (data: TCreate__MiningProfile) => {
-//   const generatedId = data.id ?? id();
-
-//   await db.insert(Table__MiningProfile).values({ ...data, id: generatedId });
-
-//   return (await read__OneMiningProfile({
-//     identifier: {
-//       id: generatedId,
-//     },
-//   }))!;
-// };
-
-/**
- * ==========================================
- * READ (ALL) - Mining Profiles
- * ==========================================
- *
- * Fetches multiple mining profiles from the database using strict `db.select()` with
- * granular field selection and optional relation aggregation.
- *
- * @param options - Configuration object containing filters, pagination, join options, and selected fields.
- * @returns An array of filtered mining profile records (along with aggregated orders if joined).
- */
-
-/**
- * ==========================================
- * READ (ONE)
- * ==========================================
- */
-
-// type TRead__OneMiningProfile = {
-//   identifier:
-//     | {
-//         id: string;
-//       }
-//     | {
-//         category: string;
-//       };
-
-//   joinOptions?: Partial<{
-//     orders: true;
-//   }>;
-// };
-
-// const read__OneMiningProfile = async (options: TRead__OneMiningProfile) => {
-//   const conditions: SQL[] = [];
-
-//   if ("id" in options.identifier) {
-//     conditions.push(eq(Table__MiningProfile.id, options.identifier.id));
-//   }
-
-//   if ("category" in options.identifier) {
-//     conditions.push(
-//       eq(Table__MiningProfile.category, options.identifier.category),
-//     );
-//   }
-
-//   const profile = await db.query.Table__MiningProfile.findFirst({
-//     where: and(...conditions),
-//     with: {
-//       ...(options.joinOptions?.orders ? { orders: true } : {}),
-//     },
-//   });
-
-//   return profile ? profile : null;
-// };
-
-/**
- * ==========================================
  * UPDATE
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
-// type TUpdate__MiningProfile = {
-//   identifier: {
-//     id: string;
-//   };
+type TUpdate__MiningProfile = {
+  identifier: {
+    id: (typeof Table__MiningProfile.$inferSelect)["id"];
+  };
 
-//   dataToUpdate: Partial<
-//     Omit<typeof Table__MiningProfile.$inferInsert, "tableIdentifierToken" | "id">
-//   >;
-// };
+  dataToUpdate: Partial<
+    Omit<
+      typeof Table__MiningProfile.$inferInsert,
+      "tableIdentifierToken" | "createdAt" | "updatedAt" | "id"
+    >
+  >;
+};
 
-// const update__MiningProfile = async (options: TUpdate__MiningProfile) => {
-//   const filteredData = Object.fromEntries(
-//     Object.entries(options.dataToUpdate).filter(
-//       ([, value]) => value !== undefined,
-//     ),
-//   );
+const update__MiningProfile = async (options: TUpdate__MiningProfile) => {
+  const conditions: SQL[] = [];
 
-//   if (Object.keys(filteredData).length === 0) {
-//     return null;
-//   }
+  conditions.push(eq(Table__MiningProfile.id, options.identifier.id));
 
-//   await db
-//     .update(Table__MiningProfile)
-//     .set(filteredData)
-//     .where(eq(Table__MiningProfile.id, options.identifier.id));
+  const baseQuery = db
+    .update(Table__MiningProfile)
+    .set({ ...options.dataToUpdate })
+    .where(and(...conditions));
 
-//   return await read__OneMiningProfile({
-//     identifier: options.identifier,
-//   });
-// };
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in update__MiningProfile`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [updatedMiningProfile] = await db
+      .select()
+      .from(Table__MiningProfile)
+      .where(and(...conditions))
+      .limit(1)
+      .offset(0);
+
+    return updatedMiningProfile!;
+  }
+
+  throw Error("Unexpected block in update__MiningProfile");
+};
 
 /**
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * ==========================================
  * DELETE
  * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
-// type TDelete__MiningProfile = {
-//   identifier: {
-//     id: string;
-//   };
-// };
+type TDelete__MiningProfile = {
+  identifier: {
+    id: (typeof Table__MiningProfile.$inferSelect)["id"];
+  };
+};
 
-// const delete__MiningProfile = async (options: TDelete__MiningProfile) => {
-//   const existing = await read__OneMiningProfile({
-//     identifier: options.identifier,
-//   });
+const delete__MiningProfile = async (options: TDelete__MiningProfile) => {
+  const conditions: SQL[] = [];
 
-//   if (!existing) {
-//     return null;
-//   }
+  conditions.push(eq(Table__MiningProfile.id, options.identifier.id));
 
-//   await db
-//     .delete(Table__MiningProfile)
-//     .where(eq(Table__MiningProfile.id, options.identifier.id));
+  const baseQuery = db.delete(Table__MiningProfile).where(and(...conditions));
 
-//   return existing;
-// };
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in delete__MiningProfile`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    return {
+      id: options.identifier.id,
+      deleted: true,
+    };
+  }
+
+  throw Error("Unexpected block in delete__MiningProfile");
+};
 
 export {
   read__AllMiningProfiles,
-  // create__MiningProfile,
-  // read__OneMiningProfile,
-  // update__MiningProfile,
-  // delete__MiningProfile,
+  update__MiningProfile,
+  delete__MiningProfile,
+  create__MiningProfile,
 };

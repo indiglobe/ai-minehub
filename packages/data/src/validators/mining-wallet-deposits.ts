@@ -1,7 +1,14 @@
 import { z } from "zod";
 import { DEPOSIT_STATUS, TRANSACTION_METHOD } from "@repo/utils/db-enums";
 
-export const create__MiningWalletDepositeSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__MiningWalletDepositSchema = z.object({
   dataToInsert: z.object({
     id: z.string().optional(),
     orderedBy: z.string(),
@@ -14,7 +21,14 @@ export const create__MiningWalletDepositeSchema = z.object({
   }),
 });
 
-export const read__AllMiningWalletDepositeSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__AllMiningWalletDepositSchema = z
   .object({
     identifier: z
       .object({
@@ -34,7 +48,14 @@ export const read__AllMiningWalletDepositeSchema = z
   })
   .optional();
 
-export const read__MiningWalletDepositStatsSchema = z
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__MiningWalletDepositStatsSchema = z
   .object({
     identifier: z
       .object({
@@ -47,7 +68,14 @@ export const read__MiningWalletDepositStatsSchema = z
   })
   .optional();
 
-export const update__MiningWalletDepositeSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__MiningWalletDepositSchema = z.object({
   identifier: z.union([
     z.object({
       walletId: z.string(),
@@ -66,3 +94,24 @@ export const update__MiningWalletDepositeSchema = z.object({
     depositProof: z.string().optional(),
   }),
 });
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const read__MiningWalletMonthlyDepositStatsSchema = z
+  .object({
+    year: z.number().int().min(2000).max(9999).optional(),
+  })
+  .optional();
+
+export {
+  create__MiningWalletDepositSchema,
+  read__AllMiningWalletDepositSchema,
+  read__MiningWalletDepositStatsSchema,
+  update__MiningWalletDepositSchema,
+  read__MiningWalletMonthlyDepositStatsSchema,
+};

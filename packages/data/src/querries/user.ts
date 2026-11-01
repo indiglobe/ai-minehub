@@ -1,13 +1,27 @@
 import { db } from "@/index";
 import { Table__User } from "@/schema";
 import { tryCatch } from "@repo/utils/try-catch";
-import { and, eq, getTableColumns, inArray, sql, SQL } from "drizzle-orm";
+import {
+  and,
+  count,
+  eq,
+  getTableColumns,
+  inArray,
+  sql,
+  SQL,
+} from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 /**
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * CREATE
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
 type TCreate__User = Omit<
@@ -15,9 +29,6 @@ type TCreate__User = Omit<
   "tableIdentifierToken" | "id"
 >;
 
-/**
- * create user
- */
 const create__User = async (data: TCreate__User) => {
   const baseQuery = db.insert(Table__User).values(data);
 
@@ -59,9 +70,15 @@ const create__User = async (data: TCreate__User) => {
 };
 
 /**
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (USER COUNT)
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
 type TRead__UserCount = Partial<{
@@ -105,9 +122,15 @@ const read__UserCount = async (options?: TRead__UserCount) => {
 };
 
 /**
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (ALL)
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
 type TRead__AllUsers = {
@@ -126,18 +149,6 @@ type TRead__AllUsers = {
     limit?: number;
   };
 };
-
-/**
- * Fetch multiple user records from the database.
- *
- * Supports filtering by role, pagination, and optional inclusion
- * of related mining wallet, trading wallet, and rating details.
- *
- * @param options.identifier.role - Filter users by role
- * @param options.queryOptions.skip - Number of records to skip (pagination offset)
- * @param options.queryOptions.limit - Maximum number of records to return
- * @returns Array of user records with optional relations
- */
 
 const read__AllUsers = async (options?: TRead__AllUsers) => {
   const skip = options?.queryOptions?.skip ?? 0;
@@ -179,9 +190,15 @@ const read__AllUsers = async (options?: TRead__AllUsers) => {
 };
 
 /**
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ (ONE)
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
 type TRead__OneUser = {
@@ -193,14 +210,6 @@ type TRead__OneUser = {
         email: (typeof Table__User.$inferSelect)["email"];
       };
 };
-
-/**
- * Fetch a single user record from the database by email.
- *
- * Optionally includes related mining wallet, trading wallet,
- * and rating details based on join configuration.
- *
- */
 
 const read__OneUser = async (options: TRead__OneUser) => {
   const skip = 0;
@@ -236,9 +245,15 @@ const read__OneUser = async (options: TRead__OneUser) => {
 };
 
 /**
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  * READ REFERRALS (ONE)
- * ----------------------------------------
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
  */
 
 type TRead__OneReferrals = {
@@ -294,10 +309,113 @@ const read__Referrals = async (options: TRead__OneReferrals) => {
   return referredUsersList;
 };
 
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * READ (MONTHLY STATISTICS)
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TRead__UserMonthlyStats = {
+  year?: number;
+};
+
+const read__UserMonthlyStats = async (options?: TRead__UserMonthlyStats) => {
+  const year = options?.year ?? new Date().getFullYear();
+
+  const month = sql<string>`
+    DATE_FORMAT(${Table__User.createdAt}, '%Y-%m')
+  `;
+
+  const baseQuery = db
+    .select({
+      month,
+      totalUsers: count(Table__User.id),
+    })
+    .from(Table__User)
+    .where(sql`YEAR(${Table__User.createdAt}) = ${year}`)
+    .groupBy(month)
+    .orderBy(month);
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in read__UserMonthlyStats`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  return queryOperationResult;
+};
+
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * UPDATE
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+type TUpdate__User = {
+  identifier: {
+    id: (typeof Table__User.$inferSelect)["id"];
+  };
+
+  dataToUpdate: Partial<
+    Omit<
+      typeof Table__User.$inferInsert,
+      "id" | "createdAt" | "updatedAt" | "tableIdentifierToken"
+    >
+  >;
+};
+
+const update__User = async (options: TUpdate__User) => {
+  const conditions: SQL[] = [];
+
+  conditions.push(eq(Table__User.id, options.identifier.id));
+
+  const baseQuery = db
+    .update(Table__User)
+    .set({ ...options.dataToUpdate })
+    .where(and(...conditions));
+
+  const [queryOperationError, queryOperationResult] = await tryCatch(baseQuery);
+
+  if (queryOperationError) {
+    console.error(`Error in queryOperationError in update__User`);
+    console.error(queryOperationError);
+    throw queryOperationError;
+  }
+
+  if (queryOperationResult[0].affectedRows === 1) {
+    const [updatedUser] = await db
+      .select()
+      .from(Table__User)
+      .where(and(...conditions))
+      .limit(1)
+      .offset(0);
+
+    return updatedUser!;
+  }
+
+  throw Error("Unexpected block in update__User");
+};
+
 export {
   create__User,
   read__AllUsers,
   read__OneUser,
   read__UserCount,
   read__Referrals,
+  update__User,
+  read__UserMonthlyStats,
 };

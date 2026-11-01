@@ -1,335 +1,636 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ComponentProps } from "react";
+import { useForm } from "@tanstack/react-form";
 import { cn } from "@repo/styles/cn";
-import { Layers, Plus, Edit, X } from "lucide-react";
+import {
+  Layers,
+  Plus,
+  Edit,
+  Trash,
+  TrendingUp,
+  Clock,
+  DollarSign,
+} from "lucide-react";
 import { Button } from "@repo/ui/button";
-import { useReadAllMiningPlans } from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
+import { Input } from "@repo/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@repo/ui/dialog";
 import {
   MiningPlansError,
   MiningPlansLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/mining-plans/boundary-comps";
+import { useRouter } from "@tanstack/react-router";
+import {
+  useCreateMiningProfile,
+  useDeleteMiningProfile,
+  useReadAllMiningProfiles,
+  useUpdateMiningProfile,
+} from "@/integrations/tanstack/react-querry/mining-profile";
+
+type MiningProfile = {
+  id: string;
+  category: string;
+  dailyReturn: number | null;
+  lockinPeriod: number;
+  minimumAllowedAmount: number;
+  maximumAllowedAmount: number;
+  isPopular: boolean;
+};
+
+type MiningProfileFormValues = {
+  category: string;
+  dailyReturn: number;
+  lockinPeriod: number;
+  minimumAllowedAmount: number;
+  maximumAllowedAmount: number;
+  isPopular: boolean;
+};
+
+const defaultValues: MiningProfileFormValues = {
+  category: "",
+  dailyReturn: 0,
+  lockinPeriod: 30,
+  minimumAllowedAmount: 100,
+  maximumAllowedAmount: 1000,
+  isPopular: false,
+};
+
+function MiningProfileFormFields({ form }: { form: any }) {
+  return (
+    <div className="space-y-5">
+      <form.Field
+        name="category"
+        validators={{
+          onChange: ({ value }: { value: string }) =>
+            value.trim().length === 0
+              ? "Plan name is required"
+              : value.length > 50
+                ? "Plan name cannot exceed 50 characters"
+                : undefined,
+        }}
+      >
+        {(field: any) => (
+          <div className="space-y-2">
+            <label
+              htmlFor={field.name}
+              className="text-foreground/70 text-xs font-medium"
+            >
+              Plan Name
+            </label>
+            <Input
+              id={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(event) => field.handleChange(event.target.value)}
+              placeholder="e.g. Advanced"
+              maxLength={50}
+              aria-invalid={field.state.meta.errors.length > 0}
+            />
+            {field.state.meta.errors.length > 0 && (
+              <p className="text-xs text-red-500">
+                {field.state.meta.errors.join(", ")}
+              </p>
+            )}
+          </div>
+        )}
+      </form.Field>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <form.Field
+          name="dailyReturn"
+          validators={{
+            onChange: ({ value }: { value: number }) =>
+              !Number.isFinite(value) || value < 0
+                ? "Daily return must be a non-negative number"
+                : undefined,
+          }}
+        >
+          {(field: any) => (
+            <div className="space-y-2">
+              <label
+                htmlFor={field.name}
+                className="text-foreground/70 text-xs font-medium"
+              >
+                Daily Return (%)
+              </label>
+              <div className="relative">
+                <TrendingUp className="text-foreground/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) =>
+                    field.handleChange(Number(event.target.value))
+                  }
+                  className="pl-9"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+              </div>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-red-500">
+                  {field.state.meta.errors.join(", ")}
+                </p>
+              )}
+            </div>
+          )}
+        </form.Field>
+
+        <form.Field
+          name="lockinPeriod"
+          validators={{
+            onChange: ({ value }: { value: number }) =>
+              !Number.isInteger(value) || value <= 0
+                ? "Duration must be a positive whole number"
+                : undefined,
+          }}
+        >
+          {(field: any) => (
+            <div className="space-y-2">
+              <label
+                htmlFor={field.name}
+                className="text-foreground/70 text-xs font-medium"
+              >
+                Duration (Days)
+              </label>
+              <div className="relative">
+                <Clock className="text-foreground/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) =>
+                    field.handleChange(Number(event.target.value))
+                  }
+                  className="pl-9"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+              </div>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-red-500">
+                  {field.state.meta.errors.join(", ")}
+                </p>
+              )}
+            </div>
+          )}
+        </form.Field>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <form.Field
+          name="minimumAllowedAmount"
+          validators={{
+            onChange: ({ value }: { value: number }) =>
+              !Number.isInteger(value) || value <= 0
+                ? "Minimum deposit must be a positive whole number"
+                : undefined,
+          }}
+        >
+          {(field: any) => (
+            <div className="space-y-2">
+              <label
+                htmlFor={field.name}
+                className="text-foreground/70 text-xs font-medium"
+              >
+                Minimum Deposit ($)
+              </label>
+              <div className="relative">
+                <DollarSign className="text-foreground/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) =>
+                    field.handleChange(Number(event.target.value))
+                  }
+                  className="pl-9"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+              </div>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-red-500">
+                  {field.state.meta.errors.join(", ")}
+                </p>
+              )}
+            </div>
+          )}
+        </form.Field>
+
+        <form.Field
+          name="maximumAllowedAmount"
+          validators={{
+            onChange: ({ value }: { value: number }) =>
+              !Number.isInteger(value) || value <= 0
+                ? "Maximum deposit must be a positive whole number"
+                : undefined,
+            onChangeListenTo: ["minimumAllowedAmount"],
+          }}
+        >
+          {(field: any) => (
+            <div className="space-y-2">
+              <label
+                htmlFor={field.name}
+                className="text-foreground/70 text-xs font-medium"
+              >
+                Maximum Deposit ($)
+              </label>
+              <div className="relative">
+                <DollarSign className="text-foreground/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) =>
+                    field.handleChange(Number(event.target.value))
+                  }
+                  className="pl-9"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+              </div>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-red-500">
+                  {field.state.meta.errors.join(", ")}
+                </p>
+              )}
+            </div>
+          )}
+        </form.Field>
+      </div>
+
+      <form.Field name="isPopular">
+        {(field: any) => (
+          <label className="border-foreground/10 bg-foreground/2.5 hover:bg-foreground/5 flex cursor-pointer items-center justify-between gap-4 rounded-lg border p-4 transition-colors">
+            <div className="space-y-1">
+              <span className="text-foreground text-sm font-medium">
+                Popular Plan
+              </span>
+              <p className="text-foreground/50 text-xs">
+                Highlight this plan as a popular choice.
+              </p>
+            </div>
+
+            <input
+              type="checkbox"
+              checked={field.state.value}
+              onChange={(event) => field.handleChange(event.target.checked)}
+              className="accent-primary-500 size-4 shrink-0"
+            />
+          </label>
+        )}
+      </form.Field>
+    </div>
+  );
+}
+
+function MiningProfileFormDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  form,
+  submitLabel,
+  submittingLabel,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: string;
+  form: any;
+  submitLabel: string;
+  submittingLabel: string;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] gap-0 overflow-y-auto p-0 sm:max-w-xl">
+        <div className="p-5 sm:p-6">
+          <DialogHeader className="mb-6">
+            <div className="bg-primary-500/10 text-primary-500 mb-3 flex size-10 items-center justify-center rounded-lg">
+              <Layers className="size-5" />
+            </div>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+
+          <form
+            className="space-y-6"
+            onSubmit={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              void form.handleSubmit();
+            }}
+          >
+            <MiningProfileFormFields form={form} />
+
+            <DialogFooter className="mt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
+                Cancel
+              </Button>
+
+              <form.Subscribe
+                selector={(state: any) => [state.isSubmitting] as const}
+              >
+                {([isSubmitting]: [boolean]) => (
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? submittingLabel : submitLabel}
+                  </Button>
+                )}
+              </form.Subscribe>
+            </DialogFooter>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export function MiningPlans({
   className,
   ...props
 }: ComponentProps<"section">) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<MiningProfile | null>(
+    null,
+  );
 
-  // const plans = [
-  //   {
-  //     id: "p-1",
-  //     name: "Starter",
-  //     dailyReturn: "0.4000%",
-  //     duration: "30 days",
-  //     minDeposit: "$1.00",
-  //     maxDeposit: "$500.00",
-  //     totalReturn: "12.0000%",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: "p-2",
-  //     name: "Basic",
-  //     dailyReturn: "0.5000%",
-  //     duration: "45 days",
-  //     minDeposit: "$501.00",
-  //     maxDeposit: "$3,000.00",
-  //     totalReturn: "22.5000%",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: "p-3",
-  //     name: "Professional",
-  //     dailyReturn: "0.7000%",
-  //     duration: "60 days",
-  //     minDeposit: "$3,001.00",
-  //     maxDeposit: "$8,000.00",
-  //     totalReturn: "42.0000%",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: "p-4",
-  //     name: "Enterprise",
-  //     dailyReturn: "1.0000%",
-  //     duration: "90 days",
-  //     minDeposit: "$8,001.00",
-  //     maxDeposit: "$100,000.00",
-  //     totalReturn: "90.0000%",
-  //     status: "Active",
-  //   },
-  // ];
+  const {
+    data: allMiningProfiles,
+    isLoading: isAllMiningProfilesLoading,
+    isError: isAllMiningProfilesError,
+  } = useReadAllMiningProfiles();
 
-  const { data: plans } = useReadAllMiningPlans();
+  const { mutateAsync: createMiningProfile } = useCreateMiningProfile();
+  const { mutateAsync: updateMiningProfile } = useUpdateMiningProfile();
+  const { mutateAsync: deleteMiningProfile } = useDeleteMiningProfile();
 
-  const [state] = useState<"error" | "loading" | "data">("data");
-  // const [state] = useState<"error" | "loading" | "data">("loading");
-  //  const [state] = useState<"error" | "loading" | "data">("error");
+  const router = useRouter();
+
+  const createForm = useForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      await createMiningProfile({
+        data: {
+          dataToInsert: value,
+        },
+      });
+
+      setIsModalOpen(false);
+      createForm.reset();
+      await router.invalidate();
+    },
+  });
+
+  const updateForm = useForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      if (!selectedProfile) return;
+
+      await updateMiningProfile({
+        data: {
+          identifier: { id: selectedProfile.id },
+          dataToUpdate: value,
+        },
+      });
+
+      setSelectedProfile(null);
+      await router.invalidate();
+    },
+  });
+
+  useEffect(() => {
+    if (isModalOpen) {
+      createForm.reset();
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    if (selectedProfile) {
+      updateForm.reset({
+        category: selectedProfile.category,
+        dailyReturn: selectedProfile.dailyReturn ?? 0,
+        lockinPeriod: selectedProfile.lockinPeriod,
+        minimumAllowedAmount: selectedProfile.minimumAllowedAmount,
+        maximumAllowedAmount: selectedProfile.maximumAllowedAmount,
+        isPopular: selectedProfile.isPopular,
+      });
+    }
+  }, [selectedProfile]);
+
+  const handleDelete = async (plan: MiningProfile) => {
+    await deleteMiningProfile({
+      data: {
+        identifier: { id: plan.id },
+      },
+    });
+
+    await router.invalidate();
+  };
 
   return (
     <section
-      className={cn(`default-padding @container py-10`, className)}
+      className={cn("default-padding @container py-10", className)}
       {...props}
     >
-      <div
-        className={cn(
-          `bg-secondary-500/5 border-secondary-500/20 rounded-2xl border px-6 py-4`,
-        )}
-      >
-        <div className={cn(`flex w-full items-center justify-between`)}>
-          <div className={cn(`flex items-center gap-2`)}>
-            <Layers className={cn(`text-primary-500 size-4`)} />
-            <h2 className={cn(`font-brand-secondary text-sm font-semibold`)}>
-              Mining Plans
-            </h2>
+      <div className="border-secondary-500/20 bg-secondary-500/5 overflow-hidden rounded-2xl border">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary-500/10 text-primary-500 flex size-9 items-center justify-center rounded-lg">
+              <Layers className="size-4" />
+            </div>
+
+            <div>
+              <h2 className="font-brand-secondary text-sm font-semibold">
+                Mining Plans
+              </h2>
+              <p className="text-foreground/50 mt-0.5 text-xs">
+                Manage your available mining plans
+              </p>
+            </div>
           </div>
 
           <Button
             size="sm"
             onClick={() => setIsModalOpen(true)}
-            className={cn(
-              `h-9 gap-1.5 rounded-lg bg-blue-600 px-4 text-xs text-white hover:bg-blue-700`,
-            )}
+            className="gap-1.5"
           >
-            <Plus className={cn(`size-3.5`)} />
+            <Plus className="size-3.5" />
             Add New Mining Plan
           </Button>
         </div>
 
-        <hr className={cn(`border-foreground/20 -mx-6 my-4`)} />
+        <div className="border-foreground/10 border-t" />
 
-        {state === "data" && (
-          <div className={cn(`overflow-x-auto`)}>
-            <table className={cn(`w-full border-collapse text-left`)}>
+        {allMiningProfiles && (
+          <div className="overflow-x-auto px-5 sm:px-6">
+            <table className="w-full min-w-190 border-collapse text-left">
               <thead>
-                <tr
-                  className={cn(
-                    `text-foreground/50 text-2.75 tracking-wider uppercase`,
-                  )}
-                >
-                  <th className={cn(`py-3 font-medium`)}>Plan Name</th>
-                  <th className={cn(`py-3 font-medium`)}>Daily Return</th>
-                  <th className={cn(`py-3 font-medium`)}>Duration</th>
-                  <th className={cn(`py-3 font-medium`)}>Min Deposit</th>
-                  <th className={cn(`py-3 font-medium`)}>Max Deposit</th>
-                  <th className={cn(`py-3 font-medium`)}>Total Return</th>
-                  <th className={cn(`py-3 font-medium`)}>Status</th>
-                  <th className={cn(`py-3 font-medium`)}>Popularity</th>
-                  <th className={cn(`py-3 text-right font-medium`)}>Actions</th>
+                <tr className="text-foreground/50 text-xs tracking-wider uppercase">
+                  <th className="py-4 pr-4 font-medium">Plan Name</th>
+                  <th className="py-4 pr-4 font-medium">Daily Return</th>
+                  <th className="py-4 pr-4 font-medium">Duration</th>
+                  <th className="py-4 pr-4 font-medium">Min Deposit</th>
+                  <th className="py-4 pr-4 font-medium">Max Deposit</th>
+                  <th className="py-4 pr-4 font-medium">Total Return</th>
+                  <th className="py-4 pr-4 font-medium">Popularity</th>
+                  <th className="py-4 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className={cn(`divide-foreground/10 divide-y text-sm`)}>
-                {plans &&
-                  plans.map((plan) => (
-                    <tr key={plan.id} className={cn(`group`)}>
-                      <td className={cn(`py-4 pr-4 font-semibold`)}>
+
+              <tbody className="divide-foreground/10 divide-y text-sm">
+                {allMiningProfiles.map((plan) => (
+                  <tr
+                    key={plan.id}
+                    className="group hover:bg-foreground/2.5 transition-colors"
+                  >
+                    <td className="py-4 pr-4">
+                      <span className="text-foreground font-semibold">
                         {plan.category}
-                      </td>
-                      <td
-                        className={cn(`py-4 pr-4 font-semibold text-green-500`)}
-                      >
-                        {plan.dailyReturn}
-                      </td>
-                      <td
-                        className={cn(`text-foreground/80 py-4 pr-4 text-xs`)}
-                      >
-                        {plan.lockinPeriod}
-                      </td>
-                      <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                        {plan.minimumAllowedAmount}
-                      </td>
-                      <td className={cn(`text-foreground/80 py-4 pr-4`)}>
-                        {plan.maximumAllowedAmount}
-                      </td>
-                      <td
+                      </span>
+                    </td>
+
+                    <td className="py-4 pr-4">
+                      <span className="font-semibold text-green-500">
+                        {plan.dailyReturn}%
+                      </span>
+                    </td>
+
+                    <td className="text-foreground/70 py-4 pr-4 text-xs">
+                      {plan.lockinPeriod} days
+                    </td>
+
+                    <td className="text-foreground/70 py-4 pr-4">
+                      ${plan.minimumAllowedAmount.toLocaleString()}
+                    </td>
+
+                    <td className="text-foreground/70 py-4 pr-4">
+                      ${plan.maximumAllowedAmount.toLocaleString()}
+                    </td>
+
+                    <td className="py-4 pr-4">
+                      <span className="text-primary-400 font-semibold">
+                        {Math.round(
+                          (plan.dailyReturn ?? 0) * plan.lockinPeriod,
+                        )}
+                        %
+                      </span>
+                    </td>
+
+                    <td className="py-4 pr-4">
+                      <span
                         className={cn(
-                          `text-primary-400 py-4 pr-4 font-semibold`,
+                          "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
+                          plan.isPopular
+                            ? "border-blue-500/30 bg-blue-500/10 text-blue-400"
+                            : "border-foreground/10 bg-foreground/5 text-foreground/50",
                         )}
                       >
-                        {Math.round(plan.dailyReturn * plan.lockinPeriod)}
-                      </td>
-                      <td className={cn(`py-4 pr-4`)}>
-                        <span
-                          className={cn(
-                            `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
-                          )}
-                        >
-                          ---"plan"---
-                        </span>
-                      </td>
-                      <td className={cn(`py-4 pr-4`)}>
-                        <span
-                          className={cn(
-                            `inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400`,
-                          )}
-                        >
-                          {plan.isPopular ? "--true--" : "--false--"}
-                        </span>
-                      </td>
-                      <td className={cn(`py-4 text-right`)}>
+                        {plan.isPopular ? "Popular" : "Standard"}
+                      </span>
+                    </td>
+
+                    <td className="py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
                         <Button
+                          type="button"
                           size="sm"
-                          className={cn(
-                            `h-8 gap-1.5 rounded-md bg-blue-600 px-3 text-xs text-white hover:bg-blue-700`,
-                          )}
+                          variant="outline"
+                          onClick={() => setSelectedProfile(plan)}
+                          className="h-8 gap-1.5 px-3 text-xs"
                         >
-                          <Edit className={cn(`size-3.5`)} />
+                          <Edit className="size-3.5" />
                           Edit
                         </Button>
-                      </td>
-                    </tr>
-                  ))}
+
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => void handleDelete(plan)}
+                          className="h-8 gap-1.5 px-3 text-xs"
+                        >
+                          <Trash className="size-3.5" />
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+                {allMiningProfiles.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="py-14 text-center">
+                      <div className="mx-auto flex max-w-xs flex-col items-center">
+                        <div className="bg-foreground/5 text-foreground/40 mb-3 flex size-11 items-center justify-center rounded-full">
+                          <Layers className="size-5" />
+                        </div>
+                        <p className="text-foreground text-sm font-medium">
+                          No mining plans yet
+                        </p>
+                        <p className="text-foreground/50 mt-1 text-xs">
+                          Create your first mining plan to get started.
+                        </p>
+                        <Button
+                          size="sm"
+                          onClick={() => setIsModalOpen(true)}
+                          className="mt-4 gap-1.5"
+                        >
+                          <Plus className="size-3.5" />
+                          Create Plan
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         )}
 
-        {state === "error" && <MiningPlansError></MiningPlansError>}
-
-        {state === "loading" && <MiningPlansLoading></MiningPlansLoading>}
+        {isAllMiningProfilesError && <MiningPlansError />}
+        {isAllMiningProfilesLoading && <MiningPlansLoading />}
       </div>
 
-      {/* Add Mining Plan Modal */}
-      {isModalOpen && (
-        <div
-          className={cn(
-            `fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4`,
-          )}
-        >
-          <div
-            className={cn(
-              `bg-background border-foreground/20 relative w-full max-w-lg rounded-2xl border p-6 shadow-2xl`,
-            )}
-          >
-            <div className={cn(`flex items-center justify-between pb-4`)}>
-              <div className={cn(`flex items-center gap-2`)}>
-                <Layers className={cn(`text-primary-500 size-4`)} />
-                <h3
-                  className={cn(`font-brand-secondary text-base font-semibold`)}
-                >
-                  Add New Mining Plan
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className={cn(
-                  `bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground flex size-8 items-center justify-center rounded-lg transition-colors`,
-                )}
-              >
-                <X className={cn(`size-4`)} />
-              </button>
-            </div>
+      <MiningProfileFormDialog
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        title="Create Mining Plan"
+        description="Configure the details and earning parameters for your new mining plan."
+        form={createForm}
+        submitLabel="Create Plan"
+        submittingLabel="Creating..."
+      />
 
-            <hr className={cn(`border-foreground/20 -mx-6 mb-6`)} />
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setIsModalOpen(false);
-              }}
-              className={cn(`space-y-4`)}
-            >
-              <div className={cn(`space-y-1.5`)}>
-                <label className={cn(`text-foreground/70 text-xs font-medium`)}>
-                  Plan Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Advanced"
-                  className={cn(
-                    `border-foreground/20 bg-foreground/5 text-foreground placeholder:text-foreground/40 focus:ring-secondary-500 h-10 w-full rounded-lg border px-3 text-xs focus:ring-1 focus:outline-none`,
-                  )}
-                  required
-                />
-              </div>
-
-              <div className={cn(`grid grid-cols-2 gap-4`)}>
-                <div className={cn(`space-y-1.5`)}>
-                  <label
-                    className={cn(`text-foreground/70 text-xs font-medium`)}
-                  >
-                    Daily Return (%)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="0.6000%"
-                    className={cn(
-                      `border-foreground/20 bg-foreground/5 text-foreground placeholder:text-foreground/40 focus:ring-secondary-500 h-10 w-full rounded-lg border px-3 text-xs focus:ring-1 focus:outline-none`,
-                    )}
-                    required
-                  />
-                </div>
-                <div className={cn(`space-y-1.5`)}>
-                  <label
-                    className={cn(`text-foreground/70 text-xs font-medium`)}
-                  >
-                    Duration (Days)
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="30"
-                    className={cn(
-                      `border-foreground/20 bg-foreground/5 text-foreground placeholder:text-foreground/40 focus:ring-secondary-500 h-10 w-full rounded-lg border px-3 text-xs focus:ring-1 focus:outline-none`,
-                    )}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={cn(`grid grid-cols-2 gap-4`)}>
-                <div className={cn(`space-y-1.5`)}>
-                  <label
-                    className={cn(`text-foreground/70 text-xs font-medium`)}
-                  >
-                    Min Deposit ($)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="100.00"
-                    className={cn(
-                      `border-foreground/20 bg-foreground/5 text-foreground placeholder:text-foreground/40 focus:ring-secondary-500 h-10 w-full rounded-lg border px-3 text-xs focus:ring-1 focus:outline-none`,
-                    )}
-                    required
-                  />
-                </div>
-                <div className={cn(`space-y-1.5`)}>
-                  <label
-                    className={cn(`text-foreground/70 text-xs font-medium`)}
-                  >
-                    Max Deposit ($)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="1000.00"
-                    className={cn(
-                      `border-foreground/20 bg-foreground/5 text-foreground placeholder:text-foreground/40 focus:ring-secondary-500 h-10 w-full rounded-lg border px-3 text-xs focus:ring-1 focus:outline-none`,
-                    )}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={cn(`flex items-center justify-end gap-3 pt-4`)}>
-                <Button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className={cn(
-                    `bg-foreground/10 hover:bg-foreground/20 text-foreground h-10 rounded-lg px-4 text-xs`,
-                  )}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className={cn(
-                    `h-10 rounded-lg bg-blue-600 px-6 text-xs text-white hover:bg-blue-700`,
-                  )}
-                >
-                  Save Plan
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <MiningProfileFormDialog
+        open={Boolean(selectedProfile)}
+        onOpenChange={(open) => {
+          if (!open) setSelectedProfile(null);
+        }}
+        title="Update Mining Plan"
+        description="Modify the details and earning parameters of this mining plan."
+        form={updateForm}
+        submitLabel="Save Changes"
+        submittingLabel="Updating..."
+      />
     </section>
   );
 }

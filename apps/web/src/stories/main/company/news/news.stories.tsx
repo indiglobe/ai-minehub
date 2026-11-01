@@ -1,5 +1,5 @@
 import News from "@/components/main/company/news/news";
-import type { serverFn__readAllNewsSchema } from "@/integrations/server-function/news";
+import type { serverFn__readAllNewsSchema } from "@/integrations/tanstack/server-function/news.sfn";
 import type {
   TypedMetaOptions,
   TypedStoryOptions,

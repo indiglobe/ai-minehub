@@ -1,4 +1,4 @@
-import type { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
+import type { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readAllMiningProfiles() {

@@ -1,4 +1,4 @@
-import type { serverFn__readAllTradingOrders } from "@/integrations/server-function/trading-order";
+import type { serverFn__readAllTradingOrders } from "@/integrations/tanstack/server-function/trading-order.sfn";
 import type { DeepPartial } from "@/utils/types/storybook";
 
 export function mocked__serverFn__readAllTradingOrders() {

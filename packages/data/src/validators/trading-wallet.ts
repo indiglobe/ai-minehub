@@ -1,29 +1,27 @@
 import z from "zod";
 
-export const create__TradingWalletSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const create__TradingWalletSchema = z.object({
   dataToInsert: z.object({
     balance: z.number().optional(),
     associatedUser: z.string(),
   }),
 });
 
-export const read__AllTradingWalletsSchema = z
-  .object({
-    queryOptions: z
-      .object({
-        skip: z.number().optional(),
-        limit: z.number().optional(),
-      })
-      .optional(),
-    joinOptions: z
-      .object({
-        user: z.literal(true).optional(),
-      })
-      .optional(),
-  })
-  .optional();
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
 
-export const read__OneTradingWalletSchema = z.object({
+const read__OneTradingWalletSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
@@ -34,29 +32,29 @@ export const read__OneTradingWalletSchema = z.object({
   ]),
 });
 
-export const TUpdate__TradingWalletSchema = z.object({
+/**
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ * ==========================================
+ */
+
+const update__BalanceSchema = z.object({
   identifier: z.union([
     z.object({
       id: z.string(),
     }),
     z.object({
-      associatedUser: z.string(),
+      associatedUserId: z.string(),
     }),
   ]),
   dataToUpdate: z.object({
-    balance: z.number().nullish(),
-    createdAt: z.date().optional(),
-    updatedAt: z.date().optional(),
+    balance: z.number(),
   }),
 });
 
-export const delete__TradingWalletSchema = z.object({
-  identifier: z.union([
-    z.object({
-      id: z.string(),
-    }),
-    z.object({
-      associatedUser: z.string(),
-    }),
-  ]),
-});
+export {
+  create__TradingWalletSchema,
+  read__OneTradingWalletSchema,
+  update__BalanceSchema,
+};

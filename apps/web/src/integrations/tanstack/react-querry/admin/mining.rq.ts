@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { serverFn__readAllMiningProfiles } from "@/integrations/server-function/mining-profile";
-import { serverFn__readAllMiningOrders } from "@/integrations/server-function/mining-order";
+import { serverFn__readAllMiningProfiles } from "@/integrations/tanstack/server-function/mining-profile.sfn";
+import { serverFn__readAllMiningOrders } from "@/integrations/tanstack/server-function/mining-order.sfn";
 import type { INVESTMENT_STATUS } from "@repo/utils/db-enums";
 
 type TINVESTMENT_STATUS = (typeof INVESTMENT_STATUS)[number];
