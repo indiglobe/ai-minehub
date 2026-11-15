@@ -1,0 +1,1 @@
+ALTER TABLE `chat` MODIFY COLUMN `sent_by_id` char(10) NOT NULL;

@@ -6,14 +6,18 @@ import { z } from "zod";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { tryCatch } from "@repo/utils/try-catch";
-import {
-  useCreateMiningWalletDeposits,
-  useCreateTradingWalletDeposits,
-  useReadMiningWallet,
-  useReadTradingWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { useRouteContext } from "@tanstack/react-router";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@repo/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
+import { useReadOneMiningWallet } from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
+import { useReadOneTradingWallet } from "@/integrations/tanstack/react-querry/trading-wallet/basic.rq";
+import { useCreateMiningWalletDeposit } from "@/integrations/tanstack/react-querry/mining-wallet-deposits/basic.rq";
+import { useCreateTradingWalletDeposit } from "@/integrations/tanstack/react-querry/trading-wallet-deposits/basic.rq";
 
 const quickAmounts = [50, 100, 500, 1000];
 
@@ -47,17 +51,23 @@ export function DepositForm({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { userDetailsFromCookie } = useRouteContext({
+  const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/",
   });
 
   const [file, setFile] = useState<File | null>(null);
 
-  const { mutateAsync: miningWalletDeposits } = useCreateMiningWalletDeposits();
-  const { data: miningWallet } = useReadMiningWallet();
-  const { data: tradingWallet } = useReadTradingWallet();
+  const { mutateAsync: miningWalletDeposits } = useCreateMiningWalletDeposit();
+  const { data: miningWallet } = useReadOneMiningWallet({
+    associatedUserId: userId,
+  });
+  const { data: tradingWallet } = useReadOneTradingWallet({
+    associatedUserId: userId,
+  });
   const { mutateAsync: tradingWalletDeposits } =
-    useCreateTradingWalletDeposits();
+    useCreateTradingWalletDeposit();
 
   const form = useForm({
     defaultValues,
@@ -98,8 +108,6 @@ export function DepositForm({
         throw new Error(`Error in parsing in subnit`);
       }
       const { amount, paymentMethod, transactionHash } = value;
-
-      const { userId } = userDetailsFromCookie;
 
       if (value.destinationWallet === "Mining Wallet") {
         const [depositingToMiningWalletError] = await tryCatch(
@@ -201,7 +209,6 @@ export function DepositForm({
                 value={field.state.value}
                 onValueChange={(value) =>
                   field.handleChange(
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     value as DepositFormValues["destinationWallet"],
                   )
                 }

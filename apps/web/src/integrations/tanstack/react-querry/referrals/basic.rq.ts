@@ -1,11 +1,18 @@
 import { serverFn__readReferrals } from "@/integrations/tanstack/server-function/user.sfn";
+
 import { queryOptions, useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 
-export const querryKeys = {
-  all: () => ["referrals"],
-};
+export const queryKeys = {
+  all: () => ["referrals", "basic"],
+
+  withIdentifier: {
+    all: (identifier: { id: string } | { email: string }) => [
+      ...queryKeys.all(),
+      identifier,
+    ],
+  },
+} as const;
 
 /**
  * ==========================================
@@ -14,27 +21,21 @@ export const querryKeys = {
  * ==========================================
  */
 
-function useReadReferrals() {
+function useReadReferrals(identifier: { id: string } | { email: string }) {
   const readReferrals = useServerFn(serverFn__readReferrals);
-
-  const {
-    userDetailsFromCookie: { email },
-  } = useRouteContext({
-    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
-  });
 
   return useQuery(
     queryOptions({
-      queryKey: querryKeys.all(),
+      queryKey: queryKeys.withIdentifier.all(identifier),
 
       queryFn: () =>
         readReferrals({
           data: {
-            identifier: {
-              email,
-            },
+            identifier,
           },
         }),
+
+      enabled: "id" in identifier ? !!identifier.id : !!identifier.email,
     }),
   );
 }

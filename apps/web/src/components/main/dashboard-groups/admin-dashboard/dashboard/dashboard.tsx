@@ -36,7 +36,6 @@ import {
   UserGrowthCardError,
   UserGrowthCardLoading,
 } from "@/components/main/dashboard-groups/admin-dashboard/dashboard/boundary-comps";
-import {} from "@/integrations/tanstack/react-querry/dashboard/admin.rq";
 import {
   useReadUserCount,
   useReadUserMonthlyStats,
@@ -1088,7 +1087,7 @@ export function PendingWithdrawalsTable({
           isPendingTradingWalletWithdrawlsLoading) && (
           <PendingWithdrawalsTableLoading />
         )}
-        
+
         {pendingMiningWalletWithdraw && pendingTradingWalletWithdraw && (
           <>
             {[...pendingMiningWalletWithdraw, ...pendingTradingWalletWithdraw]

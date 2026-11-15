@@ -1,10 +1,3 @@
-import {
-  useCreateTradingWallet,
-  useReadTradingWallet,
-  useCreateMiningWallet,
-  useReadMiningWallet,
-  useInvestmentData,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { useRouteContext } from "@tanstack/react-router";
@@ -16,7 +9,16 @@ import {
   StatCardHeadingIcon,
   StatCardData,
   StatCardFooter,
-} from "./page-ui";
+} from "@/components/main/dashboard-groups/user-dashboard/dashboard/page-ui";
+import {
+  useCreateMiningWallet,
+  useReadOneMiningWallet,
+} from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
+import {
+  useCreateTradingWallet,
+  useReadOneTradingWallet,
+} from "@/integrations/tanstack/react-querry/trading-wallet/basic.rq";
+import { useReadAllMiningOrders } from "@/integrations/tanstack/react-querry/mining-order/basic.rq";
 
 export function MiningWallet() {
   const { userDetailsFromCookie } = useRouteContext({
@@ -28,7 +30,9 @@ export function MiningWallet() {
     data: miningWallet,
     isError: isMiningWalletError,
     isLoading: isMiningWalletLoading,
-  } = useReadMiningWallet();
+  } = useReadOneMiningWallet({
+    associatedUserId: userDetailsFromCookie.userId,
+  });
 
   return (
     <StatCard>
@@ -104,7 +108,9 @@ export function TradingWallet() {
     data: tradingwallet,
     isError: isTradingWalletError,
     isLoading: isTradingWalletLoading,
-  } = useReadTradingWallet();
+  } = useReadOneTradingWallet({
+    associatedUserId: userDetailsFromCookie.userId,
+  });
 
   return (
     <StatCard>
@@ -171,11 +177,23 @@ export function TradingWallet() {
 }
 
 export function InvestedAmount() {
+  const { userDetailsFromCookie } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+  });
+
   const {
-    data: investment,
-    isError: isInvestmentError,
-    isLoading: isInvestmentLoading,
-  } = useInvestmentData();
+    data: allMiningOrders,
+    isError: isAllMiningOrdersError,
+    isLoading: isAllMiningOrdersLoading,
+  } = useReadAllMiningOrders({
+    userId: userDetailsFromCookie.userId,
+    miningStatus: ["ACTIVE", "COMPLETED"],
+  });
+
+  const isError = isAllMiningOrdersError;
+  const isLoading = isAllMiningOrdersLoading;
+  const investedAmount =
+    allMiningOrders?.reduce((p, n) => (p = p + n.amountInvested), 0) ?? 0;
 
   return (
     <StatCard>
@@ -186,7 +204,7 @@ export function InvestedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isInvestmentError && (
+      {isError && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">
             Unable to load investment
@@ -198,7 +216,7 @@ export function InvestedAmount() {
         </div>
       )}
 
-      {isInvestmentLoading && (
+      {isLoading && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-200 border-t-red-500" />
@@ -209,10 +227,10 @@ export function InvestedAmount() {
         </div>
       )}
 
-      {investment && (
+      {!isError && !isLoading && (allMiningOrders || investedAmount === 0) && (
         <>
           <StatCardData className={cn("text-red-500")}>
-            $ {investment.investedAmount}
+            $ {investedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount invested</StatCardFooter>
@@ -223,11 +241,21 @@ export function InvestedAmount() {
 }
 
 export function GainedAmount() {
-  const {
-    data: investment,
-    isError: isInvestmentError,
-    isLoading: isInvestmentLoading,
-  } = useInvestmentData();
+  const { userDetailsFromCookie } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+  });
+
+  const { data: allMiningOrders, status: allMiningOrdersFetchingStatus } =
+    useReadAllMiningOrders({ userId: userDetailsFromCookie.userId });
+
+  const gainedAmount =
+    allMiningOrders?.reduce((p, n) => {
+      if (n.miningStatus === "COMPLETED") {
+        p = p + (!n.amountReceived ? 0 : n.amountReceived - n.amountInvested);
+      }
+
+      return p;
+    }, 0) ?? 0;
 
   return (
     <StatCard>
@@ -238,7 +266,7 @@ export function GainedAmount() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isInvestmentError && (
+      {allMiningOrdersFetchingStatus === "error" && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">Unable to load profit</p>
 
@@ -248,7 +276,7 @@ export function GainedAmount() {
         </div>
       )}
 
-      {isInvestmentLoading && (
+      {allMiningOrdersFetchingStatus === "pending" && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />
@@ -257,10 +285,10 @@ export function GainedAmount() {
         </div>
       )}
 
-      {investment && (
+      {allMiningOrdersFetchingStatus === "success" && (
         <>
           <StatCardData className={cn("text-green-500")}>
-            $ {investment.gainedAmount}
+            $ {gainedAmount}
           </StatCardData>
 
           <StatCardFooter>Amount profit</StatCardFooter>
@@ -271,11 +299,21 @@ export function GainedAmount() {
 }
 
 export function ActiveInvestment() {
-  const {
-    data: investment,
-    isError: isInvestmentError,
-    isLoading: isInvestmentLoading,
-  } = useInvestmentData();
+  const { userDetailsFromCookie } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+  });
+
+  const { data: allMiningOrders, status: allMiningOrdersFetchingStatus } =
+    useReadAllMiningOrders({ userId: userDetailsFromCookie.userId });
+
+  const activeInvestCount =
+    allMiningOrders?.reduce((p, n) => {
+      if (n.miningStatus === "ACTIVE") {
+        p = p + 1;
+      }
+
+      return p;
+    }, 0) ?? 0;
 
   return (
     <StatCard>
@@ -286,7 +324,7 @@ export function ActiveInvestment() {
         </StatCardHeadingIcon>
       </StatCardHeader>
 
-      {isInvestmentError && (
+      {allMiningOrdersFetchingStatus === "error" && (
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-destructive font-medium">
             Unable to load investment
@@ -298,7 +336,7 @@ export function ActiveInvestment() {
         </div>
       )}
 
-      {isInvestmentLoading && (
+      {allMiningOrdersFetchingStatus === "pending" && (
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-500" />
@@ -309,10 +347,10 @@ export function ActiveInvestment() {
         </div>
       )}
 
-      {investment && (
+      {allMiningOrdersFetchingStatus === "success" && (
         <>
           <StatCardData className={cn("text-green-500")}>
-            {investment.activeInvestmentsCount}
+            {activeInvestCount}
           </StatCardData>
 
           <StatCardFooter>Active sessions</StatCardFooter>

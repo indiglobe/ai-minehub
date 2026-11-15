@@ -10,10 +10,6 @@ import {
   TradingWallet,
 } from "@/components/main/dashboard-groups/user-dashboard/dashboard/dashboard-stats";
 import { extractMonthName } from "@repo/utils/date";
-import {
-  useReadActiveMiningSessions,
-  useRecentTransactionsHistory,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { round } from "es-toolkit/math";
 import {
   ActiveDenoteBadge,
@@ -24,6 +20,8 @@ import {
 } from "@/components/main/dashboard-groups/user-dashboard/dashboard/page-ui";
 import { Button } from "@repo/ui/button";
 import { env } from "@repo/env/client";
+import { useReadAllMiningOrders } from "@/integrations/tanstack/react-querry/mining-order/basic.rq";
+import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/referal-earning/basic.rq";
 
 export function UserDashboard() {
   return (
@@ -83,11 +81,19 @@ export function ActiveMiningSession({
   className,
   ...props
 }: ComponentProps<"section">) {
+  const { userDetailsFromCookie } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+  });
+
   const {
     data: activeMiningSessions,
-    isPending,
-    error,
-  } = useReadActiveMiningSessions();
+    isPending: isActiveMiningSessionsPending,
+    isError: isActiveMiningSessionsError,
+  } = useReadAllMiningOrders({
+    userId: userDetailsFromCookie.userId,
+    miningStatus: "ACTIVE",
+  });
+  userDetailsFromCookie.userId;
 
   return (
     <section className={cn(``, className)} {...props}>
@@ -107,7 +113,7 @@ export function ActiveMiningSession({
 
         <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
 
-        {error && (
+        {isActiveMiningSessionsError && (
           <div
             className={cn(
               `flex flex-col items-center justify-center py-10 text-center`,
@@ -132,7 +138,7 @@ export function ActiveMiningSession({
           </div>
         )}
 
-        {isPending && (
+        {isActiveMiningSessionsPending && (
           <div className={cn(`space-y-5 py-4`)}>
             <div className={cn(`flex w-full gap-4`)}>
               <div
@@ -233,7 +239,7 @@ export function ActiveMiningSession({
                 const createdAt = new Date(activeSession.createdAt).getTime();
                 const durationMs =
                   // ONE_DAY * activeSession.miningProfile?.lockinPeriod;
-                  ONE_DAY * activeSession.miningProfile!.lockinPeriod;
+                  ONE_DAY * activeSession.miningProfile.lockinPeriod;
                 const elapsedMs = now - createdAt;
                 let progress = (elapsedMs / durationMs) * 100;
 
@@ -241,7 +247,7 @@ export function ActiveMiningSession({
                 const remainingMs = Math.max(0, durationMs - elapsedMs);
                 const remainingDays = Math.ceil(remainingMs / ONE_DAY);
                 const approxReturnTillToday =
-                  activeSession.miningProfile!.dailyReturn *
+                  activeSession.miningProfile.dailyReturn *
                   (elapsedMs / ONE_DAY);
 
                 return (
@@ -270,7 +276,7 @@ export function ActiveMiningSession({
 
                         <div>
                           <h2 className={cn(`font-semibold`)}>
-                            {activeSession.miningProfile!.category}
+                            {activeSession.miningProfile.category}
                           </h2>
 
                           <p className={cn(`text-foreground/50 text-xs`)}>
@@ -345,7 +351,49 @@ export function RecentTransaction({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data, isError, isLoading } = useRecentTransactionsHistory();
+  const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)",
+  });
+
+  // const { data, isError, isLoading } = useRecentTransactionsHistory();
+
+  const { data: allMiningOrders, status: allMiningOrdersFetchingStatus } =
+    useReadAllMiningOrders({ userId });
+  const { data: referalEarning, status: referalEarningFetchingStatus } =
+    useReadAllReferalEarning({ userId });
+
+  const data = [
+    ...(allMiningOrders ?? []).map((order) => ({
+      id: order.id,
+      category: "Mining order",
+      createdAt: order.createdAt,
+      amount: order.amountInvested,
+      status: order.miningStatus,
+      type: "spend" as const,
+    })),
+    ...(referalEarning ?? [])
+      .map((order) => ({
+        amount: order.amount,
+        category: "Referrals",
+        type: "gain" as const,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+        id: order.id,
+        status: "COMPLETED",
+      })),
+  ]
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .slice(0, 10);
+
+  const isLoading =
+    allMiningOrdersFetchingStatus === "pending" ||
+    referalEarningFetchingStatus === "pending";
+
+  const isError =
+    allMiningOrdersFetchingStatus === "error" ||
+    referalEarningFetchingStatus === "error";
 
   return (
     <section className={cn(``, className)} {...props}>
@@ -356,9 +404,9 @@ export function RecentTransaction({
       >
         <div className={cn(`flex w-full items-center justify-between`)}>
           <h2 className={cn(`font-brand-secondary`)}>⛏️ Recent Transactions</h2>
-          <Link to="/" className={cn(`text-sm text-purple-500`)}>
+          {/* <Link to="/" className={cn(`text-sm text-purple-500`)}>
             View all →
-          </Link>
+          </Link> */}
         </div>
 
         <hr className={cn(`border-foreground/20 -mx-6 my-5`)} />
@@ -458,12 +506,12 @@ export function RecentTransaction({
                           >
                             <span
                               className={cn(`text-sm font-semibold`, {
-                                "text-green-500":
-                                  type === "gain" || type === "receive",
+                                // "text-green-500":
+                                //   type === "gain" || type === "receive",
                                 "text-red-500": type === "spend",
                               })}
                             >
-                              {(type === "gain" || type === "receive") && "+"}
+                              {/* {(type === "gain" || type === "receive") && "+"} */}
                               {type === "spend" && "-"} $ {amount}
                             </span>
                             <span

@@ -9,10 +9,10 @@ import {
   ReferralStatHeading,
   ReferralStatIcon,
 } from "./page-ui";
-import { useReadReferrals } from "@/integrations/tanstack/react-querry/referrals/referrals";
+import { useReadReferrals } from "@/integrations/tanstack/react-querry/referrals/basic.rq";
 import { Image } from "@unpic/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@repo/ui/table";
-import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/dashboard/user.rq";
+import { useReadAllReferalEarning } from "@/integrations/tanstack/react-querry/referal-earning/basic.rq";
 
 export function Referral() {
   return (
@@ -368,7 +368,13 @@ export function YourReferrals({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data, isLoading, isError } = useReadReferrals();
+  const {
+    userDetailsFromCookie: { email },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/referral/",
+  });
+
+  const { data, isLoading, isError } = useReadReferrals({ email: email });
 
   return (
     <section className={cn(`default-padding pb-20`, className)} {...props}>
@@ -456,7 +462,10 @@ export function YourReferrals({
                 </Thead>
 
                 <Tbody className={cn(`*:even:bg-slate-800/30`)}>
+                  {/* eslint-disable-next-line no-shadow */}
                   {data.map(({ avatarUrl, email, fullName, id }) => {
+                    if (!email) return null;
+
                     return (
                       <Tr
                         key={id}

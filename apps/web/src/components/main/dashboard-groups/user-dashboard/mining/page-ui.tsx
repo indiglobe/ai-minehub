@@ -17,12 +17,9 @@ import {
 } from "@repo/ui/dialog";
 import { Input } from "@repo/ui/input";
 import z from "zod";
-import {
-  useCreateMiningOrder,
-  useReadMiningWallet,
-  useUpdateOneMiningWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { tryCatch } from "@repo/utils/try-catch";
+import { useReadOneMiningWallet, useUpdateOneMiningWallet } from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
+import { useCreateMiningOrder } from "@/integrations/tanstack/react-querry/mining-order/basic.rq";
 
 export function PassiveIncome({
   className,
@@ -183,7 +180,9 @@ export function PassiveIncomeCTA({
   userId: string;
 } & ComponentProps<typeof Button>) {
   const [open, setOpen] = useState(false);
-  const { data: miningWallet } = useReadMiningWallet();
+  const { data: miningWallet } = useReadOneMiningWallet({
+    associatedUserId: userId,
+  });
   const miningWalletBalance = miningWallet?.balance ?? 0;
 
   const investmentSchema = createInvestmentSchema(miningWalletBalance);

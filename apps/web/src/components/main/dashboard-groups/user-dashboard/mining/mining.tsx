@@ -1,4 +1,3 @@
-import { useReadMiningWallet } from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
 import { ActiveMiningSession } from "../dashboard/dashboard";
@@ -20,6 +19,7 @@ import {
 } from "@tanstack/react-router";
 import { Button } from "@repo/ui/button";
 import { AlertCircle, LoaderCircle, RefreshCw } from "lucide-react";
+import { useReadOneMiningWallet } from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
 
 export function Mining() {
   return (
@@ -69,14 +69,17 @@ export function MiningBalance({
   ...props
 }: ComponentProps<"section">) {
   const {
-    data: miningWalletData,
-    isError: isMiningWalletError,
-    isLoading: isMiningWalletLoading,
-  } = useReadMiningWallet();
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/mining/",
+  });
+
+  const { data: miningWalletData, status: miningWalletDataFetchingStatus } =
+    useReadOneMiningWallet({ associatedUserId: userId });
 
   return (
     <section className={cn(`default-padding`, className)} {...props}>
-      {isMiningWalletError && (
+      {miningWalletDataFetchingStatus === "error" && (
         <div className="flex min-h-38 w-full items-center justify-between gap-4 rounded-2xl border border-red-500/20 bg-[#111118] px-6 py-7 md:px-8">
           <div className="flex items-center gap-4">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
@@ -102,7 +105,7 @@ export function MiningBalance({
         </div>
       )}
 
-      {isMiningWalletLoading && (
+      {miningWalletDataFetchingStatus === "pending" && (
         <div className="relative flex min-h-38 w-full items-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-6 py-7 md:px-8">
           <div className="absolute inset-y-0 left-0 w-1 bg-linear-to-b from-[#626ee7] to-[#7849b7]" />
 
@@ -132,7 +135,7 @@ export function MiningBalance({
         </div>
       )}
 
-      {!isMiningWalletError && !isMiningWalletLoading && (
+      {miningWalletDataFetchingStatus == "success" && (
         <div
           className={cn(
             `border-foreground/10 3xs:px-6 flex min-h-38 w-full items-center justify-between rounded-2xl border bg-[#111118] px-8 py-7 md:px-8`,

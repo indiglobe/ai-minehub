@@ -1,9 +1,3 @@
-import {
-  useCreateMiningWalletWithdraws,
-  useCreateTradingWalletWithdraw,
-  useReadMiningWallet,
-  useReadTradingWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
 import { cn } from "@repo/styles/cn";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
@@ -18,6 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select";
+import { useReadOneMiningWallet } from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
+import { useReadOneTradingWallet } from "@/integrations/tanstack/react-querry/trading-wallet/basic.rq";
+import { useCreateMiningWalletWithdraw } from "@/integrations/tanstack/react-querry/mining-wallet-withdraw/basic.rq";
+import { useCreateTradingWalletWithdraw } from "@/integrations/tanstack/react-querry/trading-wallet-withdraw/basic.rq";
 
 const quickAmounts = [50, 100, 500, 1000];
 
@@ -46,16 +44,22 @@ export function WithdrawForm({
   className,
   ...props
 }: ComponentProps<"section">) {
-  const { data: miningWallet } = useReadMiningWallet();
-  const { data: tradingWallet } = useReadTradingWallet();
-  const { mutateAsync: createMiningWalletWithdraws } =
-    useCreateMiningWalletWithdraws();
-  const { mutateAsync: createTradingWalletWithdraw } =
-    useCreateTradingWalletWithdraw();
-
-  const { userDetailsFromCookie } = useRouteContext({
+  const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
     from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/",
   });
+
+  const { data: miningWallet } = useReadOneMiningWallet({
+    associatedUserId: userId,
+  });
+  const { data: tradingWallet } = useReadOneTradingWallet({
+    associatedUserId: userId,
+  });
+  const { mutateAsync: createMiningWalletWithdraws } =
+    useCreateMiningWalletWithdraw();
+  const { mutateAsync: createTradingWalletWithdraw } =
+    useCreateTradingWalletWithdraw();
 
   const form = useForm({
     defaultValues,
@@ -94,8 +98,6 @@ export function WithdrawForm({
       if (!selectedWallet?.id) {
         throw new Error(`${sourceWallet} is not available.`);
       }
-
-      const { userId } = userDetailsFromCookie;
 
       if (value.sourceWallet === "Mining Wallet") {
         const [miningWalletWithdrawsError] = await tryCatch(

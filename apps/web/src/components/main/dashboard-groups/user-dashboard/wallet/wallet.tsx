@@ -1,12 +1,11 @@
 import { cn } from "@repo/styles/cn";
 import type { ComponentProps } from "react";
 import { useState } from "react";
-import { DepositForm } from "./deposit-form";
-import { WithdrawForm } from "./withdraw-form";
-import {
-  useReadMiningWallet,
-  useReadTradingWallet,
-} from "@/integrations/tanstack/react-querry/dashboard/user.rq";
+import { DepositForm } from "@/components/main/dashboard-groups/user-dashboard/wallet/deposit-form";
+import { WithdrawForm } from "@/components/main/dashboard-groups/user-dashboard/wallet/withdraw-form";
+import { useRouteContext } from "@tanstack/react-router";
+import { useReadOneMiningWallet } from "@/integrations/tanstack/react-querry/mining-wallet/basic.rq";
+import { useReadOneTradingWallet } from "@/integrations/tanstack/react-querry/trading-wallet/basic.rq";
 
 export function Wallet({ className, ...props }: ComponentProps<"section">) {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
@@ -113,15 +112,21 @@ export function WalletBalance({
   ...props
 }: ComponentProps<"section">) {
   const {
+    userDetailsFromCookie: { userId },
+  } = useRouteContext({
+    from: "/(without-header-footer)/(authenticated)/(existing-user)/(basic)/wallet/",
+  });
+
+  const {
     data: miningWalletData,
     isLoading: isMiningWalletLoading,
     isError: isMiningWalletError,
-  } = useReadMiningWallet();
+  } = useReadOneMiningWallet({ associatedUserId: userId });
   const {
     data: tradingWalletData,
     isLoading: isTradingWalletLoading,
     isError: isTradingWalletError,
-  } = useReadTradingWallet();
+  } = useReadOneTradingWallet({associatedUserId: userId});
 
   return (
     <section

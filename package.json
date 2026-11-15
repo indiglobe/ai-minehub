@@ -1,6 +1,11 @@
 {
   "name": "ai-minehub",
   "scripts": {
+    "START OF MAIN SCRIPTS": "==============================",
+    "build:packages:dev:apps": "turbo run build --filter=@repo/* && turbo run dev --filter=!@repo/*",
+    "build:packages:dev:app:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
+    "build:packages:dev:app:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket",
+    "END OF MAIN SCRIPTS": "==============================",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:apps": "turbo run dev --filter=!@repo/*",
@@ -11,12 +16,7 @@
     "format": "turbo run format",
     "lint:staged": "turbo run lint:staged",
     "turbo:ui": "turbo devtools --port 8520",
-    "check-types": "turbo run check-types",
-    "START OF MAIN SCRIPTS":"==============================",
-    "build:packages:dev:apps": "turbo run build --filter=@repo/* && turbo run dev --filter=!@repo/*",
-    "build:packages:dev:app:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
-    "build:packages:dev:app:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket",
-    "END OF MAIN SCRIPTS":"=============================="
+    "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "husky": "^9.1.7",
@@ -35,5 +35,5 @@
   "packageManager": "pnpm@10.27.0",
   "engines": {
     "node": ">=18"
-  } 
+  }
 }

@@ -1,7 +1,17 @@
 import { useState } from "react";
 import type { ComponentProps } from "react";
 import { cn } from "@repo/styles/cn";
-import { Users, Eye, Wallet, UserCog, Search, ChevronDown } from "lucide-react";
+import {
+  Users,
+  Eye,
+  Wallet,
+  UserCog,
+  Search,
+  ChevronDown,
+  AlertCircle,
+  Loader2,
+  ExternalLink,
+} from "lucide-react";
 import { Button } from "@repo/ui/button";
 import { Link, useRouter } from "@tanstack/react-router";
 import { AllUsersError, AllUsersLoading } from "./boundary-comps";
@@ -24,6 +34,7 @@ import {
 } from "@repo/ui/select";
 import {
   useReadAllUsers,
+  useReadOneUser,
   useUpdateUser,
 } from "@/integrations/tanstack/react-querry/user/admin.rq";
 import { useForm } from "@tanstack/react-form";
@@ -155,12 +166,9 @@ export function AllUsers({ className, ...props }: ComponentProps<"section">) {
                             {item.fullName}
                           </span>
                           {item.referrerId && (
-                            <span
-                              className={cn(
-                                `text-2.5 font-semibold text-green-500`,
-                              )}
-                            >
-                              Referred
+                            <span className="inline-flex flex-wrap items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-500">
+                              <span>Referred by</span>
+                              <ReferrerDetails userId={item.referrerId} />
                             </span>
                           )}
                         </div>
@@ -393,5 +401,34 @@ function ManageUserDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function ReferrerDetails({ userId }: { userId: string }) {
+  const { data: user, status } = useReadOneUser(userId);
+
+  if (status === "pending") {
+    return (
+      <span className="text-muted-foreground inline-flex items-center gap-1.5">
+        <Loader2 className="size-3 animate-spin" />
+        <span className="text-xs font-medium">Loading referrer...</span>
+      </span>
+    );
+  }
+
+  if (status === "error" || !user) {
+    return (
+      <span className="text-destructive inline-flex items-center gap-1">
+        <AlertCircle className="size-3" />
+        <span className="text-xs font-medium">Unable to load referrer</span>
+      </span>
+    );
+  }
+
+  return (
+    <Link to="/users/$userId" params={{userId}} target="_blank" className="font-semibold text-green-600 dark:text-green-500">
+      {user.fullName}{" "}
+        <ExternalLink className="size-3.5 inline-block" />
+    </Link>
   );
 }
