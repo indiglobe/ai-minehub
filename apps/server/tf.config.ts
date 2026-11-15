@@ -9,7 +9,8 @@ export default defineConfig({
       envFile:
         os.platform() === "linux" ? ".env.devcontainer" : ".env.development",
       envValues: {
-        PORT: 12027,
+        PORT: 17332,
+        NODE_ENV: "development",
       },
     },
     start: {

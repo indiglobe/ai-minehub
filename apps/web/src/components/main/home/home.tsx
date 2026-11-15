@@ -62,13 +62,14 @@ import {
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
-} from "@repo/types/socket/active-traders";
+  NamespaceName,
+} from "@repo/types/socket-namespaces/active-traders";
 import { Await, useLoaderData } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
 import { LiveMarkets } from "./live-market";
 
 const activeTradersSocket: Socket<ServerToClientEvents, ClientToServerEvents> =
-  io(`${env.VITE_SOCKET_APP_HOST}/active-traders`);
+  io(`${env.VITE_SERVER_APP_HOST}${"/active-traders" as NamespaceName}`);
 
 export default function Home() {
   return (
@@ -110,15 +111,13 @@ export function HeroSection({
 
       <div
         className={cn(
-          `relative z-10 flex w-full flex-col gap-14 md:flex-row  md:gap-8 lg:gap-12`,
+          `relative z-10 flex w-full flex-col gap-14 md:flex-row md:gap-8 lg:gap-12`,
         )}
       >
         {/* LEFT SIDE */}
         <div className={cn(`w-full min-w-0 md:basis-1/2`)}>
           <div
-            className={cn(
-              `flex flex-wrap items-center gap-x-3 gap-y-2 pb-4`,
-            )}
+            className={cn(`flex flex-wrap items-center gap-x-3 gap-y-2 pb-4`)}
           >
             <YearsInMarket />
             <ActiveTraders />
@@ -126,7 +125,7 @@ export function HeroSection({
 
           <h1
             className={cn(
-              `fs-12 font-brand-secondary leading-16 font-bold tracking-tighter sm:fs-16 sm:leading-20 md:fs-20 md:leading-24`,
+              `fs-12 font-brand-secondary sm:fs-16 md:fs-20 leading-16 font-bold tracking-tighter sm:leading-20 md:leading-24`,
             )}
           >
             <span>The World's</span>
@@ -142,7 +141,7 @@ export function HeroSection({
 
           <p
             className={cn(
-              `text-secondary-800/50 fs-4 max-w-140 sm:fs-4.5 md:fs-5`,
+              `text-secondary-800/50 fs-4 sm:fs-4.5 md:fs-5 max-w-140`,
             )}
           >
             Access Forex, stocks, indices and our exclusive SyntX synthetic
@@ -150,11 +149,7 @@ export function HeroSection({
             spreads from 0.0 pips.
           </p>
 
-          <div
-            className={cn(
-              `flex flex-col flex-wrap gap-4 pt-8 sm:flex-row`,
-            )}
-          >
+          <div className={cn(`flex flex-col flex-wrap gap-4 pt-8 sm:flex-row`)}>
             <Button
               className={cn(
                 `relative px-10 py-7 font-semibold transition-all duration-300 hover:-translate-y-1`,
@@ -171,7 +166,7 @@ export function HeroSection({
 
             <Button
               className={cn(
-                `relative px-10 py-7 font-semibold transition-all duration-300 hover:-translate-y-1 hover:border-secondary-500 hover:text-secondary-500`,
+                `hover:border-secondary-500 hover:text-secondary-500 relative px-10 py-7 font-semibold transition-all duration-300 hover:-translate-y-1`,
               )}
               variant={"outline"}
               corner={"circle"}
@@ -192,7 +187,7 @@ export function HeroSection({
         {/* RIGHT SIDE */}
         <div
           className={cn(
-            `relative flex w-full min-w-0 items-center justify-centerd md:basis-1/2 md:justify-end`,
+            `justify-centerd relative flex w-full min-w-0 items-center md:basis-1/2 md:justify-end`,
           )}
         >
           <LiveMarkets />
@@ -206,10 +201,7 @@ export function HeroSection({
 /*                              ACTIVE TRADERS                                */
 /* -------------------------------------------------------------------------- */
 
-export function ActiveTraders({
-  className,
-  ...props
-}: ComponentProps<"div">) {
+export function ActiveTraders({ className, ...props }: ComponentProps<"div">) {
   const [activeTraders, setActiveTraders] = useState(0);
 
   useEffect(() => {
@@ -245,7 +237,9 @@ export function ActiveTraders({
           `bg-accent-500/20 border-accent-500/60 text-accent-600 flex max-w-max items-center gap-2 rounded-full border py-2 pr-6 pl-4 text-xs font-bold`,
         )}
       >
-        <span className={cn(`inline-block size-2 rounded-full bg-accent-500`)} />
+        <span
+          className={cn(`bg-accent-500 inline-block size-2 rounded-full`)}
+        />
 
         <span>{activeTraders} Active Traders</span>
       </div>
@@ -257,10 +251,7 @@ export function ActiveTraders({
 /*                              YEARS IN MARKET                               */
 /* -------------------------------------------------------------------------- */
 
-export function YearsInMarket({
-  className,
-  ...props
-}: ComponentProps<"div">) {
+export function YearsInMarket({ className, ...props }: ComponentProps<"div">) {
   return (
     <div className={cn(``, className)} {...props}>
       <div
@@ -340,9 +331,7 @@ export function Rating({ className, ...props }: ComponentProps<"div">) {
 
                           <Star
                             style={{
-                              clipPath: `inset(0 0 0 ${
-                                filledAmount * 100
-                              }%)`,
+                              clipPath: `inset(0 0 0 ${filledAmount * 100}%)`,
                             }}
                             className={cn(
                               `text-secondary-500 absolute inset-0 opacity-30`,
@@ -352,9 +341,7 @@ export function Rating({ className, ...props }: ComponentProps<"div">) {
                       )}
 
                       {filledAmount === 0 && (
-                        <Star
-                          className={cn(`text-secondary-500 opacity-30`)}
-                        />
+                        <Star className={cn(`text-secondary-500 opacity-30`)} />
                       )}
                     </span>
                   ))}
@@ -362,16 +349,12 @@ export function Rating({ className, ...props }: ComponentProps<"div">) {
 
                 <div className={cn(`flex items-baseline gap-2`)}>
                   <span
-                    className={cn(
-                      `text-secondary-600 text-sm font-semibold`,
-                    )}
+                    className={cn(`text-secondary-600 text-sm font-semibold`)}
                   >
                     {isNaN(averageRating) ? 0 : averageRating.toFixed(2)}
                   </span>
 
-                  <span className={cn(`text-foreground/50 text-xs`)}>
-                    / 5
-                  </span>
+                  <span className={cn(`text-foreground/50 text-xs`)}>/ 5</span>
                 </div>
               </div>
 
@@ -412,49 +395,37 @@ export function TrustStatSection({
         )}
       >
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           FSC Mauritius
         </li>
 
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           ISO 27001
         </li>
 
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           Trustpilot ★4.2
         </li>
 
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           SSL Secured
         </li>
 
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           PCI DSS
         </li>
 
         <li
-          className={cn(
-            `hover:text-secondary-900/80 px-8 transition-colors`,
-          )}
+          className={cn(`hover:text-secondary-900/80 px-8 transition-colors`)}
         >
           100K+ Traders
         </li>
@@ -494,9 +465,7 @@ export function WhyUsSection({
       </div>
 
       <div
-        className={cn(
-          `grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`,
-        )}
+        className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`)}
       >
         <WhyChooseCards className={cn(`md:col-span-2`)}>
           <WhyChooseCardIcon
@@ -617,9 +586,7 @@ export function AccountTypesSection({
 
       <div className={cn(`pt-24`)}>
         <div
-          className={cn(
-            `grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`,
-          )}
+          className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3`)}
         >
           {/* MICRO */}
 
@@ -1004,9 +971,7 @@ export function ExclusiveOffersSection({
             <Grid2x2 className={cn(`text-primary-500`)} />
           </PromotionBonusIcon>
 
-          <PromotionBonusTitle>
-            First Deposit Bonus
-          </PromotionBonusTitle>
+          <PromotionBonusTitle>First Deposit Bonus</PromotionBonusTitle>
 
           <PromotionBonusDescription>
             Double your first deposit or get your first deposit bonus — choose
@@ -1051,9 +1016,7 @@ export function EverythingYouNeedSection({
         <SectionHeading>
           <span>Trade With </span>
 
-          <span className={cn(`text-secondary-500`)}>
-            Total Confidence
-          </span>
+          <span className={cn(`text-secondary-500`)}>Total Confidence</span>
         </SectionHeading>
       </div>
 
@@ -1171,7 +1134,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
+            `justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50 flex w-full flex-col items-center`,
           )}
         >
           <ErrorBoundary fallback={<div>Error...</div>}>
@@ -1202,7 +1165,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
+            `justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50 flex w-full flex-col items-center`,
           )}
         >
           <ErrorBoundary fallback={<div>Error...</div>}>
@@ -1230,7 +1193,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
+            `justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50 flex w-full flex-col items-center`,
           )}
         >
           <span>99.9%</span>
@@ -1241,7 +1204,7 @@ export function PassiveIncomeSection({
 
         <div
           className={cn(
-            `flex w-full flex-col items-center justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50`,
+            `justify-centerd *:nth-[1]:text-3xld *:nth-[1]:font-semiboldd *:nth-[1]:text-secondary-500d *:nth-[2]:text-foreground/50 flex w-full flex-col items-center`,
           )}
         >
           <span>24/7</span>
@@ -1281,9 +1244,7 @@ export function BottomCTASection({
 
             <br />
 
-            <span className={cn(`text-secondary-500`)}>
-              World's Markets?
-            </span>
+            <span className={cn(`text-secondary-500`)}>World's Markets?</span>
           </h2>
 
           <p className={cn(`text-foreground/50`)}>
@@ -1292,9 +1253,7 @@ export function BottomCTASection({
           </p>
 
           <ul
-            className={cn(
-              `text-foreground/50 flex flex-wrap gap-x-10 gap-y-2`,
-            )}
+            className={cn(`text-foreground/50 flex flex-wrap gap-x-10 gap-y-2`)}
           >
             <li>
               <Check
@@ -1336,14 +1295,12 @@ export function BottomCTASection({
 
         <div
           className={cn(
-            `flex w-full items-center justify-centerd lg:max-w-max`,
+            `justify-centerd flex w-full items-center lg:max-w-max`,
           )}
         >
           <Button
             corner={"circle"}
-            className={cn(
-              `m-auto h-12 w-full text-lg md:h-16 md:w-60`,
-            )}
+            className={cn(`m-auto h-12 w-full text-lg md:h-16 md:w-60`)}
           >
             <Rocket className={cn(`inline-block size-5`)} />
 

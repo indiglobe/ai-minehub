@@ -10,7 +10,7 @@ export const env = createEnv({
 
     DATABASE_URL: z.string(),
 
-    SOCKET_APP_HOST: z.string(),
+    SERVER_APP_HOST: z.string(),
     WEB_APP_HOST: z.string(),
     STORAGE_APP_HOST: z.string(),
 

@@ -1,14 +1,14 @@
 {
   "name": "@repo/types",
   "exports": {
-    "./socket/*": {
+    "./socket-namespaces/*": {
       "require": {
-        "types": "./dist/socket/*.d.cts",
-        "default": "./dist/socket/*.cjs"
+        "types": "./dist/socket-namespaces/*.d.cts",
+        "default": "./dist/socket-namespaces/*.cjs"
       },
       "import": {
-        "types": "./dist/socket/*.d.mts",
-        "default": "./dist/socket/*.mjs"
+        "types": "./dist/socket-namespaces/*.d.mts",
+        "default": "./dist/socket-namespaces/*.mjs"
       }
     }
   },
