@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { env } from "@repo/env/server";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 
 /**
  * Indicates whether the application is running in production.
@@ -142,4 +143,11 @@ export const auth = betterAuth({
       path: "/",
     },
   },
+
+  /**
+   * Integrates Better Auth cookie handling with TanStack Start.
+   * Ensures cookies are correctly managed during server-side requests
+   * and responses.
+   */
+  plugins: [tanstackStartCookies()],
 });

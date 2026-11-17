@@ -14,6 +14,7 @@ import {
   Table__MiningWalletWithdraw,
   Table__TradingWalletDeposits,
   Table__TradingWalletWithdraw,
+  Table__Chat,
 } from "@/schema";
 import { eq } from "drizzle-orm";
 import { id } from "@repo/utils/id";
@@ -38,6 +39,7 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
+  await db.delete(Table__Chat);
   await db.delete(Table__MiningWalletDeposits);
   await db.delete(Table__MiningWalletWithdraw);
   await db.delete(Table__TradingWalletDeposits);
@@ -55,7 +57,7 @@ async function clearTables() {
 }
 
 /* -------------------------------------------------------- */
-/*                         Table__User                        */
+/*                         Table__User                      */
 /* -------------------------------------------------------- */
 
 async function seedUsers() {
@@ -73,6 +75,7 @@ async function seedUsers() {
       phoneNumber: Math.floor(Math.random() * 10000000000).toString(),
       fullName,
       userStatus: faker.helpers.arrayElement(USER_STATUS),
+      role: idx < 5 ? "ADMIN" : "BASIC",
     };
   });
 
@@ -80,22 +83,24 @@ async function seedUsers() {
 
   const users = await db.select().from(Table__User);
 
-  users.forEach(async (u) => {
-    const randomSelectedUser = users[randomInt(0, users.length - 1)];
+  users
+    .filter((u) => u.role === "BASIC")
+    .forEach(async (u) => {
+      const randomSelectedUser = users[randomInt(0, users.length - 1)];
 
-    if (randomSelectedUser && randomSelectedUser.id !== u.id) {
-      await db
-        .update(Table__User)
-        .set({ referrerId: randomSelectedUser.id })
-        .where(eq(Table__User.id, u.id));
-    }
-  });
+      if (randomSelectedUser && randomSelectedUser.id !== u.id) {
+        await db
+          .update(Table__User)
+          .set({ referrerId: randomSelectedUser.id })
+          .where(eq(Table__User.id, u.id));
+      }
+    });
 
   console.log("✅ Table__User seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWallet                    */
+/*                    Table__TradingWallet                  */
 /* -------------------------------------------------------- */
 
 async function seedTradingWallet() {
@@ -118,7 +123,7 @@ async function seedTradingWallet() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWallet                    */
+/*                    Table__TradingWallet                  */
 /* -------------------------------------------------------- */
 
 async function seedMiningWallet() {
@@ -141,7 +146,7 @@ async function seedMiningWallet() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__Rating                    */
+/*                      Table__Rating                       */
 /* -------------------------------------------------------- */
 
 async function seedRating() {
@@ -164,7 +169,7 @@ async function seedRating() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__MiningProfile                    */
+/*                    Table__MiningProfile                  */
 /* -------------------------------------------------------- */
 
 async function seedMiningProfile() {
@@ -226,7 +231,7 @@ async function seedMiningOrder() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__News                    */
+/*                        Table__News                       */
 /* -------------------------------------------------------- */
 
 async function seedNews() {
@@ -236,7 +241,9 @@ async function seedNews() {
     typeof Table__News.$inferInsert
   >(() => {
     return {
-      details: faker.lorem.paragraphs({ min: 3, max: 6 }, "\n\n").slice(0,1000),
+      details: faker.lorem
+        .paragraphs({ min: 3, max: 6 }, "\n\n")
+        .slice(0, 1000),
       effectiveDate:
         Math.random() > 0.5 ? faker.date.future() : faker.date.past(),
       heading: faker.lorem.sentence(),
@@ -249,7 +256,7 @@ async function seedNews() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingOrder                    */
+/*                    Table__TradingOrder                   */
 /* -------------------------------------------------------- */
 
 async function seedTradingOrder() {
@@ -278,7 +285,7 @@ async function seedTradingOrder() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWalletDeposits                    */
+/*               Table__TradingWalletDeposits               */
 /* -------------------------------------------------------- */
 
 async function seedTradingWalletDeposits() {
@@ -318,7 +325,7 @@ async function seedTradingWalletDeposits() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWalletWithdraw                    */
+/*               Table__TradingWalletWithdraw               */
 /* -------------------------------------------------------- */
 
 async function seedTradingWalletWithdraw() {
@@ -346,6 +353,12 @@ async function seedTradingWalletWithdraw() {
         "ETH",
         "Bitcoin",
       ]),
+      status: faker.helpers.arrayElement([
+        "PENDING",
+        "PROCESSED",
+        "VALIDATING",
+        "REJECTED",
+      ]),
     };
   }) satisfies (typeof Table__TradingWalletWithdraw.$inferInsert)[];
 
@@ -357,7 +370,7 @@ async function seedTradingWalletWithdraw() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWalletDeposits            */
+/*                   Table__TradingWalletDeposits           */
 /* -------------------------------------------------------- */
 
 async function seedMiningWalletDeposits() {
@@ -397,7 +410,7 @@ async function seedMiningWalletDeposits() {
 }
 
 /* -------------------------------------------------------- */
-/*                    Table__TradingWalletWithdraw                    */
+/*               Table__TradingWalletWithdraw               */
 /* -------------------------------------------------------- */
 
 async function seedMiningWalletWithdraw() {
@@ -426,6 +439,12 @@ async function seedMiningWalletWithdraw() {
         "Bitcoin",
       ]),
       cryptoWalletAddress: id({ length: 20 }),
+      status: faker.helpers.arrayElement([
+        "PENDING",
+        "PROCESSED",
+        "VALIDATING",
+        "REJECTED",
+      ]),
     };
   }) satisfies (typeof Table__MiningWalletWithdraw.$inferInsert)[];
 
@@ -434,6 +453,37 @@ async function seedMiningWalletWithdraw() {
     .values([...__dummyMiningWalletWithdraw]);
 
   console.log("✅ Table__MiningWalletWithdraw seeded");
+}
+
+async function seedChat() {
+  console.log("🔃 Seeding Table__Chat...");
+
+  const users = await db.select().from(Table__User);
+
+  const admins = users.filter((user) => user.role === "ADMIN");
+  const basicUsers = users.filter((user) => user.role === "BASIC");
+
+  const __dummyChats = basicUsers.flatMap((basicUser) => {
+    const admin = faker.helpers.arrayElement(admins);
+
+    return Array.from({ length: randomInt(2, 20) }).map<
+      typeof Table__Chat.$inferInsert
+    >(() => {
+      const isBasicSender = Math.random() > 0.5;
+
+      return {
+        message: faker.lorem.sentences({ min: 1, max: 3 }),
+        senderId: isBasicSender ? basicUser.id : admin.id,
+        reciverId: isBasicSender ? null : basicUser.id,
+      };
+    });
+  });
+
+  if (__dummyChats.length > 0) {
+    await db.insert(Table__Chat).values(__dummyChats);
+  }
+
+  console.log("✅ Table__Chat seeded");
 }
 
 /* -------------------------------------------------------- */
@@ -458,6 +508,7 @@ export async function seed() {
     await seedTradingWalletWithdraw();
     await seedMiningWalletDeposits();
     await seedMiningWalletWithdraw();
+    await seedChat();
 
     console.log("🎉 SEEDING COMPLETED");
 

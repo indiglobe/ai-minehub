@@ -1,26 +1,14 @@
-import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@repo/styles/cn";
 import { Button } from "@repo/ui/button";
 import { LogoIconFilled } from "@repo/ui/logo";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import type { ComponentProps } from "react";
-import { deleteUserDetailsCookie as deleteUserDetailsCookieServerFn } from "@/lib/auth/session";
 
 export default function AuthenticatedNavbar({
   className,
   ...props
 }: ComponentProps<"nav">) {
-  const deleteUserDetailsCookie = useServerFn(deleteUserDetailsCookieServerFn);
-  const navigate = useNavigate();
-
-  async function logOut() {
-    await authClient.signOut();
-    await deleteUserDetailsCookie();
-    throw navigate({ to: "/" });
-  }
-
   return (
     <nav
       className={cn(
@@ -40,11 +28,13 @@ export default function AuthenticatedNavbar({
         </Link>
       </Button>
 
-      <Button variant={"destructive"} corner={"circle"} onClick={logOut}>
-        <span className={cn(`max-xs:hidden`)}>Logout</span>
-        <span>
-          <LogOut />
-        </span>
+      <Button variant={"destructive"} corner={"circle"} asChild>
+        <Link to="/logout">
+          <span className={cn(`max-xs:hidden`)}>Logout</span>
+          <span>
+            <LogOut />
+          </span>
+        </Link>
       </Button>
     </nav>
   );

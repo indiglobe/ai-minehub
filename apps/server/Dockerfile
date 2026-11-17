@@ -122,7 +122,7 @@ COPY --from=builder /app/apps/server/dist ./apps/server/dist
 COPY --from=builder /app/packages/data/dist ./packages/data/dist
 COPY --from=builder /app/packages/env/dist ./packages/env/dist
 COPY --from=builder /app/packages/types/dist ./packages/types/dist
-COPY --from=builder /app/packages/utils/dist ./packages/utils/dis
+COPY --from=builder /app/packages/utils/dist ./packages/utils/dist
 
 # install prod deps
 RUN pnpm install --prod --frozen-lockfile

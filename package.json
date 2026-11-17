@@ -4,7 +4,7 @@
     "START OF MAIN SCRIPTS": "==============================",
     "build:packages:dev:apps": "turbo run build --filter=@repo/* && turbo run dev --filter=!@repo/*",
     "build:packages:dev:app:web": "turbo run build --filter=@repo/* && turbo run dev --filter=web",
-    "build:packages:dev:app:socket": "turbo run build --filter=@repo/* && turbo run dev --filter=socket",
+    "build:packages:dev:app:server": "turbo run build --filter=@repo/* && turbo run dev --filter=server",
     "END OF MAIN SCRIPTS": "==============================",
     "build": "turbo run build",
     "dev": "turbo run dev",

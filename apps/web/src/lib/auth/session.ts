@@ -89,3 +89,24 @@ export const setUserDetailsCookie = createServerFn()
 export const deleteUserDetailsCookie = createServerFn().handler(async () => {
   deleteCookie(USER_DETAILS);
 });
+
+/**
+ * Removes the better auth cookie from the client.
+ *
+ * This is typically used during logout or when the cached
+ * user information should be cleared.
+ *
+ * @returns {Promise<void>}
+ */
+export const signOut = createServerFn({
+  method: "POST",
+}).handler(async () => {
+  const headers = getRequestHeaders();
+
+  await auth.api.signOut({
+    headers,
+    asResponse: true,
+  });
+
+  deleteCookie(USER_DETAILS);
+});

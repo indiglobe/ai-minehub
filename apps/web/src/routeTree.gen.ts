@@ -14,6 +14,7 @@ import { Route as withHeaderFooterIndexRouteImport } from './routes/(with-header
 import { Route as withoutHeaderFooterauthenticatedRouteRouteImport } from './routes/(without-header-footer)/(authenticated)/route'
 import { Route as withoutHeaderFooterguestRouteRouteImport } from './routes/(without-header-footer)/(guest)/route'
 import { Route as withoutHeaderFooterleagalPagesRouteRouteImport } from './routes/(without-header-footer)/(leagal-pages)/route'
+import { Route as LogoutIndexRouteImport } from './routes/logout/index'
 import { Route as withHeaderFooterCompanyIndexRouteImport } from './routes/(with-header-footer)/company/index'
 import { Route as withHeaderFooterPartnershipIndexRouteImport } from './routes/(with-header-footer)/partnership/index'
 import { Route as withHeaderFooterToolsIndexRouteImport } from './routes/(with-header-footer)/tools/index'
@@ -77,6 +78,11 @@ const withoutHeaderFooterleagalPagesRouteRoute =
     id: '/(without-header-footer)/(leagal-pages)',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LogoutIndexRoute = LogoutIndexRouteImport.update({
+  id: '/logout/',
+  path: '/logout/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const withHeaderFooterCompanyIndexRoute =
   withHeaderFooterCompanyIndexRouteImport.update({
     id: '/company/',
@@ -341,6 +347,7 @@ const withoutHeaderFooterauthenticatedexistingUseradminUsersUserIdWalletIndexRou
 
 export interface FileRoutesByFullPath {
   '/': typeof withHeaderFooterIndexRoute
+  '/logout/': typeof LogoutIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company/': typeof withHeaderFooterCompanyIndexRoute
   '/partnership/': typeof withHeaderFooterPartnershipIndexRoute
@@ -378,6 +385,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof withHeaderFooterIndexRoute
+  '/logout': typeof LogoutIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/company': typeof withHeaderFooterCompanyIndexRoute
   '/partnership': typeof withHeaderFooterPartnershipIndexRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/(without-header-footer)/(guest)': typeof withoutHeaderFooterguestRouteRouteWithChildren
   '/(without-header-footer)/(leagal-pages)': typeof withoutHeaderFooterleagalPagesRouteRouteWithChildren
   '/(with-header-footer)/': typeof withHeaderFooterIndexRoute
+  '/logout/': typeof LogoutIndexRoute
   '/(without-header-footer)/(authenticated)/(existing-user)': typeof withoutHeaderFooterauthenticatedexistingUserRouteRouteWithChildren
   '/(without-header-footer)/(authenticated)/(new-user)': typeof withoutHeaderFooterauthenticatednewUserRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -463,6 +472,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/logout/'
     | '/api/auth/$'
     | '/company/'
     | '/partnership/'
@@ -500,6 +510,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/logout'
     | '/api/auth/$'
     | '/company'
     | '/partnership'
@@ -541,6 +552,7 @@ export interface FileRouteTypes {
     | '/(without-header-footer)/(guest)'
     | '/(without-header-footer)/(leagal-pages)'
     | '/(with-header-footer)/'
+    | '/logout/'
     | '/(without-header-footer)/(authenticated)/(existing-user)'
     | '/(without-header-footer)/(authenticated)/(new-user)'
     | '/api/auth/$'
@@ -586,6 +598,7 @@ export interface RootRouteChildren {
   withoutHeaderFooterauthenticatedRouteRoute: typeof withoutHeaderFooterauthenticatedRouteRouteWithChildren
   withoutHeaderFooterguestRouteRoute: typeof withoutHeaderFooterguestRouteRouteWithChildren
   withoutHeaderFooterleagalPagesRouteRoute: typeof withoutHeaderFooterleagalPagesRouteRouteWithChildren
+  LogoutIndexRoute: typeof LogoutIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiUploadIndexRoute: typeof ApiUploadIndexRoute
 }
@@ -625,6 +638,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof withoutHeaderFooterleagalPagesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout/': {
+      id: '/logout/'
+      path: '/logout'
+      fullPath: '/logout/'
+      preLoaderRoute: typeof LogoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(with-header-footer)/company/': {
@@ -1104,6 +1124,7 @@ const rootRouteChildren: RootRouteChildren = {
     withoutHeaderFooterguestRouteRouteWithChildren,
   withoutHeaderFooterleagalPagesRouteRoute:
     withoutHeaderFooterleagalPagesRouteRouteWithChildren,
+  LogoutIndexRoute: LogoutIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiUploadIndexRoute: ApiUploadIndexRoute,
 }
